@@ -7,7 +7,8 @@ cdef unsigned char _nibble_at(np.uint16_t * data, int i):
     cdef int word_offset = i // 4
     cdef int in_word_offset = i % 4
     return (data[word_offset] >> ((3 - in_word_offset) * 4)) & 0x0f
-        
+
+
 def test__nibble_at():
     cdef np.ndarray[np.uint16_t] data = np.array([0x3412, 0x659f],
                                                  dtype=np.uint16)
@@ -16,14 +17,21 @@ def test__nibble_at():
         print "%s: wanted %s, got %s" % (i, nibble, got)
         assert nibble == got
 
+
 def _decompress_crw_chunk(compressed_data, int ncompressed_words,
                           int nchans,
                           int chunk_samples=256):
     # On big-endian systems, this copies the data, but not on little-endian
     # systems:
     cdef np.ndarray[np.uint16_t, ndim=1] cd_array
-    cd_array = np.asarray(np.fromstring(compressed_data, dtype="<u2"),
+
+    # TPU numpy deprecated fromstring for unicode misbehavior
+    # cd_array = np.asarray(np.fromstring(compressed_data, dtype="<u2"),
+    #                      dtype=np.uint16)
+
+    cd_array = np.asarray(np.frombuffer(compressed_data, dtype="<u2"),
                           dtype=np.uint16)
+
     # For some reason Cython doesn't want me passing a type ndarray directly
     # to the cdef function above, so oh well, have a pointer instead...:
     cdef np.uint16_t * cd = <np.uint16_t *> cd_array.data

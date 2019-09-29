@@ -623,7 +623,7 @@ class mkh5:
             # check for legal yaml
             with open(yml_f, "r") as f:
                 yml_str = f.read()
-                hdocs = yaml.load_all(yml_str)
+                hdocs = yaml.load_all(yml_str, Loader=yaml.SafeLoader)
                 yml_f_md5 = hashlib.md5(yml_str.encode("utf8")).hexdigest()
 
             # load up the docs w/ modicum of error checking
@@ -1314,7 +1314,7 @@ class mkh5:
           int-like (int, np.int, np.uint32, np.uint64)
           float-like (float, np.float32, np.float64)
 
-        
+
         Parameters
         ----------
         epochs_table_name : string
@@ -1333,17 +1333,17 @@ class mkh5:
         Returns
         -------
         None
-           updates h5_f/epochs/ with the named epoch table h5py.Dataset 
+            updates h5_f/epochs/ with the named epoch table h5py.Dataset
 
 
         The epochs table is a lightweight lookup table specific to
         this mkh5 instance's hdf5 file,
-        
+
           h5['epochs'][epochs_table_name] = epochs_table
 
         Event tables by default are "epochs" 1 sample long with 0
         prestimulus.
-        
+
         This simply updates the prestimulus interval and length
         accordingly, adds the peri-event time interval information for
         slicing mkh5 datablocks and massages the event table
@@ -1355,14 +1355,15 @@ class mkh5:
         with the ones you want.
 
         """
-        with h5py.File(self.h5_fname) as h5:
+        with h5py.File(self.h5_fname, mode="r") as h5:
             if (
                 "epochs" in h5.keys()
                 and epochs_table_name in h5["epochs"].keys()
             ):
-                msg = "epochs name '{0}' is in use: ".format(epochs_table_name)
-                msg += "pick another or reset_all() and rebuild the mkh5 file".format(
-                    self.h5_fname
+                msg = (
+                    f"epochs name {epochs_table_name} is in use, "
+                    f"pick another name or use reset_all() to "
+                    f"completely wipe the mkh5 file: {self.h5_fname}"
                 )
                 raise RuntimeError(msg)
 
@@ -1701,7 +1702,8 @@ class mkh5:
         epochs_table = None
         with h5py.File(self.h5_fname, "r") as h5:
             epochs_path = "epochs/" + epochs_name
-            epochs_table = h5[epochs_path].value
+            # epochs_table = h5[epochs_path].value
+            epochs_table = h5[epochs_path][...]
         if epochs_table is None:
             msg = "epochs table not found: {0}".format(epochs_name)
             raise RuntimeError(msg)
@@ -2365,7 +2367,8 @@ class mkh5:
             hio = self.HeaderIO()
             hio.get(h5[h5_path])
             header = hio.header
-            dblock = copy.deepcopy(h5[h5_path].value)
+            # dblock = copy.deepcopy(h5[h5_path].value) # deprecated
+            dblock = copy.deepcopy(h5[h5_path][...])
         return (header, dblock)
 
     def _h5_get_dblock_slice(self, h5_f, h5_path, db_slice=None):
@@ -2388,7 +2391,8 @@ class mkh5:
         """
         with h5py.File(h5_f, "r") as h5:
 
-            db_len = len(h5[h5_path].value)
+            # db_len = len(h5[h5_path].value)
+            db_len = len(h5[h5_path][...])
             if db_slice is None:
                 db_slice = slice(0, db_len)
             else:

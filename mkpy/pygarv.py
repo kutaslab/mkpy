@@ -19,13 +19,13 @@ Examples
       [ {'dblock_path_idx': 0,
          'dblock_path': 'calstest/dblock_0',
          'name': 'pygarv',
-	 'tests': [ [{'test': 'ppa'},
-		     {'tag': 'amplitude exursions'},
+         'tests': [ [{'test': 'ppa'},
+                     {'tag': 'amplitude exursions'},
                      {'stream': 'MiCe'},
                      {'threshold': 0.0},
                      {'interval': 0.0} ],
-		   [ {'test': 'ppadif'},
-		     {'tag': 'amplitude exursions'},
+                    [{'test': 'ppadif'},
+                     {'tag': 'amplitude exursions'},
                      {'stream': 'MiCe'},
                      {'threshold': 0.1},
                      {'interval': 0.1},
@@ -40,7 +40,7 @@ Examples
 tr_doc['fails'] : list
 
 len(tr_doc['fails'] == len(tr_doc['tests'])
-where tr_doc['fails'][idx] is 
+where tr_doc['fails'][idx] is
 
 a list of (start, stop) intervals in dblock_tick indexes where tr_doc['test'] failed. 
 tr_doc['pygarv']
@@ -184,7 +184,8 @@ class PyYarf(object):
             yaml_stream = yf.read()
         self.lint_yarf(yaml_stream)  # raises Exception on bad YAML
 
-        yarf_iter = yaml.load_all(yaml_stream)  # thank you PyYaml
+        # thank you PyYaml
+        yarf_iter = yaml.load_all(yaml_stream, Loader=yaml.SafeLoader)
         yarf_docs = []
         for yarf_doc in yarf_iter:
             self.check_yarf_doc(yarf_doc)
@@ -537,7 +538,7 @@ class PyGarvTest(OrderedDict):
 
 
 class PyGarv(object):
-    """container to hold an inventory of functions for computing sample-wise 
+    r"""container to hold an inventory of functions for computing sample-wise 
     artifact masks.
 
 
@@ -588,7 +589,6 @@ class PyGarv(object):
     where test_name is the test name and the list of key_i=dtype_i
     optionally gives extra parameters named key_1, ... key_n 
     with data type dtype.
-
     """
 
     def __init__(self, mkh5_f, yarf_f=None):
@@ -1210,12 +1210,12 @@ class PyGarv(object):
         "ppa", stream=str, threshold=float, prestim=float, poststim=float
     )
     def ppa(hdr, dblock, *args, **kwargs):
-        """tag event if any stream regexp match has peak-to-peak amplitude excursion
+        r"""tag event if any stream regexp match has peak-to-peak amplitude excursion
 
         Parameters
         ----------
         stream : regex
-           stream label pattern to match, e.g. '.+' or 'MiPa' or '\w+' 
+           stream label pattern to match, e.g. '.+' or 'MiPa' or '\w+'
         threshold : float
            amplitude excursion threshold
         prestim : float (>= 0)
@@ -1278,12 +1278,12 @@ class PyGarv(object):
         poststim=float,
     )
     def maxflat(hdr, dblock, *args, **kwargs):
-        """tag events on regex stream for flat runs
+        r"""tag events on regex stream for flat runs
 
         Parameters
         ----------
         stream : regex
-           stream label pattern to match, e.g. 'MiPa' or '\w{3}$' 
+           stream label pattern to match, e.g. 'MiPa' or '\w{3}$'
         threshold : float
            minimum range allowable
         nsamp : int

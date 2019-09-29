@@ -1,31 +1,29 @@
 #!/usr/bin/env python
+"""cross various regexp patterns w/ event code sequences verify output
 
-# this works through a range of test cases crossing patterns w/ event code sequences and checking the output
-#
-#
-# Event codes
-#    - length: 1-5
-#    - sign +/-
-#
-# Event code array:
-#    two parts: head, tail
-#    head lengths: 0, 1
-#    tail lengths: 0, 1, more than one
-#    - length: description
-#         0:  empty list, i.e., len(head) == len(tail) == 0
-#         1:  singleton list, i.e., len(head) == 1, len(tail) == 0
-#         2:  len(head) == len(tail) == 1
-#         3:  len(head) == 1, len(tail) > 1
-#
-#
-# Patterns:
-#    - capture groups
-#       - literals
-#       - \d
-#       - fancy crap (?*** )
-#
+Event codes
+   - length: 1-5
+   - sign +/-
 
-import pprint
+Event code array:
+   # two parts: head, tail
+   head lengths: 0, 1
+   tail lengths: 0, 1, more than one
+   - length: description
+        0:  empty list, i.e., len(head) == len(tail) == 0
+        1:  singleton list, i.e., len(head) == 1, len(tail) == 0
+        2:  len(head) == len(tail) == 1
+        3:  len(head) == 1, len(tail) > 1
+
+Patterns:
+   - capture groups
+   - literals
+      - \d
+      - fancy crap (?*** )
+
+"""
+
+
 import pdb
 from .config import TEST_DIR, IRB_DIR, GET_IRB_MKDIG, irb_data, mkpy
 from mkpy import mkh5
@@ -76,7 +74,7 @@ def anchor_gen(code_str, sep):
 
         # case 3: len(tail) > 1
         if length == 3:
-            ## ways to match single digit w/ literal and
+            # ways to match single digit w/ literal and
             anchor_patterns[3].append(r"(#\d\d\d)")
             anchor_patterns[3].append(r"(#\d{1}\d\d)")
             anchor_patterns[3].append(r"(#\d{1,1}\d\d)")
@@ -207,6 +205,6 @@ def test_irb_special_cases():
     ]:
         try:
             # print(event_table.loc[test, cols_of_interest])
-            val = event_table.loc[test, cols_of_interest]
+            event_table.loc[test, cols_of_interest]
         except Exception:
             print("Index {0} not found in event_table".format(test))

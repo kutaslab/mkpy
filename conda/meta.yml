@@ -14,7 +14,7 @@ requirements:
         - python
         - Cython
     run:
-        - python>=3.6
+        - python<=3.7
         - dpath
         - h5py
         - numpy

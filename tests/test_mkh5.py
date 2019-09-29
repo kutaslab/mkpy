@@ -451,7 +451,7 @@ def test_irb_calibrate_same_crw():
     mydat.calibrate_mkdata(pfx, **CAL_ARGS)
 
     # report calibration scale factors direct from hdf5 file
-    with h5py.File(h5f) as h5:
+    with h5py.File(h5f, "r") as h5:
         subid = pfx
         dblock_names = [
             subid + "/dblock_" + str(b) for b in range(len(h5[subid].keys()))
@@ -641,7 +641,7 @@ def test_irb_calibrate_negative_cals():
     mydat = mkh5.mkh5(str(h5f))
     mydat.reset_all()
     mydat.create_mkdata(pfx, *GET_IRB_MKDIG(pfx))
-    with h5py.File(h5f) as h5:
+    with h5py.File(h5f, "r") as h5:
         MiPa_before = h5[pfx + "/dblock_0"]["MiPa"]
 
     mydat.calibrate_mkdata(
@@ -654,7 +654,7 @@ def test_irb_calibrate_negative_cals():
         cal_ccode=0,
         use_cals=None,
     )
-    with h5py.File(h5f) as h5:
+    with h5py.File(h5f, "r") as h5:
         MiPa_after = h5[pfx + "/dblock_0"]["MiPa"]
     assert all(np.sign(MiPa_before) == np.sign(MiPa_after))
     # polarity of data heads/tails should be the same
@@ -698,6 +698,256 @@ def test_irb_calibrate_logpoked_cals():
                         assert 17.0 < scale_by and scale_by < 22.0
                     else:
                         assert 34.0 < scale_by and scale_by < 44.0
+
+
+def test_mkh5_correctness():
+    """verify dtypes and spot check A/D samples and calibrated microvolts"""
+
+    dblock_dtype = np.dtype(
+        [
+            ("dblock_ticks", "<u4"),
+            ("crw_ticks", "<u4"),
+            ("raw_evcodes", "<i2"),
+            ("log_evcodes", "<i2"),
+            ("log_ccodes", "<u2"),
+            ("log_flags", "<u2"),
+            ("pygarv", "<u8"),
+            ("lle", "<f2"),
+            ("lhz", "<f2"),
+            ("MiPf", "<f2"),
+            ("LLPf", "<f2"),
+            ("RLPf", "<f2"),
+            ("LMPf", "<f2"),
+            ("RMPf", "<f2"),
+            ("LDFr", "<f2"),
+            ("RDFr", "<f2"),
+            ("LLFr", "<f2"),
+            ("RLFr", "<f2"),
+            ("LMFr", "<f2"),
+            ("RMFr", "<f2"),
+            ("LMCe", "<f2"),
+            ("RMCe", "<f2"),
+            ("MiCe", "<f2"),
+            ("MiPa", "<f2"),
+            ("LDCe", "<f2"),
+            ("RDCe", "<f2"),
+            ("LDPa", "<f2"),
+            ("RDPa", "<f2"),
+            ("LMOc", "<f2"),
+            ("RMOc", "<f2"),
+            ("LLTe", "<f2"),
+            ("RLTe", "<f2"),
+            ("LLOc", "<f2"),
+            ("RLOc", "<f2"),
+            ("MiOc", "<f2"),
+            ("A2", "<f2"),
+            ("rhz", "<f2"),
+            ("rle", "<f2"),
+            ("heog", "<f2"),
+        ]
+    )
+
+    # check after calibration to 3 decimal places
+    samples_0 = (
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        2.0,
+        4.0,
+        -5.0,
+        -4.0,
+        0.0,
+        0.0,
+        1.0,
+        3.0,
+        -4.0,
+        2.0,
+        2.0,
+        1.0,
+        2.0,
+        2.0,
+        3.0,
+        3.0,
+        -1.0,
+        -2.0,
+        1.0,
+        2.0,
+        4.0,
+        0.0,
+        0.0,
+        -1.0,
+        -7.0,
+        3.0,
+        -2.0,
+        0.0,
+        7.0,
+        4.0,
+        0.0,
+        5.0,
+    )
+
+    samples_n = (
+        28159,
+        28159,
+        -16384,
+        -16384,
+        0,
+        0,
+        0,
+        1.0,
+        1.0,
+        -3.0,
+        0.0,
+        -1.0,
+        2.0,
+        0.0,
+        2.0,
+        0.0,
+        2.0,
+        1.0,
+        -1.0,
+        3.0,
+        0.0,
+        3.0,
+        0.0,
+        -4.0,
+        -1.0,
+        2.0,
+        2.0,
+        1.0,
+        0.0,
+        2.0,
+        -2.0,
+        -17.0,
+        -1.0,
+        -1.0,
+        0.0,
+        -3.0,
+        0.0,
+        -4.0,
+        2.0,
+    )
+
+    # after calibration to 3 decimal places
+    muv_0 = (
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        3.492,
+        6.516,
+        -8.125,
+        -6.754,
+        0.0,
+        0.0,
+        1.7705,
+        4.94,
+        -6.695,
+        3.316,
+        3.264,
+        1.743,
+        3.312,
+        3.371,
+        4.99,
+        4.957,
+        -1.791,
+        -3.479,
+        1.656,
+        3.408,
+        6.613,
+        0.0,
+        0.0,
+        -1.669,
+        -11.66,
+        4.97,
+        -3.287,
+        0.0,
+        11.766,
+        6.57,
+        0.0,
+        8.71,
+    )
+
+    muv_n = (
+        28159,
+        28159,
+        -16384,
+        -16384,
+        0,
+        0,
+        0,
+        1.746,
+        1.629,
+        -4.875,
+        0.0,
+        -1.698,
+        3.342,
+        0.0,
+        3.295,
+        0.0,
+        3.316,
+        1.632,
+        -1.743,
+        4.97,
+        0.0,
+        4.99,
+        0.0,
+        -7.164,
+        -1.739,
+        3.312,
+        3.408,
+        1.653,
+        0.0,
+        3.258,
+        -3.338,
+        -28.31,
+        -1.656,
+        -1.644,
+        0.0,
+        -5.043,
+        0.0,
+        -6.918,
+        3.484,
+    )
+
+    n_cols = len(dblock_dtype)
+
+    # convert .crw/.log to HDF5
+    mydat = mkh5.mkh5(TEST_H5)
+    mydat.reset_all()
+    mydat.create_mkdata(S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"])
+
+    hdr, dblock = mydat.get_dblock("S01/dblock_0")
+
+    assert dblock.shape == (28160,)  # rows
+    assert dblock.dtype == dblock_dtype
+    assert all([samples_0[i] == dblock[0][i] for i in range(n_cols)])
+    assert all([samples_n[i] == dblock[-1][i] for i in range(n_cols)])
+
+    mydat.calibrate_mkdata(S01["gid"], **CAL_ARGS)
+    hdr, muv_dblock = mydat.get_dblock("S01/dblock_0")
+
+    assert all(
+        [
+            np.isclose(muv_0[i], muv_dblock[0][i], rtol=1e-3)
+            for i in range(n_cols)
+        ]
+    )
+    assert all(
+        [
+            np.isclose(muv_n[i], muv_dblock[-1][i], rtol=1e-3)
+            for i in range(n_cols)
+        ]
+    )
+
+    os.remove(TEST_H5)
 
 
 # def test_LocDat():
@@ -780,160 +1030,6 @@ def test_irb_calibrate_logpoked_cals():
 #     myeeg.update_epoch('test_epoch', my_event_stream, 500, 2)
 
 
-# def test_load_xlog(eeg_f='data/lm20.crw'):
-#     '''mkh5 avg -x artifact marked log file loader test'''
-#     myeeg = mkh5.mkh5(eeg_f)
-#     xlog_f = re.sub('.crw$|.raw$', '.x.log', eeg_f)
-
-
-#     # this is normative usage ...
-#     print("loading avg -x arked log {0}".format(xlog_f))
-#     myeeg.load_log(xlog_f, presamp=500, cprecis=2)
-#     print("Ok with presamp=500, cprecis=2")
-
-#     # try/catch various fails
-
-#     # no cprecis
-#     try:
-#         myeeg.load_log(xlog_f, presamp=500)
-#     except ValueError:
-#         print('caught no cprecis for artifact flagged log')
-
-#     # no presamp
-#     try:
-#         myeeg.load_log(xlog_f, cprecis=2)
-#     except ValueError:
-#         print('caught no presamp for artifact flagged log')
-
-#     # neither
-#     try:
-#         myeeg.load_log(xlog_f)
-#     except ValueError:
-#         print('caught no cprecis and presamp for artifact flagged log')
-
-
-#     # main epoch not set
-#     try:
-#         # manually re-initialize the epoch
-#         myeeg.epoch = list()
-
-#         myeeg.load_log(xlog_f, presamp=500)
-#     except ValueError:
-#         print('caught main epoch not set before loading the artifact log')
-
-
-# # ------------------------------------------------------------
-# # h5 read tests ...
-# # ------------------------------------------------------------
-# def test_10cal_read_h5(h5_f='data/10cal.h5'):
-#     '''mkh5 h5 short h5 reader test'''
-
-#     # open read-only
-#     with h5py.File(h5_f, 'r') as h5:
-#         allgroups = []
-#         h5.visit(allgroups.append)
-#         for g in allgroups:
-#             if isinstance(h5[g], h5py.Dataset):
-#                 vals = np.array(h5[g], dtype='f4')
-#                 print('{0}'.format(g))
-#                 print('  head: {}'.format(vals[0:3]))
-#                 print('  tail: {}'.format(vals[-3:]))
-#                 print('  mean: {}'.format(np.mean(vals)), end="")
-#                 print('  sd: {:5.3f}'.format(np.std(vals, ddof=1)), end="")
-#                 print('  sum: {:5.3f}'.format(np.sum(vals)))
-
-# def test_lm20_read_h5(h5_f='data/lm20.h5'):
-#     '''mkh5 h5 real data reader test'''
-
-#     # open read-only
-#     with h5py.File(h5_f, 'r') as h5:
-#         allgroups = []
-#         h5.visit(allgroups.append)
-#         for g in allgroups:
-#             # print('Group: %s %s'.format(g, type(g)))
-#             print('Group {0}: {1}'.format(g, type(h5[g])))
-#             if isinstance(h5[g], h5py.Dataset):
-#                 vals = np.array(h5[g], dtype='f4') # native eekmk f2 = float32 overflow on math ops!
-#                 print('{0} length: {1:5d} mean: {2:10.5f}'.format(g, vals.size, np.mean(vals)))
-#                 testvals = vals[(vals!=0).nonzero()[0]]
-#                 for i in testvals[1:6]:
-#                     print('{0}'.format(i), end=" ")
-#                 print("\n")
-
-# def test_10cal_write_h5(eeg_f='data/10cal.crw'):
-#     '''mkh5 h5 short crw writer test'''
-
-#     # normative usage
-#     myeeg = mkh5.mkh5(eeg_f)
-#     log_f = re.sub('.crw$|.raw$', '.log', eeg_f)
-#     elp_f = 'data/test27.elp'
-
-#     # myeeg.set_epoch_to(100, 1)
-#     myeeg.load_log(log_f, presamp=500, cprecis=2)
-#     myeeg.load_locations(elp_f, ftype='elp')
-#     myeeg.calibrate(
-#         n_points = 3,     # points to average on either side of cursor
-#         cal_size = 10,    # uV
-#         polarity = 1,     # of calibration pulse
-#         lo_cursor = -30,  # ms
-#         hi_cursor = 30)
-
-#     # set h5 filename and write mode 'w' or 'r+'
-#     h5_f =  re.sub('.crw$|.raw$', '.h5', eeg_f)
-#     w_mode = 'w'
-#     myeeg.eeg2h5(h5_f, write_mode=w_mode,
-#                  compression="gzip",
-#                  chunks=(2048,) )
-
-# def test_lm20_nocal_write_h5(eeg_f='data/lm20.crw'):
-#     '''squawk if trying to write uncalibrated data'''
-
-#     # normative usage
-#     myeeg = mkh5.mkh5(eeg_f)
-#     xlog_f = re.sub('.crw$|.raw$', '.x.log', eeg_f)
-#     myeeg.load_log(xlog_f, presamp=500, cprecis=2)
-
-#     # hdf5 file to write
-#     h5_f =  re.sub('.crw$|.raw$', '.h5', eeg_f)
-
-#     # set mode ... 'w' write or 'r+'read/write
-#     w_mode = 'w'
-
-#     # writing before calibration should throw an error
-#     try:
-#         myeeg.eeg2h5(h5_f, write_mode=w_mode)
-#     except Exception as msg:
-#         print(msg)
-
-
-# def test_lm20_write_h5(eeg_f='data/lm20.crw'):
-#     '''mkh5 h5 writer test'''
-
-#     # normative usage
-#     myeeg = mkh5.mkh5(eeg_f)
-#     xlog_f = re.sub('.crw$|.raw$', '.x.log', eeg_f)
-#     elp_f = 'data/test27.elp'
-
-#     # myeeg.set_epoch_to(500, 2)
-#     myeeg.load_log(xlog_f, presamp=500, cprecis=2)
-#     myeeg.load_locations(elp_f, ftype='elp')
-#     myeeg.calibrate(
-#         n_points = 3,     # points to average on either side of cursor
-#         cal_size = 10,    # uV
-#         polarity = 1,     # of calibration pulse
-#         lo_cursor = -30,  # ms
-#         hi_cursor = 30)
-
-#     # hdf5 file to write
-#     h5_f =  re.sub('.crw$|.raw$', '.h5', eeg_f)
-
-#     # set mode ... 'w' write or 'r+'read/write
-#     w_mode = 'w'
-
-#     myeeg.eeg2h5(h5_f, write_mode=w_mode,
-#                  compression="gzip",
-#                  chunks=(2048,) )
-
 # def test_md5(eeg_f='data/lm20.crw'):
 #     ''' compare python hashlib md5 digest to openssh via system call'''
 #     import subprocess
@@ -972,159 +1068,4 @@ def test_irb_calibrate_logpoked_cals():
 #     # print("plotting cals")
 #     # myeeg.plotcals()
 
-# def test_plotcals(eeg_f='data/lm20.crw'):
-#     '''calibration routine with sensible default values'''
-
-#     print("initializing with {0}".format(eeg_f))
-#     myeeg = mkh5.mkh5(eeg_f)
-#     log_f = re.sub('.crw$|.raw$', '.log', eeg_f)
-
-#     print("loading log eeg_f {0}".format(log_f))
-#     myeeg.load_log(log_f)
-
-#     print("calibrating ...")
-#     myeeg.calibrate(
-#         n_points = 3,     # points to average on either side of cursor
-#         cal_size = 10,    # uV
-#         polarity = 1,     # of calibration pulse
-#         lo_cursor = -30,  # ms
-#         hi_cursor = 30)
-
-#     print("plotting cals")
-#     myeeg.plotcals()
-
 # # FIX ME: add tests for mismatching data, cal files
-
-# def test_load_topo(eeg_f='data/lm20.crw'):
-
-#     log_f = re.sub('.crw$|.raw$', '.log', eeg_f)
-
-#     print("initializing mkh5 with {0} and {1}".format(eeg_f, log_f))
-#     myeeg = mkh5.mkh5(eeg_f)
-#     myeeg.load_log(log_f)
-
-#     topo_f = 'data/se64.cap'
-#     print("loading topo file {0}".format(topo_f))
-#     myeeg.load_locations(topo_f, 'topo')
-
-
-# # ------------------------------------------------------------
-# # ms <-> samples (ticks) conversion tests
-# # ------------------------------------------------------------
-# # intvl [opn  :    clz)[op   : clz)[opn :   clz)[opn  :   clz)
-# #   ms  [-2*p : < -1*p)[-1*p : < 0)[=0  : < 1*p)[=1*p : < 2*p)
-# #  samp [-2   :     -2)[-1   :  -1)[0   :     0)[1    :     1)
-
-# # EX. sampling period p = 0.004 ms = 1.0/r for rate r
-
-# # ------------------------------------------------------------
-# # Epoching tests: backend _epoch* functions
-# # ------------------------------------------------------------
-# def test_get_epoch_at(eeg_f='data/lm20.crw'):
-#     '''test _get_epoch_at
-#     '''
-
-#     # normative usage to load a file
-#     myeeg = mkh5.mkh5(eeg_f)
-
-#     # srate = 250
-#     # cprecis = 1 -> 256 samples
-#     # pause marks in lm20 [ 19455 127743 231167 259327 383999 563711 687103 836607 865535]
-#     # last tick 865535
-#     presamp = 100 # -> 25 samples
-#     cprecis = 1
-#     cp_samp = cprecis * 256  #  samples
-
-#     # 100ms prestim = 25 samples
-#     test_range = [x + 25 for x in [-2, -1, 0, 1, 2]] # sliding window
-
-#     # these epochs underrun or overrun the data, or span a boundary
-#     # the last point in epoch on a pause is allowed
-#     tick_tests = [
-#         # these are demos ... sequence shows transition between
-#         # good and bad as the epoch slides along values in test_range
-#         ('under_run',  test_range),
-#         ('over_run', [myeeg.marktrack.size - (cp_samp - x) for x in test_range]), # approach and exceed last sample
-#         ('start_before_boundary', [x for x in [19455, 259327, 865535] for y in test_range]), # anchor ticks on boundaries
-#         ('end_after_boundary', [x + cp_samp - y for x in [19455, 259327, 865535] for y in test_range]), # anchor ticks on boundaries
-#         ('anchor_equal_boundary', [19455, 259327, 865535]), # anchor ticks on boundaries
-
-#         # these are the good tests, should all return sensible epochs (start,stop)
-#         ('Go', [ x+y for x in [245, 20000] for y in test_range]),
-
-#         # these are the bad tests, should all return (np.nan, np.nan)
-#         ('NoG', [22, 23, 24] ),
-#     ]
-
-#     # for test in tick_tests:
-#     #     for t in test[1]:
-#     #         print('Test: {0} anchor {1}: isGo {2} isNoGo {3}'.format(
-#     #             test[0], t, 'Go' in test[0], 'NoG' in test[0]))
-#     # return(None)
-
-#     for test in tick_tests:
-#         for t in test[1]:
-#             (start_tick, stop_tick) = myeeg._get_epoch_at(t, presamp, cprecis)
-#             print('Test {0}: '.format(test[0]), end="")
-#             print('anchor tick {0} presamp {1} cprecis {2} = '.format(t,presamp,cprecis), end="")
-#             print("({0}, {1})".format(start_tick, stop_tick))
-
-#             ## actual error checks
-#             ## "good" tests better return sensible, non-nan epochs
-#             if ('Go' in test[0]) and \
-#                ( np.isnan(start_tick) or np.isnan(stop_tick) or \
-#                  start_tick < 0 or stop_tick > myeeg.marktrack.size or \
-#                  start_tick > t or stop_tick < t  or \
-#                  ( (stop_tick - start_tick) + 1  != cp_samp ) ):
-
-#                 errmsg="Failed Go test ... something wrong at _get_epoch_at" + \
-#                     "({0},{1},{2})".format(t,presamp,cprecis) + \
-#                     "= ({0},{1})".format(start_tick, stop_tick)
-#                 raise ValueError(errmsg)
-
-#             ## "bad" tests better return np.nans
-#             if 'NoG' in test[0] and (not ( np.isnan(start_tick) and np.isnan(stop_tick))):
-#                 errmsg="Failed NoGo test ... _get_epoch_at({0},{1},{2}) should have returned np.nan".format(t,presamp,cprecis)
-#                 raise ValueError(errmsg)
-
-# def test_get_raw_epochs(eeg_f='data/lm20.crw'):
-#     '''test _get_epochs_from_eventstream
-#     '''
-#     # normative usage to load a file
-#     myeeg = mkh5.mkh5(eeg_f)
-
-#     # srate = 250
-#     # cprecis = 1 -> 256 samples
-#     # pause marks in lm20 [ 19455 127743 231167 259327 383999 563711 687103 836607 865535]
-#     # last tick 865535
-#     presamp = 100 # -> 25 samples
-#     cprecis = 2
-
-#     myepochs = myeeg._get_epochs_from_eventstream(myeeg.events['eeg_events'], presamp, cprecis)
-#     # for x in myepochs:
-#     #    print(x)
-
-# def test_write_bin_epochs_h5():
-
-#     eeg_f='data/lm20.crw'
-#     myeeg = mkh5.mkh5(eeg_f)
-#     xlog_f = re.sub('.crw$|.raw$', '.x.log', eeg_f)
-#     blf_f = re.sub('.crw$|.raw$', '.blf', eeg_f)
-#     elp_f = 'data/test27.elp'
-
-#     # this is normative usage ...
-#     # myeeg.set_epoch_to(500, 2)
-#     myeeg.load_log(xlog_f, presamp=500, cprecis=2)
-
-#     myeeg.calibrate(
-#         n_points = 3,     # points to average on either side of cursor
-#         cal_size = 10,    # uV
-#         polarity = 1,     # of calibration pulse
-#         lo_cursor = -30,  # ms
-#         hi_cursor = 30)
-#     myeeg.load_locations(elp_f, ftype='elp')
-#     myeeg.load_blf(blf_f)
-
-#     # extract the epochs to a new file
-#     hdf5_f = 'data/lm20.bin.epochs.h5'
-#     myeeg._write_bin_epochs_h5(hdf5_f, 'w')
