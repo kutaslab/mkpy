@@ -1,0 +1,17 @@
+# syntax
+#   key: column
+#
+# result
+#   fetch value of key as column
+---
+name: dig
+subdesc: subdesc
+
+--- 
+name: runsheet
+
+subid: participant
+hand: hand
+task: task
+
+

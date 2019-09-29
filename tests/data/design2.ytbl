@@ -1,0 +1,113 @@
+# This is the yaml text format equivalent of a rows x columns tabular format
+#
+# It is handy b.c. easy to script generate, easy to parse, and human readable. 
+#
+# Here are the rules for mkh5 yaml code map file well-formedednes:
+#
+#  1. it specifies a yaml map containg two key:value items with keys: 'columns', 'rows'
+#
+#  2. the value of 'columns' is a sequence of 2 or more column names (strings) 
+#     beginning with: ['Index', 'regexp', ...] and continuing ad lib.
+#
+#  3. the value of 'rows' is a sequence of row specifications: [row1, row2, ... ]
+#
+#  4. each row spec is a sequence of values corresponding to the columns in order,
+#       Index, events, ... etc. where
+# 
+#     * 'Index' column values can by any legal data type (descriptive strings
+#        or integers are recommended)
+#
+#
+#     * 'regexp' column values are regular expression patterns for
+#       matching space-separated (string representations of) integer
+#       code sequences that have exactly one "anchor" capturing group
+#       of the form (#N) where where N is an 32-bit integer.
+#
+# That's it. 
+#
+#  All the real work is done by coming up with regular
+#  expressions that match useful sequences of codes and coming up
+#  with optional columns that label the matched codes in useful
+#  ways, e.g., by specifying levels of experimental design.
+#
+#
+#
+# Notes:
+#
+#  The values in a column should all be the same data type: string,
+#  integer, boolean, float. This is not enforced, violate at your own risk.
+#
+#  If missing values are unavoidable, coding them with the yaml value
+#  .NAN is recommended for all cases ... yes, even string data. The
+#  yaml value null maps to None and behaves differently in
+#  python/numpy. This is not enforced, violate at your own risk
+#
+#  Floating point precision. Reading code maps from yaml text
+#  files and directly from Excel .xlsx files introduce the
+#  rounding errors for floating point numbers that are the
+#  *same*, e.g., 0.357 -> 0.35699999999999998. Reading text
+#  files introduces a *different* rounding error,
+#  e.g.,0.35700000000000004.
+#
+#
+# Example:
+#
+# Legal column specs:
+# 
+#  columns:
+#  - Index
+#  - regexp
+#
+#  columns:
+#  - Index
+#  - regexp
+#  - item_id
+#
+#  columns:
+#  - Index
+#  - regexp
+#  - item_id
+#  - difficulty/length
+#  - cloze
+#
+# 
+# Illegal examples:
+#
+#  columns:
+#  - regexp
+#  - item_id
+#
+#  columns:
+#  - regexp
+#  - Index
+
+# Begin actual file ...
+
+columns:
+- Index
+- regexp
+- item_id
+- difficulty/length
+- cloze
+
+rows:
+- - bin01
+  - r'(\d+) (#10046) (1)'
+  - 10046
+  - Hard/Short
+  - .NAN
+
+- - bin02
+  - r'(#10046) (?:\d+ ){0,1}(1024)' 
+  - 10046
+  - .NAN
+  - 0.2
+
+- - bin03
+  - r'(#10046) (?:\d+ ){0,1}(1048)' 
+  - 10046
+  - Hard/Short/Incorrect
+  - 0.357
+
+
+

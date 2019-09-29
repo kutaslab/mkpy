@@ -1,0 +1,565 @@
+# This file extends the .crw header with additional information that 
+# should travel with the eeg data
+#
+# apparatus:
+# 
+# Minimal Format:
+#
+# * these maps are mandatory
+#
+#      name: apparatus
+#      space: (details below)
+#      fiducials: (details below)
+#      sensors: (details below)
+#      streams: (details below)
+# 
+# * There MAY be additional yaml docs 
+#
+# * The docs MAY contain additional maps
+# 
+# * Missing data *MUST* be coded with JSON null not YAML .NaN for import into MATLAB
+# 
+# NOTE: Nested YAML key: value maps are verbose but "self-documenting"
+#       and map neatly to indexed tabular data (rows x columns) where
+#       the top-level keys are the rows and the nested keys are
+#       columns
+# 
+# Ex. YAML maps for two EEG data streams
+#
+# lle  
+#   pos:    lle
+#   neg:    *A1
+#   gain:  *10K
+#   hphz:  0.01
+#   lphz:  100.0
+#
+# MiPf:
+#   pos:   MiPf
+#   neg:   *A1
+#   gain:  *10K
+#   hphz:  0.01
+#   lphz:  100.0
+#
+# HEOG:
+#   pos:   lhz
+#   neg:   rhz
+#   gain:  10000
+#   hphz:  0.01
+#   lphz:  100.0
+#
+# Convert to this table 
+#    
+# index  pos   neg   gain hphz lphz 
+#  lle   lle    A1  10000 0.01 100.0
+#  MiPf  MiPf   A1  10000 0.01 100.0
+
+---
+name: runsheet
+
+subid: calstest
+
+---
+# Description: the apparatus document specifies instrumentation parameters
+#              including amplifier settings and electrode locations
+name: apparatus
+
+mne_montage_name: 26chan
+
+# define the Cartesian 3D coordinate relative to the head
+# default = RAS
+space:
+  origin: mid_fiducial    # vertex, mid_temporal  
+  coordinate: cartesian   # polar_degree  polar_radian
+  distance_unit: cm       # in
+  orientation: ['Y+','X+', 'Z+'] # X=right, Y = anterior, Z = superior
+
+# bony landmarks X, Y, Z = r
+fiducials:
+  rpa:
+    x:  8.00
+    y:  0.00
+    z:  0.00
+    
+  nasion:
+    x:  0.00
+    y:  8.00
+    z:  0.00
+    
+  lpa:
+    x:  -8.00
+    y:   0.00
+    z:   0.00
+
+#  streams:
+#
+#  Description: 
+#
+#     stream specifies EEG data channel recording parameters. 
+#
+#     * Each top level key names a dig data channel, e.g. lle, MiPa, HEOG
+#
+#     * Each nested key:value gives the setting (value)
+#
+#     * In tablular form, each top level key is a row, each value of its 
+#       nested key is a column
+# 
+# 
+#     * Missing data MUST be coded as null (JSON) for mkh5 portability between Python, MATLAB, and R.
+#       
+#       For Python only .NAN (YAML) works better for numerical missing data.
+#
+# 
+
+
+# ALL CHAN SETTINGS using YAML anchor-reference syntax where &name marks a values and *name plugs it in
+common_ref:  &A1 A1
+gain20K:    &20K 20000
+gain10K:    &10K 10000
+lp:  &lp 100.0
+hp:  &hp 000.01
+
+# pos = positive input to differential bio amp
+streams: 
+  lle:
+    pos:    lle
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eog
+
+  lhz:
+    pos:    lhz
+    neg:    *A1
+    gain:   *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eog
+
+  MiPf:
+    pos:   MiPf
+    neg:   *A1
+    gain:  *10K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+    
+  LLPf:
+    pos:   LLPf
+    neg:   *A1
+    gain:  *10K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LLFr:
+    pos:   LLFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LLTe:
+    pos:   LLTe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LLOc:
+    pos:   LLOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  MiOc:
+    pos:   MiOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LDFr:
+    pos:   LDFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LDCe:
+    pos:   LDCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LDPa:
+    pos:   LDPa
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMPf:
+    pos:   LMPf
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMFr:
+    pos:   LMFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMCe:
+    pos:   LMCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMOc:
+    pos:   LMOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  MiCe:
+    pos:   MiCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  MiPa:
+    pos:   MiPa
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  rle:
+    pos:    rle 
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eog
+
+  rhz:
+    pos:   rhz 
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eog
+
+  A2:
+    pos:    A2  
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLPf:
+    pos:   RLPf
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLFr:
+    pos:   RLFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLTe:
+    pos:   RLTe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLOc:
+    pos:   RLOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RDFr:
+    pos:   RDFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RDCe:
+    pos:   RDCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RDPa:
+    pos:   RDPa
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMPf:
+    pos:   RMPf
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMFr:
+    pos:   RMFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMCe:
+    pos:   RMCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMOc:
+    pos:   RMOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  HEOG:
+    pos:   lhz
+    neg:   rhz 
+    gain:  *10K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eog
+
+# sensor map (MANDATORY)
+# 3-D locations of each sensor (typically electrode)
+# HEOG	0	6.12E-17	-1
+
+sensors:
+  lle: 
+    x:   0.289
+    y:   0.714
+    z:  -0.637
+
+  lhz:
+    x:   0.564
+    y:   0.605
+    z:  -0.562     
+
+  A1:
+    x:  -0.674
+    y:  -0.329
+    z:  -0.661  
+
+  MiPf:
+    x:   0.000
+    y:   1.000
+    z:   0.000
+
+  LLPf:
+    x:  -0.588
+    y:   0.809
+    z:   0.000
+
+  LLFr:
+    x:  -0.951
+    y:   0.309
+    z:   0.000
+
+  LLTe:
+    x:  -0.951
+    y:  -0.309
+    z:   0.000 
+
+  LLOc:
+    x:  -0.588
+    y:  -0.809
+    z:   0.000
+
+  MiOc:
+    x:   0.000
+    y:  -1.000
+    z:   0.000
+
+#   GND:
+#     x:      0.97    
+#     y:      7.76    
+#     z:      6.81
+
+  LDFr:
+    x:  -0.696
+    y:   0.506
+    z:   0.509   
+
+  LDCe:
+    x:  -0.861
+    y:   0.000
+    z:   0.509 
+
+  LDPa:
+    x:  -0.696
+    y:  -0.506
+    z:   0.509 
+
+  LMPf:
+    x:  -0.266 
+    y:   0.819
+    z:   0.509 
+
+  LMFr:
+    x:  -0.294
+    y:   0.405
+    z:   0.866
+
+  LMCe:
+    x:  -0.476
+    y:  -0.155
+    z:   0.866 
+
+  LMOc:
+    x:  -0.266
+    y:  -0.819
+    z:   0.509
+
+  MiCe:
+    x:    0.00
+    y:    0.00
+    z:    1.00 
+
+  MiPa:
+    x:    0.000
+    y:   -0.501
+    z:    0.866
+
+  rle:
+    x:   -0.289
+    y:    0.714
+    z:   -0.637  
+
+  rhz:
+    x:   -0.564
+    y:    0.605
+    z:   -0.562
+
+  A2:
+    x:    0.674
+    y:   -0.329
+    z:   -0.661
+
+  RLPf:
+    x:    0.588
+    y:    0.809
+    z:    0.000
+
+  RLFr:
+    x:    0.951
+    y:    0.309
+    z:    0.000
+
+  RLTe:
+    x:    0.951
+    y:   -0.309
+    z:    0.000
+
+  RLOc:
+    x:    0.588
+    y:   -0.809
+    z:    0.000
+
+  RDFr:
+    x:    0.696
+    y:    0.506
+    z:    0.509  
+
+  RDCe:
+    x:    0.861
+    y:    0.009
+    z:    0.509  
+
+  RDPa:
+    x:    0.696
+    y:   -0.506
+    z:    0.509
+
+  RMPf:
+    x:    0.266
+    y:    0.819
+    z:    0.509
+
+  RMFr:
+    x:    0.294
+    y:    0.405
+    z:    0.866
+
+  RMCe:
+    x:    0.476
+    y:   -0.155
+    z:    0.866 
+
+  RMOc:
+    x:    0.266
+    y:   -0.819
+    z:    0.509  
+
+# additional maps are allowed
+PS: >-
+  The notes column in the stream map is for demonstration only. Since
+  only a few streams/channels have notes, the information might just
+  as well be tucked in as an addendum. Along with other notes about
+  the streams that may not fit neatly in rows and columns.
+
+stream_notes:
+  look_ma: no single quotes are needed 
+  lle:  strings can contain quoted whitespece
+  lhz:  missing data is not allowed, use null or .NAN
+  MiPf: null
+  LLPf: ' '
+  LLFr: spaces only are legal but dumb
+  headbox: >
+    electrode board adapters C1 and C2 inadvertently switched during the recording
+

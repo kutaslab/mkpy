@@ -1,0 +1,515 @@
+---
+name: runsheet
+subid: s001
+resting_state: closed
+
+---
+# insert this YAML doc in the .yhdr so mkh5mne can import the mkh5 channel info
+# into MNE python
+#
+# Description: the apparatus document specifies instrumentation parameters
+#              including amplifier settings and electrode locations
+
+
+name: apparatus
+
+mne_montage_name: adlong
+
+# define the Cartesian 3D coordinate relative to the head
+# default = RAS
+space:
+  origin: mid_fiducial    # vertex, mid_temporal  
+  coordinate: cartesian   # polar_degree  polar_radian
+  distance_unit: cm       # in
+  orientation: ['X+','Y+', 'Z+'] # X=right, Y = anterior, Z = superior
+
+# bony landmarks X, Y, Z = r
+fiducials:
+  rpa:
+    x:   0.9237
+    y:   0.00
+    z:  -0.3826
+    
+  nasion:
+    x:   0.00
+    y:   0.9237
+    z:  -0.3826
+    
+  lpa:
+    x:  -0.9237
+    y:   0.00
+    z:  -0.3826
+
+
+#  streams:
+#
+#  Description: 
+#
+#     stream specifies EEG data channel recording parameters. 
+#
+#     * Each top level key names a dig data channel, e.g. lle, MiPa, HEOG
+#
+#     * Each nested key:value gives the setting (value)
+#
+#     * In tablular form, each top level key is a row, each value of its 
+#       nested key is a column
+# 
+# 
+#     * Missing data MUST be coded as null (JSON) for mkh5 portability between Python, MATLAB, and R.
+#       
+#       For Python only .NAN (YAML) works better for numerical missing data.
+#
+# 
+
+
+# ALL CHAN SETTINGS using YAML anchor-reference syntax where &name marks a values and *name plugs it in
+common_ref:  &A1 A1
+gain20K:    &20K 20000
+gain10K:    &10K 10000
+lp:  &lp 100.0
+hp:  &hp 000.01
+
+# pos = positive input to differential bio amp
+streams: 
+  le:
+    pos:    le
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eog
+
+  heog:
+    pos:    rhz
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eog
+
+  cz:
+    pos:    cz
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  f7:
+    pos:    f7
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  f8:
+    pos:    f8
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  bl:
+    pos:    bl
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  br:
+    pos:    br
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  l41:
+    pos:    l41
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  r41:
+    pos:    r41
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  t5:
+    pos:    t5
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  t6:
+    pos:    t6
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  wl:
+    pos:    wl
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  wr:
+    pos:    wr
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  o1:
+    pos:    o1
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  o2:
+    pos:    o2
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  a2:
+    pos:    a2
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  lle:
+    pos:    lle
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eog
+
+  fz:
+    pos:    fz
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  pz:
+    pos:    pz
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  fp1:
+    pos:    fp1
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  fp2:
+    pos:    fp2
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  f3:
+    pos:    f3
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  f4:
+    pos:    f4
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  p3:
+    pos:    p3
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  p4:
+    pos:    p4
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  fc1:
+    pos:    fc1
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  fc2:
+    pos:    fc2
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  cp1:
+    pos:    cp1
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  cp2:
+    pos:    cp2
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  po7:
+    pos:    po7
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  po8:
+    pos:    po8
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+  poz:
+    pos:    poz
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eeg
+
+# sensor map (MANDATORY)
+# 3-D locations of each sensor (typically electrode)
+# HEOG	0	6.12E-17	-1
+
+sensors:
+  le:
+    x: 0.4540
+    y: 0.8910
+    z: -0.7650
+
+  lhz:
+    x: -0.7472
+    y: 0.5430
+    z: -0.3826
+
+  cz:
+    x: 0.0000
+    y: 0.0002
+    z: 1.0000
+
+  f7:
+    x: -0.8090
+    y: 0.5878
+    z: 0.0000
+
+  f8:
+    x: 0.8090
+    y: 0.5878
+    z: 0.0000
+
+  bl:
+    x: -0.9511
+    y: 0.3090
+    z: 0.0000
+
+  br:
+    x: 0.9511
+    y: 0.3090
+    z: 0.0000
+
+  l41:
+    x: -0.9237
+    y: 0.0001
+    z: 0.3826
+
+  r41:
+    x: 0.9237
+    y: 0.0001
+    z: 0.3826
+
+  t5:
+    x: -0.8090
+    y: -0.5878
+    z: -0.0001
+
+  t6:
+    x: 0.8090
+    y: -0.5878
+    z: -0.0001
+
+  wl:
+    x: -0.8712
+    y: -0.3372
+    z: 0.3552
+
+  wr:
+    x: 0.8712
+    y: -0.3372
+    z: 0.3552
+
+  o1:
+    x: -0.3090
+    y: -0.9511
+    z: 0.0000
+
+  o2:
+    x: 0.3090
+    y: -0.9511
+    z: 0.0000
+
+  a2:
+    x: 0.8777
+    y: -0.2853
+    z: -0.3826
+
+  lle:
+    x: -0.4540
+    y: 0.8910
+    z: -0.7650
+
+  fz:
+    x: 0.0000
+    y: 0.7067
+    z: 0.7067
+
+  pz:
+    x: 0.0000
+    y: -0.7063
+    z: 0.7065
+
+  fp1:
+    x: -0.3090
+    y: 0.9511
+    z: 0.0001
+
+  fp2:
+    x: 0.3091
+    y: 0.9511
+    z: 0.0000
+
+  f3:
+    x: -0.5399
+    y: 0.6726
+    z: 0.5043
+
+  f4:
+    x: 0.5399
+    y: 0.6726
+    z: 0.5043
+
+  p3:
+    x: -0.5401
+    y: -0.6724
+    z: 0.5045
+
+  p4:
+    x: 0.5401
+    y: -0.6724
+    z: 0.5045
+
+  fc1:
+    x: -0.3581
+    y: 0.3770
+    z: 0.8532
+
+  fc2:
+    x: 0.3581
+    y: 0.3770
+    z: 0.8532
+
+  cp1:
+    x: -0.3580
+    y: -0.3767
+    z: 0.8534
+
+  cp2:
+    x: 0.3580
+    y: -0.3767
+    z: 0.8534
+
+  po7:
+    x: -0.5878
+    y: -0.8090
+    z: 0.0000
+
+  po8:
+    x: 0.5878
+    y: -0.8090
+    z: 0.0000
+
+  poz:
+    x: 0.0000
+    y: -0.9230
+    z: 0.3824
+
+  a1:
+    x: -0.8777
+    y: -0.2852
+    z: -0.3826
+
+  lhz:
+    x: -0.7472
+    y: 0.5430
+    z: -0.3826
+
+  rhz:
+    x: 0.7472
+    y: 0.5429
+    z: -0.3826
+
+  a1:
+    x: -0.8777
+    y: -0.2853
+    z: -0.3826
+
+

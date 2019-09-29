@@ -1,0 +1,18 @@
+# same info as YAML, with extra information
+--- 
+# always name the document!
+name: runsheet
+
+subid: 000
+sub_code: sub000
+run_date: 08/22/2018
+experiment: cals
+
+# plus some extra information ...
+
+experimenter: Anna
+time_of_day: 4:50pm
+
+
+
+

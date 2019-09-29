@@ -1,0 +1,4 @@
+Index	regexp	item_id	difficulty/length	cloze
+bin01	(\d+) #(22036) (1)	22036	Hard/Short	
+bin02	#(14080) (?:\d+ ){0,1}(1024)	14080		0.2
+bin03	#(14080) (?:\d+ ){0,1}(1048)	14080	Hard/Short/Incorrect	0.357

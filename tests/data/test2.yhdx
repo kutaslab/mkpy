@@ -1,0 +1,103 @@
+# Header data extraction uses the same YAML format as the header file 
+#
+# Every mkh5 data block has exactly one header.
+#
+# The header is a tree structure with branches ending in a dataum "leaf". 
+#
+# The header file defines branches and where to *set* the leaves. 
+#
+# The extraction file defines branches and where *get* those leaves. 
+#
+# Syntax:
+# 
+#    key:
+#     value
+#
+# where value may be non-terminal or terminal 
+#
+#   * non-terminals:
+#
+#       key (string) for maps in the YAML header
+#       index (0-based positive integer) for sequences in the YAML header
+#
+#    * terminal
+#       column_name (string) in the event table for these terminal data in the YAML header
+#
+# In English ... mkh5 header information comes from two places:
+#
+#   1. the original dig header in the .crw file (from mdh)
+#   2. the new YAML header (.yhdr) passed in when mkh5 converted the crw/log 
+# We extract it the same way it went in ... via any of the info from
+#  the mkh5 header the same way
+
+# ---
+name: dig  # extract name of the header ... should be path to a dblock
+
+# extract participant to a column called dig_sub_id
+subdesc: subdesc
+expdesc: expdesc
+   
+# Example: 
+
+---
+name: runsheet   # a document name always
+
+age: age      # Note 1: the column name can be the same as header key like this ...
+SAT: sat_test # Note 2: but it doesn't have to be ... as in this case
+mri_id: MR_ID
+
+# if the branch specified doesn't exist or the data is missing the
+# row(s) for that column will be empty
+there_is_no_such_header_key_as_this: empty_col
+
+# This extraction map aligns with the corresponding data in the YAML header.
+# And again, the "leaf" here says which column to put the data into.
+mood_VAS:
+  pre:
+    valence: mood_pre_valence  
+    arousal: mood_pre_arousal
+  mid:
+    valence: mood_mid_valence
+    arousal: mood_mid_arousal
+  post:
+    valence: mood_post_valence
+    arousal: mood_post_arousal
+
+# 1. To extract data that came from the .crw dig header.
+#
+#      - define a YAML document 
+#      - specify which keys you want to extract 
+#      - where the datum would be, instead put the name of the column
+#        where it will be stored.
+#
+#
+# 2. The YAML header (yhdr) allows additional information to be
+#    included in the mkh5 header. To fish it back out for inclusion in
+#    the event and epoch table do this.
+#
+#       - copy and paste the part of the YAML header file you want to extract
+#       - replace each data value with the name of the column where you want it to appear
+# 
+#     Thats it.
+#
+
+# Wrinkle: sequences
+#
+# In YAML a sequence might look like this
+# 
+#    some_sequence:
+#      - alpha
+#      - beta
+#      - gamma
+#
+#
+#
+#  For defining the branches/paths to sequence data, the indices of
+#  the sequence i = 0, 1, 2 are promoted to keys and then work the
+#  same way as the usual maps (except that order is preserved).
+
+some_sequence:
+  0: alpha
+  1: beta
+  2: gamma
+

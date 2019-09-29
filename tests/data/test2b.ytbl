@@ -1,0 +1,28 @@
+# YAML version 
+---
+name: demo
+
+# Index and regexp are mandatory, all else is whatever
+columns:
+    [ Index, regexp , col         ]
+rows:
+# typical usage
+- [ bin1, '(#11\d\d\d)', 'B1'     ]   # \d\d\d = match 3 numerals
+- [ bin2, '(#11\d{3})', 'B2'      ]   # \d{3} does the same
+- [ bin3, '(#12\d{3})', 'B3'      ]
+- [ bin4, '(#13\d{3})', 'B4'      ]
+- [ bin5, '(#15\d{3})', 'B5'      ]
+- [ bin6, '(#16\d{3})', 'B6'      ]
+- [ bin7, '(#17\d{3})', 'B7'      ]
+- [ bin8, '(#18\d{3})', 'B8'      ]
+
+# some fancy pattern matching
+- [ binX, '(#10)', 'B_emtpy' ]   # there are no #10 codes and 1024 is not an anchor match
+- [ binX, '(#1\d+58)', 'BB'  ]   # 1158 1258 10158 10258 
+- [ binX, '(#10058) (\d+ ){3}', 'BC' ] # extract anchor and 3rd code after anchor
+- [ binX, '(#10058) (\d+ ){1,5}', 'B1_5_long' ] # match anchor 1 - 5  capture longest possible match
+- [ binX, '(#10058) (?:\d+ )+(1040)', 'B_longest'] # extract anchor and 1040 after *longest* match
+- [ binX, '(#10058) (?:\d+ )+?(1040)', 'B_shortest' ] # extract anchor and 1040 after *shortest* match
+- [ bin_odd, '(#\d+[13579])', 'B_odd'  ]   # anchors ending in odd numbers
+
+

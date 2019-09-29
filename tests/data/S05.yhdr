@@ -1,0 +1,559 @@
+# This file extends the .crw header with additional information that 
+# should travel with the eeg data
+#
+# apparatus:
+# 
+# Minimal Format:
+#
+# * these maps are mandatory
+#
+#      name: apparatus
+#      space: (details below)
+#      fiducials: (details below)
+#      sensors: (details below)
+#      streams: (details below)
+# 
+# * There MAY be additional yaml docs 
+#
+# * The docs MAY contain additional maps
+# 
+# * Missing data *MUST* be coded with JSON null not YAML .NaN for import into MATLAB
+# 
+# NOTE: Nested YAML key: value maps are verbose but "self-documenting"
+#       and map neatly to indexed tabular data (rows x columns) where
+#       the top-level keys are the rows and the nested keys are
+#       columns
+# 
+# Ex. YAML maps for two EEG data streams
+#
+# lle  
+#   pos:    lle
+#   neg:    *A1
+#   gain:  *10K
+#   hphz:  0.01
+#   lphz:  100.0
+#
+# MiPf:
+#   pos:   MiPf
+#   neg:   *A1
+#   gain:  *10K
+#   hphz:  0.01
+#   lphz:  100.0
+#
+# HEOG:
+#   pos:   lhz
+#   neg:   rhz
+#   gain:  10000
+#   hphz:  0.01
+#   lphz:  100.0
+#
+# Convert to this table 
+#    
+# index  pos   neg   gain hphz lphz 
+#  lle   lle    A1  10000 0.01 100.0
+#  MiPf  MiPf   A1  10000 0.01 100.0
+---
+
+name: runsheet
+subid: S05
+
+---
+# Description: the apparatus document specifies instrumentation parameters
+#              including amplifier settings and electrode locations
+name: apparatus
+
+mne_montage_name: 26chan
+
+# define the Cartesian 3D coordinate relative to the head
+# default = RAS
+# space:
+#   origin: mid_fiducial    # vertex, mid_temporal  
+#   coordinate: cartesian   # polar_degree  polar_radian
+#   distance_unit: cm       # in
+#   orientation: ['Y+','X+', 'Z+'] # X=right, Y = anterior, Z = superior
+
+space:
+  coordinates: cartesian
+  distance_unit: cm
+  orientation: ras
+
+
+#  streams:
+#
+#  Description: 
+#
+#     stream specifies EEG data channel recording parameters. 
+#
+#     * Each top level key names a dig data channel, e.g. lle, MiPa, HEOG
+#
+#     * Each nested key:value gives the setting (value)
+#
+#     * In tablular form, each top level key is a row, each value of its 
+#       nested key is a column
+# 
+# 
+#     * Missing data MUST be coded as null (JSON) for mkh5 portability between Python, MATLAB, and R.
+#       
+#       For Python only .NAN (YAML) works better for numerical missing data.
+#
+# 
+
+
+# ALL CHAN SETTINGS using YAML anchor-reference syntax where &name marks a values and *name plugs it in
+common_ref:  &A1 A1
+gain20K:    &20K 20000
+gain10K:    &10K 10000
+lp:  &lp 100.0
+hp:  &hp 000.01
+
+# pos = positive input to differential bio amp
+streams: 
+  lle:
+    pos:    lle
+    neg:    *A1
+    gain:  *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eog
+
+  lhz:
+    pos:    lhz
+    neg:    *A1
+    gain:   *10K
+    hphz:   *hp
+    lphz:   *lp
+    mne_type: eog
+
+  MiPf:
+    pos:   MiPf
+    neg:   *A1
+    gain:  *10K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+    
+  LLPf:
+    pos:   LLPf
+    neg:   *A1
+    gain:  *10K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LLFr:
+    pos:   LLFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LLTe:
+    pos:   LLTe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LLOc:
+    pos:   LLOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  MiOc:
+    pos:   MiOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LDFr:
+    pos:   LDFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LDCe:
+    pos:   LDCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LDPa:
+    pos:   LDPa
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMPf:
+    pos:   LMPf
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMFr:
+    pos:   LMFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMCe:
+    pos:   LMCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  LMOc:
+    pos:   LMOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  MiCe:
+    pos:   MiCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  MiPa:
+    pos:   MiPa
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  rle:
+    pos:    rle 
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eog
+
+  rhz:
+    pos:   rhz 
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eog
+
+  A2:
+    pos:    A2  
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLPf:
+    pos:   RLPf
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLFr:
+    pos:   RLFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLTe:
+    pos:   RLTe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RLOc:
+    pos:   RLOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RDFr:
+    pos:   RDFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RDCe:
+    pos:   RDCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RDPa:
+    pos:   RDPa
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMPf:
+    pos:   RMPf
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMFr:
+    pos:   RMFr
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMCe:
+    pos:   RMCe
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  RMOc:
+    pos:   RMOc
+    neg:   *A1
+    gain:  *20K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+  heog:
+    pos:   lhz
+    neg:   rhz 
+    gain:  *10K
+    hphz:  *hp
+    lphz:  *lp
+    mne_type:  eeg
+
+# fiducials and sensors
+fiducials:
+  lpa:
+    x: -6.9
+    y: 0.0
+    z: 0.0
+
+  nasion:
+    x: 0.0
+    y: 8.5
+    z: 0.0
+
+  rpa:
+    x: 6.9
+    y: 0.0
+    z: 0.0
+
+
+# sensor map (MANDATORY)
+# 3-D locations of each sensor (typically electrode)
+#
+
+sensors:
+
+  A1:
+    x: -6.2
+    y: -3.4
+    z: -0.1
+
+  A2:
+    x: 6.2
+    y: -3.4
+    z: -0.1
+
+  GND:
+    x: 0.0
+    y: 9.6
+    z: 8.5
+
+  LDCe_:
+    x: -7.4
+    y: 0.5
+    z: 10.4
+
+  LDFr:
+    x: -5.7
+    y: 4.8
+    z: 10.0
+
+  LDPa:
+    x: -5.8
+    y: -3.3
+    z: 10.1
+
+  LLFr:
+    x: -7.7
+    y: 2.5
+    z: 5.1
+
+  LLOc:
+    x: -5.0
+    y: -6.6
+    z: 6.1
+
+  LLPf:
+    x: -5.7
+    y: 7.2
+    z: 5.0
+
+  LLTe:
+    x: -7.8
+    y: -2.2
+    z: 5.5
+
+  LMCe:
+    x: -3.9
+    y: -0.3
+    z: 13.3
+
+  LMFr:
+    x: -2.7
+    y: 4.3
+    z: 13.2
+
+  LMOc:
+    x: -2.3
+    y: -5.8
+    z: 10.2
+
+  LMPf:
+    x: -2.3
+    y: 8.2
+    z: 9.9
+
+  MiCe:
+    x: 0.0
+    y: 1.7
+    z: 14.7
+
+  MiOc:
+    x: 0.0
+    y: -8.3
+    z: 6.0
+
+  MiPa:
+    x: 0.0
+    y: -2.7
+    z: 13.2
+
+  MiPf:
+    x: 0.0
+    y: 9.8
+    z: 5.6
+
+  RDCe:
+    x: 6.6
+    y: 0.7
+    z: 9.9
+
+  RDFr:
+    x: 5.7
+    y: 4.8
+    z: 10.0
+
+  RDPa:
+    x: 5.8
+    y: -3.3
+    z: 10.1
+
+  RLFr:
+    x: 7.7
+    y: 2.5
+    z: 5.1
+
+  RLOc:
+    x: 5.0
+    y: -6.6
+    z: 6.1
+
+  RLPf:
+    x: 5.7
+    y: 7.2
+    z: 5.0
+
+  RLTe:
+    x: 7.8
+    y: -2.2
+    z: 5.5
+
+  RMCe:
+    x: 3.9
+    y: -0.3
+    z: 13.3
+
+  RMFr:
+    x: 2.7
+    y: 4.3
+    z: 13.2
+
+  RMOc:
+    x: 2.3
+    y: -5.8
+    z: 10.2
+
+  RMPf:
+    x: 2.3
+    y: 8.2
+    z: 9.9
+
+  lhz:
+    x: -6.7
+    y: 5.5
+    z: 1.1
+
+  lle:
+    x: -4.5
+    y: 7.7
+    z: -1.7
+
+  rhz:
+    x: 6.7
+    y: 5.5
+    z: 1.1
+
+  rle:
+    x: 4.5
+    y: 7.7
+    z: -1.7
+
+ 
+
+
+

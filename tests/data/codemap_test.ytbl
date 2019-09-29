@@ -1,0 +1,87 @@
+# This is the yaml text format equivalent of a rows x columns tabular format
+#
+
+# Begin actual file ...
+
+columns:
+- Index
+- regexp
+- description
+
+
+rows:
+- - set_initial
+  - (#[12]\d{3,})
+  - set_initial
+
+- - set_medial
+  - (#\d+[12]\d)
+  - set_medial
+
+- - neg_last
+  - (#-\d+)
+  - neg_last
+
+- - neg_last_plus_one
+  - (#-\d+) (\d+)
+  - neg_last_plus_one
+
+- - neg_code
+  - (#\d+) (-\d+)
+  - neg_code
+
+- - code_frag
+  - (#\d+) (\b12028\b)
+  - non-anchor code fragment
+
+- - bin1
+  - (\d+) \d+ (#12028)
+  - capture_pre_anchor
+
+- - bin2
+  - (#1[12]02[\d]) (\d+)
+  - capture_post_anchor
+
+- - bin3
+  - (#\d+) \d+ (1[12]028)
+  - capture_post_anchor2
+
+- - bin4
+  - (#\d+) (\d+) (1[12]028)
+  - multiple_capture_groups
+
+- - bin4
+  - (#\d+) (\d+) (1[12]028)
+  - duplicate_Index_labels_are_ok_but_why
+
+- - 1anch_patt_seq
+  - (#1[12]02[\d])
+  - dont_start_Index_with_number
+
+- - anch_patt
+  - (#1202[58])
+  - lit_12025_12028
+
+- - anch_patt
+  - (#1[12]02[\d])
+  - lit_12025_12028
+
+- - anch_lit
+  - (#12028)
+  - lit_12028
+
+- - anch_lit
+  - (#12025)
+  - lit_12025
+
+- - anch_lit_w_sequence
+  - (#12025) \d+ \d+
+  - lit_12025
+
+- - anch_lit_w_seq_and_capture
+  - (#12025) \d+ (\d+)
+  - lit_12025
+
+
+
+

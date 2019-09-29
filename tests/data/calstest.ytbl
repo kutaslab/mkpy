@@ -1,0 +1,94 @@
+# YAML version ... c.f. calstest.cdbl
+---
+name: calstest
+
+# Index and regexp are mandatory, all else is whatever
+columns:
+    [ Index, regexp , bin, bindesc ]
+
+rows:
+- - 0_0
+  - (#8)
+  - 0
+  - bin 0 code 8 n=100
+
+- - 1_1
+  - (#2011) (2012)  # match 2011 followed by 2012 and extract both
+  - 1
+  - bin 1 cal 1 item 1
+
+- - 1_2
+  - (#2012)
+  - 2
+  - bin 2 cal 1 item 2
+
+- - 1_3
+  - (#2013)
+  - 3
+  - bin 3 cal 1 item 3
+
+- - 1_4
+  - (#2014)
+  - 4
+  - bin 4 cal 1 item 4
+
+- - 1_5
+  - (#2051) (?!2052)  # match 2051 *not* followed by 2052
+  - 5
+  - bin 5 cal 5 item 1
+
+- - 1_6
+  - (#2052)
+  - 6
+  - bin 6 cal 5 item 2
+
+- - 1_7
+  - (#2053)
+  - 7
+  - bin 7 cal 5 item 3
+
+- - 1_8
+  - (#2054)
+  - 8
+  - bin 8 cal 5 item 4
+
+- - 1_9
+  - (#2101)
+  - 9
+  - bin 9 cal 10 item 1
+
+- - 1_10
+  - (#2102)
+  - 10
+  - bin 10 cal 10 item 2
+
+- - 1_11
+  - (#2103)
+  - 11
+  - bin 11 cal 10 item 3
+
+- - 1_12
+  - (#2104)
+  - 12
+  - bin 12 cal 10 item 4
+
+- - 1_13
+  - (#2201)
+  - 13
+  - bin 13 cal 20 item 1
+
+- - 1_14
+  - (#2202)
+  - 14
+  - bin 14 cal 20 item 2
+
+- - 1_15
+  - (#2203)
+  - 15
+  - bin 15 cal 20 item 3
+
+- - 1_16
+  - (#2204)
+  - 16
+  - bin 16 cal 20 item 4
+

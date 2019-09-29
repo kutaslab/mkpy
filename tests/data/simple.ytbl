@@ -1,0 +1,36 @@
+# cd 0
+# Calibration
+# sd 0
+# cal pulses 10 mV 200ms
+# .{1;2;3;10;11;12;14;91;92;93;94;81;82;83;84;199}
+
+# cd 1
+# First Presentation
+# sd 1
+# All Trials
+# .{*}
+
+
+# cd 2
+# Second Presentation
+# sd 2
+# All Trials
+# .{*}
+
+# cd 3
+# Third Presentation
+# sd 3
+# All Trials
+# .{*}
+
+
+
+# YAML version 
+---
+name: pcag      # some name
+
+# Index and regexp are mandatory, all else is whatever
+columns:
+    [ Index, regexp ]
+rows:
+  - [ bin1, '(#\d+)' ]

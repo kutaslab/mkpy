@@ -1,0 +1,29 @@
+#!/usr/bin/env python3
+
+import argparse  # successor to optparse
+from mkpy import pygarv
+from mkpy import mkh5viewer
+
+# set up parser
+parser = argparse.ArgumentParser(description='mkh5 artifact tagger') 
+
+# names 
+parser.add_argument("mkh5_f", type=str, help="mkh5 format data")
+parser.add_argument("--yarf", type=str, metavar='myfile.yarf', 
+                    dest="yarf_f", help=".yarf format YAML artifact test file")
+
+args_dict = vars(parser.parse_args()) # fetch from sys.argv
+# TO DO ... implement --tests option to dump available tests?
+
+# run pygarv to mod the file 
+if args_dict['yarf_f'] is not None:
+    print('running pygarv')
+    pg = pygarv.PyGarv(mkh5_f=args_dict['mkh5_f'])
+    pg._update_tr_docs_from_yaml_f(yarf_f=args_dict['yarf_f']) # load yarf tests
+    pg._update_mkh5() # actually mod the h5 file
+else:
+    # bare init w/ mkh5 for viewing
+    pg = pygarv.PyGarv(mkh5_f=args_dict['mkh5_f'])
+    pg._update_tr_docs_from_mkh5()
+    mkh5viewer.launch_app(args_dict['mkh5_f'])
+        

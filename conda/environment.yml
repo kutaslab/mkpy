@@ -1,0 +1,21 @@
+# usage:
+#   conda env create -f environment.yml
+#   conda activate fitgrid_compat
+
+---
+name: mkpy_compat
+channels:
+    - kutaslab
+    - conda-forge
+dependencies:
+    - Cython
+    - pytest
+    - pytest-cov
+    - dpath
+    - h5py
+    - numpy
+    - matplotlib
+    - pandas
+    - PyYAML
+    - xlrd
+    - yamllint

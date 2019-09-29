@@ -1,0 +1,49 @@
+#!/usr/bin/env python
+""" generate a scenario file for acquiring different sized cal pulses coded as follows:
+
+cals
+  condition code 0
+  event code 8
+
+experimental
+  condition code 1
+  event codes = 20XY
+
+where
+   X = cal magnitude, 1, 5, 10, 20
+   Y = "stim type" 0, 3, 6 ,9
+
+"""
+import numpy as np
+import pdb
+
+n_cals = 100
+cal_stim = '1000 500 8 text="cal pulse {0}/{1}"'
+for n in range(n_cals):
+    print(cal_stim.format(n, n_cals))
+
+
+# trial specs
+n_trial_types = 4
+n_trials_per_type = 3 # manageable
+trial_types = [x + 1 for x in range(n_trial_types)]
+
+# block specs, one per cal magnitude
+block_types = [1, 5, 10, 20]
+n_blocks = len(block_types)
+block_len = n_trial_types * n_trials_per_type
+expt_len = block_len * n_blocks
+
+# template
+this_stim = '1000 500 2{0:02d}{1} text="block {0:02d} trial {1}"'
+for b in block_types:
+    this_block = np.tile(np.repeat(trial_types, n_trials_per_type),
+                         n_blocks)
+    for i,t in enumerate(this_block):
+        print(this_stim.format(b, t))
+        if i == len(this_block)-1:
+            if b != block_types[-1]:
+                print('1000 500 0 text="increment the cal pulse and condition code" pause')
+            else: 
+                print('1000 500 0 text="Done"')
+

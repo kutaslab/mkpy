@@ -1,0 +1,34 @@
+---
+package:
+    name: mkpy
+    version: "0.1.3"
+
+source:
+    path: ../
+
+build:
+    script: python setup.py install --single-version-externally-managed --record=record.txt
+
+requirements:
+    build:
+        - python
+        - Cython
+    run:
+        - python>=3.6
+        - dpath
+        - h5py
+        - numpy
+        - matplotlib
+        - pandas
+        - PyYAML
+        - xlrd
+        - yamllint
+
+test:
+    imports:
+        - mkpy
+
+about:
+    home: https://github.com/kutaslab/mkpy
+    license: BSD
+    license_file: LICENSE
