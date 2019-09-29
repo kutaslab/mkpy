@@ -66,7 +66,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "mkpy"
-copyright = "2017-2018 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith"
+copyright = "2017-2019 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith"
 author = (
     "Thomas P. Urbach, Andrey Portnoy, extending code from Nathaniel Smith"
 )

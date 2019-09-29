@@ -236,7 +236,7 @@ class CodeTagger:
         """
         # use !named_sheet if there is one, else default to 0 == first
         cmf_reob = re.match(
-            "(?P<xl_f>.+\.xls[xm])[\!]*(?P<sheet_name>.*)$", cmf
+            r"(?P<xl_f>.+\.xls[xm])[\!]*(?P<sheet_name>.*)$", cmf
         )
         xl_f = cmf_reob["xl_f"]
         sheet_name = cmf_reob["sheet_name"]
@@ -264,7 +264,7 @@ class CodeTagger:
 
         # slurp the code tags
         with open(cmf, "r") as d:
-            mapper = yaml.load(d.read())
+            mapper = yaml.load(d.read(), Loader=yaml.SafeLoader)
 
         # modicum of format checking ...
         if not isinstance(mapper, dict):
@@ -496,7 +496,7 @@ class CodeTagger:
 
         ``anchor pattern`` : regexp str
             any capturing code pattern that captures a subset of the codes
-            captured by r'(#[-]{0,1}\d+)'. 
+            captured by r'(#[-]{0,1}\d+)'.
 
         ``code sequence`` : str
             a sequence of codes, each preceded by a single a single whitespace.
