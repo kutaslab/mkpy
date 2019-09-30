@@ -8,6 +8,7 @@ install:
     - conda info -a
     - conda env create --name mkpy -f conda/environment.yml
     - source activate mkpy
+    - conda install nose  # for dpath tests on travis, not needed otherwise
     - conda list
     - lscpu
     - python -c 'import numpy; numpy.show_config()'
