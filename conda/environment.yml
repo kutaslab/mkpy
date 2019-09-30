@@ -11,7 +11,7 @@ dependencies:
     - Cython
     - pytest
     - pytest-cov
-    - dpath
+    #    - dpath
     - h5py
     - numpy
     - matplotlib

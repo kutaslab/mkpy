@@ -81,7 +81,6 @@ import pdb
 import logging
 
 import numpy as np
-import dpath.util
 import pprint as pp
 from matplotlib import pyplot as plt
 import copy
@@ -92,6 +91,9 @@ from mkpy import mkh5
 import h5py
 import sys
 import warnings
+
+# import dpath.util
+from . import dpath
 
 from mkpy import mkh5viewer
 

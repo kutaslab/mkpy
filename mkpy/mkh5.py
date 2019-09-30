@@ -1,19 +1,20 @@
 import hashlib
 import inspect
 import os.path
-import pdb
 import re
 import warnings
 import h5py
 import json
 import pprint
 import yaml
-import dpath.util
 import uuid
 import pandas as pd
 import copy
 import logging
 from pathlib import Path
+
+# import dpath.util
+from . import dpath
 
 import numpy as np
 import matplotlib.pyplot as plt

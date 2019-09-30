@@ -15,7 +15,6 @@ import tempfile
 
 import numpy as np
 import pandas as pd
-import dpath, dpath.util
 from collections import OrderedDict as odict
 from mkpy import mkh5
 import pprint as pp
@@ -23,7 +22,10 @@ import pprint as pp
 import pdb
 import warnings
 
+# import dpath, dpath.util
+from . import dpath
 from mkpy import pygarv as pg
+
 from . import current_function, indent, log_exceptions
 
 ## appearance
