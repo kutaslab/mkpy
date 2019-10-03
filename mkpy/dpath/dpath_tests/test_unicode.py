@@ -1,9 +1,5 @@
 # -*- coding: utf-8 -*-
-
-import nose
-import dpath.path
-import dpath.util
-
+import mkpy.dpath as dpath
 
 def test_unicode_merge():
     a = {"中": ["zhong"]}

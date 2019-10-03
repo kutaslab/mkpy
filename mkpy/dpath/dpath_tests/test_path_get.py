@@ -1,7 +1,4 @@
-import nose
-from nose.tools import raises
-import dpath.path
-import dpath.exceptions
+import mkpy.dpath as dpath
 
 
 def test_path_get_list_of_dicts():

@@ -1,5 +1,4 @@
-import nose
-import dpath.util
+import mkpy.dpath as dpath
 
 
 def test_set_new_separator():
@@ -22,10 +21,10 @@ def test_set_new_list():
     dict = {"a": []}
     dpath.util.new(dict, "/a/1", 1)
     assert dict["a"][1] == 1
-    assert dict["a"][0] == None
+    assert dict["a"][0] is None
     dpath.util.new(dict, ["a", "1"], 1)
     assert dict["a"][1] == 1
-    assert dict["a"][0] == None
+    assert dict["a"][0] is None
 
 
 def test_set_new_list_path_with_separator():
