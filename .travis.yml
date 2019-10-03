@@ -19,7 +19,7 @@ install:
 script:
     - black --check --verbose --line-length=79 .
     # else mkpy warnings clog output
-    - pytest --disable-warnings --cov=mkpy 
+    - python -m pytest --disable-warnings --cov=mkpy 
 after_success:
     - pip install codecov && codecov
 before_deploy:
