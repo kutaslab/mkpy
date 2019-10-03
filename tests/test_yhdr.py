@@ -7,8 +7,10 @@ import io
 import glob
 import os.path
 import json
-import dpath.path
-import dpath.util
+
+# import dpath.path
+# import dpath.util
+from mkpy import dpath
 
 
 def test_load():

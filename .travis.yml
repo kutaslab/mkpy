@@ -8,6 +8,7 @@ install:
     - conda info -a
     - conda env create --name mkpy -f conda/environment.yml
     - source activate mkpy
+    # - conda install nose  # for dpath tests on travis, not needed otherwise
     - conda list
     - lscpu
     - python -c 'import numpy; numpy.show_config()'
@@ -16,7 +17,8 @@ install:
     - pip install -e .
 script:
     - black --check --verbose --line-length=79 .
-    - pytest --disable-warnings --cov=mkpy  # else mkpy warnings clog output
+    # else mkpy warnings clog output
+    - pytest --ignore mkpy/dpath/dpath_tests --disable-warnings --cov=mkpy 
 after_success:
     - pip install codecov && codecov
 before_deploy:
