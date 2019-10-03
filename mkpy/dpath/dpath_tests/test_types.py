@@ -1,6 +1,6 @@
 import nose
-import dpath.util
 from nose.tools import assert_raises
+import mkpy.dpath as dpath
 
 try:
     # python3, especially 3.8

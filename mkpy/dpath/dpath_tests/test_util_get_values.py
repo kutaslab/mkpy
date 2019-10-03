@@ -1,6 +1,7 @@
 import nose
 from nose.tools import assert_raises
-import dpath.util
+import mkpy.dpath as dpath
+
 
 # import mock
 from unittest import mock
@@ -45,8 +46,9 @@ def test_values():
     assert 2 in ret
 
 
-@mock.patch("dpath.util.search")
+@mock.patch("mkpy.dpath.util.search")
 def test_values_passes_through(searchfunc):
+
     searchfunc.return_value = []
 
     def y():

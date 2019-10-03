@@ -1,7 +1,6 @@
 import nose
 from nose.tools import raises
-import dpath.util
-import dpath.exceptions
+import mkpy.dpath as dpath
 
 
 def test_delete_separator():

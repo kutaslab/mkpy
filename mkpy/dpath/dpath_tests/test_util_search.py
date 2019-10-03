@@ -1,5 +1,4 @@
-import nose
-import dpath.util
+import mkpy.dpath as dpath
 
 
 def test_search_paths_with_separator():

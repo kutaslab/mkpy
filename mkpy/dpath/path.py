@@ -2,9 +2,8 @@
 # import dpath.exceptions
 # import dpath.options
 
-from . import PY3
-from . import exceptions as dpath_exceptions
-from . import options as dpath_options
+from mkpy.dpath import PY3
+import mkpy.dpath as dpath
 
 import re
 import fnmatch
@@ -70,7 +69,7 @@ def validate(path, regex=None):
         key = elem[0]
         strkey = str(key)
         if regex and (not regex.findall(strkey)):
-            raise dpath_exceptions.InvalidKeyName(
+            raise dpath.exceptions.InvalidKeyName(
                 "{} at {} does not match the expression {}"
                 "".format(strkey, validated, regex.pattern)
             )
@@ -103,10 +102,10 @@ def paths(obj, dirs=True, leaves=True, path=[], skip=False):
 
         for (k, v) in iteritems:
             if issubclass(k.__class__, (string_class)):
-                if (not k) and (not dpath_options.ALLOW_EMPTY_STRING_KEYS):
-                    raise dpath_exceptions.InvalidKeyName(
+                if (not k) and (not dpath.options.ALLOW_EMPTY_STRING_KEYS):
+                    raise dpath.exceptions.InvalidKeyName(
                         "Empty string keys not allowed without "
-                        "dpath_options.ALLOW_EMPTY_STRING_KEYS=True"
+                        "dpath.options.ALLOW_EMPTY_STRING_KEYS=True"
                     )
                 elif skip and k[0] == "+":
                     continue
@@ -146,7 +145,7 @@ def match(path, glob):
     if "**" in glob:
         ss = glob.index("**")
         if "**" in glob[ss + 1 :]:
-            raise dpath_exceptions.InvalidGlob(
+            raise dpath.exceptions.InvalidGlob(
                 "Invalid glob. Only one '**' is permitted per glob."
             )
 
@@ -257,7 +256,7 @@ def set(obj, path, value, create_missing=True, afilter=None):
         if (not tester(obj, elem)) and (create_missing):
             creator(obj, elem)
         elif not tester(obj, elem):
-            raise dpath_exceptions.PathNotFound(
+            raise dpath.exceptions.PathNotFound(
                 "{} does not exist in {}".format(elem, traversed)
             )
         traversed.append(elem_value)
@@ -317,7 +316,7 @@ def get(obj, path, view=False, afilter=None):
 
         if not issubclass(target.__class__, (MutableSequence, MutableMapping)):
             if afilter and (not afilter(target)):
-                raise dpath_exceptions.FilteredValue
+                raise dpath.exceptions.FilteredValue
 
         index += 1
 

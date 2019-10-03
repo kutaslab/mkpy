@@ -1,8 +1,8 @@
 # import dpath.path
 # import dpath.exceptions
 
-from . import path as dpath_path
-from . import exceptions as dpath_exception
+import mkpy.dpath.path
+import mkpy.dpath.exceptions
 
 import traceback
 
@@ -38,7 +38,7 @@ def __safe_path__(path, separator):
         key = elem[0]
         strkey = str(key)
         if separator and (separator in strkey):
-            raise dpath_exceptions.InvalidKeyName(
+            raise mkpy.dpath.exceptions.InvalidKeyName(
                 "{0} at {1} contains the separator {2}"
                 "".format(strkey, separator.join(validated), separator)
             )
@@ -57,8 +57,8 @@ def new(obj, path, value, separator="/"):
     keys
     """
     pathlist = __safe_path__(path, separator)
-    pathobj = dpath_path.path_types(obj, pathlist)
-    return dpath_path.set(obj, pathobj, value, create_missing=True)
+    pathobj = mkpy.dpath.path.path_types(obj, pathlist)
+    return mkpy.dpath.path.set(obj, pathobj, value, create_missing=True)
 
 
 def delete(obj, glob, separator="/", afilter=None):
@@ -90,7 +90,7 @@ def delete(obj, glob, separator="/", afilter=None):
             prev.pop(item[0])
         deleted += 1
     if not deleted:
-        raise dpath_exceptions.PathNotFound(
+        raise mkpy.dpath.exceptions.PathNotFound(
             "Could not find {0} to delete it".format(glob)
         )
     return deleted
@@ -105,7 +105,9 @@ def set(obj, glob, value, separator="/", afilter=None):
     globlist = __safe_path__(glob, separator)
     for path in _inner_search(obj, globlist, separator):
         changed += 1
-        dpath_path.set(obj, path, value, create_missing=False, afilter=afilter)
+        mkpy.dpath.path.set(
+            obj, path, value, create_missing=False, afilter=afilter
+        )
     return changed
 
 
@@ -122,7 +124,8 @@ def get(obj, glob, separator="/"):
     for item in search(obj, glob, yielded=True, separator=separator):
         if ret is not None:
             raise ValueError(
-                "dpath.util.get() globs must match only one leaf : %s" % glob
+                "mkpy.dpath.util.get() globs must match only one leaf : %s"
+                % glob
             )
         ret = item[1]
         found = True
@@ -140,7 +143,7 @@ def values(obj, glob, separator="/", afilter=None, dirs=True):
     """
     return [
         x[1]
-        for x in dpath.util.search(
+        for x in mkpy.dpath.util.search(
             obj,
             glob,
             yielded=True,
@@ -166,9 +169,11 @@ def search(obj, glob, yielded=False, separator="/", afilter=None, dirs=True):
         globlist = __safe_path__(glob, separator)
         for path in _inner_search(obj, globlist, separator, dirs=dirs):
             try:
-                val = dpath_path.get(obj, path, afilter=afilter, view=True)
+                val = mkpy.dpath.path.get(
+                    obj, path, afilter=afilter, view=True
+                )
                 merge(view, val)
-            except dpath_exceptions.FilteredValue:
+            except mkpy.dpath.exceptions.FilteredValue:
                 pass
         return view
 
@@ -176,12 +181,14 @@ def search(obj, glob, yielded=False, separator="/", afilter=None, dirs=True):
         globlist = __safe_path__(glob, separator)
         for path in _inner_search(obj, globlist, separator, dirs=dirs):
             try:
-                val = dpath_path.get(obj, path, view=False, afilter=afilter)
+                val = mkpy.dpath.path.get(
+                    obj, path, view=False, afilter=afilter
+                )
                 yield (
-                    separator.join(map(str, dpath_path.paths_only(path))),
+                    separator.join(map(str, mkpy.dpath.path.paths_only(path))),
                     val,
                 )
-            except dpath_exceptions.FilteredValue:
+            except mkpy.dpath.exceptions.FilteredValue:
                 pass
 
     if afilter is not None:
@@ -193,8 +200,8 @@ def search(obj, glob, yielded=False, separator="/", afilter=None, dirs=True):
 
 def _inner_search(obj, glob, separator, dirs=True, leaves=False):
     """Search the object paths that match the glob."""
-    for path in dpath_path.paths(obj, dirs, leaves, skip=True):
-        if dpath_path.match(path, glob):
+    for path in mkpy.dpath.path.paths(obj, dirs, leaves, skip=True):
+        if mkpy.dpath.path.match(path, glob):
             yield path
 
 

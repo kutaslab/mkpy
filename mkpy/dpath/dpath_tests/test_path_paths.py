@@ -1,31 +1,36 @@
 import nose
 from nose.tools import raises
-import dpath.path
-import dpath.exceptions
-import dpath.options
+
+# import dpath.path
+# import dpath.exceptions
+# import dpath.options
+
+import mkpy.dpath.exceptions
+import mkpy.dpath.path
+import mkpy.dpath.options
 
 
-@raises(dpath.exceptions.InvalidKeyName)
+@raises(mkpy.dpath.exceptions.InvalidKeyName)
 def test_path_paths_empty_key_disallowed():
     tdict = {"Empty": {"": {"Key": ""}}}
-    for x in dpath.path.paths(tdict):
+    for x in mkpy.dpath.path.paths(tdict):
         pass
 
 
 def test_path_paths_empty_key_allowed():
     tdict = {"Empty": {"": {"Key": ""}}}
     parts = []
-    dpath.options.ALLOW_EMPTY_STRING_KEYS = True
-    for x in dpath.path.paths(tdict, dirs=False, leaves=True):
+    mkpy.dpath.options.ALLOW_EMPTY_STRING_KEYS = True
+    for x in mkpy.dpath.path.paths(tdict, dirs=False, leaves=True):
         path = x
     for x in path[:-1]:
         parts.append(x[0])
-    dpath.options.ALLOW_EMPTY_STRING_KEYS = False
+    mkpy.dpath.options.ALLOW_EMPTY_STRING_KEYS = False
     assert "/".join(parts) == "Empty//Key"
 
 
 def test_path_paths_int_keys():
-    dpath.path.validate(
+    mkpy.dpath.path.validate(
         [
             ["I", dict],
             ["am", dict],
