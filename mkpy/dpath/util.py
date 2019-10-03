@@ -105,7 +105,9 @@ def set(obj, glob, value, separator="/", afilter=None):
     globlist = __safe_path__(glob, separator)
     for path in _inner_search(obj, globlist, separator):
         changed += 1
-        mkpy.dpath.path.set(obj, path, value, create_missing=False, afilter=afilter)
+        mkpy.dpath.path.set(
+            obj, path, value, create_missing=False, afilter=afilter
+        )
     return changed
 
 
@@ -122,7 +124,8 @@ def get(obj, glob, separator="/"):
     for item in search(obj, glob, yielded=True, separator=separator):
         if ret is not None:
             raise ValueError(
-                "mkpy.dpath.util.get() globs must match only one leaf : %s" % glob
+                "mkpy.dpath.util.get() globs must match only one leaf : %s"
+                % glob
             )
         ret = item[1]
         found = True
@@ -166,7 +169,9 @@ def search(obj, glob, yielded=False, separator="/", afilter=None, dirs=True):
         globlist = __safe_path__(glob, separator)
         for path in _inner_search(obj, globlist, separator, dirs=dirs):
             try:
-                val = mkpy.dpath.path.get(obj, path, afilter=afilter, view=True)
+                val = mkpy.dpath.path.get(
+                    obj, path, afilter=afilter, view=True
+                )
                 merge(view, val)
             except mkpy.dpath.exceptions.FilteredValue:
                 pass
@@ -176,7 +181,9 @@ def search(obj, glob, yielded=False, separator="/", afilter=None, dirs=True):
         globlist = __safe_path__(glob, separator)
         for path in _inner_search(obj, globlist, separator, dirs=dirs):
             try:
-                val = mkpy.dpath.path.get(obj, path, view=False, afilter=afilter)
+                val = mkpy.dpath.path.get(
+                    obj, path, view=False, afilter=afilter
+                )
                 yield (
                     separator.join(map(str, mkpy.dpath.path.paths_only(path))),
                     val,

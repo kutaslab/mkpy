@@ -11,7 +11,9 @@ def test_merge_typesafe_and_separator():
         mkpy.dpath.util.merge(
             dst,
             src,
-            flags=(mkpy.dpath.util.MERGE_ADDITIVE | mkpy.dpath.util.MERGE_TYPESAFE),
+            flags=(
+                mkpy.dpath.util.MERGE_ADDITIVE | mkpy.dpath.util.MERGE_TYPESAFE
+            ),
             separator=";",
         )
     except TypeError as e:

@@ -2,6 +2,7 @@ import nose
 from nose.tools import raises
 import mkpy.dpath as dpath
 
+
 def test_delete_separator():
     dict = {"a": {"b": 0}}
     dpath.util.delete(dict, ";a;b", separator=";")

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import mkpy.dpath as dpath
 
+
 def test_unicode_merge():
     a = {"中": ["zhong"]}
     b = {"文": ["wen"]}

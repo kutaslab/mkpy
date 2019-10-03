@@ -45,6 +45,7 @@ def test_values():
     assert 1 in ret
     assert 2 in ret
 
+
 @mock.patch("mkpy.dpath.util.search")
 def test_values_passes_through(searchfunc):
 

@@ -1,5 +1,6 @@
 import nose
 from nose.tools import raises
+
 # import dpath.path
 # import dpath.exceptions
 # import dpath.options
@@ -14,6 +15,7 @@ def test_path_paths_empty_key_disallowed():
     tdict = {"Empty": {"": {"Key": ""}}}
     for x in mkpy.dpath.path.paths(tdict):
         pass
+
 
 def test_path_paths_empty_key_allowed():
     tdict = {"Empty": {"": {"Key": ""}}}
