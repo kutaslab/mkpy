@@ -11,7 +11,7 @@ package:
 source:
   git_url: https://github.com/kutaslab/mkpy.git
   git_tag: {{ version }}
-  git_depth: 1  # (Defaults to -1/not shallow)
+  # git_depth: 1  # (Defaults to -1/not shallow)
 
 build:
   script: python setup.py install --single-version-externally-managed --record=record.txt
@@ -23,13 +23,14 @@ requirements:
     - setuptools
     - Cython
 
-  host:
-    - python ={{ py_pin }}
-    - numpy =={{ np_pin }} # 1.16.4=py36_0  # for fitgrid 0.4.4
+#  host:
+#    - python ={{ py_pin }}
+#    - numpy =={{ np_pin }} # 1.16.4=py36_0  # for fitgrid 0.4.4
 
   run:
-    - python
-    - numpy
+    - python ={{ py_pin }}
+    - numpy =={{ np_pin }}  # { pin_compatible('numpy') }}
+    - pytest  # so users can run tests to verify installation
     - h5py
     - matplotlib
     - pandas
