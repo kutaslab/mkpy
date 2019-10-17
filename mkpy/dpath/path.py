@@ -3,7 +3,9 @@
 # import dpath.options
 
 from mkpy.dpath import PY3
-import mkpy.dpath as dpath
+
+# from import mkpy.dpath as dpath
+from mkpy import dpath
 
 import re
 import fnmatch
