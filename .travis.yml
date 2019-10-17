@@ -7,7 +7,10 @@ install:
     - conda config --set always_yes yes --set changeps1 no
     - conda info -a
     - conda env create --name mkpy -f conda/environment.yml
-    - source activate mkpy
+    - conda install conda-build
+    - conda build -c defaults -c conda-forge conda  # conda build mkpy locally
+    - conda create --name mkpy_env mkpy -c $HOME/miniconda/conda-bld -c defaults -c conda-forge  # minimal env with mkpy
+    - source activate mkpy_env
     # - conda install nose  # for dpath tests on travis, not needed otherwise
     - conda list
     - lscpu
@@ -15,7 +18,7 @@ install:
     - pip install black
     - pip install nose  # for legacy dpath tests
     # install mkpy locally to build Cython and to import into notebooks
-    - pip install -e .
+    # - pip install -e .
 script:
     - black --check --verbose --line-length=79 .
     # python -m so pytest adds packager dir to sys.path for dpath_tests
