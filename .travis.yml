@@ -9,10 +9,10 @@ install:
     # - conda env create --name mkpy -f conda/environment.yml
     - conda install conda-build
     - conda build conda -c defaults -c conda-forge  # conda build mkpy locally
-    - conda create --name mkpy_env mkpy -c $HOME/miniconda/conda-bld -c defaults -c conda-forge  # minimal env with mkpy
+    - conda create --name mkpy_env mkpy -c file://$HOME/miniconda/conda-bld -c defaults -c conda-forge  # minimal env with mkpy
     - source activate mkpy_env
     # - conda install nose  # for dpath tests on travis, not needed otherwise
-    - conda install black pytest pytest-cov nose   # nose for legacy dpath tests
+    - conda install black pytest-cov nose   # nose for legacy dpath tests
     - conda list
     - lscpu
     - python -c 'import numpy; numpy.show_config()'
@@ -23,7 +23,8 @@ install:
 script:
     - black --check --verbose --line-length=79 .
     # python -m so pytest adds packager dir to sys.path for dpath_tests
-    - python -m pytest --disable-warnings --cov=mkpy
+    # - python -m pytest --disable-warnings --cov=mkpy
+    - pytest --disable-warnings --cov=mkpy
 after_success:
     - pip install codecov && codecov
 before_deploy:
