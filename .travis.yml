@@ -1,3 +1,4 @@
+# conda build mkpy then install locally and run pytests
 language: minimal
 install:
     - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
@@ -6,24 +7,16 @@ install:
     - hash -r
     - conda config --set always_yes yes --set changeps1 no
     - conda info -a
-    # - conda env create --name mkpy -f conda/environment.yml
     - conda install conda-build
-    - conda build conda -c defaults -c conda-forge  # conda build mkpy locally
-    - conda create --name mkpy_env mkpy -c file://$HOME/miniconda/conda-bld -c defaults -c conda-forge  # minimal env with mkpy
+    - conda build conda -c defaults -c conda-forge  # conda build mkpy 
+    - conda create --name mkpy_env mkpy -c file://$HOME/miniconda/conda-bld -c defaults -c conda-forge 
     - source activate mkpy_env
-    # - conda install nose  # for dpath tests on travis, not needed otherwise
     - conda install black pytest-cov nose   # nose for legacy dpath tests
     - conda list
     - lscpu
     - python -c 'import numpy; numpy.show_config()'
-    # - pip install black
-    # - pip install nose  
-    # install mkpy locally to build Cython and to import into notebooks
-    # - pip install -e .
 script:
     - black --check --verbose --line-length=79 .
-    # python -m so pytest adds packager dir to sys.path for dpath_tests
-    # - python -m pytest --disable-warnings --cov=mkpy
     - pytest --disable-warnings --cov=mkpy
 after_success:
     - pip install codecov && codecov
@@ -32,7 +25,7 @@ before_deploy:
     - conda install -c conda-forge pandoc
     - conda list
     - cd mkpy/docs
-    - sphinx-apidoc -f -e -o source .. test/*
+    - sphinx-apidoc -e -o source .. ../dpath/*
     - make html
     - touch _build/html/.nojekyll
 deploy:

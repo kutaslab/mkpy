@@ -1,4 +1,4 @@
-# build cmd from parent dir: conda-build -c defaults -c conda-forge conda
+# build cmd from parent dir: conda build conda -c defaults -c conda-forge
 
 {% set version = "0.1.4.dev2" %}
 {% set np_pin = "1.16.4" %}
@@ -17,25 +17,20 @@ build:
   script: python setup.py install --single-version-externally-managed --record=record.txt
 
 requirements:
-#  build:
-#    - {{ compiler('c') }}
 
-#    - python {{ py_pin }} # else the build Cythonizes with 3.7 and conflicts
-#    - numpy {{ np_pin }}  # for fitgrid 0.4.4
-#    - setuptools
-#    - Cython
+#  build:
+#    ... moved to host ...
 
   host:
-    # pin here or cythonized with 3.7
+    # pin here, else cythonized with 3.7
     - python ={{ py_pin }}
     - numpy =={{ np_pin }} # 1.16.4=py36_0  # for fitgrid 0.4.4
     - Cython
 
-
   run:
     - python ={{ py_pin }}  # cythonize with 3.6
     - numpy =={{ np_pin }}  # { pin_compatible('numpy') }}
-    - pytest  # so users can run tests to verify installation
+    - pytest  # include so users can run tests of installation
     - h5py
     - matplotlib
     - pandas
