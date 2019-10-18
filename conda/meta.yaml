@@ -1,6 +1,6 @@
 # build cmd from parent dir: conda build conda -c defaults -c conda-forge
 
-{% set version = "0.1.4.dev2" %}
+{% set version = "0.1.4rc1" %}
 {% set np_pin = "1.16.4" %}
 {% set py_pin = "3.6" %}
 
