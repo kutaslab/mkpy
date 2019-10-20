@@ -28,9 +28,9 @@ before_deploy:
     - conda install -c conda-forge pandoc
     - conda install anaconda-client
     - conda list
-    - sphinx-apidoc -e -f -o docs/source . ./tests/* ./setup.py
-    - make -C docs html
-    - touch docs/build/html/.nojekyll
+    - sphinx-apidoc -e -f -o mkpy/docs/source/ mkpy ./tests/ ./mkpy/dpath/* ./setup.py
+    - make -C mkpy/docs html
+    - touch mkpy/docs/_build/html/.nojekyll
 deploy:
     - provider: script
       skip_cleanup: true
