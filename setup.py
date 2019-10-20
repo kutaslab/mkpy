@@ -34,8 +34,21 @@ from Cython.Distutils import build_ext
 from Cython.Build import cythonize
 from setuptools import find_packages, setup, Extension
 import numpy as np
+from pathlib import Path
+import re
 
 from mkpy.__version__ import __version__
+
+# enforce conda meta.yaml semantic version is the same
+jinja_version = f'{{% set version = "{__version__}" %}}'
+meta_yaml_f = Path("./conda/meta.yaml")
+with open(meta_yaml_f) as f:
+    if not re.match(r"^" + jinja_version, f.read()):
+        fail_msg = (
+            "conda/meta.yaml must start with a jinja variable line exactly like this: "
+            f"{jinja_version}"
+        )
+        raise Exception(fail_msg)
 
 extensions = [
     Extension(
