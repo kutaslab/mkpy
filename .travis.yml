@@ -1,15 +1,18 @@
 # conda build mkpy then install locally and run pytests
+env:
+    - PACKAGE_NAME: mkpy   # for the conda_upload.sh deploy script
 language: minimal
-install:
+before_install:
     - wget https://repo.continuum.io/miniconda/Miniconda3-latest-Linux-x86_64.sh -O miniconda.sh
     - bash miniconda.sh -b -p $HOME/miniconda
     - export PATH="$HOME/miniconda/bin:$PATH"
     - hash -r
     - conda config --set always_yes yes --set changeps1 no
     - conda info -a
-    - conda install conda-build
+    - conda install conda-build conda-verify
+install:
     - conda build conda -c defaults -c conda-forge  # conda build mkpy 
-    - conda create --name mkpy_env mkpy -c file://$HOME/miniconda/conda-bld -c defaults -c conda-forge 
+    - conda create --name mkpy_env mkpy -c local -c defaults -c conda-forge 
     - source activate mkpy_env
     - conda install black pytest-cov nose   # nose for legacy dpath tests
     - conda list
@@ -23,17 +26,24 @@ after_success:
 before_deploy:
     - pip install sphinx sphinx_rtd_theme jupyter nbsphinx nbconvert!=5.4
     - conda install -c conda-forge pandoc
+    - conda install anaconda-client
     - conda list
-    - cd mkpy/docs
-    - sphinx-apidoc -e -o source .. ../dpath/*
-    - make html
-    - touch _build/html/.nojekyll
+    - sphinx-apidoc -e -f -o docs/source . ./tests/* ./setup.py
+    - make -C docs html
+    - touch docs/build/html/.nojekyll
 deploy:
-    provider: pages
-    skip_cleanup: true
-    github_token: $GITHUB_TOKEN
-    keep-history: true
-    on:
-        branch: master
-    target_branch: gh-pages  # that's the default anyway, just to be explicit
-    local_dir: mkpy/docs/_build/html
+    - provider: script
+      skip_cleanup: true
+      script: bash ./scripts/conda_upload.sh
+      on:
+          all_branches: true
+
+    - provider: pages
+      skip_cleanup: true
+      github_token: $GITHUB_TOKEN
+      keep-history: true
+      on:
+          branch: master
+      target_branch: gh-pages  # that's the default anyway, just to be explicit
+      local_dir: mkpy/docs/_build/html
+
