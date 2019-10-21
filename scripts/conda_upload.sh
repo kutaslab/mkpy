@@ -1,8 +1,8 @@
-# Notes
+# Notes: mkpy
 #   turbach 10/20/19
 #
-
-# * A bash script for use with a github repo and a .travis.yml deploy
+#
+# * Bash script for use with a github repo and a .travis.yml deploy
 #   script provider, example below. Requires several environment
 #   variables (in caps) including a current $ANACONDA_TOKEN for the
 #   destination channel.
@@ -142,7 +142,8 @@ fi
 rm -f -r ./tmp-conda-builds
 mkdir -p ./tmp-conda-builds/linux-64
 cp ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 ./tmp-conda-builds/linux-64
-conda convert --platform all ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 --output-dir ./tmp-conda-builds --force
+# conda convert --platform all ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 --output-dir ./tmp-conda-builds --force
+conda convert --platform linux-64 ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 --output-dir ./tmp-conda-builds --force
 /bin/ls -l ./tmp-conda-builds/**/${PACKAGE_NAME}-*.tar.bz2
 
 
