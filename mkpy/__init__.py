@@ -14,6 +14,8 @@ from pprint import pformat
 
 from .__version__ import __version__
 
+from . import dpath
+
 # log names are timestamps
 current_datetime = datetime.now().strftime("%m-%d-%y_%H:%M:%S")
 

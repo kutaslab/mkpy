@@ -20,7 +20,6 @@ import os
 import pdb
 from mkpy._mkh5 import _decompress_crw_chunk
 
-
 # ----------
 # 2. Helpers
 # ----------

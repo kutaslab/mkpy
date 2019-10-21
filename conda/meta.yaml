@@ -1,31 +1,34 @@
-# build cmd from parent dir: conda-build -c defaults -c conda-forge conda
+{% set version = "0.1.4rc1" %}
+{% set np_pin = "1.16.4" %}
+{% set py_pin = "3.6" %}
 
 package:
   name: mkpy
-  version: "0.1.3"
+  version: {{ version }}
 
 source:
   git_url: https://github.com/kutaslab/mkpy.git
-  git_rev: v0.1.3
-  git_depth: 1  # (Defaults to -1/not shallow)
+  git_tag: {{ version }}
+  # git_depth: 1  # (Defaults to -1/not shallow)
 
 build:
   script: python setup.py install --single-version-externally-managed --record=record.txt
 
 requirements:
-  build:
-    - python
-    - numpy
-    - setuptools
-    - Cython
+
+#  build:
+#    ... moved to host ...
 
   host:
-    - python
-    - numpy ==1.16.4=py36_0  # for fitgrid 0.4.4
+    # pin here, else cythonized with 3.7
+    - python ={{ py_pin }}
+    - numpy =={{ np_pin }} # 1.16.4=py36_0  # for fitgrid 0.4.4
+    - Cython
 
   run:
-    - python
-    - numpy
+    - python ={{ py_pin }}  # cythonize with 3.6
+    - numpy =={{ np_pin }}  # { pin_compatible('numpy') }}
+    - pytest  # include so users can run tests of installation
     - h5py
     - matplotlib
     - pandas
