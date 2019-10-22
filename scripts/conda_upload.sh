@@ -130,16 +130,16 @@ mmp=`echo $version | sed -n "s/\(\([0-9]\+\.\)\{1,2\}[0-9]\+\).*/\1/p"`
 
 # toggle whether this is a release version
 if [[ "${version}" = "$mmp" ]]; then
-    release="true"
+    is_release="true"
 else
-    release="false"
+    is_release="false"
 fi
 
 # switch conda label, upload behavior and enforce versioning
 if [ $TRAVIS_BRANCH = "master" ];
 then
     # versioning: whitelist major.minor.patch on master branch
-    if [[ $release != "true" ]]; then
+    if [[ $is_release = "false" ]]; then
 	echo "$PACKAGE_NAME development error: the github master branch version ${version} should be major.minor.patch"
 	exit -4
     fi
@@ -151,7 +151,7 @@ then
 
 else
     # versioning: blacklist major.minor.patch on non-master branches
-    if [[ "$version" == "$release" ]]; then
+    if [[ "$is_release" = "true" ]]; then
 	echo "$PACKAGE_NAME development error: development branch $TRAVIS_BRANCH is using a release version number: ${version}"
 	exit -5
     fi
@@ -175,8 +175,8 @@ echo "conda_upload.sh"
 echo "travis branch: $TRAVIS_BRANCH"
 echo "package name: $PACKAGE_NAME"
 echo "conda-bld: ${bld_prefix}/conda-bld/linux-64"
-echo "conda version: $version"
-echo "release: $release"
+echo "conda meta.yaml version: $version"
+echo "is_release: $is_release"
 echo "upload destination label: $conda_label"
 echo "upload force flag: $FORCE"
 echo "Anaconda.org upload command ..."
