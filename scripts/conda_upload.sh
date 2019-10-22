@@ -106,7 +106,7 @@ fi
 
 # set parent of conda-bld, the else isn't needed for travis, simplifies local testing
 if [ $USER = "travis" ]; then
-    bldgq_prefix="/home/travis/miniconda"  # from the .travis.yml
+    bld_prefix="/home/travis/miniconda"  # from the .travis.yml
 else
     bld_prefix=${CONDA_PREFIX}
 fi
