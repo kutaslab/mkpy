@@ -28,7 +28,6 @@
 #
 #    export TRAVIS="true"
 #    export TRAVIS_BRANCH="X.Y.Z" 
-#    export ANACONDA_TOKEN="an-actual-token"
 #    export PACKAGE_NAME="an-actual-name"
 #
 #  * Example .travis.yml for a linux-64 package
@@ -87,35 +86,62 @@
 #          local_dir: docs/build/html
 # # END .travis.yml ----------------------------------------
 
-# set parent of conda-bld, the else is only local user for testing in active conda env
+# POSIX magic sets an unset or empty $ANACONDA_TOKEN to the default string "[none]"
+ANACONDA_TOKEN=${ANACONDA_TOKEN:-[not_set]}
+if [[ ${ANACONDA_TOKEN} = "[not_set]" ]]; then
+    echo 'TravisCI $ANACONDA_TOKEN is not set, this dry run will run not attempt the upload.'
+fi
+
+# some guarding ...
+if [[ -z ${CONDA_DEFAULT_ENV} ]]; then
+    echo "activate a conda env before running conda_upload.sh"
+    exit -1
+fi
+
+# discourage casual misuse
+if [[ "$TRAVIS" != "true" || -z "$TRAVIS_BRANCH" || -z "${PACKAGE_NAME}" ]]; then
+    echo "conda_upload.sh is meant to run on TravisCI, see notes to run locally."
+    exit -2
+fi
+
+# set parent of conda-bld, the else isn't needed for travis, simplifies local testing
 if [ $USER = "travis" ]; then
-    bld_prefix="/home/travis/miniconda"  # from the .travis.yml
+    bldgq_prefix="/home/travis/miniconda"  # from the .travis.yml
 else
     bld_prefix=${CONDA_PREFIX}
 fi
 
-# enforce some version number requirements before uploading to conda
+# on travis there should be a single linux-64 package tarball. insist
 tarball=`/bin/ls -1 ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*-*.tar.bz2`
+n_tarballs=`echo "${tarball}" | wc -w`
+if (( $n_tarballs != 1 )); then
+    echo "found $n_tarballs package tarballs there must be exactly 1"
+    echo "$tarball"
+    exit -3
+fi
+
+# tarball="whatever/mkpy-v0.12.2.dev0-blahblah.tar.bz2"
 
 # version is the package and conda meta.yaml {% version = any_stringr %}
-version=`echo $tarball | sed -n "s/.*\(${PACKAGE_NAME}-.\+\)-.*/\1/p"`
+version=`echo $tarball | sed -n "s/.*${PACKAGE_NAME}-[v]\{0,1\}\(.\+\)-.*/\1/p"`
 
-# empty unless version is major.minor.patch
-release=`echo $tarball | sed -n "s/.*\(${PACKAGE_NAME}-\([0-9]\+\.\)\{1,2\}[0-9]\+\)-.*/\1/p"`
+# extract the major.minor.patch of version
+mmp=`echo $version | sed -n "s/\(\([0-9]\+\.\)\{1,2\}[0-9]\+\).*/\1/p"`
 
-# discourage casual misuse
-if [ "$TRAVIS" != "true" ]; then
-    echo "This script meant to run on TravisCI, see notes to run locally."
-    exit -1
+# toggle whether this is a release version
+if [[ "${version}" = "$mmp" ]]; then
+    release="true"
+else
+    release="false"
 fi
 
 # switch conda label, upload behavior and enforce versioning
-if [ $TRAVIS_BRANCH = "master" ]; 
+if [ $TRAVIS_BRANCH = "master" ];
 then
     # versioning: whitelist major.minor.patch on master branch
-    if [[ "$version" != "$release" ]]; then
+    if [[ $release != "true" ]]; then
 	echo "$PACKAGE_NAME development error: the github master branch version ${version} should be major.minor.patch"
-	exit -2
+	exit -4
     fi
 
     # do *NOT* force master onto main, we want conda upload to fail on
@@ -127,25 +153,22 @@ else
     # versioning: blacklist major.minor.patch on non-master branches
     if [[ "$version" == "$release" ]]; then
 	echo "$PACKAGE_NAME development error: development branch $TRAVIS_BRANCH is using a release version number: ${version}"
-	exit -3
+	exit -5
     fi
 	
     # *DO* force non-master branches to overwrite existing labels so
     # we can test conda install from Anaconda Cloud with the latest
     # development version
     FORCE="--force" 
-    conda_label=latest$TRAVIS_BRANCH
+    conda_label=latest_br$TRAVIS_BRANCH
 fi
 
-
-# force convert even though compiled C extension ... whatever works cross-platform works
-rm -f -r ./tmp-conda-builds
-mkdir -p ./tmp-conda-builds/linux-64
-cp ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 ./tmp-conda-builds/linux-64
-# conda convert --platform all ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 --output-dir ./tmp-conda-builds --force
-conda convert --platform linux-64 ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 --output-dir ./tmp-conda-builds --force
-/bin/ls -l ./tmp-conda-builds/**/${PACKAGE_NAME}-*.tar.bz2
-
+# mkpy doesn't convert, compiled C extension
+# rm -f -r ./tmp-conda-builds
+# mkdir -p ./tmp-conda-builds/linux-64
+# cp $tarball ./tmp-conda-builds/linux-64
+# conda convert --platform linux-64 ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*.tar.bz2 --output-dir ./tmp-conda-builds --force
+# /bin/ls -l ./tmp-conda-builds/**/${PACKAGE_NAME}-*.tar.bz2
 
 # so what have we here ...
 echo "conda_upload.sh"
@@ -156,17 +179,22 @@ echo "conda version: $version"
 echo "release: $release"
 echo "upload destination label: $conda_label"
 echo "upload force flag: $FORCE"
+echo "Anaconda.org upload command ..."
+conda_cmd="anaconda --token $ANACONDA_TOKEN upload ${tarball} --label $conda_label --register ${FORCE}"
+echo "conda upload command: ${conda_cmd}"
 
-echo "Deploying to Anaconda.org like so ..."
-conda_cmd="anaconda --token $ANACONDA_TOKEN upload ./tmp-conda-builds/**/${PACKAGE_NAME}-*.tar.bz2 --label $conda_label --register ${FORCE}"
-echo ${conda_cmd}
+if [[ $ANACONDA_TOKEN = "[not_set]" ]]; then
+    echo "${PACKAGE_NAME}" 'dry run OK ... set ANACONDA_TOKEN on TravisCI to upload this version to Anaconda Cloud'
+    exit 0
+fi
 
+# upload for real ...
 if ${conda_cmd};
 then
     echo "Successfully deployed to Anaconda.org."
 else
     echo "Error deploying to Anaconda.org"
-    exit -4
+    exit -6
 fi
 exit 0
 
