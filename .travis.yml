@@ -14,7 +14,7 @@ install:
     - conda build conda -c defaults -c conda-forge
     - conda create --name mkpy_env mkpy -c local -c defaults -c conda-forge
     - conda activate mkpy_env  # so tests run in env as installed by conda
-    - conda install black pytest-cov
+    - conda install black pytest-cov nose
     - conda list
     - lscpu
     - python -c 'import numpy; numpy.show_config()'
