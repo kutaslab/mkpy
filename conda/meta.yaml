@@ -1,4 +1,4 @@
-{% set version = "0.1.4" %}
+{% set version = "0.1.5" %}
 {% set np_pin = "1.16.4" %}
 {% set py_pin = "3.6" %}
 
@@ -7,23 +7,18 @@ package:
   version: {{ version }}
 
 source:
-  path: ../
-  # git_url: https://github.com/kutaslab/mkpy.git
-  # git_tag: {{ version }}
-  # git_depth: 1  # (Defaults to -1/not shallow)
+  # path: ../
+  git_url: ../  # to enable GIT_X_Y env vars
 
 build:
   script: python setup.py install --single-version-externally-managed --record=record.txt
+  string: {{ environ.get('GIT_BUILD_STR', "no_tags_on_travis_br") }}
 
 requirements:
-
-#  build:
-#    ... moved to host ...
-
+  # build ... all moved to host
   host:
-    # pin here, else cythonized with 3.7
-    - python ={{ py_pin }}
-    - numpy =={{ np_pin }} # 1.16.4=py36_0  # for fitgrid 0.4.4
+    - python ={{ py_pin }}  # else cython uses Python 3.7
+    - numpy =={{ np_pin }}
     - Cython
 
   run:

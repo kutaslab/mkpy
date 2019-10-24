@@ -11,10 +11,28 @@ from pathlib import Path
 import sys
 import traceback
 from pprint import pformat
-
-from .__version__ import __version__
-
+import re
 from . import dpath
+
+__version__ = "0.1.5"
+
+
+def get_ver():
+    pf_ver = re.search(r"(?P<ver_str>\d+\.\d+\.\d+\S*)", __version__)
+
+    if pf_ver is None:
+        msg = f"""Illegal  __version__: {__version__}
+        spudtr __init__.py must have an X.Y.Z semantic version, e.g.,
+
+        __version__ = '0.0.0'
+        __version__ = '0.0.0.dev0'
+        __version__ = '0.0.0rc1'
+
+        """
+        raise Exception(msg)
+    else:
+        return pf_ver["ver_str"]
+
 
 # log names are timestamps
 current_datetime = datetime.now().strftime("%m-%d-%y_%H:%M:%S")

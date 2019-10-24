@@ -1,31 +1,4 @@
-# mkpy is restricted to python 3.6 until other packages support 3.7
-#
-# To install mkpy in an existing python 3.6 conda environment at the
-# terminal command line, cd to where this setup.py and
-# requirements.txt are found. Then run
-#
-#  conda activate my_env
-#  pip install -r requirements.txt
-#  pip install .
-#
-# To create a python 3.6 conda environment from scratch, run this with a
-# sensible name in place of "some_env"
-#
-#   > create conda -n some_env python=3.6 pip
-#
-# Changes for Fall 2017
-#  - distutils stuff stopped working for Cython, switched to setup tools
-#
-# to install in development mode with an egg from this directory run
-#
-#     python ./setup.py build_ext --inplace
-#     python ./setup.py develop -d ~/.local/lib/python3.6/site-packages/
-#
-#  to install stable package to default python site-packages as root
-#
-#    pip install .
-#
-# http://python-packaging.readthedocs.io/en/latest/minimal.html
+# mkpy is pinned to python 3.6 until other packages support 3.7
 
 # commented out as distutils fades into oblivion
 # from distutils.core import setup
@@ -37,7 +10,9 @@ import numpy as np
 from pathlib import Path
 import re
 
-from mkpy.__version__ import __version__
+from mkpy import get_ver
+
+__version__ = get_ver()
 
 # enforce conda meta.yaml semantic version is the same
 jinja_version = f'{{% set version = "{__version__}" %}}'
