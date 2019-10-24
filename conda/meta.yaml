@@ -15,11 +15,11 @@ build:
   string: {{ environ.get('GIT_BUILD_STR', "no_tags_on_travis_br") }}
 
 requirements:
-    # build ... all moved to host
-    host:
-        - python ={{ py_pin }}  # else cython uses Python 3.7
-        - numpy =={{ np_pin }}
-        - Cython
+  # build ... all moved to host
+  host:
+    - python ={{ py_pin }}  # else cython uses Python 3.7
+    - numpy =={{ np_pin }}
+    - Cython
 
   run:
     - python ={{ py_pin }}  # cythonize with 3.6
@@ -41,4 +41,3 @@ about:
   home: https://github.com/kutaslab/mkpy
   license: BSD
   license_file: LICENSE
-
