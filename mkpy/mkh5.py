@@ -14,14 +14,17 @@ import logging
 from pathlib import Path
 
 # import dpath.util
-from . import dpath
-
+# from . import dpath
+from mkpy import dpath
 import numpy as np
 import matplotlib.pyplot as plt
 from mkpy import mkio, pygarv, h5tools
 from mkpy.codetagger import CodeTagger
 from . import current_function, indent, log_exceptions
-from .__version__ import __version__
+
+from mkpy import get_ver
+
+__version__ = get_ver()
 
 logging.info("Entering " + __name__)
 

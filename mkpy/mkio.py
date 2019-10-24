@@ -17,7 +17,6 @@ import numpy as np
 import gzip
 import math
 import os
-import pdb
 from mkpy._mkh5 import _decompress_crw_chunk
 
 # ----------
