@@ -1,4 +1,4 @@
-{% set version = "0.1.5" %}
+{% set version = "0.1.6" %}
 {% set np_pin = "1.16.4" %}
 {% set py_pin = "3.6" %}
 
@@ -24,7 +24,6 @@ requirements:
   run:
     - python ={{ py_pin }}  # cythonize with 3.6
     - numpy =={{ np_pin }}  # { pin_compatible('numpy') }}
-    - pytest  # include so users can run tests of installation
     - h5py
     - matplotlib
     - pandas
@@ -32,6 +31,8 @@ requirements:
     - PyYAML
     - xlrd
     - yamllint
+    - pytest  # include so users can run tests
+    - nose  # for legacy dpath tests
 
 test:
   imports:
