@@ -63,7 +63,7 @@ def test_update_mkh5():
     reset_h5()
 
     # work on tmp in case there is trouble ...
-    tmp_f = f'{pg_h5}_tmp'
+    tmp_f = f"{pg_h5}_tmp"
     r = subprocess.run(["cp", no_pg_h5, tmp_f])
 
     # init
