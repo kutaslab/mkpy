@@ -62,6 +62,11 @@ mkpy
 .. toctree::
    :maxdepth: 5
 
+   ReleaseNotes.rst
+
+.. toctree::
+   :maxdepth: 5
+
    RolesCredits
 
 

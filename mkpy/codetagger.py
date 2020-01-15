@@ -213,13 +213,12 @@ class CodeTagger:
             ).format(self.cmf)
             raise IOError(msg)
 
-
     def _load_xlsx_map(self, cmf):
         """wraps pandas.Dataframe.read_excel() to load a code tag table from .xlsx
 
         Parameter
         ---------
-            cmf : str or Path 
+            cmf : str or Path
                 is path_to_file.xlsx[!named_sheet )path to an .xlsx file with optional  Default selects first
                 worksheet use .xlsx!sheet_name syntax to select a
                 named sheet.

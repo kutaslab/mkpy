@@ -172,7 +172,7 @@ def test_irb_event_table_fails():
 def test_non_unique_event_table_index():
 
     # name and reset the .h5 file
-    sid = TEST_DIR("sub000")
+    sid = "sub000"
     eeg_f = TEST_DIR("data/sub000wr.crw")
     log_f = TEST_DIR("data/sub000wr.log")
 

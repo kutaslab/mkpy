@@ -11,7 +11,8 @@ import mkpy
 
 def TEST_DIR(fpath):
     """wrap a daughter to the test dir"""
-    return str(Path(__file__).parent / fpath)
+    # return str(Path(__file__).parent / fpath)
+    return Path(__file__).parent / fpath
 
 
 # IRB protected data requred for testing are stored outside the repo

@@ -12,20 +12,20 @@ from .config import TEST_DIR, S01
 
 # short file w/ cal pulses
 pfx = "calstest"
-data_pfx = TEST_DIR("data/" + pfx)
+data_dir = TEST_DIR("data")
 
 # dig files
-eeg_f = data_pfx + ".crw"
-log_f = data_pfx + ".x.log"
-yhdr_f = data_pfx + ".yhdr"
+eeg_f = data_dir / (pfx + ".crw")
+log_f = data_dir / (pfx + ".x.log")
+yhdr_f = data_dir / (pfx + ".yhdr")
 
 # mkh5 files
 # yarf
-yarf_f = data_pfx + ".yarf"
-ytbl_f = data_pfx + ".ytbl"  # event descriptor table
+yarf_f = data_dir / (pfx + ".yarf")
+ytbl_f = data_dir / (pfx + ".ytbl")  # event descriptor table
 
-pg_h5 = data_pfx + "_pg.h5"
-no_pg_h5 = data_pfx + "_no_pg.h5"
+pg_h5 = data_dir / (pfx + "_pg.h5")
+no_pg_h5 = data_dir / (pfx + "_no_pg.h5")
 
 
 def reset_h5():
@@ -63,7 +63,7 @@ def test_update_mkh5():
     reset_h5()
 
     # work on tmp in case there is trouble ...
-    tmp_f = pg_h5 + "_tmp"
+    tmp_f = f'{pg_h5}_tmp'
     r = subprocess.run(["cp", no_pg_h5, tmp_f])
 
     # init

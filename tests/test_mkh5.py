@@ -571,7 +571,7 @@ def test_irb_negative_raw_evcodes():
 
     h5f = IRB_DIR / "mkh5" / (pfx + ".h5")
 
-    mydat = mkh5.mkh5(str(h5f))
+    mydat = mkh5.mkh5(h5f)
     mydat.reset_all()  # start fresh
     mydat.create_mkdata(pfx, *GET_IRB_MKDIG(pfx))
     # print(mydat.info()) # very long
@@ -587,7 +587,7 @@ def test_irb_event_code_0_in_log():
     h5f = IRB_DIR / "mkh5" / (pfx + ".h5")
 
     try:
-        mydat = mkh5.mkh5(str(h5f))
+        mydat = mkh5.mkh5(h5f)
         mydat.reset_all()  # start fresh
         mydat.create_mkdata(pfx, *GET_IRB_MKDIG(pfx))
     except Exception as fail:
@@ -603,7 +603,7 @@ def test_irb_flat_cals():
     pfx = "lexcon02"
     h5f = IRB_DIR / "mkh5" / (pfx + ".h5")
 
-    myh5 = mkh5.mkh5(str(h5f))  # start fresh
+    myh5 = mkh5.mkh5(h5f)  # start fresh
     myh5.reset_all()
     myh5.create_mkdata(pfx, *GET_IRB_MKDIG(pfx))
 
@@ -638,7 +638,7 @@ def test_irb_calibrate_negative_cals():
     pfx = "arquant3"
     h5f = IRB_DIR / "mkh5" / "negative_cals_test.h5"
 
-    mydat = mkh5.mkh5(str(h5f))
+    mydat = mkh5.mkh5(h5f)
     mydat.reset_all()
     mydat.create_mkdata(pfx, *GET_IRB_MKDIG(pfx))
     with h5py.File(h5f, "r") as h5:
@@ -667,7 +667,7 @@ def test_irb_calibrate_logpoked_cals():
 
     pfx = "arquant2"
     h5f = IRB_DIR / "mkh5" / "logpoked_cals_test.h5"
-    mydat = mkh5.mkh5(str(h5f))
+    mydat = mkh5.mkh5(h5f)
     mydat.reset_all()  # a = read/write, create if needed
     mydat.create_mkdata(pfx, *GET_IRB_MKDIG(pfx))
     mydat.calibrate_mkdata(

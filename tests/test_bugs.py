@@ -22,7 +22,7 @@ def test_irb_pcag_10y():
 
     myh5 = mkh5.mkh5(h5_f)
     myh5.reset_all()
-    myh5.create_mkdata("10y", str(crw_f), str(log_f), str(yhdr_f))
+    myh5.create_mkdata("10y", crw_f, log_f, yhdr_f)
 
 
 @irb_data
@@ -44,7 +44,7 @@ def test_irb_pcag_13o():
     ytbl_f = TEST_DIR("data/simple.ytbl")
     myh5 = mkh5.mkh5(h5_f)
     myh5.reset_all()
-    myh5.create_mkdata("13o", str(crw_f), str(log_f), str(yhdr_f))
+    myh5.create_mkdata("13o", crw_f, log_f, yhdr_f)
     event_table = myh5.get_event_table(ytbl_f)
 
 
@@ -62,5 +62,5 @@ def test_irb_hp301():
 
     myh5 = mkh5.mkh5(h5_f)
     myh5.reset_all()
-    myh5.create_mkdata("hp301", str(crw_f), str(log_f), str(yhdr_f))
+    myh5.create_mkdata("hp301", crw_f, log_f, yhdr_f)
     event_table = myh5.get_event_table(ytbl_f)
