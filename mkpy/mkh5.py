@@ -1017,7 +1017,6 @@ class mkh5:
         specification is in lieu of .blf (for EEG epoching and
         time-locking), .rts (for event-to-event timing), and .hdr (for
         experimental design specification).
-        
         """
 
         # instantiate the codemapper w/ its map and code finder

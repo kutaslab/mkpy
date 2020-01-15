@@ -18,6 +18,7 @@ __version__ = "0.1.7.dev0"
 
 
 def get_ver():
+    # check semantic version format in __init__.py and meta.yaml matches
     pf_ver = re.search(r"(?P<ver_str>\d+\.\d+\.\d+\S*)", __version__)
 
     if pf_ver is None:
@@ -30,8 +31,22 @@ def get_ver():
 
         """
         raise Exception(msg)
-    else:
-        return pf_ver["ver_str"]
+
+    ver_str = pf_ver["ver_str"]
+
+    # enforce conda meta.yaml semantic version == package __init__
+    jinja_version = f'{{% set version = "{ver_str}" %}}'
+    meta_yaml_f = Path(__file__).parents[1] / "conda/meta.yaml"
+    with open(meta_yaml_f) as f:
+        conda_ver = re.match(r"^" + jinja_version, f.read())
+        if not conda_ver:
+            fail_msg = (
+                "conda/meta.yaml must start with a jinja variable line exactly"
+                f"like this: {jinja_version}"
+            )
+            raise Exception(fail_msg)
+
+    return ver_str
 
 
 # log names are timestamps

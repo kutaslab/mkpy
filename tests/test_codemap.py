@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """cross various regexp patterns w/ event code sequences verify output
 
 Event codes
