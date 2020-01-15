@@ -56,13 +56,15 @@ mmp=`echo $version | sed -n "s/\(\([0-9]\+\.\)\{1,2\}[0-9]\+\).*/\1/p"`
 #   vMajor.Minor.Patch release tag convention for conda uploads.
 if [[ "${version}" = "$mmp" && $TRAVIS_BRANCH = v$mmp ]]; then
     is_release="true"
+    label_param="--label main"
 else
     is_release="false"
+    label_param="--label pre-release"
 fi
 
 # POSIX trick sets $ANACONDA_TOKEN if unset or empty string 
 ANACONDA_TOKEN=${ANACONDA_TOKEN:-[not_set]}
-conda_cmd="anaconda --token $ANACONDA_TOKEN upload ${tarball}"
+conda_cmd="anaconda --token $ANACONDA_TOKEN upload ${tarball} ${label_param}"
 
 # thus far ...
 echo "conda meta.yaml version: $version"
@@ -73,11 +75,9 @@ echo "travis branch: $TRAVIS_BRANCH"
 echo "is_release: $is_release"
 echo "conda upload command: ${conda_cmd}"
 
-# if the token is in the ENV and this is a release/tagged commit or equivalent
-#    attempt the upload 
-# else
-#    skip the upload and exit happy
-if [[ $ANACONDA_TOKEN != "[not_set]" && $is_release = "true" ]]; then
+# let TravisCI upload pre-releases to Anaconda Cloud ... useful for testing
+# if [[ $ANACONDA_TOKEN != "[not_set]" && $is_release = "true" ]]; then
+if [[ $ANACONDA_TOKEN != "[not_set]" ]]; then
 
     echo "uploading to Anconda Cloud: $PACKAGE_NAME$ $version ..."
     if ${conda_cmd}; then

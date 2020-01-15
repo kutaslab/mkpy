@@ -14,7 +14,7 @@ from pprint import pformat
 import re
 from . import dpath
 
-__version__ = "0.1.6"
+__version__ = "0.1.7.dev0"
 
 
 def get_ver():
