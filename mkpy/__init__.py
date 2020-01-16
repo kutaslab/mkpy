@@ -14,10 +14,11 @@ from pprint import pformat
 import re
 from . import dpath
 
-__version__ = "0.1.6"
+__version__ = "0.1.7"
 
 
 def get_ver():
+    # check semantic version format in __init__.py and meta.yaml matches
     pf_ver = re.search(r"(?P<ver_str>\d+\.\d+\.\d+\S*)", __version__)
 
     if pf_ver is None:
@@ -30,8 +31,10 @@ def get_ver():
 
         """
         raise Exception(msg)
-    else:
-        return pf_ver["ver_str"]
+
+    ver_str = pf_ver["ver_str"]
+
+    return ver_str
 
 
 # log names are timestamps

@@ -186,39 +186,66 @@ class CodeTagger:
 
     def __init__(self, cmf):
         """initialize instance with a code tag map file. """
+
         # TODO: handle different filetypes, don't let things fail silently
-        self.code_map = None
-        try:
-            self.code_map = self._load_xlsx_map(cmf)
-        except Exception:
-            pass
+        self.cmf = str(cmf)  # for Path
 
-        try:
-            self.code_map = self._load_yaml_map(cmf)
-        except Exception:
-            pass
+        loaders = {
+            "xlsx": self._load_xlsx_map,
+            "yaml": self._load_yaml_map,
+            "text": self._load_txt_map,
+        }
 
-        try:
-            self.code_map = self._load_txt_map(cmf)
-        except Exception:
-            pass
+        fails = []
+        code_map = None
+        for kind, loader in loaders.items():
+            try:
+                code_map = loader(self.cmf)
+            except Exception as fail:
+                fails.append((kind, fail))
+                continue
 
-        if self.code_map is None:
-            # three strikes and yer out ...
-            msg = (
-                "cannot load {0} ... make sure file exists and is a .ytbl"
-                ", tab-separated .txt or Excel .xlsx"
-            ).format(cmf)
-            raise IOError(msg)
+            # break out on success
+            if code_map is not None:
+                self.code_map = code_map
+                return
 
-        self.cmf = cmf
+        # uh oh ...
+        for fail in fails:
+            print(f"failed {fail[0]}: {fail[1]}")
+        raise IOError(
+            f"failed to load {cmf} as an xlsx, YAML, or text code map"
+        )
+
+        # try:
+        #     self.code_map = self._load_xlsx_map(self.cmf)
+        # except Exception:
+        #     pass
+
+        # try:
+        #     self.code_map = self._load_yaml_map(self.cmf)
+        # except Exception:
+        #     pass
+
+        # try:
+        #     self.code_map = self._load_txt_map(self.cmf)
+        # except Exception:
+        #     pass
+
+        # if self.code_map is None:
+        #     # three strikes and yer out ...
+        #     msg = (
+        #         "cannot load {0} ... make sure file exists and is a .ytbl"
+        #         ", tab-separated .txt or Excel .xlsx"
+        #     ).format(self.cmf)
+        #     raise IOError(msg)
 
     def _load_xlsx_map(self, cmf):
         """wraps pandas.Dataframe.read_excel() to load a code tag table from .xlsx
 
         Parameter
         ---------
-            cmf : str 
+            cmf : str or Path
                 is path_to_file.xlsx[!named_sheet )path to an .xlsx file with optional  Default selects first
                 worksheet use .xlsx!sheet_name syntax to select a
                 named sheet.
@@ -242,6 +269,7 @@ class CodeTagger:
         sheet_name = cmf_reob["sheet_name"]
         if len(sheet_name) == 0:
             sheet_name = 0
+
         mapper = pd.read_excel(
             xl_f, sheet_name=sheet_name, header=0, index_col="Index"
         )
@@ -422,7 +450,7 @@ class CodeTagger:
         return (anchor, capture_groups, code_patt)
 
     def _find_evcodes(self, pattern, ticks, evcodes):
-        """Pattern match sequences of integer codes and extract timing information
+        r"""Pattern match sequences of integer codes and extract timing information
 
         This finds arbitrary subsequences of integers in a 1-D array
         of integers (``evcodes``) and returns bundles of match and

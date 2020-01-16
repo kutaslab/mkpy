@@ -1,0 +1,21 @@
+# This is the yaml text format equivalent of a rows x columns tabular format
+#
+
+# Begin actual file ...
+
+# This matches nothing in lm20.h5
+
+columns:
+- Index
+- regexp
+- item_id
+
+rows:
+- - anch_lit
+  - (#10001)
+  - lit_10001)
+
+
+
+
+

@@ -4,14 +4,17 @@ import pdb
 import pprint
 import uuid
 import os
+from pathlib import Path
+import pytest
 
 import pandas as pd
 from .config import TEST_DIR, TEST_H5, IRB_DIR, GET_IRB_MKDIG, irb_data, mkpy
 from mkpy import mkh5
 
 
+@pytest.mark.parametrize("path_type", [str, Path])
 @irb_data
-def test_irb_load_code_map_files():
+def test_irb_load_code_map_files(path_type):
 
     # h5f = IRB_DIR / "mkh5" / (uuid.uuid4().hex + ".h5")
     h5group = "test2"
@@ -21,12 +24,12 @@ def test_irb_load_code_map_files():
     mydat.reset_all()  # start fresh
     mydat.create_mkdata(h5group, *GET_IRB_MKDIG(h5group))
 
-    # load code mappers in different formats
-    cm_ytbl = mkh5.CodeTagger(TEST_DIR("data/design2.ytbl"))
-    cm_txt = mkh5.CodeTagger(TEST_DIR("data/design2.txt"))
-    cm_xlsx = mkh5.CodeTagger(TEST_DIR("data/design2.xlsx"))
+    # load code mappers in different formats as Path and str
+    cm_ytbl = mkh5.CodeTagger(path_type(TEST_DIR("data/design2.ytbl")))
+    cm_txt = mkh5.CodeTagger(path_type(TEST_DIR("data/design2.txt")))
+    cm_xlsx = mkh5.CodeTagger(path_type(TEST_DIR("data/design2.xlsx")))
     cm_xlsx_named_sheet = mkh5.CodeTagger(
-        TEST_DIR("data/design2.xlsx!code_map")
+        path_type(TEST_DIR("data/design2.xlsx!code_map"))
     )
 
     # check for identity ... NB: nan == nan evaluates to False
@@ -154,25 +157,25 @@ def test_irb_event_table_fails():
     #  design4.ytbl is a well-formed code mapper file but no code
     #  matches in test2.h5
 
-    fail = None
     try:
         event_table = mydat.get_event_table(TEST_DIR("data/design4.ytbl"))
     except Exception as err:
-        print("Caught the no matching codes RuntimeError")
-        fail = True
-    if fail is None:
-        msg = (
-            "uh oh ... no code pattern match, so the event table "
-            + "is empty. This should have raised an error."
-        )
-        raise RuntimeError(msg)
+        # hard coded error message in mkh5.get_event_table
+        if isinstance(err, RuntimeError) and "no events found" in str(err):
+            print("Caught the no matching codes RuntimeError")
+        else:
+            msg = (
+                "\nNo codes match the pattern so the event table is empty, "
+                "expected a RuntimeError instead of this:\n"
+            )
+            raise RuntimeError(msg + str(err))
     os.remove(h5f)
 
 
 def test_non_unique_event_table_index():
 
     # name and reset the .h5 file
-    sid = TEST_DIR("sub000")
+    sid = "sub000"
     eeg_f = TEST_DIR("data/sub000wr.crw")
     log_f = TEST_DIR("data/sub000wr.log")
 

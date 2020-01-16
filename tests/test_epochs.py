@@ -148,7 +148,7 @@ def test_irb_export_one_sub_epochs():
     # epochs, attrs = myh5.get_epochs('epochs_short', format='numpy')
 
     for fmt, ext in [("h5", "h5"), ("feather", "fthr"), ("txt", "txt")]:
-        epochs_h5_f = str(epochs_pfx) + "." + ext
+        epochs_h5_f = f"{epochs_pfx}.{ext}"
         myh5.export_epochs("epochs_short", epochs_h5_f, file_format=fmt)
         os.remove(epochs_h5_f)
 
@@ -222,7 +222,7 @@ def test_irb_messy_event_table():
     try:
         cor_h5.set_epochs("cor_a", cor_event_table_a, -500, 1500)
     except mkh5.mkh5.EpochsTableDataError as fail:
-        msg = "caught epochs table data error: " + cor_code_map_f + "[cor_a]"
+        msg = f"caught epochs table data error: {cor_code_map_f}[cor_a]"
         print(msg)
     else:
         raise
