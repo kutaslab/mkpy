@@ -20,4 +20,4 @@ help:
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
 api-docs:
-	sphinx-apidoc -e -o source .. test/*
+	sphinx-apidoc -e -o source .. ../dpath/
