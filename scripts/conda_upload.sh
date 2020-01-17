@@ -76,8 +76,8 @@ echo "is_release: $is_release"
 echo "conda upload command: ${conda_cmd}"
 
 # let TravisCI upload pre-releases to Anaconda Cloud ... useful for testing
-# if [[ $ANACONDA_TOKEN != "[not_set]" && $is_release = "true" ]]; then
-if [[ $ANACONDA_TOKEN != "[not_set]" ]]; then
+if [[ $ANACONDA_TOKEN != "[not_set]" && $is_release = "true" ]]; then
+# if [[ $ANACONDA_TOKEN != "[not_set]" ]]; then
 
     echo "uploading to Anconda Cloud: $PACKAGE_NAME$ $version ..."
     if ${conda_cmd}; then
