@@ -25,6 +25,8 @@ sys.path.insert(0, os.path.abspath("../.."))
 
 from mkpy import get_ver
 
+# hide for TravisCI gh-pages build
+autodoc_mock_imports = ["mkpy._mkh5"]
 
 # -- General configuration ------------------------------------------------
 
