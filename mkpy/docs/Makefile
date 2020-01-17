@@ -19,5 +19,5 @@ help:
 %: api-docs Makefile
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-api-docs:
-	sphinx-apidoc -e -o source .. ../dpath/
+# api-docs:
+# 	sphinx-apidoc -e -o source .. ../dpath/
