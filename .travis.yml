@@ -19,7 +19,6 @@ install:
     - lscpu
     - python -c 'import numpy; numpy.show_config()'
     - python -c 'import mkpy'
-    - python -c 'from mkpy import _mkh5'
     - python -c 'from mkpy import mkh5'
 
 script:
