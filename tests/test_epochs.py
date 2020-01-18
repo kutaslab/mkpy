@@ -1,3 +1,4 @@
+from pathlib import Path
 import h5py
 import numpy as np
 import pdb
@@ -5,6 +6,7 @@ import pprint
 import os
 import warnings
 import pandas as pd
+
 from matplotlib import pyplot as plt
 
 from .config import TEST_DIR, IRB_DIR, GET_IRB_MKDIG, CAL_ARGS, irb_data, mkpy
@@ -153,17 +155,6 @@ def test_irb_export_one_sub_epochs():
         os.remove(epochs_h5_f)
 
     os.remove(h5_f)
-
-
-@irb_data
-def test_irb_export_expt_epochs():
-
-    # this file has 32 Ss and prebuilt with 4 second epochs/epochs already set
-    # h5_f = 'data/cloze_demo.h5'
-    # myh5 = mkh5.mkh5(h5_f)
-    # (data, specs) = myh5.get_epochs('epochs')
-    # pdb.set_trace()
-    warnings.warn("Full experiment epoch export test not implemented")
 
 
 @irb_data
@@ -452,3 +443,135 @@ def test_pd_series_to_hdf5():
         raise
 
     os.remove(h5_f)
+
+
+def test_export_epochs():
+
+    MKDIG = TEST_DIR("data")
+    MKPY_IN = TEST_DIR("data")
+    MKPY_OUT = TEST_DIR("data")
+
+    # set the calibration and event codemap files to use for each experiment
+    exps = dict(
+        wr={"cal": "c", "codemap_ext": "xlsx"},
+        # p3={'cal': 'c', 'codemap_ext': 'ytbl'},
+        # p5={'cal': 'c5', 'codemap_ext': 'ytbl'},
+    )
+
+    for exp, file_info in exps.items():
+
+        print(f"Experiment {exp}")
+
+        # construct some string labels for this experiment
+        snum = "000"
+        sid = "sub" + snum  # name of the HDF5 data group to store
+        sub = sid + exp  # infix for the .crw/.log data files
+
+        cal_ext = file_info["cal"]
+        codemap_ext = file_info["codemap_ext"]
+
+        sub_cal = sid + cal_ext
+
+        # ------------------------------------------------------------
+        # 1. Convert EEG crw data logger file to an mkh5 HDF5 tree of
+        #    data blocks
+        # ------------------------------------------------------------
+
+        yhdr = MKPY_IN / (sub + ".yhdr")
+        crw = MKDIG / (sub + ".crw")
+        log = MKDIG / (sub + ".x.log")  # includes garved log flags
+
+        yhdr_cal = MKPY_IN / (sub_cal + ".yhdr")
+        eegcal = MKDIG / (sub_cal + ".crw")
+        logcal = MKDIG / (sub_cal + ".log")
+
+        # name and reset the .h5 file
+        eeg_f = MKPY_OUT / (sub + ".h5")
+
+        eeg_h5 = mkh5.mkh5(eeg_f)
+        eeg_h5.reset_all()
+
+        # load in subject and cals
+        eeg_h5.create_mkdata(sid, crw, log, yhdr)
+        eeg_h5.append_mkdata(sid, eegcal, logcal, yhdr_cal)
+
+        # --------------------------------------------------------------
+        # 2. calibrate 12-bit digitized EEG (int16) to microvolts (float32)
+        # --------------------------------------------------------------
+        pts, pulse, lo, hi, ccode = 5, 10, -40, 40, 0
+        eeg_h5.calibrate_mkdata(
+            sid,  # specific data group
+            n_points=pts,  # pts to average
+            cal_size=pulse,  # uV
+            lo_cursor=lo,  # lo_cursor ms
+            hi_cursor=hi,  # hi_cursor ms
+            cal_ccode=ccode,  # condition code
+        )
+
+        # ------------------------------------------------------------
+        # 3. Mark fixed-length epochs, event of interest at t=0
+        # ------------------------------------------------------------
+        # find log event codes in the data and decorate them according
+        # to the code map
+        event_table = eeg_h5.get_event_table(
+            MKPY_IN / (exp + "_code_map." + codemap_ext),
+            MKPY_IN / (exp + ".yhdx"),
+        )
+
+        # mark the epochs
+        eeg_h5.set_epochs(exp, event_table, -100, 1000)  # tmin ms, tmax ms
+
+        # ------------------------------------------------------------
+        # 4. fetch epoch data according to mkh5 HDF
+        # ------------------------------------------------------------
+        mkpy_epx_np, _ = eeg_h5.get_epochs(exp, format="numpy")
+        mkpy_epx_pd, _ = eeg_h5.get_epochs(exp, format="pandas")
+
+        # check np.array of compound dtype vs pd.DataFrame
+        assert list(mkpy_epx_np.dtype.names) == mkpy_epx_pd.columns.to_list()
+        for col in mkpy_epx_np.dtype.names:
+
+            if mkpy_epx_np[col].dtype.type == np.bytes_:
+                # byte-like
+                assert all(
+                    [x.decode() for x in mkpy_epx_np[col]] == mkpy_epx_pd[col]
+                )
+
+            elif any(np.isnan(mkpy_epx_np[col])) or any(
+                np.isnan(mkpy_epx_pd[col])
+            ):
+                # nan
+                assert all(np.isnan(mkpy_epx_np[col])) and all(
+                    np.isnan(mkpy_epx_pd[col])
+                )
+
+            else:
+                # everything else
+                assert all(mkpy_epx_np[col] == mkpy_epx_pd[col])
+
+        # ------------------------------------------------------------
+        # 5. check export/import round trip ... use pd.DataFrame
+        #    b.c. nan == nan -> False and np.testing.assert_array_equal
+        #    doesn't work on the compound data types
+        # ------------------------------------------------------------
+        for fmt in ["h5", "pdh5", "feather", "txt"]:
+            epx_f = eeg_f.with_suffix(".epochs.test")
+            eeg_h5.export_epochs(exp, epx_f, file_format=fmt)
+
+            print("format", fmt)
+            from_disk = None
+            if fmt == "h5":
+                with h5py.File(epx_f, "r") as h5:
+                    from_disk = pd.DataFrame(h5[exp][...])
+            elif fmt == "pdh5":
+                from_disk = pd.read_hdf(epx_f)
+
+            elif fmt == "feather":
+                from_disk = pd.read_feather(epx_f)
+
+            elif fmt == "txt":
+                from_disk = pd.read_csv(epx_f, sep="\t")
+            else:
+                raise Exception(f"unsupported epochs export format: {fmt}")
+
+            assert all(mkpy_epx_pd == from_disk)
