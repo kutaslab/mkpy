@@ -1999,9 +1999,6 @@ class mkh5:
 
         known_formats = ["h5", "pdh5", "feather", "txt"]
         if file_format not in known_formats:
-            msg = "uknown file_format='{0}': must be 'h5', 'feather', or 'txt'".format(
-                file_format
-            )
             msg = f"unknown file_format='{file_format}': must be one of {' '.join(known_formats)}"
             raise ValueError(msg)
 
