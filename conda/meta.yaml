@@ -27,9 +27,10 @@ requirements:
     - h5py
     - matplotlib
     - pandas
+    - pytables
     - pyarrow
-    - PyYAML
     - xlrd
+    - PyYAML
     - yamllint
     - pytest  # include so users can run tests
     - nose  # for legacy dpath tests
