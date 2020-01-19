@@ -39,7 +39,7 @@ setup(
     author="Thomas P. Urbach, Andrey Portnoy, forked from Nathaniel Smith",
     author_email="turbach@ucsd.edu",
     url="http://kutaslab.ucsd.edu/people/urbach",
-    packages=find_packages(),  # ['mkh5.core', 'mkh5.utils'],
+    packages=find_packages(exclude=['tests']),  # ['mkh5.core', 'mkh5.utils'],
     scripts=["bin/pygarv"],
     cmdclass={"build_ext": build_ext},
     ext_modules=cythonize(extensions),
