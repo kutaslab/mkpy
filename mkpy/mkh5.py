@@ -1953,8 +1953,9 @@ class mkh5:
     def export_epochs(
         self, epochs_name, epochs_f, file_format="h5", columns=None
     ):
-        """write previously set epochs to data in specified file format
-        
+        """write previously set epochs to data in the specified file format
+
+        Recommended epoch export formats for sross-platform data interchange
 
         Parameters
         ----------
@@ -1962,25 +1963,43 @@ class mkh5:
              must name one of the datasets in this h5['epochs']
         epochs_f : string
              file path and name of the data file
-        file_format : string, {'h5', 'feather', 'txt'}
+        file_format : string, {'h5', 'pdh5', 'feather', 'txt'}
 
         Note
         ----
 
-        * h5 format: the epochs are saved in the h5 file root a
+        * File formats other than h5 and pdh5 overwrite any
+          file with the same name without warning.
+
+        * h5 format: the epochs are saved in the h5 file root as a
           dataset named epochs_name. Fails if such a dataset already
           exists.
 
-        * Output formats other than h5 overwrites any file with the
-          same name without warning.
+        * h5 format: 2-D rows x columns epochs data are stored as a
+          single 1-D column vector (rows) of an HDF5 compound data
+          type (columns). This HDF5 dataset is easily read and
+          unpacked with any HDF5 reader that supports HDF5 compound
+          data types.
 
-        * txt format is tab-separated. 
+        * pdh5, feather, text formats: 2-D rows x columns epochs data
+          are stored via the pandas to_hdf, to_feather, and to_csv
+          writers. These epochs data are easily read into a
+          pandas.DataFrame with pandas.read_hdf(epochs_f,
+          key=epochs_name) and also readable, less easily, by other
+          HDF5 readers.
+
+
+        * txt format is tab-separated.
+
         """
 
-        if file_format not in ["h5", "feather", "txt"]:
-            msg = "uknown file_format='{0}': must be 'h5', 'feather', or 'txt'".format(
-                file_format
-            )
+        # in case of Path
+        epochs_name = str(epochs_name)
+        epochs_f = str(epochs_f)
+
+        known_formats = ["h5", "pdh5", "feather", "txt"]
+        if file_format not in known_formats:
+            msg = f"unknown file_format='{file_format}': must be one of {' '.join(known_formats)}"
             raise ValueError(msg)
 
         if file_format == "h5":
@@ -1998,7 +2017,11 @@ class mkh5:
             )
 
             # dump with pandas
-            if file_format == "feather":
+            if file_format == "pdh5":
+                epochs.to_hdf(
+                    epochs_f, key=epochs_name, format="fixed", mode="w"
+                )
+            elif file_format == "feather":
                 epochs.to_feather(epochs_f)
             elif file_format == "txt":
                 # don't write row count index
