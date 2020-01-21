@@ -15,14 +15,16 @@ There are three kinds:
      information to merge with event table information and tag event
      codes, e.g., subject, experiment, apparatus specific variables.
 
-  #. Event table files are used to identify event codes (and patterns of
+  #. Codemap files are used to identify event codes (and patterns of
      event codes) and tag them with additional information about the
      event, e.g., stimulus-specific properties for stimulus events,
      respo
 
 
-YAML headers: ``.yhdf``
------------------------
+.. _yhdr:
+
+YAML header files: ``.yhdf``
+----------------------------
 
 The YAML header is an open-ended mechanism for storing extra nuggets
 of information with the EEG data that are useful for record keeping or
@@ -33,11 +35,9 @@ subsequent data analysis. For instance
 * instrument settings, e.g., bioamp gain and filter, electrode locations
 
 
-.. _yhdr:
 
-``.yhdf`` YAML header file
-~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
+YAML header specification
+~~~~~~~~~~~~~~~~~~~~~~~~~
 
   #. **Must** conform to YAML syntax.
   #. **Must** contain at least one YAML document, **may** contain more. 
@@ -77,8 +77,8 @@ Real Example:
 
 .. _yhdx:
 
-``.yhdx`` YAML header data extrators 
---------------------------------------
+YAML header data extractors: ``.yhdx`` 
+-------------------------------------
 
 A ``.yhdx`` YAML header extraction file is used to extract information
 from the stored header so it can be included in an event table.
@@ -129,132 +129,60 @@ pulls out this data in (wide) tabular format.
   +----------+----------+------------+
 
 
-YAML Notes
------------
 
-The same information can be formatted in various way, with different
-tradeoffs. 
+.. _codemap:
 
-* `key`: `value` are handy when order doesn't matter.
+Event codemap files: `.xlsx`, `.ytbl`, `.txt`
+---------------------------------------------
 
-.. code-block:: yaml
-
-  ---
-  name: runsheet
-  dob: 11/17/92
-  adrc_id: M001A1
-  mood_vas:
-    pre: 4
-    post: 3
-
-.. code-block:: yaml
-
-  ---
-  MiPf:
-    pos:   MiPf
-    neg:   A1
-    gain:  10000
-    hphz:  0.01
-    lphz:  100.0
+These user defined helper files contain information about how to tag
+certain (sequences of) integer event codes in the data stream with
+experimental design information.
 
 
-`sequences` are handy when order matters
+Codemap specification
+~~~~~~~~~~~~~~~~~~~~~
 
-.. code-block:: yaml
+* Regardless of the disk file format, the codemap is always rows x
+  columns (tabular, dataframe).
 
-  block_order: 
-    - A
-    - B
-    - B
-    - A
+* There are three special columns. The first (``Index``) guarantees
+  there is at least one tag to attach to the matched event codes. The
+  next two (``regexp``, ``ccode``) control what codes are matched.
 
-They are not mutually exclusive:
+  1. ``Index`` (mandatory)
+       specifies any experimenter defined number or string tag to
+       attach to the matched pattern.
 
-Example: three ways to encode the following mixed tabular data:
+  2. ``regexp`` (mandatory)
+       Specifies the pattern of the code sequence
+       to match, at least one code, possibly flanked by others.
 
-  +---------+-------+------+-------+------+-------+
-  |  index  | pos   |neg   |gain   | hphz | lphz  |
-  +=========+=======+======+=======+======+=======+
-  |  MiPf   | MiPf  | A1   | 20000 | 0.01 | 100.0 |
-  +---------+-------+------+-------+------+-------+
-  |  HEOG   | lle   | lhz  | 10000 | 0.01 | 100.0 |
-  +---------+-------+------+-------+------+-------+
+  3. ``ccode`` (optional) If present in the code map, restricts
+       matches to data where the ``log_ccode`` in the HDF5 data block
+       equals ``ccode`` in the code map. This emulates the familar
+       behavior of Kutas Lab ERPSS ``cdbl`` code sequence pattern
+       matching where, e.g., event code 1 with ccode==0 is a
+       calibration pulse and event code 1 with ccode==1 is an
+       experimental stimulus.
 
-* pure nested `sequences` (YAML "flow" syntax, c.f. JSON).
-
-.. code-block:: yaml
-
-  table:[ [index, pos,   neg,  gain,   hphz, lphz ],
-          [MiPf,  MiPf,   A1,  20000,  0.01, 100.0],
-          [HEOG,  lhz,   lhz,  10000,  0.01, 100.0] ]
-
-  Virtues: The structure of the table is obvious. Data is visually
-  compact, fairly easy to read, type, and proofread.
- 
-  Vices: There's no way to tell column headings from data except by
-  the order convention.  Departures break the processing pipeline or
-  corrupt the data.
-
-* `key`: `sequence` maps (c.f. headed .csv)
- 
-.. code-block:: yaml
-
-  columns:
-      [index, pos,   neg,  gain,   hphz, lphz ]
-  rows:
-    - [MiPf,  MiPf,   A1,  20000,  0.01, 100.0]
-    - [HEOG,  lhz,   lhz,  10000,  0.01, 100.0]
-
-  Virtues: The structure of the table is obvious, data is fairly
-  compact, easy to read, type, and proofread. Columns headings
-  are explicitly tagged and segregated from data.
- 
-  Vices: Data retrieval is by implicit index, *i*-th row of *j*-th column.
-
-* Nested `key`: `value` maps::
- 
-    MiPf:
-      pos:   MiPf
-      neg:   A1
-      gain:  10000
-      hphz:  0.01
-      lphz:  100.0
-
-    HEOG:
-      pos:   lhz
-      neg:   rhz
-      gain:  10000
-      hphz:  0.01
-      lphz:  100.0
-
-  Virtues: Each data point is explicitly labeled and can be extracted
-  by a unique slash-path tag: `MiPf/gain`. 
-
-  Vices: The structure of the table is not obvious. Explicit
-  `key:value` labelling increases storage overhead. Retrieval by tag is
-  slow compared to retrieval by index.
-
-.. hint:: For header data you plan to automatically extract with
-       :meth:`~mkpy.mkh5.mkh5.get_event_table('some_data',
-       'some_yhdx')` shallow `key:value` maps are likely the easiest
-       to work with.
+* The rest of the columns in the codemap, if any, give the values of
+  additional experimental variables to tag the matched event code
+  with. These may be string labels for factor levels, numeric
+  co-variates. There may be a few or many, though the latter multiply
+  the storage requirements in RAM or on disk when processing time
+  series of continuous data instead of the (typically) relatively
+  small numbers of event codes.
 
 
-Event code table files: `.xlsx`, `.ytbl`, `.txt`
-------------------------------------------------
+.. warning ::
+   
+   Code sequence patterns are matched within each `mkh5` data block
+   and cannot span data block boundaries by design.
 
-These user defined helper files contain information about how
-to decorate or tag certain event codes with additional experimental
-information.
 
-The format of the data is tabular. Each row specifies an Index and the
-pattern of the code to match.
-
-A regular-expression pattern matching mechanism is used to locate
-event codes and sequences of them in the log.
-
-Sequence patterns are matched within each data block and cannot span
-data blocks by design.
+How it works: event code sequence pattern matching
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 Event codes are numbers and regular expressions match strings so
 behind the scenes the sequence of event codes in a datablock is mapped
@@ -267,8 +195,8 @@ Example:
     stringified: ``' 1 1 1 11 1024 1'``
 
 
-Event code string matching definitions
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Pattern matching definitions:
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 numerals
   ``0 1 2 3 4 5 6 7 8 9``
@@ -305,8 +233,10 @@ search pattern
         ``code_pattern* anchor_pattern code_pattern*``
 
 
-Event table and epoch table column data types
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Code map specification 
+~~~~~~~~~~~~~~~~~~~~~~
+
+In addition
 
 * The ``Index`` column values must be integers or string labels 
 
@@ -481,4 +411,116 @@ Notes
 
     * There is no provision for <t:n-m> time interval constraints on
       code patterns. Maybe someday.
+
+
+
+YAML Notes
+----------
+
+The same information can be formatted in various way, with different
+tradeoffs. 
+
+* `key`: `value` are handy when order doesn't matter.
+
+.. code-block:: yaml
+
+  ---
+  name: runsheet
+  dob: 11/17/92
+  adrc_id: M001A1
+  mood_vas:
+    pre: 4
+    post: 3
+
+.. code-block:: yaml
+
+  ---
+  MiPf:
+    pos:   MiPf
+    neg:   A1
+    gain:  10000
+    hphz:  0.01
+    lphz:  100.0
+
+
+`sequences` are handy when order matters
+
+.. code-block:: yaml
+
+  block_order: 
+    - A
+    - B
+    - B
+    - A
+
+They are not mutually exclusive:
+
+Example: three ways to encode the following mixed tabular data:
+
+  +---------+-------+------+-------+------+-------+
+  |  index  | pos   |neg   |gain   | hphz | lphz  |
+  +=========+=======+======+=======+======+=======+
+  |  MiPf   | MiPf  | A1   | 20000 | 0.01 | 100.0 |
+  +---------+-------+------+-------+------+-------+
+  |  HEOG   | lle   | lhz  | 10000 | 0.01 | 100.0 |
+  +---------+-------+------+-------+------+-------+
+
+* pure nested `sequences` (YAML "flow" syntax, c.f. JSON).
+
+.. code-block:: yaml
+
+  table:[ [index, pos,   neg,  gain,   hphz, lphz ],
+          [MiPf,  MiPf,   A1,  20000,  0.01, 100.0],
+          [HEOG,  lhz,   lhz,  10000,  0.01, 100.0] ]
+
+  Virtues: The structure of the table is obvious. Data is visually
+  compact, fairly easy to read, type, and proofread.
+ 
+  Vices: There's no way to tell column headings from data except by
+  the order convention.  Departures break the processing pipeline or
+  corrupt the data.
+
+* `key`: `sequence` maps (c.f. headed .csv)
+ 
+.. code-block:: yaml
+
+  columns:
+      [index, pos,   neg,  gain,   hphz, lphz ]
+  rows:
+    - [MiPf,  MiPf,   A1,  20000,  0.01, 100.0]
+    - [HEOG,  lhz,   lhz,  10000,  0.01, 100.0]
+
+  Virtues: The structure of the table is obvious, data is fairly
+  compact, easy to read, type, and proofread. Columns headings
+  are explicitly tagged and segregated from data.
+ 
+  Vices: Data retrieval is by implicit index, *i*-th row of *j*-th column.
+
+* Nested `key`: `value` maps::
+ 
+    MiPf:
+      pos:   MiPf
+      neg:   A1
+      gain:  10000
+      hphz:  0.01
+      lphz:  100.0
+
+    HEOG:
+      pos:   lhz
+      neg:   rhz
+      gain:  10000
+      hphz:  0.01
+      lphz:  100.0
+
+  Virtues: Each data point is explicitly labeled and can be extracted
+  by a unique slash-path tag: `MiPf/gain`. 
+
+  Vices: The structure of the table is not obvious. Explicit
+  `key:value` labelling increases storage overhead. Retrieval by tag is
+  slow compared to retrieval by index.
+
+.. hint:: For header data you plan to automatically extract with
+       :meth:`~mkpy.mkh5.mkh5.get_event_table('some_data',
+       'some_yhdx')` shallow `key:value` maps are likely the easiest
+       to work with.
 

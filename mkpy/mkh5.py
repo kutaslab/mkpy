@@ -1011,24 +1011,36 @@ class mkh5:
         Returns
         -------
         event_table : pandas.DataFrame
-           See Notes.
+           See Note.
 
-        Notes
-        -----
 
-        This sweeps the code tag map across the data to generate a lookup
-        table for specific event (sequence patterns) where the rows specify
+        Note
+        ----
 
-           1. slashpath to the mkh5 dblock data set and sample index
-              for pattern-matching events.
+        1. This sweeps the code tag map across the data to generate a lookup
+           table for specific event (sequence patterns) where the rows specify:
 
-           2. all the additional information for that pattern given in
-              the code tag map
+           * slashpath to the mkh5 dblock data set and sample index
+             for pattern-matching events.
 
-        The event table generated from mkh5 data and the code_map
-        specification is in lieu of .blf (for EEG epoching and
-        time-locking), .rts (for event-to-event timing), and .hdr (for
-        experimental design specification).
+           * all the additional information for that pattern given in
+             the code tag map
+
+           The event table generated from mkh5 data and the code_map
+           specification is in lieu of .blf (for EEG epoching and
+           time-locking), .rts (for event-to-event timing), and .hdr
+           (for experimental design specification).
+
+
+        2. ``ccode`` Special column. If the code tag map has a column
+           named ``ccode`` the code finder finds events that match the
+           code sequence given by the regex pattern **AND** the
+           log_ccode == ccode. This emulates Kutas Lab `cdbl` event
+           lookup and to support, e.g., the condition code == 0 for
+           cals convention and blocked designs where the `ccode`
+           varies block to block. If the code map does not specify
+           a ``ccode``, column the `log_ccode` column is ignored for
+           pattern matching.
 
         """
 
@@ -1976,7 +1988,7 @@ class mkh5:
     ):
         """write previously set epochs to data in the specified file format
 
-        Recommended epoch export formats for sross-platform data interchange
+        Recommended epoch export formats for cross-platform data interchange
 
         Parameters
         ----------
@@ -1986,31 +1998,37 @@ class mkh5:
              file path and name of the data file
         file_format : string, {'h5', 'pdh5', 'feather', 'txt'}
 
+
+        .. warning ::
+
+           File formats other than h5 overwrite any file with the same
+           name without warning.
+
+
         Note
         ----
 
-        * File formats other than h5 and pdh5 overwrite any
-          file with the same name without warning.
+        * h5 format:
 
-        * h5 format: the epochs are saved in the h5 file root as a
-          dataset named epochs_name. Fails if such a dataset already
-          exists.
+          * the epochs are saved in the HDF5 file root as a dataset
+            named `epochs_name`. Fails if such a dataset already
+            exists.
 
-        * h5 format: 2-D rows x columns epochs data are stored as a
-          single 1-D column vector (rows) of an HDF5 compound data
-          type (columns). This HDF5 dataset is easily read and
-          unpacked with any HDF5 reader that supports HDF5 compound
-          data types.
+          * 2-D rows x columns epochs data are stored as a single 1-D
+            column vector (rows) of an HDF5 compound data type
+            (columns). This HDF5 dataset is easily read and unpacked
+            with any HDF5 reader that supports HDF5 compound data
+            types.
 
-        * pdh5, feather, text formats: 2-D rows x columns epochs data
-          are stored via the pandas to_hdf, to_feather, and to_csv
-          writers. These epochs data are easily read into a
-          pandas.DataFrame with pandas.read_hdf(epochs_f,
-          key=epochs_name) and also readable, less easily, by other
-          HDF5 readers.
+        * pdh5 format: 2-D rows x columns epochs data are written to
+          disk with `pandas.to_hdf` writer (via pytables). These
+          epochs data are easily read into a `pandas.DataFrame` with
+          `pandas.read_hdf(epochs_f, key=epochs_name)` and are also
+          readable, less easily, by other HDF5 readers.
 
-
-        * txt format is tab-separated.
+        * feather, txt formats: 2-D rows x columns epochs data are
+          written to disk with `pandas.to_feather` (via pyarrow) and
+          as tab-separated text with `pandas.to_csv(..., sep='\t')`.
 
         """
 

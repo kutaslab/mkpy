@@ -4,6 +4,55 @@ Quick start
 ===========
 
 
+Install ``mkpy``
+----------------
+
+``conda env (recommended)`` If you work on a 64-bit linux or fairly recent MacOS and
+are already using conda environments, install the latest versions
+X.Y.Z. from Anaconda Cloud like so
+
+* Minimal::
+ 
+    conda create --name mkpy_env install mkpy=X.Y.Z -c kutaslab -c defaults -c conda-forge
+    
+* A scientific computing stack including ``mkpy``::
+    
+    conda create --name mkconda_X.Y.Z install mkpy -c kutaslab -c defaults -c conda-forge
+
+
+``github`` Install from source::
+
+    git clone https://github.com/kutaslab/mkpy mkpy
+    cd mkpy
+    pip install .
+
+
+
+Launch ``mkpy``
+-------------------
+
+#. Log into your server.
+
+#. Open a terminal window and navigate to the directory where you want
+   to work.
+
+#. Activate the conda environment to work in, e.g., ``mkconda-0.0.7_expt_4``
+
+#. At the shell prompt launch ``jupyter notebook``::
+
+     [turbach@mkgpu1 ~]$ jupyter notebook
+
+#. Find the jupyter window in your web browser and start a new notebook 
+   or open an existing one running the ``Python 3`` kernel.
+
+   In the first code cell enter::
+
+     from mkpy import mkh5
+     myh5 = mkh5.mkh5("some_file.h5")
+
+#. Have at it.
+
+
 Single subject, single session workflow
 ---------------------------------------
 
@@ -204,15 +253,19 @@ Merging experimental data with EEG
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
   :ref:`yhdr`
-  Extend the data block headers with arbitrary experimental information when the
-  ``mkh5`` EEG data are imported.
+    Extend the data block headers with arbitrary experimental information when the
+    ``mkh5`` EEG data are imported.
 
-  :meth:`~mkpy.mkh5.mkh5.get_event_table`
-  look up and tag single-trial event codes and event code sequences with 
-  imported experimental variables in a data table format
+  :ref:`codemap`
+     specifies what numeric event codes in the data get tagged with
+     what experimental information
 
   :ref:`yhdx`
-  broadcast information from the header to a column in the event data table
+    broadcast information from the header to a column in the event data table
+
+  :meth:`~mkpy.mkh5.mkh5.get_event_table`
+    look up and tag single-trial event codes and event code sequences with 
+    imported experimental variables in a data table format. The 
 
   :meth:`~mkpy.mkh5.mkh5.set_epochs`
     write the single-trial tagged EEG epoch lookup table to the ``mkh5`` file
@@ -226,34 +279,12 @@ Exporting EEG and event data for analysis
     feather binary data interchange format (``.fthr``).
 
   :meth:`~mkpy.mkh5.mkh5.export_epochs_table`
-  write out tabular epochs data in tab-separated text (``.txt``) or
-  feather binary data interchange format (``.fthr``).
+    write out tabular epochs data in tab-separated text (``.txt``) or
+    feather binary data interchange format (``.fthr``).
 
-  :meth:`~mkpy.mkh5.mkh5.export_epochs`
-    write out single trial EEG data epochs defined by the epochs data
-    table in the HDF5 (``.h5``) or feather (``.fthr``) binary
-    data interchange formats or as tab-separated text (``.txt``)
-
-
-Running ``mkpy`` on the GPU server
-----------------------------------
-
-#. Log into ``mkgpu.ucsd.edu`` with your AD credentials
-
-#. Open a terminal window and navigate to the directory where you want
-   to work.
-
-#. At the shell prompt launch ``jupyter notebook``::
-
-     [turbach@mkgpu1 ~]$ jupyter notebook
-
-#. Find the jupyter window in your web browser and start a new notebook 
-   or open an existing one running the ``Python 3`` kernel.
-
-   In the first code cell enter::
-
-     from mkpy import mkh5
-     myh5 = mkh5.mkh5("some_file.h5")
-
-#. Have at it.
+  :meth:`~mkpy.mkh5.mkh5.export_epochs` write out single trial EEG
+    data epochs defined by the epochs data table as 1-D vectors of
+    compound data types in HDF5 (``.h5``) or with ``pandas.DataFrame``
+    writers to HDF5 (``.pdh5``), feather (``.fthr``) binary data
+    interchange formats or as tab-separated text (``.txt``)
 
