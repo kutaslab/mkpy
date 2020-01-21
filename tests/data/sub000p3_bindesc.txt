@@ -1,0 +1,7 @@
+Index	regexp	bin	tone	stim	accuracy	acc_type	False	True	All
+thch	(#11) 1040	3	hi	target	correct	hit	23	27	50
+slcc	(#10) (?!1040)	4	lo	standard	correct	cr	138	8	146
+tlch	(#21) 1040	9	lo	target	correct	hit	31	19	50
+shcc	(#20) (?!1040)	10	hi	standard	correct	cr	142	4	146
+thch	(#11) (1040)	103	hi	target	correct	hit	23	27	50
+tlch	(#21) (1040)	109	lo	target	correct	hit	31	19	50

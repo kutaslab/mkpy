@@ -996,13 +996,25 @@ class mkh5:
     # Public event code tag mapping and epoching utilities
     # ------------------------------------------------------------
     def get_event_table(self, code_map_f, header_map_f=None):
-        """ Reads the code tag and header extractor and returns an event lookup table
+        """Reads the code tag and header extractor and returns an event lookup table
 
         Parameters
         ----------
         code_map_f : str
-            Excel, YAML, or tab-separated text, see mkh5 docs for format details.
-        
+            Excel, YAML, or tab-separated text, see mkh5 docs for
+            format details.
+
+        header_map_f : str
+            YAML header extractor file, keys match header keys, values specify
+            name of the event table column to put the header data
+
+        Returns
+        -------
+        event_table : pandas.DataFrame
+           See Notes.
+
+        Notes
+        -----
 
         This sweeps the code tag map across the data to generate a lookup
         table for specific event (sequence patterns) where the rows specify
@@ -1017,6 +1029,7 @@ class mkh5:
         specification is in lieu of .blf (for EEG epoching and
         time-locking), .rts (for event-to-event timing), and .hdr (for
         experimental design specification).
+
         """
 
         # instantiate the codemapper w/ its map and code finder
@@ -1059,6 +1072,7 @@ class mkh5:
                         code_pattern_matches = ctagger._find_evcodes(
                             cm["regexp"], dblock_ticks, log_evcodes
                         )
+
                         if code_pattern_matches is not None:
                             for m in code_pattern_matches:
                                 for mm in m:
@@ -1084,16 +1098,19 @@ class mkh5:
                                             ]
                                         ]
                                     )
+
                                     if is_anchor:
                                         assert anchor_tick == match_tick
                                     else:
                                         assert anchor_tick != match_tick
+
+                                    # ok, this is the tick of the pattern match
+                                    # and it must be unique
                                     tick_idx = np.where(
                                         dblock_ticks == match_tick
                                     )[0]
-                                    assert (
-                                        len(tick_idx) == 1
-                                    )  # better be a unique tick
+                                    assert len(tick_idx) == 1
+
                                     sample_data = [
                                         ("Index", idx),
                                         ("data_group", dgp),
@@ -1145,11 +1162,15 @@ class mkh5:
 
         # handle no matches ...
         if len(match_list) > 0:
+
             event_table = pd.DataFrame([dict(m) for m in match_list])
+
+            # code map ccode triggers backwards compatibility
+            # with Kutas Lab ERPSS cdbl
+            if "ccode" in ctagger.code_map.columns:
+                event_table = event_table.query("ccode == log_ccodes")
+
             event_table.set_index("Index", inplace=True)
-            # do not use ... overmaps duplicate Indexs
-            # event_table = pd.merge(event_table, ctagger.code_map,
-            #                       left_index=True, right_index=True)
 
             self._h5_check_events(self.h5_fname, event_table)
             return event_table
@@ -1167,7 +1188,7 @@ class mkh5:
         h5_f : str
             path to mkh5 format hdf5 file
         e_table: (pandas.DataFrame, np.ndarray)
-            as returned by mkh5.get_event_table() 
+            as returned by mkh5.get_event_table()
 
         Returns
         -------

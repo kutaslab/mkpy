@@ -6,6 +6,7 @@ import pprint
 import os
 import warnings
 import pandas as pd
+import tables  # mkpy >= v0.1.9 import tables or pandas->importlib->pathspec errors
 
 from matplotlib import pyplot as plt
 
