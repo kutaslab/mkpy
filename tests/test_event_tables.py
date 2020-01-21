@@ -1,4 +1,5 @@
 import re
+import hashlib
 import numpy as np
 import pdb
 import pprint
@@ -172,7 +173,9 @@ def test_irb_event_table_fails():
     os.remove(h5f)
 
 
-def test_non_unique_event_table_index():
+@pytest.mark.parametrize("sheet", ["Sheet1", "Sheet2"])
+def test_non_unique_event_table_index(sheet):
+    """test xlsx codemap with non-unique index values, with and without ccode"""
 
     # name and reset the .h5 file
     sid = "sub000"
@@ -204,12 +207,39 @@ def test_non_unique_event_table_index():
         cal_ccode=ccode,
     )  # condition code
 
-    code_map_f = TEST_DIR("data/WR_event_table.xlsx!Sheet1")
+    # -----------------------------------------------------
+    # check the event code table specs
+    # -----------------------------------------------------
+    code_map_f = TEST_DIR(f"data/wr_code_map.xlsx!{sheet}")
     event_table = myh5.get_event_table(code_map_f, yhdx_f)
 
-    idxs = event_table.index.unique()
+    # events: 209 cals, 144 block 1 words, 144 block 2 words
+    events = {
+        "Sheet1": {
+            "shape": (288, 34),  # no ccode column
+            "idx_n": 144,  # no cals, 144 unique words
+            "word_lags_1": ["unique", "none"],
+            "word_lags_2_3": ["short", "long"],
+        },
+        # Sheet2 has ccode column for bdf compatibility test
+        "Sheet2": {
+            "shape": (497, 35),  # 34 + ccode column
+            "idx_n": 145,
+            "ccodes_n": (209, 0, 144, 144),  # ccode 0, 1, 2, 3
+            "word_lags_1": ["cal", "unique", "none"],
+            "word_lags_2_3": ["cal", "short", "long"],
+        },
+    }
 
-    assert len(idxs) == 144
+    idxs = event_table.index.unique()
+    assert event_table.shape == events[sheet]["shape"]
+    assert len(idxs) == events[sheet]["idx_n"]
+
+    # count the ccodes, if any
+    if "ccodes_n" in events[sheet].keys():
+        for code, n_codes in enumerate(events[sheet]["ccodes_n"]):
+            assert len(event_table.query("ccode == @code")) == n_codes
+
     for idx in idxs:
         row_slice = event_table.loc[idx]
 
@@ -221,14 +251,103 @@ def test_non_unique_event_table_index():
         for idx, row in row_slice.iterrows():
             assert row["anchor_code"] == row["log_evcodes"]
 
+        # spot check the word_lag rows
         if len(row_slice) == 1:
-            assert row_slice["word_lag"].all() in ["unique", "none"]
+            assert row_slice["word_lag"].all() in events[sheet]["word_lags_1"]
         elif len(row_slice) in [2, 3]:
             # duplicate indices, multiple rows match, make sure the
             # the right number comes back
-            assert row_slice["word_lag"].all() in ["short", "long"]
+            assert (
+                row_slice["word_lag"].all() in events[sheet]["word_lags_2_3"]
+            )
+        elif len(row_slice) == 209:
+            assert row_slice["word_lag"].unique()[0] == "cal"
         else:
             print("{0}".format(row_slice))
             raise ValueError("something wrong with word rep event table")
 
     os.remove(TEST_H5)
+
+
+@pytest.mark.parametrize("codemap", ["no_ccode", "with_ccode"])
+def test_p3_yaml_codemap_ccode(codemap):
+    """test YAML codemaps with and without ccode"""
+
+    # name and reset the .h5 file
+    sid = "sub000"
+    eeg_f = TEST_DIR("data/sub000p3.crw")
+    log_f = TEST_DIR("data/sub000p3.x.log")
+
+    yhdr_f = TEST_DIR("data/sub000p3.yhdr")
+    # yhdx_f = TEST_DIR("data/wr.yhdx")
+
+    cal_eeg_f = TEST_DIR("data/sub000c.crw")
+    cal_log_f = TEST_DIR("data/sub000c.log")
+    cal_yhdr_f = TEST_DIR("data/sub000c.yhdr")
+
+    myh5 = mkh5.mkh5(TEST_H5)
+    myh5.reset_all()
+
+    # load in subject and cals
+    myh5.create_mkdata(sid, eeg_f, log_f, yhdr_f)
+    myh5.append_mkdata(sid, cal_eeg_f, cal_log_f, cal_yhdr_f)
+
+    # calibrate data
+    pts, pulse, lo, hi, ccode = 5, 10, -40, 40, 0
+    myh5.calibrate_mkdata(
+        sid,  # specific data group
+        n_points=pts,  # pts to average
+        cal_size=pulse,  # uV
+        lo_cursor=lo,  # lo_cursor ms
+        hi_cursor=hi,  # hi_cursor ms
+        cal_ccode=ccode,
+    )  # condition code
+
+    # ------------------------------------------------------------
+    # Fetch and check events for codemaps with and without ccode
+    # ------------------------------------------------------------
+
+    events = {
+        "no_ccode": {
+            "event_shape": (492, 29),
+            "ytbl": TEST_DIR("data/sub000p3_codemap.ytbl"),
+            "bindesc_f": TEST_DIR("data/sub000p3_bindesc.txt"),
+            "sha256": "0921acfb0c41c96f89f4a86252dfa0fcdfa6827eacd0c9057bc043fa44cff9f1",
+        },
+        "with_ccode": {
+            "event_shape": (701, 30),
+            "ytbl": TEST_DIR("data/sub000p3_codemap_ccode.ytbl"),
+            "bindesc_f": TEST_DIR("data/sub000p3_ccode_bindesc.txt"),
+            "sha256": "0908e0600377cbf31aef06360f09fb0395fcfb2b8bf592f4638785c4c13bc9e4",
+        },
+    }
+
+    ytbl = events[codemap]["ytbl"]
+    event_table = myh5.get_event_table(ytbl).query("is_anchor == True")
+    assert event_table.shape == events[codemap]["event_shape"]
+    print(f"{ytbl} event_table {event_table.shape}")
+
+    counts = pd.crosstab(
+        event_table.bin, [event_table.log_flags > 0], margins=True
+    )
+    counts.columns = [str(col) for col in counts.columns]
+
+    coi = ["regexp", "bin", "tone", "stim", "accuracy", "acc_type"]
+    bin_desc = (
+        event_table[coi]
+        .drop_duplicates()
+        .sort_values("bin")
+        .join(counts, on="bin")
+        .reset_index()
+    )
+
+    # bin_desc.to_csv(events[codemap]["bindesc_f"], sep="\t", index=False)
+
+    bindesc_f = events[codemap]["bindesc_f"]
+    with open(bindesc_f, "rb") as bd:
+        assert (
+            hashlib.sha256(bd.read()).hexdigest() == events[codemap]["sha256"]
+        )
+
+    assert all(bin_desc == pd.read_csv(bindesc_f, sep="\t"))
+    print(bin_desc)

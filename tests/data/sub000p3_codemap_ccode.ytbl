@@ -1,0 +1,124 @@
+# cd 0
+# Calibration
+# 	sd 0
+# 		cal pulses  10 uV
+# 		.{*}
+# cd 1
+# Simple Oddball Task 
+# 	sd 1
+# 		Low Tone Standard 
+# 		.{10}
+# 	sd 2
+# 		High Tone Target
+# 		.{11}
+# 	sd 3
+# 		High Tone Correct Target(Hit)
+# 		.{11}{1040:rt}
+# 	sd 4    
+# 		Low Tone Correct Standard(CR)
+# 		.{10}{~1040}
+# 	sd 5    
+# 		High Tone Incorrect Target(Miss)
+# 		.{11}{~1040}
+# 	sd 6    
+# 		Low Tone Incorrect Standard(FA)
+# 		.{10}{1040:rt}
+
+# 	sd 7
+# 		High Tone Standard
+# 		.{20}
+# 	sd 8
+# 		Low Tone Target
+# 		.{21}
+# 	sd 9
+# 		Low Tone Correct Target(Hit)
+# 		.{21}{1040:rt}
+# 	sd 10   
+# 		High Tone Correct Standard(CR)
+# 		.{20}{~1040}
+# 	sd 11 
+# 		Low Tone Incorrect Target(Miss)
+# 		.{21}{~1040}
+# 	sd 12
+# 		High Tone Incorrect Standard(FA)
+# 		.{20}{1040:rt}
+#	
+# 	sd 13
+# 		Tone Standard
+# 		.{10;20}
+# 	sd 14
+# 		Tone Target
+# 		.{11;21}
+# 	sd 15
+# 		Correct Target(Hit)
+# 		.{11;21}{1040:rt}
+# 	sd 16
+# 		Correct Standard(CR)
+# 		.{10;20}{~1040}	
+# 	sd 17   
+# 		Incorrect Target(Miss)
+# 		.{11;21}{~1040}
+# 	sd 18
+# 		Incorrect Standard(FA)
+# 		.{10;20}{1040:rt}
+
+# 	sd 19
+# 		High Tone(S+T)
+# 		.{11;20}
+# 	sd 20
+# 		Low Tone(S+T)
+# 		.{10;21}
+
+
+# YAML version, 
+#
+# There are 4 basic stimuli: (target, standard) x (high, low)
+# There 8 experimental conditions: stimuli (4) x accuracy (correct, incorrect)
+#
+# With the 4 stimuli x 2 response-contingent accuracy = 8 experimental conditions
+# tagged here, there is no need to pool bins, here. Model them in analysis.
+#
+# Note the use of code tagger *NON* caputuring group for ommitted
+# responses, e.g. '(#10) (?!1040)'
+
+---
+name: p3  
+
+# Index and regexp are mandatory, all else is whatever
+columns:
+    [ Index,      regexp,           ccode, bin,   tone,  stim,       accuracy,    acc_type ]
+
+rows:
+  - [ cals, '(#\d+)',               0,     0,     cal,   cal,        cal,         cal      ]
+# - [ sl, '(#10)',                  1,     1,     lo,    standard,   all,         all      ]
+# - [ th, '(#11)',                  1,     2,     hi,    target,     all,         all      ]
+
+  - [ thch, '(#11) 1040',           1,     3,     hi,    target,     correct,     hit      ]
+  - [ thch, '(#11) (1040)',         1,   103,     hi,    target,     correct,     hit      ]  # extract stim-response
+  - [ slcc, '(#10) (?!1040)',       1,     4,     lo,    standard,   correct,     cr       ]
+  - [ thim, '(#11) (?!1040)',       1,     5,     hi,    target,     incorrect,   miss     ]
+  - [ slif, '(#10) 1040',           1,     6,     lo,    standard,   incorrect,   fa       ]
+  - [ slif, '(#10) (1040)',         1,   106,     lo,    standard,   incorrect,   fa       ]  # extract stim-response
+
+# - [ sh, '(#20)',                  1,     7,     hi,    standard,   all,         all      ]
+# - [ tl, '(#21)',                  1,     8,     lo,    target,   all,           all      ]
+
+  - [ tlch, '(#21) 1040',           1,     9,     lo,    target,     correct,      hit     ]
+  - [ tlch, '(#21) (1040)',         1,   109,     lo,    target,     correct,      hit     ]
+  - [ shcc, '(#20) (?!1040)',       1,    10,     hi,    standard,   correct,      cr      ]
+  - [ tlim, '(#21) (?!1040)',       1,    11,     lo,    target,     incorrect,    miss    ]
+  - [ shif, '(#20) 1040',           1,    12,     hi,    standard,   incorrect,    fa      ]
+  - [ shif, '(#20) (1040)',         1,   112,     hi,    standard,   incorrect,    fa      ]
+
+# - [ s...,     '(#[12]0)',         1,    13,    tone,  standard,   all,          all     ]
+# - [ t...,     '(#[12]1)',         1,    14,    tone,  target,     all,          all     ]
+
+# - [ .tch,    '(#[12]1) (1040)',   1,     15,   tone,   target,     correct,      hit     ]
+# - [ .scc,    '(#[12]0) (?!1040)', 1,     16,   tone,   standard,   correct,      cr      ]
+
+# - [ .tim,    '(#[12]1) (?!1040)', 1,     17,   tone,   target,     incorrect,    miss    ]
+# - [ .sif,    '(#[12]0) (1040)',   1,     18,   tone,   standard,   incorrect,    fa      ]
+
+# - [ .h..,    '(#(11|20))',        1,     19,   hi,     all,        all,          all     ]
+# - [ .l..,    '(#(10|21))',        1,     20,   lo,     all,        all,          all     ]
+

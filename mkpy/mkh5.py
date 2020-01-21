@@ -996,31 +996,65 @@ class mkh5:
     # Public event code tag mapping and epoching utilities
     # ------------------------------------------------------------
     def get_event_table(self, code_map_f, header_map_f=None):
-        """ Reads the code tag and header extractor and returns an event lookup table
+        """Reads the code tag and header extractor and returns an event lookup table
 
         Parameters
         ----------
         code_map_f : str
-            Excel, YAML, or tab-separated text, see mkh5 docs for format details.
-        
+            Excel, YAML, or tab-separated text, see mkh5 docs for
+            format details.
 
-        This sweeps the code tag map across the data to generate a lookup
-        table for specific event (sequence patterns) where the rows specify
+        header_map_f : str
+            YAML header extractor file, keys match header keys, values specify
+            name of the event table column to put the header data
 
-           1. slashpath to the mkh5 dblock data set and sample index
-              for pattern-matching events.
+        Returns
+        -------
+        event_table : pandas.DataFrame
+           See Note.
 
-           2. all the additional information for that pattern given in
-              the code tag map
 
-        The event table generated from mkh5 data and the code_map
-        specification is in lieu of .blf (for EEG epoching and
-        time-locking), .rts (for event-to-event timing), and .hdr (for
-        experimental design specification).
+        Note
+        ----
+
+        1. This sweeps the code tag map across the data to generate a lookup
+           table for specific event (sequence patterns) where the rows specify:
+
+           * slashpath to the mkh5 dblock data set and sample index
+             for pattern-matching events.
+
+           * all the additional information for that pattern given in
+             the code tag map
+
+           The event table generated from mkh5 data and the code_map
+           specification is in lieu of .blf (for EEG epoching and
+           time-locking), .rts (for event-to-event timing), and .hdr
+           (for experimental design specification).
+
+
+        2. ``ccode`` Special column. If the code tag map has a column
+           named ``ccode`` the code finder finds events that match the
+           code sequence given by the regex pattern **AND** the
+           log_ccode == ccode. This emulates Kutas Lab `cdbl` event
+           lookup and to support, e.g., the condition code == 0 for
+           cals convention and blocked designs where the `ccode`
+           varies block to block. If the code map does not specify
+           a ``ccode``, column the `log_ccode` column is ignored for
+           pattern matching.
+
         """
 
         # instantiate the codemapper w/ its map and code finder
         ctagger = CodeTagger(code_map_f)
+
+        if "ccode" in ctagger.code_map.columns:
+            msg = (
+                f"\nAs of mkpy 0.2.0 to match events with a codemap regexp pattern, the\n"
+                f"ccode column in {Path(code_map_f).name} must also match the log_ccode\n"
+                f"in the datablock. If this behavior is not desired, delete or rename\n"
+                f"the ccode column in the codemap."
+            )
+            warnings.warn(msg)
 
         # set up to extract info from the header
         hio = self.HeaderIO()
@@ -1059,6 +1093,7 @@ class mkh5:
                         code_pattern_matches = ctagger._find_evcodes(
                             cm["regexp"], dblock_ticks, log_evcodes
                         )
+
                         if code_pattern_matches is not None:
                             for m in code_pattern_matches:
                                 for mm in m:
@@ -1084,16 +1119,19 @@ class mkh5:
                                             ]
                                         ]
                                     )
+
                                     if is_anchor:
                                         assert anchor_tick == match_tick
                                     else:
                                         assert anchor_tick != match_tick
+
+                                    # ok, this is the tick of the pattern match
+                                    # and it must be unique
                                     tick_idx = np.where(
                                         dblock_ticks == match_tick
                                     )[0]
-                                    assert (
-                                        len(tick_idx) == 1
-                                    )  # better be a unique tick
+                                    assert len(tick_idx) == 1
+
                                     sample_data = [
                                         ("Index", idx),
                                         ("data_group", dgp),
@@ -1145,11 +1183,15 @@ class mkh5:
 
         # handle no matches ...
         if len(match_list) > 0:
+
             event_table = pd.DataFrame([dict(m) for m in match_list])
+
+            # code map ccode triggers backwards compatibility
+            # with Kutas Lab ERPSS cdbl
+            if "ccode" in ctagger.code_map.columns:
+                event_table = event_table.query("ccode == log_ccodes")
+
             event_table.set_index("Index", inplace=True)
-            # do not use ... overmaps duplicate Indexs
-            # event_table = pd.merge(event_table, ctagger.code_map,
-            #                       left_index=True, right_index=True)
 
             self._h5_check_events(self.h5_fname, event_table)
             return event_table
@@ -1167,7 +1209,7 @@ class mkh5:
         h5_f : str
             path to mkh5 format hdf5 file
         e_table: (pandas.DataFrame, np.ndarray)
-            as returned by mkh5.get_event_table() 
+            as returned by mkh5.get_event_table()
 
         Returns
         -------
@@ -1955,7 +1997,7 @@ class mkh5:
     ):
         """write previously set epochs to data in the specified file format
 
-        Recommended epoch export formats for sross-platform data interchange
+        Recommended epoch export formats for cross-platform data interchange
 
         Parameters
         ----------
@@ -1965,31 +2007,37 @@ class mkh5:
              file path and name of the data file
         file_format : string, {'h5', 'pdh5', 'feather', 'txt'}
 
+
+        .. warning ::
+
+           File formats other than h5 overwrite any file with the same
+           name without warning.
+
+
         Note
         ----
 
-        * File formats other than h5 and pdh5 overwrite any
-          file with the same name without warning.
+        * h5 format:
 
-        * h5 format: the epochs are saved in the h5 file root as a
-          dataset named epochs_name. Fails if such a dataset already
-          exists.
+          * the epochs are saved in the HDF5 file root as a dataset
+            named `epochs_name`. Fails if such a dataset already
+            exists.
 
-        * h5 format: 2-D rows x columns epochs data are stored as a
-          single 1-D column vector (rows) of an HDF5 compound data
-          type (columns). This HDF5 dataset is easily read and
-          unpacked with any HDF5 reader that supports HDF5 compound
-          data types.
+          * 2-D rows x columns epochs data are stored as a single 1-D
+            column vector (rows) of an HDF5 compound data type
+            (columns). This HDF5 dataset is easily read and unpacked
+            with any HDF5 reader that supports HDF5 compound data
+            types.
 
-        * pdh5, feather, text formats: 2-D rows x columns epochs data
-          are stored via the pandas to_hdf, to_feather, and to_csv
-          writers. These epochs data are easily read into a
-          pandas.DataFrame with pandas.read_hdf(epochs_f,
-          key=epochs_name) and also readable, less easily, by other
-          HDF5 readers.
+        * pdh5 format: 2-D rows x columns epochs data are written to
+          disk with `pandas.to_hdf` writer (via pytables). These
+          epochs data are easily read into a `pandas.DataFrame` with
+          `pandas.read_hdf(epochs_f, key=epochs_name)` and are also
+          readable, less easily, by other HDF5 readers.
 
-
-        * txt format is tab-separated.
+        * feather, txt formats: 2-D rows x columns epochs data are
+          written to disk with `pandas.to_feather` (via pyarrow) and
+          as tab-separated text with `pandas.to_csv(..., sep='\t')`.
 
         """
 
