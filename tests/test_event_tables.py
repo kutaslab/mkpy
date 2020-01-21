@@ -269,8 +269,7 @@ def test_non_unique_event_table_index(sheet):
     os.remove(TEST_H5)
 
 
-@pytest.mark.parametrize("codemap", ["no_ccode", "with_ccode"]
-)
+@pytest.mark.parametrize("codemap", ["no_ccode", "with_ccode"])
 def test_p3_yaml_codemap_ccode(codemap):
     """test YAML codemaps with and without ccode"""
 
@@ -313,20 +312,19 @@ def test_p3_yaml_codemap_ccode(codemap):
             "event_shape": (492, 29),
             "ytbl": TEST_DIR("data/sub000p3_codemap.ytbl"),
             "bindesc_f": TEST_DIR("data/sub000p3_bindesc.txt"),
-            "sha256": '0921acfb0c41c96f89f4a86252dfa0fcdfa6827eacd0c9057bc043fa44cff9f1',
+            "sha256": "0921acfb0c41c96f89f4a86252dfa0fcdfa6827eacd0c9057bc043fa44cff9f1",
         },
-
         "with_ccode": {
             "event_shape": (701, 30),
             "ytbl": TEST_DIR("data/sub000p3_codemap_ccode.ytbl"),
             "bindesc_f": TEST_DIR("data/sub000p3_ccode_bindesc.txt"),
-            "sha256": '0908e0600377cbf31aef06360f09fb0395fcfb2b8bf592f4638785c4c13bc9e4',
+            "sha256": "0908e0600377cbf31aef06360f09fb0395fcfb2b8bf592f4638785c4c13bc9e4",
         },
     }
 
-    ytbl = events[codemap]['ytbl']
+    ytbl = events[codemap]["ytbl"]
     event_table = myh5.get_event_table(ytbl).query("is_anchor == True")
-    assert event_table.shape == events[codemap]['event_shape']
+    assert event_table.shape == events[codemap]["event_shape"]
     print(f"{ytbl} event_table {event_table.shape}")
 
     counts = pd.crosstab(
@@ -334,25 +332,33 @@ def test_p3_yaml_codemap_ccode(codemap):
     )
     counts.columns = [str(col) for col in counts.columns]
 
-    coi = ['regexp', 'bin', 'tone', 'stim', 'accuracy', 'acc_type']
-    bin_desc = event_table[coi].drop_duplicates().sort_values('bin').join(counts, on='bin').reset_index()
+    coi = ["regexp", "bin", "tone", "stim", "accuracy", "acc_type"]
+    bin_desc = (
+        event_table[coi]
+        .drop_duplicates()
+        .sort_values("bin")
+        .join(counts, on="bin")
+        .reset_index()
+    )
 
     # bin_desc.to_csv(events[codemap]["bindesc_f"], sep="\t", index=False)
 
     bindesc_f = events[codemap]["bindesc_f"]
-    with open(bindesc_f, 'rb') as bd:
-        assert hashlib.sha256(bd.read()).hexdigest() == events[codemap]['sha256']
-    
-    assert all(bin_desc == pd.read_csv(bindesc_f, sep='\t'))
+    with open(bindesc_f, "rb") as bd:
+        assert (
+            hashlib.sha256(bd.read()).hexdigest() == events[codemap]["sha256"]
+        )
+
+    assert all(bin_desc == pd.read_csv(bindesc_f, sep="\t"))
     print(bin_desc)
 
     # events[codemap]["bindesc_f"]
 
     # mark the epochs
     # myh5.set_epochs("p3", event_table, -100, 1000)  # tmin ms, tmax ms
-    
+
     # ------------------------------------------------------------
-    # export epochs 
+    # export epochs
     # ------------------------------------------------------------
     # print('writing p3 epochs as pandas hdf5 ...')
     # epx, _  = myh5.get_epochs("p3", format='pandas')
