@@ -1047,6 +1047,15 @@ class mkh5:
         # instantiate the codemapper w/ its map and code finder
         ctagger = CodeTagger(code_map_f)
 
+        if "ccode" in ctagger.code_map.columns:
+            msg = (
+                f"\nAs of mkpy 0.2.0 to match events with a codemap regexp pattern, the\n"
+                f"ccode column in {Path(code_map_f).name} must also match the log_ccode\n"
+                f"in the datablock. If this behavior is not desired, delete or rename\n"
+                f"the ccode column in the codemap."
+            )
+            warnings.warn(msg)
+
         # set up to extract info from the header
         hio = self.HeaderIO()
         if header_map_f is not None:

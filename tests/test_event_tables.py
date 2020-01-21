@@ -351,17 +351,3 @@ def test_p3_yaml_codemap_ccode(codemap):
 
     assert all(bin_desc == pd.read_csv(bindesc_f, sep="\t"))
     print(bin_desc)
-
-    # events[codemap]["bindesc_f"]
-
-    # mark the epochs
-    # myh5.set_epochs("p3", event_table, -100, 1000)  # tmin ms, tmax ms
-
-    # ------------------------------------------------------------
-    # export epochs
-    # ------------------------------------------------------------
-    # print('writing p3 epochs as pandas hdf5 ...')
-    # epx, _  = myh5.get_epochs("p3", format='pandas')
-    # print(epx.shape)
-
-    # import pdb; pdb.set_trace()
