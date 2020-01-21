@@ -45,8 +45,8 @@ deploy:
       github_token: $GITHUB_TOKEN
       keep-history: true
       on:
-          # branch: master
-          all_branches: true
+          branch: master
+          # all_branches: true
       target_branch: gh-pages  # that's the default anyway, just to be explicit
       local_dir: mkpy/docs/_build/html
 
