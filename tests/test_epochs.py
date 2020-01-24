@@ -35,12 +35,12 @@ def test_irb_epochs_out_of_bounds():
     myh5.set_epochs("oobl", event_table, -20000, 100)
     eptbl = myh5.get_epochs_table("oobl")
     oobl_epoch_idxs = [0, 7, 38, 64]  # should be excluded
-    assert all([idx not in oobl_epoch_idxs for idx in eptbl["Epoch_idx"]])
+    assert all([idx not in oobl_epoch_idxs for idx in eptbl["epoch_id"]])
 
     myh5.set_epochs("oobr", event_table, -100, 20000)
     eptbl = myh5.get_epochs_table("oobr")
     oobr_epoch_idxs = [1, 18, 57, 78, 84, 117]  # should be excluded
-    assert all([idx not in oobr_epoch_idxs for idx in eptbl["Epoch_idx"]])
+    assert all([idx not in oobr_epoch_idxs for idx in eptbl["epoch_id"]])
 
     os.remove(h5_f)
 
