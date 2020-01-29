@@ -214,7 +214,7 @@ def test_non_unique_event_table_index(sheet):
     event_table = myh5.get_event_table(code_map_f, yhdx_f)
 
     # use column Index to index the frame for these tests
-    event_table.set_index('Index', inplace=True)
+    event_table.set_index("Index", inplace=True)
 
     # events: 209 cals, 144 block 1 words, 144 block 2 words
     events = {
@@ -349,8 +349,6 @@ def test_p3_yaml_codemap_ccode(codemap):
     # bin_desc.to_csv(events[codemap]["bindesc_f"], sep="\t", index=False)
     with open(bindesc_f, "rb") as bd:
         sha256 = hashlib.sha256(bd.read()).hexdigest()
-        assert (
-            sha256 == events[codemap]["sha256"]
-        )
+        assert sha256 == events[codemap]["sha256"]
 
     assert all(bin_desc == pd.read_csv(bindesc_f, sep="\t"))

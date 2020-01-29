@@ -237,6 +237,11 @@ class CodeTagger:
                 print(f"regexp row {row}")
                 raise fail
 
+        if code_map.columns[0] == "Index":
+            warnings.DeprecationWarning(
+                "As of mkpy 0.2.1 codemaps no longer require an Index as the first column."
+            )
+
     def _load_xlsx_map(self, cmf):
         """wraps pandas.Dataframe.read_excel() to load a code tag table from .xlsx
 
