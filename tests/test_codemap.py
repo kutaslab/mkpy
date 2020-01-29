@@ -206,4 +206,4 @@ def test_irb_special_cases():
             # print(event_table.loc[test, cols_of_interest])
             event_table.loc[test, cols_of_interest]
         except Exception:
-            print("Index {0} not found in event_table".format(test))
+            print(f"{test} not found in event_table")

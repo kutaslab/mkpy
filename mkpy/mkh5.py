@@ -92,6 +92,9 @@ class mkh5:
     # splitting the .raw/.crw into mkh5 dblocks
     _dig_pause_marks = (-16384,)
 
+    # HDF5 slashpath to where epochs tables are stashed in the mkh5 file
+    EPOCH_TABLES_PATH = "_epoch_tables"
+
     class Mkh5Error(Exception):
         """general purposes mkh5 error"""
 
@@ -433,7 +436,7 @@ class mkh5:
                 sheet_name = 0
 
             slicer = pd.read_excel(
-                xl_f, sheet_name=sheet_name, header=0, index_col="Index"
+                xl_f, sheet_name=sheet_name, header=0  # , index_col="Index"
             )
 
             if slicer is not None:
@@ -444,7 +447,7 @@ class mkh5:
             raise NotImplemented
             with open(slicer_f, "r") as d:
                 mapper = pd.read_table(
-                    slicer_f, delimiter="\t", header=0, index_col="Index"
+                    slicer_f, delimiter="\t", header=0  # , index_col="Index"
                 )
             return mapper
 
@@ -1133,7 +1136,7 @@ class mkh5:
                                     assert len(tick_idx) == 1
 
                                     sample_data = [
-                                        ("Index", idx),
+                                        # ("Index", idx),
                                         ("data_group", dgp),
                                         ("dblock_path", dbp),
                                         ("dblock_tick_idx", tick_idx[0]),
@@ -1186,12 +1189,12 @@ class mkh5:
 
             event_table = pd.DataFrame([dict(m) for m in match_list])
 
-            # code map ccode triggers backwards compatibility
+            # codemap ccode triggers backwards compatibility
             # with Kutas Lab ERPSS cdbl
             if "ccode" in ctagger.code_map.columns:
                 event_table = event_table.query("ccode == log_ccodes")
 
-            event_table.set_index("Index", inplace=True)
+            # event_table.set_index("Index", inplace=True)
 
             self._h5_check_events(self.h5_fname, event_table)
             return event_table
@@ -1378,8 +1381,7 @@ class mkh5:
         Returns
         -------
         None
-            updates h5_f/epochs/ with the named epoch table h5py.Dataset
-
+            updates h5_f/EPOCH_TABLES_PATH/ with the named epoch table h5py.Dataset
 
         The epochs table is a lightweight lookup table specific to
         this mkh5 instance's hdf5 file,
@@ -1402,8 +1404,8 @@ class mkh5:
         """
         with h5py.File(self.h5_fname, mode="r") as h5:
             if (
-                "epochs" in h5.keys()
-                and epochs_table_name in h5["epochs"].keys()
+                mkh5.EPOCH_TABLES_PATH in h5.keys()
+                and epochs_table_name in h5[mkh5.EPOCH_TABLES_PATH].keys()
             ):
                 msg = (
                     f"epochs name {epochs_table_name} is in use, "
@@ -1423,23 +1425,23 @@ class mkh5:
         print("Sanitizing event table data types for mkh5 epochs table ...")
 
         # enforce Index data type is str or int
-        try:
-            msg = None
-            if event_table.index.values.dtype == np.dtype("O"):
-                maxbytes = max(
-                    [len(x) for x in event_table.index.values.astype(bytes)]
-                )
-                index_dt_type = "S" + str(maxbytes)
-            elif event_table.index.values.dtype == np.dtype(int):
-                index_dt_type = "int"
-            else:
-                msg = "uh oh, cannot convert event table index column to bytes or integer"
-        except Exception as err:
-            print(msg)
-            raise err
+        # try:
+        #     msg = None
+        #     if event_table.index.values.dtype == np.dtype("O"):
+        #         maxbytes = max(
+        #             [len(x) for x in event_table.index.values.astype(bytes)]
+        #         )
+        #         index_dt_type = "S" + str(maxbytes)
+        #     elif event_table.index.values.dtype == np.dtype(int):
+        #         index_dt_type = "int"
+        #     else:
+        #         msg = "uh oh, cannot convert event table index column to bytes or integer"
+        # except Exception as err:
+        #     print(msg)
+        #     raise err
 
-        # move Index into columns for santizing
-        event_table = event_table.reset_index("Index")
+        # # move Index into columns for santizing
+        # event_table = event_table.reset_index("Index")
 
         # remap pandas 'O' dtype columns to hdf5 friendly np.arrays if possible
         tidy_table = pd.DataFrame()
@@ -1453,8 +1455,8 @@ class mkh5:
         # 2. define a numpy compound data type to hold the event_table
         # info and region refs
 
-        # start with Epoch_idx
-        epoch_dt_names = ["Epoch_idx"]
+        # start with epoch_id
+        epoch_dt_names = ["epoch_id"]
         epoch_dt_types = ["uint64"]
 
         # continue new dtype for event info columns, mapped to hdf5 compatible np.dtype
@@ -1467,8 +1469,8 @@ class mkh5:
         epoch_dt = np.dtype(list(zip(epoch_dt_names, epoch_dt_types)))
         epochs = np.ndarray(shape=(len(event_table),), dtype=epoch_dt)
 
-        # set the Epoch_idx counting index and copy the tidied event table
-        epochs["Epoch_idx"] = [idx for idx in range(len(event_table))]
+        # set the epoch_id counting index and copy the tidied event table
+        epochs["epoch_id"] = [idx for idx in range(len(event_table))]
         for c in event_table.columns:
             epochs[c] = event_table[c]
 
@@ -1530,9 +1532,9 @@ class mkh5:
         # check the epochs for consistency
         self._check_epochs_table(epochs)
 
-        # 4. add or overwrite the epochs in the mkh5 file under /epochs/epochs_table_name
+        # 4. add epoch table in the mkh5 file under /EPOCH_TABLES_PATH/epochs_table_name
         with h5py.File(self.h5_fname, "r+") as h5:
-            epochs_path = "epochs/" + epochs_table_name
+            epochs_path = f"{mkh5.EPOCH_TABLES_PATH}/{epochs_table_name}"
             ep = h5.create_dataset(epochs_path, data=epochs)
             attrs = {"tmin_ms": tmin_ms, "tmax_ms": tmax_ms}
             for k, v in attrs.items():
@@ -1568,7 +1570,7 @@ class mkh5:
         epochs_names = []
         try:
             with h5py.File(self.h5_fname, "r") as h5:
-                epochs_names = [t for t in h5["epochs"].keys()]
+                epochs_names = [t for t in h5[mkh5.EPOCH_TABLES_PATH].keys()]
         except:
             pass
         return epochs_names
@@ -1746,8 +1748,7 @@ class mkh5:
 
         epochs_table = None
         with h5py.File(self.h5_fname, "r") as h5:
-            epochs_path = "epochs/" + epochs_name
-            # epochs_table = h5[epochs_path].value
+            epochs_path = f"{mkh5.EPOCH_TABLES_PATH}/{epochs_name}"
             epochs_table = h5[epochs_path][...]
         if epochs_table is None:
             msg = "epochs table not found: {0}".format(epochs_name)
@@ -1778,11 +1779,11 @@ class mkh5:
 
         if format == "pandas":
             eptbl = pd.DataFrame(eptbl)
-            eptbl.set_index("Index", inplace=True)
+            # eptbl.set_index("Index", inplace=True)
         return eptbl
 
     def _h5_get_epochs(self, epochs_name, columns=None):
-        """merge datablock segments (event codes, EEG) with code tags and timestamp.
+        """merge datablock segments (event codes, EEG) with code tags and timestamps.
 
         Each row (1, n) in the epochs table is broadcast to an (m, n)
         array for the samples in the specified epochs interval and
@@ -1813,8 +1814,8 @@ class mkh5:
              in `epoch_table.dtype.names`. This broadcasts the
              experimental event code tags to all samples in the epoch.
 
-           epoch['Time']: uint64
-             epoch['Time'] == 0  for the *matched* event
+           epoch['match_time']: uint64
+             epoch['match_time'] == 0  for the *matched* event
 
            epoch['anchor_time']: uint64
              epoch['anchor_time'] == 0 for the *anchor* event
@@ -1830,7 +1831,7 @@ class mkh5:
         """
 
         with h5py.File(self.h5_fname, "r") as h5:
-            epochs_path = "epochs/" + epochs_name
+            epochs_path = f"{mkh5.EPOCH_TABLES_PATH}/{epochs_name}"
             epoch_view = h5[epochs_path]
             epoch_cols = epoch_view.dtype.names
 
@@ -1842,7 +1843,6 @@ class mkh5:
                 nsamp = e["epoch_ticks"]
 
                 # fill nsamp rows x event info columns
-                # FIX ME ... subset columns here
                 event_info = np.stack([e for n in range(nsamp)], axis=0)
 
                 # set for epoch slice
@@ -1865,10 +1865,13 @@ class mkh5:
                 f4_streams_dtype = np.dtype(f4_streams_dtype)
                 epoch_streams = np.array(epoch_streams, dtype=f4_streams_dtype)
 
-                # merge epoch table, Time, and datablock stream table column names
+                # merge epoch table, match_time, and datablock stream table column names
                 all_cols = list(event_info.dtype.names)
-                all_cols.append("Time")  # matched code timestamp
+                all_cols.append("match_time")  # matched code timestamp
                 all_cols.append("anchor_time")  # anchor code timestamp
+                all_cols.append(
+                    "anchor_time_delta"
+                )  # time between match and anchor
                 for c in epoch_streams.dtype.names:
                     if c not in all_cols:
                         all_cols.append(c)
@@ -1894,7 +1897,11 @@ class mkh5:
                 for n in epoch_dt_names:
                     if n in epoch_streams.dtype.names:
                         epoch_dt_types.append(epoch_streams.dtype[n])
-                    elif n in ["Time", "anchor_time"]:
+                    elif n in [
+                        "match_time",
+                        "anchor_time",
+                        "anchor_time_delta",
+                    ]:
                         epoch_dt_types.append("int64")
                     elif n in e.dtype.names:
                         epoch_dt_types.append(event_info.dtype[n])
@@ -1910,7 +1917,7 @@ class mkh5:
                 for n in epoch_dt_names:
                     if n in epoch_streams.dtype.names:
                         epoch[n] = epoch_streams[n]
-                    elif n == "Time":
+                    elif n == "match_time":
                         epoch[n] = [
                             int(mkh5._samp2ms(x - e["match_tick"], srate))
                             for x in range(start_samp, stop_samp)
@@ -1918,6 +1925,15 @@ class mkh5:
                     elif n == "anchor_time":
                         epoch[n] = [
                             int(mkh5._samp2ms(x - e["anchor_tick"], srate))
+                            for x in range(start_samp, stop_samp)
+                        ]
+                    elif n == "anchor_time_delta":
+                        epoch[n] = [
+                            int(
+                                mkh5._samp2ms(
+                                    x - e["anchor_tick_delta"], srate
+                                )
+                            )
                             for x in range(start_samp, stop_samp)
                         ]
                     elif n in event_info.dtype.names:
@@ -1933,8 +1949,7 @@ class mkh5:
                 yield (epoch)
 
     def get_epochs(self, epochs_name, format="numpy", columns=None):
-        """ fetch single trial epochs in tabluar form along 
-
+        """ fetch single trial epochs in tabluar form
 
         Parameters
         ----------
@@ -1949,7 +1964,7 @@ class mkh5:
         epochs : numpy.ndarray or pandas.DataFrame
            epochs.shape == (i x m, n + 2) where
 
-           i = the number of epochs, indexed uniquely by epoch_table['Epoch_idx']
+           i = the number of epochs, indexed uniquely by epoch_table['epoch_id']
            m = epoch length in samples
            n = the number of columns in the `epochs_name` epochs table
 
@@ -1987,7 +2002,7 @@ class mkh5:
         # fetch the attrs for this epoch dataset
         with h5py.File(self.h5_fname, "r") as h5:
             attrs = dict()
-            for k, v in h5["epochs"][epochs_name].attrs.items():
+            for k, v in h5[mkh5.EPOCH_TABLES_PATH][epochs_name].attrs.items():
                 attrs[k] = v
 
         return epochs, attrs

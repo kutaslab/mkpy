@@ -1,4 +1,4 @@
-{% set version = "0.2.0" %}
+{% set version = "0.2.1" %}
 {% set np_pin = "1.16.4" %}
 {% set py_pin = "3.6" %}
 
@@ -32,7 +32,7 @@ requirements:
     - xlrd
     - PyYAML
     - yamllint
-    - pytest  # include so users can run tests
+    - pytest  !=5.3.4 # include so users can run tests, bad release fights with nose
     - nose  # for legacy dpath tests
 
 test:

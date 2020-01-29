@@ -1,8 +1,8 @@
-Index	regexp	bin	tone	stim	accuracy	acc_type	False	True	All
-cals	(#\d+)	0	cal	cal	cal	cal	209	0	209
-thch	(#11) 1040	3	hi	target	correct	hit	23	27	50
-slcc	(#10) (?!1040)	4	lo	standard	correct	cr	138	8	146
-tlch	(#21) 1040	9	lo	target	correct	hit	31	19	50
-shcc	(#20) (?!1040)	10	hi	standard	correct	cr	142	4	146
-thch	(#11) (1040)	103	hi	target	correct	hit	23	27	50
-tlch	(#21) (1040)	109	lo	target	correct	hit	31	19	50
+index	regexp	bin	tone	stim	accuracy	acc_type	False	True	All
+1084	(#\d+)	0	cal	cal	cal	cal	209	0	209
+125	(#11) 1040	3	hi	target	correct	hit	23	27	50
+206	(#10) (?!1040)	4	lo	standard	correct	cr	138	8	146
+665	(#21) 1040	9	lo	target	correct	hit	31	19	50
+740	(#20) (?!1040)	10	hi	standard	correct	cr	142	4	146
+152	(#11) (1040)	103	hi	target	correct	hit	23	27	50
+690	(#21) (1040)	109	lo	target	correct	hit	31	19	50

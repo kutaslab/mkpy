@@ -13,8 +13,8 @@ class CodeTagger:
     * the integer values are event-markers recorded on an event or
       timing track of a digital data acquisition system.
 
-    * Each integer maps to a specific event or event-types, e.g., a
-      stimulus onset/offset, a response.
+    * Each integer maps to a specific event or event-type, e.g., a
+      stimulus onset/offset, a response, a timing mark.
 
     * A sequence of integers corresponds to a sequence of events or
       event types.
@@ -25,12 +25,15 @@ class CodeTagger:
       integers, floats, suitable for decorating events and epochs of
       data with useful information such experimental design factor
       levels (Easy, Hard), continuous covariates (age of acquisition).
-    
+
     The original use case was to find and decorate ERPSS log event
     codes with experimental information.
 
     The mechanism here is general, abstracting away from the source of
     the integer 1-D arrays and the intended purpose of the metadata.
+
+    Usage
+    -----
 
     The UI for specifying a code tag map can be any of these file types
 
@@ -54,15 +57,20 @@ class CodeTagger:
     * File formats
 
         Excel and Tabbed-text
-            1. the data must be tabular in i rows and j columns (i,j >= 1)
+            1. the data must be tabular in n rows and m columns (i,j >= 2)
             2. column labels must be in the first row
-            3. the first two column labels must be 'Index', 'regexp'
-            4. the columns may continue ad lib.
+            3. the column labels must include 'regexp'
+            4. there must be at least one tag column, there may be more
 
-            Index     regexp      <col_label_j>*
-            Index_11  pattern_12  <datum_1j>*
-            ...
-            Index_n1  pattern_n2  <datum_ij>*
+	    +------------+--------------+------------------+
+            | regexp     | col_label_1  |  <col_label_m>*  |
+	    +============+==============+==================+
+            | pattern_1  | code_tag_11  | <code_tag_1m>*   |
+	    +------------+--------------+------------------+
+            |  ...       |  ...         | ...              |
+	    +------------+--------------+------------------+
+            | pattern_n  | code_tag_n1  |  <datum_nm>*     |
+	    +------------+--------------+------------------+
     
         YAML files
             The YAML can be any combination of inline (JSON-ic) and
@@ -73,54 +81,46 @@ class CodeTagger:
             3. the columns may continue ad lib.
             4. each row must be a YAML sequence with the same number of items as there are columns
 
+
+
         Example
 
         .. code-block:: yaml
 
            ---
            'columns':
-             [Index, regexp, probability, frequency, source]
+             [regexp, bin, probability, frequency, source]
            'rows':
-             - [1, '(#1)', hi,   880, oboe]
-             - [2, '(#2)', hi,   440, oboe]
-             - [3, '(#3)', lo,   880, oboe]
-             - [4, '(#4)', lo,   440, oboe]
-             - [5, '(#5)', hi,   880, tuba]
-             - [6, '(#6)', hi,   440, tuba]
-             - [7, '(#7)', lo,   880, tuba]
-             - [8, '(#8)', lo,   440, tuba]
+             - ['(#1)', 1, hi,   880, oboe]
+             - ['(#2)', 2, hi,   440, oboe]
+             - ['(#3)', 3, lo,   880, oboe]
+             - ['(#4)', 4, lo,   440, oboe]
+             - ['(#5)', 5, hi,   880, tuba]
+             - ['(#6)', 6, hi,   440, tuba]
+             - ['(#7)', 7, lo,   880, tuba]
+             - ['(#8)', 8, lo,   440, tuba]
 
     Row value data types
 
-    Index : ( str, int )
-        data type is not checked, violate at your own risk. Each code
-        pattern may but need not have a unique Index.
- 
-        Example index sequences:
-          1,2,3, ...
-          id_1, id_2, id_3, ...
-          hi/880/oboe, hi/440/oboe, lo/880/oboe ...
-          
-    regexp :  regular expresion (`flanker* (#anchor) flanker*`)
-        This is the code sequence search pattern.  Log codes are
-        separated by a single whitespace for matching. The ``regexp``
-        has exactly one anchor pattern capture group (# ) optionally
-        flanked by zero or more code patterns.
+    regexp : regular expresion `pattern* (#pattern) pattern*`
+        This is the code sequence search pattern.  Log codes are separated
+        by a single whitespace for matching. The ``regexp`` has one or
+        more time-locking pattern capture groups of which one begins
+        with the time-marking anchor symbol, ``#``.
 
-        Flanking code patterns may capture groups (...) and
+        Flanking code patterns may be capture groups (...) and
         non-capture groups (?:...)
 
-        All matched capture event code patterns and their sample index
-        (and other book-keeping info) are extracted and loaded into
-        the returned code_tag_table for all capture groups.
-        anchor code_pattern is always captured
+        All matched time-locking codes, the anchor code, and distance
+        between them are extracted from the mkpy.mkh5 datablocks and
+        merged with the code tags in the returned event_table for all
+        capture groups.
             
     Additional columns: scalar (string, float, int, bool)
-        this is not checked, violate at your own risk
 
-    That's it. All the real work is done by 1) specifying
-    regular expressions that match useful patterns and sequences of
-    codes and 2) specifying the optional column values that label the
+    That's it. All the real work is done by 1) specifying regular
+    expressions that match useful (sequences of) integer event codes
+    and 2) specifying the optional column values that label the
     matched codes in useful ways, e.g., by specifying factors and
     levels of experimental design, or numeric values for regression
     modeling or ...
@@ -217,28 +217,30 @@ class CodeTagger:
             f"failed to load {cmf} as an xlsx, YAML, or text code map"
         )
 
-        # try:
-        #     self.code_map = self._load_xlsx_map(self.cmf)
-        # except Exception:
-        #     pass
+        self._check_mapper(self.code_map)
 
-        # try:
-        #     self.code_map = self._load_yaml_map(self.cmf)
-        # except Exception:
-        #     pass
+    def _check_mapper(self, mapper):
 
-        # try:
-        #     self.code_map = self._load_txt_map(self.cmf)
-        # except Exception:
-        #     pass
+        if not "regexp" in mapper.columns:
+            raise Exception(f"codemap {self.cmf} must include a regexp column")
 
-        # if self.code_map is None:
-        #     # three strikes and yer out ...
-        #     msg = (
-        #         "cannot load {0} ... make sure file exists and is a .ytbl"
-        #         ", tab-separated .txt or Excel .xlsx"
-        #     ).format(self.cmf)
-        #     raise IOError(msg)
+        if len(mapper.columns) < 2:
+            raise Exception(
+                f"codemap {self.cmf} must have regexp and "
+                "at least one additional code tag column."
+            )
+
+        for row, pattern in enumerate(mapper["regexp"]):
+            try:
+                re.compile(pattern)
+            except Exception as fail:
+                print(f"regexp row {row}")
+                raise fail
+
+        if code_map.columns[0] == "Index":
+            warnings.DeprecationWarning(
+                "As of mkpy 0.2.1 codemaps no longer require an Index as the first column."
+            )
 
     def _load_xlsx_map(self, cmf):
         """wraps pandas.Dataframe.read_excel() to load a code tag table from .xlsx
@@ -246,8 +248,8 @@ class CodeTagger:
         Parameter
         ---------
             cmf : str or Path
-                is path_to_file.xlsx[!named_sheet )path to an .xlsx file with optional  Default selects first
-                worksheet use .xlsx!sheet_name syntax to select a
+                is path_to_file.xlsx[!named_sheet )path to an .xlsx file with optional.
+                Default selects first worksheet use .xlsx!sheet_name syntax to select a
                 named sheet.
 
         Returns
@@ -271,7 +273,7 @@ class CodeTagger:
             sheet_name = 0
 
         mapper = pd.read_excel(
-            xl_f, sheet_name=sheet_name, header=0, index_col="Index"
+            xl_f, sheet_name=sheet_name, header=0  # , index_col="Index"
         )
         return mapper
 
@@ -283,7 +285,7 @@ class CodeTagger:
                 delimiter="\t",
                 header=0,
                 encoding="utf-8",
-                index_col="Index",
+                # index_col="Index",
             )
         return mapper
 
@@ -335,7 +337,7 @@ class CodeTagger:
 
         # return as a pandas data frame, indexed on Index
         mapper = pd.DataFrame(mapper["rows"], columns=mapper["columns"])
-        mapper.set_index("Index", inplace=True)
+        # mapper.set_index("Index", inplace=True)
         return mapper
 
     def _pattern_to_str(self, pattern):
