@@ -86,39 +86,38 @@ name: p3
 
 # Index and regexp are mandatory, all else is whatever
 columns:
-    [ Index,      regexp,           ccode, bin,   tone,  stim,       accuracy,    acc_type ]
+    [ regexp,                ccode, bin,   tone,  stim,       accuracy,    acc_type ]
 
 rows:
-  - [ cals, '(#\d+)',               0,     0,     cal,   cal,        cal,         cal      ]
-# - [ sl, '(#10)',                  1,     1,     lo,    standard,   all,         all      ]
-# - [ th, '(#11)',                  1,     2,     hi,    target,     all,         all      ]
+  - [ '(#\d+)',                0,     0,     cal,   cal,        cal,       cal      ]
+# - [ '(#10)',                 1,     1,     lo,    standard,   all,       all      ]
+# - [ '(#11)',                 1,     2,     hi,    target,     all,       all      ]
 
-  - [ thch, '(#11) 1040',           1,     3,     hi,    target,     correct,     hit      ]
-  - [ thch, '(#11) (1040)',         1,   103,     hi,    target,     correct,     hit      ]  # extract stim-response
-  - [ slcc, '(#10) (?!1040)',       1,     4,     lo,    standard,   correct,     cr       ]
-  - [ thim, '(#11) (?!1040)',       1,     5,     hi,    target,     incorrect,   miss     ]
-  - [ slif, '(#10) 1040',           1,     6,     lo,    standard,   incorrect,   fa       ]
-  - [ slif, '(#10) (1040)',         1,   106,     lo,    standard,   incorrect,   fa       ]  # extract stim-response
+  - [  '(#11) 1040',           1,     3,     hi,    target,     correct,     hit    ]
+  - [  '(#11) (1040)',         1,   103,     hi,    target,     correct,     hit    ]  # extract stim-response
+  - [  '(#10) (?!1040)',       1,     4,     lo,    standard,   correct,     cr     ]
+  - [  '(#11) (?!1040)',       1,     5,     hi,    target,     incorrect,   miss   ]
+  - [  '(#10) 1040',           1,     6,     lo,    standard,   incorrect,   fa     ]
+  - [  '(#10) (1040)',         1,   106,     lo,    standard,   incorrect,   fa     ]  # extract stim-response
 
-# - [ sh, '(#20)',                  1,     7,     hi,    standard,   all,         all      ]
-# - [ tl, '(#21)',                  1,     8,     lo,    target,   all,           all      ]
+# - [ (#20)',                  1,     7,     hi,    standard,   all,         all    ]
+# - [ (#21)',                  1,     8,     lo,    target,   all,           all    ]
 
-  - [ tlch, '(#21) 1040',           1,     9,     lo,    target,     correct,      hit     ]
-  - [ tlch, '(#21) (1040)',         1,   109,     lo,    target,     correct,      hit     ]
-  - [ shcc, '(#20) (?!1040)',       1,    10,     hi,    standard,   correct,      cr      ]
-  - [ tlim, '(#21) (?!1040)',       1,    11,     lo,    target,     incorrect,    miss    ]
-  - [ shif, '(#20) 1040',           1,    12,     hi,    standard,   incorrect,    fa      ]
-  - [ shif, '(#20) (1040)',         1,   112,     hi,    standard,   incorrect,    fa      ]
+  - [  '(#21) 1040',           1,     9,     lo,    target,     correct,      hit   ]
+  - [  '(#21) (1040)',         1,   109,     lo,    target,     correct,      hit   ]
+  - [  '(#20) (?!1040)',       1,    10,     hi,    standard,   correct,      cr    ]
+  - [  '(#21) (?!1040)',       1,    11,     lo,    target,     incorrect,    miss  ]
+  - [  '(#20) 1040',           1,    12,     hi,    standard,   incorrect,    fa    ]
+  - [  '(#20) (1040)',         1,   112,     hi,    standard,   incorrect,    fa    ]
 
-# - [ s...,     '(#[12]0)',         1,    13,    tone,  standard,   all,          all     ]
-# - [ t...,     '(#[12]1)',         1,    14,    tone,  target,     all,          all     ]
+# - [ '(#[12]0)',              1,    13,    tone,  standard,   all,          all    ]
+# - [ '(#[12]1)',              1,    14,    tone,  target,     all,          all    ]
 
-# - [ .tch,    '(#[12]1) (1040)',   1,     15,   tone,   target,     correct,      hit     ]
-# - [ .scc,    '(#[12]0) (?!1040)', 1,     16,   tone,   standard,   correct,      cr      ]
+# - [ '(#[12]1) (1040)',       1,     15,   tone,   target,     correct,      hit   ]
+# - [ '(#[12]0) (?!1040)',     1,     16,   tone,   standard,   correct,      cr    ]
 
-# - [ .tim,    '(#[12]1) (?!1040)', 1,     17,   tone,   target,     incorrect,    miss    ]
-# - [ .sif,    '(#[12]0) (1040)',   1,     18,   tone,   standard,   incorrect,    fa      ]
+# - [ '(#[12]1) (?!1040)',     1,     17,   tone,   target,     incorrect,    miss  ]
+# - [ '(#[12]0) (1040)',       1,     18,   tone,   standard,   incorrect,    fa    ]
 
-# - [ .h..,    '(#(11|20))',        1,     19,   hi,     all,        all,          all     ]
-# - [ .l..,    '(#(10|21))',        1,     20,   lo,     all,        all,          all     ]
-
+# - [ '(#(11|20))',            1,     19,   hi,     all,        all,          all   ]
+# - [ '(#(10|21))',            1,     20,   lo,     all,        all,          all   ]

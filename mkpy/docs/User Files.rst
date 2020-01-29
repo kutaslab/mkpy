@@ -78,7 +78,7 @@ Real Example:
 .. _yhdx:
 
 YAML header data extractors: ``.yhdx`` 
--------------------------------------
+~-------------------------------------
 
 A ``.yhdx`` YAML header extraction file is used to extract information
 from the stored header so it can be included in an event table.
@@ -143,22 +143,17 @@ experimental design information.
 Codemap specification
 ~~~~~~~~~~~~~~~~~~~~~
 
-* Regardless of the disk file format, the codemap is always rows x
-  columns (tabular, dataframe).
+* Regardless of the file format, the codemap is always tabular: rows x
+  columns.
 
-* There are three special columns. The first (``Index``) guarantees
-  there is at least one tag to attach to the matched event codes. The
-  next two (``regexp``, ``ccode``) control what codes are matched.
+* Two special columns control what (sequences) of codes are matched.
 
-  1. ``Index`` (mandatory)
-       specifies any experimenter defined number or string tag to
-       attach to the matched pattern.
-
-  2. ``regexp`` (mandatory)
+  1. ``regexp`` (mandatory)
        Specifies the pattern of the code sequence
        to match, at least one code, possibly flanked by others.
 
-  3. ``ccode`` (optional) If present in the code map, restricts
+  2. ``ccode`` (optional)
+       If present in the code map, the ``ccode`` column restricts
        matches to data where the ``log_ccode`` in the HDF5 data block
        equals ``ccode`` in the code map. This emulates the familar
        behavior of Kutas Lab ERPSS ``cdbl`` code sequence pattern
@@ -166,12 +161,12 @@ Codemap specification
        calibration pulse and event code 1 with ccode==1 is an
        experimental stimulus.
 
-* The rest of the columns in the codemap, if any, give the values of
-  additional experimental variables to tag the matched event code
-  with. These may be string labels for factor levels, numeric
-  co-variates. There may be a few or many, though the latter multiply
-  the storage requirements in RAM or on disk when processing time
-  series of continuous data instead of the (typically) relatively
+* The rest of the columns in the codemap are user-defined tags that
+  attach to the codes that matches the pattern.  These may be for
+  general information or a experimental variables factor levels, or
+  numeric co-variates. There may be a few or many, though the latter
+  multiply the storage requirements in RAM or on disk when processing
+  time series of continuous data instead of the (typically) relatively
   small numbers of event codes.
 
 
@@ -227,7 +222,7 @@ anchor pattern
 
 search pattern
     a regular expression with **exactly one** anchor pattern flanked
-    by **one or more** code patterns on either side, separated by a
+    by **zero or more** code patterns on either side, separated by a
     single whitespace
 
         ``code_pattern* anchor_pattern code_pattern*``
@@ -237,8 +232,6 @@ Code map specification
 ~~~~~~~~~~~~~~~~~~~~~~
 
 In addition
-
-* The ``Index`` column values must be integers or string labels 
 
 * The ``regexp`` column must be a regular expression string pattern
 
@@ -309,20 +302,20 @@ File types
     File formats
 
         Excel and Tabbed-text
-            1. the data must be tabular in i rows and j columns (i,j >= 1)
+            1. the data must be tabular in n rows and m columns (i,j >= 2)
             2. column labels must be in the first row
-            3. the first two column labels must be 'Index', 'regexp'
-            4. the columns may continue ad lib.
+            3. the column labels must include 'regexp'
+            4. there must be at least one tag column, there may be more
 
-	    +----------+------------+------------------+
-            | Index    | regexp     |  <col_label_j>*  |
-	    +==========+============+==================+
-            | Index_11 | pattern_12 | <datum_1j>*      |
-	    +----------+------------+------------------+
-            |  ...     |  ...       | ...              |
-	    +----------+------------+------------------+
-            | Index_n1 | pattern_n2 | <datum_ij>*      |
-	    +----------+------------+------------------+
+	    +------------+--------------+------------------+
+            | regexp     | col_label_1  |  <col_label_m>*  |
+	    +============+==============+==================+
+            | pattern_1  | code_tag_11  | <code_tag_1m>*   |
+	    +------------+--------------+------------------+
+            |  ...       |  ...         | ...              |
+	    +------------+--------------+------------------+
+            | pattern_n  | code_tag_n1  |  <datum_nm>*     |
+	    +------------+--------------+------------------+
 
     
         YAML files

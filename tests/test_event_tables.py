@@ -213,6 +213,9 @@ def test_non_unique_event_table_index(sheet):
     code_map_f = TEST_DIR(f"data/wr_code_map.xlsx!{sheet}")
     event_table = myh5.get_event_table(code_map_f, yhdx_f)
 
+    # use column Index to index the frame for these tests
+    event_table.set_index('Index', inplace=True)
+
     # events: 209 cals, 144 block 1 words, 144 block 2 words
     events = {
         "Sheet1": {
@@ -309,16 +312,16 @@ def test_p3_yaml_codemap_ccode(codemap):
 
     events = {
         "no_ccode": {
-            "event_shape": (492, 29),
+            "event_shape": (492, 30),
             "ytbl": TEST_DIR("data/sub000p3_codemap.ytbl"),
             "bindesc_f": TEST_DIR("data/sub000p3_bindesc.txt"),
-            "sha256": "0921acfb0c41c96f89f4a86252dfa0fcdfa6827eacd0c9057bc043fa44cff9f1",
+            "sha256": "8a8a156ccc532a5b8b9a3b606ba628fab2f3fc9f04bbb2e115c9206c42def9ba",
         },
         "with_ccode": {
             "event_shape": (701, 30),
             "ytbl": TEST_DIR("data/sub000p3_codemap_ccode.ytbl"),
             "bindesc_f": TEST_DIR("data/sub000p3_ccode_bindesc.txt"),
-            "sha256": "0908e0600377cbf31aef06360f09fb0395fcfb2b8bf592f4638785c4c13bc9e4",
+            "sha256": "fddb3e8d02f90fc3ab68383cfa8996d55fc342d2151e17d62e80bf10874ea4b7",
         },
     }
 
@@ -341,13 +344,13 @@ def test_p3_yaml_codemap_ccode(codemap):
         .reset_index()
     )
 
-    # bin_desc.to_csv(events[codemap]["bindesc_f"], sep="\t", index=False)
-
     bindesc_f = events[codemap]["bindesc_f"]
+    # use this to rebuild the gold standard file in event of a change
+    # bin_desc.to_csv(events[codemap]["bindesc_f"], sep="\t", index=False)
     with open(bindesc_f, "rb") as bd:
+        sha256 = hashlib.sha256(bd.read()).hexdigest()
         assert (
-            hashlib.sha256(bd.read()).hexdigest() == events[codemap]["sha256"]
+            sha256 == events[codemap]["sha256"]
         )
 
     assert all(bin_desc == pd.read_csv(bindesc_f, sep="\t"))
-    print(bin_desc)

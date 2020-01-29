@@ -92,7 +92,6 @@ class mkh5:
     # splitting the .raw/.crw into mkh5 dblocks
     _dig_pause_marks = (-16384,)
 
-
     # HDF5 slashpath to where epochs tables are stashed in the mkh5 file
     EPOCH_TABLES_PATH = "_epoch_tables"
 
@@ -437,7 +436,7 @@ class mkh5:
                 sheet_name = 0
 
             slicer = pd.read_excel(
-                xl_f, sheet_name=sheet_name, header=0, index_col="Index"
+                xl_f, sheet_name=sheet_name, header=0  # , index_col="Index"
             )
 
             if slicer is not None:
@@ -448,7 +447,7 @@ class mkh5:
             raise NotImplemented
             with open(slicer_f, "r") as d:
                 mapper = pd.read_table(
-                    slicer_f, delimiter="\t", header=0, index_col="Index"
+                    slicer_f, delimiter="\t", header=0  # , index_col="Index"
                 )
             return mapper
 
@@ -1137,7 +1136,7 @@ class mkh5:
                                     assert len(tick_idx) == 1
 
                                     sample_data = [
-                                        ("Index", idx),
+                                        # ("Index", idx),
                                         ("data_group", dgp),
                                         ("dblock_path", dbp),
                                         ("dblock_tick_idx", tick_idx[0]),
@@ -1190,12 +1189,12 @@ class mkh5:
 
             event_table = pd.DataFrame([dict(m) for m in match_list])
 
-            # code map ccode triggers backwards compatibility
+            # codemap ccode triggers backwards compatibility
             # with Kutas Lab ERPSS cdbl
             if "ccode" in ctagger.code_map.columns:
                 event_table = event_table.query("ccode == log_ccodes")
 
-            event_table.set_index("Index", inplace=True)
+            # event_table.set_index("Index", inplace=True)
 
             self._h5_check_events(self.h5_fname, event_table)
             return event_table
@@ -1426,23 +1425,23 @@ class mkh5:
         print("Sanitizing event table data types for mkh5 epochs table ...")
 
         # enforce Index data type is str or int
-        try:
-            msg = None
-            if event_table.index.values.dtype == np.dtype("O"):
-                maxbytes = max(
-                    [len(x) for x in event_table.index.values.astype(bytes)]
-                )
-                index_dt_type = "S" + str(maxbytes)
-            elif event_table.index.values.dtype == np.dtype(int):
-                index_dt_type = "int"
-            else:
-                msg = "uh oh, cannot convert event table index column to bytes or integer"
-        except Exception as err:
-            print(msg)
-            raise err
+        # try:
+        #     msg = None
+        #     if event_table.index.values.dtype == np.dtype("O"):
+        #         maxbytes = max(
+        #             [len(x) for x in event_table.index.values.astype(bytes)]
+        #         )
+        #         index_dt_type = "S" + str(maxbytes)
+        #     elif event_table.index.values.dtype == np.dtype(int):
+        #         index_dt_type = "int"
+        #     else:
+        #         msg = "uh oh, cannot convert event table index column to bytes or integer"
+        # except Exception as err:
+        #     print(msg)
+        #     raise err
 
-        # move Index into columns for santizing
-        event_table = event_table.reset_index("Index")
+        # # move Index into columns for santizing
+        # event_table = event_table.reset_index("Index")
 
         # remap pandas 'O' dtype columns to hdf5 friendly np.arrays if possible
         tidy_table = pd.DataFrame()
@@ -1780,7 +1779,7 @@ class mkh5:
 
         if format == "pandas":
             eptbl = pd.DataFrame(eptbl)
-            eptbl.set_index("Index", inplace=True)
+            # eptbl.set_index("Index", inplace=True)
         return eptbl
 
     def _h5_get_epochs(self, epochs_name, columns=None):
@@ -1870,7 +1869,9 @@ class mkh5:
                 all_cols = list(event_info.dtype.names)
                 all_cols.append("match_time")  # matched code timestamp
                 all_cols.append("anchor_time")  # anchor code timestamp
-                all_cols.append("anchor_time_delta")  # time between match and anchor
+                all_cols.append(
+                    "anchor_time_delta"
+                )  # time between match and anchor
                 for c in epoch_streams.dtype.names:
                     if c not in all_cols:
                         all_cols.append(c)
@@ -1896,7 +1897,11 @@ class mkh5:
                 for n in epoch_dt_names:
                     if n in epoch_streams.dtype.names:
                         epoch_dt_types.append(epoch_streams.dtype[n])
-                    elif n in ["match_time", "anchor_time", "anchor_time_delta"]:
+                    elif n in [
+                        "match_time",
+                        "anchor_time",
+                        "anchor_time_delta",
+                    ]:
                         epoch_dt_types.append("int64")
                     elif n in e.dtype.names:
                         epoch_dt_types.append(event_info.dtype[n])
@@ -1924,7 +1929,11 @@ class mkh5:
                         ]
                     elif n == "anchor_time_delta":
                         epoch[n] = [
-                            int(mkh5._samp2ms(x - e["anchor_tick_delta"], srate))
+                            int(
+                                mkh5._samp2ms(
+                                    x - e["anchor_tick_delta"], srate
+                                )
+                            )
                             for x in range(start_samp, stop_samp)
                         ]
                     elif n in event_info.dtype.names:

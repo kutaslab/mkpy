@@ -6,7 +6,7 @@ import pprint
 import os
 import warnings
 import pandas as pd
-import tables  # mkpy >= v0.1.9 import tables or pandas->importlib->pathspec errors
+import tables  # mkpy >= v0.1.9 import tables here, else pandas->importlib->pathspec errors
 
 from matplotlib import pyplot as plt
 
@@ -29,7 +29,7 @@ def test_irb_epochs_out_of_bounds():
     myh5.calibrate_mkdata(subid, **CAL_ARGS)
 
     event_table = myh5.get_event_table(code_map_f)
-    assert event_table.shape == (120, 33)
+    assert event_table.shape == (120, 34)
 
     # out of bounds left edge
     myh5.set_epochs("oobl", event_table, -20000, 100)
