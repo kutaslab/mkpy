@@ -414,13 +414,13 @@ class CodeTagger:
 
         # define capture groups, supressing greedy matching w/ ? is essential
         capt_group_patt = (
-            r"\((?!\?\:).+?\)"
-        )  # any ( ) except non-capturing (?: )
+            r"\((?!\?\:).+?\)"  # any ( ) except non-capturing (?: )
+        )
 
         # anchor_patt = r'\(#[-]{0,1}\d+\)' # matches integer code literals only
         anchor_patt = (
-            r"\(#.+\)"
-        )  # allow anchor pattern (# ...)  allows patterns
+            r"\(#.+\)"  # allow anchor pattern (# ...)  allows patterns
+        )
 
         # look up the capture groups including anchors
         capture_groups = [g for g in re.finditer(capt_group_patt, in_patt)]
@@ -558,9 +558,7 @@ class CodeTagger:
             raise TypeError(msg)
 
         # stringify the code list for matching against the code pattern
-        sep = (
-            " "
-        )  # the single whitespace delimiter, critical for pattern matching
+        sep = " "  # the single whitespace delimiter, critical for pattern matching
         code_str = ""
         for e in evcodes:
             code_str += "{0}{1}".format(sep, e)
