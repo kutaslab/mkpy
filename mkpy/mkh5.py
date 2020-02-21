@@ -242,8 +242,8 @@ class mkh5:
         def __init__(self):
             """wake up"""
             self._json_key = (
-                "json_header"
-            )  # key used to access h5py.Dataset.attrs[]
+                "json_header"  # key used to access h5py.Dataset.attrs[]
+            )
             self._header = None
             self._slicer = None
 
@@ -2993,9 +2993,13 @@ class mkh5:
 
         # slurp low level NJS data
         with open(eeg_f, "rb") as fr:
-            channel_names, raw_evcodes, record_counts, eeg, dig_header = mkio.read_raw(
-                fr, dtype="int16"
-            )
+            (
+                channel_names,
+                raw_evcodes,
+                record_counts,
+                eeg,
+                dig_header,
+            ) = mkio.read_raw(fr, dtype="int16")
 
         return channel_names, raw_evcodes, record_counts, eeg, dig_header
 
@@ -3220,9 +3224,13 @@ class mkh5:
 
         # load crw
         with open(eeg_f, "rb") as fr:
-            channel_names, raw_evcodes, record_counts, eeg, dig_header = mkio.read_raw(
-                fr, dtype="int16"
-            )
+            (
+                channel_names,
+                raw_evcodes,
+                record_counts,
+                eeg,
+                dig_header,
+            ) = mkio.read_raw(fr, dtype="int16")
         n_ticks = len(raw_evcodes)  # eeg.shape[0]
 
         # load log, screen out 0's and codes at ticks beyond data fringe
