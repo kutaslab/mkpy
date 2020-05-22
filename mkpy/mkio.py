@@ -243,7 +243,9 @@ def read_raw(stream, dtype):
         )  # track for sanity checks and later processing
         codes_chunk[
             0
-        ] = 0  # clear the record count so marktrack has all and only event codes TPU
+        ] = (
+            0
+        )  # clear the record count so marktrack has all and only event codes TPU
         all_codes += codes_chunk
         data_chunk.resize((256, nchans))
         data_chunks.append(np.array(data_chunk, dtype=dtype))

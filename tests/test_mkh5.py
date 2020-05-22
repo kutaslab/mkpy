@@ -1,6 +1,7 @@
 """test module for primary mkh5 class methods and attributes"""
 
 import pytest
+import pandas as pd
 import numpy as np
 import h5py
 import pprint
@@ -19,6 +20,7 @@ from .config import (
     CAL_ARGS,
     S01,
     S05,
+    CALSTEST,
     irb_data,
     mkpy,
 )
@@ -948,6 +950,125 @@ def test_mkh5_correctness():
     )
 
     os.remove(TEST_H5)
+
+
+wle_valerr = pytest.mark.xfail(strict=True, raises=ValueError)
+wle_runerr = pytest.mark.xfail(strict=True, raises=RuntimeError)
+
+
+@pytest.mark.parametrize(
+    "log_f,wle",
+    [
+        # correct log file
+        pytest.param(S01["log_f"], None),  # default mkpy.mkh5 <= 0.2.2
+        pytest.param(S01["log_f"], "aligned"),
+        pytest.param(S01["log_f"], "as_is"),
+        # incorrect same-length log file (S05) must fail on default,
+        # and explicit "aligned", pass "as_is"
+        pytest.param(S05["log_f"], None, marks=wle_runerr),
+        pytest.param(S05["log_f"], "aligned", marks=wle_runerr),
+        pytest.param(S05["log_f"], "as_is"),  # risky but allowed
+        # can't give a log file and not use it
+        pytest.param(S01["log_f"], "from_eeg", marks=wle_valerr),
+        pytest.param(S01["log_f"], "none", marks=wle_valerr),
+        # log_f is None
+        pytest.param(None, "from_eeg"),
+        pytest.param(None, "none"),
+        # bad log_f, with_log_events arg combinations should all fail
+        pytest.param(None, None, marks=wle_valerr),
+        pytest.param(None, "aligned", marks=wle_valerr),
+        pytest.param(None, "as_is", marks=wle_valerr),
+        # over length wrong log throws truncation warning, fails properly on
+        # event tick mismatch
+        pytest.param(CALSTEST["log_f"], None, marks=wle_runerr),
+    ],
+)
+def test_with_log_events(log_f, wle):
+    def read_log_txt(log_f_txt):
+        log_data = pd.read_csv(log_f_txt, sep="\s+")[
+            ["evtcode", "clock_ticks", "ccode", "flags"]
+        ]
+        return log_data
+
+    sid = S01["gid"]
+    eeg_f = S01["eeg_f"]
+    yhdr_f = S01["yhdr_f"]
+
+    wle_test = mkh5.mkh5(TEST_H5)
+    wle_test.reset_all()
+    if wle is None:
+        wle_test.create_mkdata(sid, eeg_f, log_f, yhdr_f)
+        wle_test.append_mkdata(sid, eeg_f, log_f, yhdr_f)
+    else:
+        wle_test.create_mkdata(sid, eeg_f, log_f, yhdr_f, with_log_events=wle)
+        wle_test.append_mkdata(sid, eeg_f, log_f, yhdr_f, with_log_events=wle)
+
+    # check correctness
+    if log_f is not None:
+        log_data = read_log_txt(str(log_f) + ".txt")
+
+    dbpaths = wle_test.dblock_paths
+    for dbpath in dbpaths:
+        _, data = wle_test.get_dblock(wle_test.dblock_paths[0])
+        dblock_raw_evcodes = data[data["raw_evcodes"] != 0]["raw_evcodes"]
+        dblock_log_evcodes = data[data["log_evcodes"] != 0]["log_evcodes"]
+
+        # read log codes from data file and confirm they match the
+        # logcat2 text dumps
+        if wle in ["as_is"]:
+            assert all(
+                dblock_log_evcodes
+                == log_data["evtcode"][: len(dblock_log_evcodes)]
+            )
+
+        if wle is "from_eeg":
+            assert all(dblock_raw_evcodes == dblock_log_evcodes)
+
+        if wle is "none":
+            for col in ["log_evcodes", "log_ccodes", "log_flags"]:
+                assert all(
+                    np.equal(0, data[col])
+                ), f"non-zero values in {col} with_log_events='none'"
+
+    os.remove(TEST_H5)
+
+
+@irb_data
+@pytest.mark.parametrize(
+    "wle,log_f",
+    [
+        pytest.param(
+            None, "sarc_cal525.log", marks=pytest.mark.xfail(strict=True)
+        ),
+        pytest.param(
+            "aligned", "sarc_cal525", marks=pytest.mark.xfail(strict=True)
+        ),
+        pytest.param("as_is", "sarc_cal525.log"),
+        pytest.param("from_eeg", None),
+        pytest.param("none", None),
+    ],
+)
+def test_irb_load_bad_log(wle, log_f):
+    """seana's split-session Sarcasm files"""
+
+    crw_f = IRB_DIR / "mkdig/sarc_cal525.crw"
+    if log_f is not None:
+        log_f = IRB_DIR / "mkdig" / log_f
+    yhdr_f = IRB_DIR / "mkdig/sarc01.yhdr"
+
+    h5f = IRB_DIR / "mkh5" / "test_load_bad.h5"
+    pfx = "sarc01"
+
+    sarc01 = mkh5.mkh5(h5f)
+    sarc01.reset_all()
+
+    if wle is None:
+        # default is "aligned", this should fail
+        sarc01.create_mkdata(pfx, crw_f, log_f, yhdr_f)
+        sarc01.append_mkdata(pfx, crw_f, log_f, yhdr_f)
+    else:
+        sarc01.create_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)
+        sarc01.append_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)
 
 
 # def test_LocDat():
