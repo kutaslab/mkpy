@@ -257,15 +257,14 @@ Merging experimental data with EEG
     ``mkh5`` EEG data are imported.
 
   :ref:`codemap`
-     specifies what numeric event codes in the data get tagged with
-     what experimental information
+    specifies what numeric event codes in the data get tagged with
+    what experimental information
 
-  :ref:`yhdx`
-    broadcast information from the header to a column in the event data table
+  :ref:`yhdx` extract `key:value` from the HDF5 dblock headers as `column:values` in the event data table
 
   :meth:`~mkpy.mkh5.mkh5.get_event_table`
-    look up and tag single-trial event codes and event code sequences with 
-    imported experimental variables in a data table format. The 
+    look up and tag single-trial event codes and event code sequences
+    with imported experimental variables in a data table format.
 
   :meth:`~mkpy.mkh5.mkh5.set_epochs`
     write the single-trial tagged EEG epoch lookup table to the ``mkh5`` file

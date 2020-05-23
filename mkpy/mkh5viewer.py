@@ -974,7 +974,7 @@ class Model:
     dblock_paths : list of str
       catalogue of all hdf5 slashpaths to mkh5 dblocks
     epoch_tables : list of str
-      each string is a slash path '_epoch_tables/*' to an mkh5 epoch table dataset
+      each string is a slash path '_epoch_tables/\*' to an mkh5 epoch table dataset
 
     dbp_idx : uint
        index of model's current dblock_path 

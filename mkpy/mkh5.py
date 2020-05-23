@@ -2278,49 +2278,95 @@ class mkh5:
             h5.attrs["version"] = __version__
 
     # create a new data set in specified group
-    def create_mkdata(self, h5_path, eeg_f, log_f, yhdr_f, *args, **kwargs):
+    def create_mkdata(
+        self,
+        h5_path,
+        eeg_f,
+        log_f,
+        yhdr_f,
+        *args,
+        with_log_events="aligned",
+        **kwargs,
+    ):
         """Convert Kutas lab ERPSS `.crw` and `.log` to the 
         `mkh5` hdf5 format.
 
-        This is the analog of ERPSS `dig` program both create new
-        EEG + header + log data files, albeit in different formats. 
+        This merges dig `.crw`, `.log`, and user-specified `.yml` data into a tidy
+        HDF5 dataset of continuous EEG recording + jsonic header.
+
+
+        .. note::
+
+           Log events are automatically truncated if log event codes
+           occur after the end of the EEG data. This is rare but can
+           happen when dig crashes or drops the last event code.
+
 
         Parameters
         ----------
-        h5_path : string
+        h5_path : str
              The full slashpath location in the `.h5` file where the
              new data blocks will be stored in the hdf5 file. Must be
              the full slashpath from the root without the leading
              slash.
-        eeg_f : string
-             file path to the `.crw` files.
-        log_f : string
-             file path to corresponding `.log` file.
-        yhdr_f : string
-             path to the YAML header file.
+        eeg_f : str
+             file path to the `.crw` file.
+        log_f : str or None
+             file path to corresponding `.log` file, if any.
+        yhdr_f : str
+             file path to the YAML header file.
+        with_log_events : {"aligned", "from_eeg", "none", "as_is"}, optional
+             how to handle log file event codes (`log_evcodes`)
+             relative to the eeg event codes (`raw_evcodes`) from the
+             eeg recording.  
+  
+             `aligned` (default)
+                   ensures eeg and log event code
+                   timestamps are 1-1 but allows discrepant, e.g., logpoked,
+                   event codes with a warning. Requires a log file. This
+                   default is the mkpy.mkh5 <= 0.2.2 behavior.  
+
+             `from_eeg` 
+                   propagates the eeg event codes (dig mark track) to the `log_evcodes`
+                   column. Requires `log_f` is `None`.
+
+             `none`
+                   sets `log_evcodes`, `log_ccode`, `log_flags` all to 0. Requires `log_f` is `None`.
+
+             `as_is`
+                   loads whatever codes are in the log file without
+                   checking against the eeg data. Requires a log
+                   file. Silently allows eeg and log event code
+                   misalignment. Exceedingly dangerous but useful for
+                   disaster recovery.
+
         *args : strings, optional
             passed in to `h5py.create_dataset()`
         *kwargs : key=values, optional
             passed in to `h5py.create_dataset()`, e.g., 
             `compression="gzip"`.
 
-  
-        Nathaniel Smith did all the hard work of low level ERPSS file
-        IO.
 
-        Uncompressed ERPSS `.raw` files are also legal but there is no
-        good reason to have them around. If the raw won't compress
-        because it is defective it won't convert to `mkh5` either.
-        there are no useful `**kwargs`. Chunking fails when the
-        size of datablock is smaller than the chunk and
-        compression makes files a little smaller and a lot slower
-        to read/write.
+        Notes
+        ----
 
         The EEG and event code data streams are snipped apart into
         uninterrupted "datablocks" at pause marks. Each data block has
         its own header containing information from the `.crw` file
         merged with the additional information from the YAML header
         file `yhdr_f`.
+
+        Uncompressed ERPSS `.raw` files are also legal but there is no
+        good reason to have them around. If the raw won't compress
+        because it is defective it won't convert to `mkh5` either.
+        There are no known useful `**kwargs`. HDF5 chunking fails when the
+        size of datablock is smaller than the chunk and
+        compression makes files a little smaller and a lot slower
+        to read/write.
+
+
+        Nathaniel Smith did all the hard work of low level ERPSS file
+        IO.
 
 
         Examples
@@ -2331,10 +2377,13 @@ class mkh5:
         """
         # clean up Path
         eeg_f = str(eeg_f)
-        log_f = str(log_f)
+        if log_f is not None:
+            log_f = str(log_f)
         yhdr_f = str(yhdr_f)
 
-        (attr, data) = self._read_raw_log(eeg_f, log_f)
+        (attr, data) = self._read_raw_log(
+            eeg_f, log_f, with_log_events=with_log_events
+        )
 
         hio = mkh5.HeaderIO()
         hio.new(attr, yhdr_f)  # merge the .crw and yhdr into the new header
@@ -2361,33 +2410,44 @@ class mkh5:
     # ------------------------------------------------------------
     # add eeg data to a group under the same header
     # ------------------------------------------------------------
-    def append_mkdata(self, h5_path, eeg_f, log_f, yhdr_f, *args, **kwargs):
+    def append_mkdata(
+        self,
+        h5_path,
+        eeg_f,
+        log_f,
+        yhdr_f,
+        *args,
+        with_log_events="aligned",
+        **kwargs,
+    ):
         """Append .crw, .log, .yhdr to an existing h5_path
 
-        This function extend an existing sequence of datablocks
-        `h5_path/dblock_0`, ... `h5_path/dblock_N`, with the
-        continuation, `h5_path/dblock_N+1`, ... 
+        Extend an existing sequence of datablocks `h5_path/dblock_0`,
+        ... `h5_path/dblock_N`, with the continuation,
+        `h5_path/dblock_N+1`, ...
 
         The intended applicaton is to combine `.crw`, `.log` files
         together that could or should be grouped, e.g., to add
-        separately recorded cals, recover from dig crashes, to pool an 
-        individuals data recorded in different sessions. 
+        separately recorded cals, recover from dig crashes, to pool an
+        individuals data recorded in different sessions.
 
 
         Parameters
         ----------
-        h5_path : string
+        h5_path : str
              The full slashpath location in the `.h5` file where the
              new data blocks will be stored in the hdf5 file. Must be
              the full slashpath from the root without the leading
              slash.
-        eeg_f : string
+        eeg_f : str
              file path to the `.crw` files.
-        log_f : string
+        log_f : str or None
              file path to corresponding `.log` file.
+        with_log_events : str
+             how to handle the log event codes, see `mkh5.create_mkdata()` for details
         yhdr_f : string
              path to the YAML header file.
-        
+
 
         Raises
         -------
@@ -2400,15 +2460,17 @@ class mkh5:
         ---------
         :meth:`~mkpy.mkh5.mkh5.create_mkdata`
 
-
         """
         # clean up Path
         eeg_f = str(eeg_f)
-        log_f = str(log_f)
+        if log_f is not None:
+            log_f = str(log_f)
         yhdr_f = str(yhdr_f)
 
         # slurp crw/log
-        (crw_hdr, crw_data) = self._read_raw_log(eeg_f, log_f)
+        (crw_hdr, crw_data) = self._read_raw_log(
+            eeg_f, log_f, with_log_events=with_log_events
+        )
 
         # build the new header
         new_hio = mkh5.HeaderIO()
@@ -2950,19 +3012,29 @@ class mkh5:
         return h5tools.get_data_group_paths(self.h5_fname)
 
     @property
-    def data_blocks(self):
-        data_blocks = []
+    def dblock_paths(self):
+        """an iterable list of HDF5 paths to all the data blocks in the mkh5 file"""
+        dblock_paths = []
         h5_paths = self.data_groups
         for h5_path in h5_paths:
-            data_blocks += h5tools.get_dblock_paths(self.h5_fname, h5_path)
-        return data_blocks
+            dblock_paths += h5tools.get_dblock_paths(self.h5_fname, h5_path)
+        return dblock_paths
+
+    @property
+    def data_blocks(self):
+        """deprecated use mkh5.dblock_paths for a list of HDF5 paths to all the data blocks"""
+        msg = (
+            "mkh5.data_blocks is deprecated and will be removed in a future "
+            "release, use mkh5.dblock_paths instead"
+        )
+        warnings.warn(msg, FutureWarning)
+        return self.dblock_paths
 
     #
     def _load_eeg(self, eeg_f):
         """kutaslab .crw or .raw data loader, also populates self.dig_header
 
         Similar to MATLAB erpio2
-   
 
         Parameters
         ----------
@@ -3195,34 +3267,109 @@ class mkh5:
     # ------------------------------------------------------------
     # Model: data handling
     # ------------------------------------------------------------
-    def _read_raw_log(self, eeg_f, log_f):
-        """slurp, merge, and return the log and raw as typed np.ndarray plus
-        header dict
-
-        NJS crw/log slurpers plus TPU decorations.
+    def _read_raw_log(self, eeg_f, log_f, with_log_events="aligned"):
+        """NJS crw/log slurpers plus TPU decorations and log wrangling. 
 
         Parameters
         ----------
         eeg_f : str
            path to ERPSS .crw or .raw file
-        log_f : str
-           path to ERPSS .log file
+
+        log_f : str or None
+           path to ERPSS .log file, if any. 
+
+        with_log_events : str ("aligned", "from_eeg", "none", "as_is" )
+
+           `aligned` (default) ensures eeg log event code timestamps
+            are 1-1 but allows values, e.g, logpoked event codes with
+            a warning. Requires log file. This is mkpy.mkh5 <= 0.2.2
+            behavior.
+
+           "from_eeg" propagates the eeg event codes (dig mark track)
+           to the log_evcodes column. Not allowed with a log filename.
+
+           `none` sets `log_evcodes`, `ccode`, `log_flags` all to 0.
+           Not allowed with a log filename.
+
+           `as_is` loads whatever codes are in the log file without
+           checking against the eeg data. Requires a log file. Allows
+           silent eeg and log event code misalignment. Excedingly
+           dangerous but useful for disaster recovery.
+
 
         Returns
         -------
-        log and raw in single np.ndarray
+        log and raw data merged into a 2-D numpy structured array
 
 
+        Notes
+        -----
+
+        `with_log_events` added in 0.2.3 to allow loading `.crw`
+        files with badly mismatching and/or missing `.log` files. The
+        change is backwards compatible, the default option
+        `with_log_events='aligned'` is the same behavior as for
+        `mkpy.mkh5` <= 0.2.2
+
+        Handle logs with care. The crw is the recorded data log of
+        eeg data and digital events (marktrack). The log file
+        contains events only. Event discrepancies between the crw
+        and log can also arise from data logging errors in the crw
+        or log or both but these are rare. Discrepancies can also be
+        introduced deliberately by logpoking the log to revise event
+        codes. Also binary log files can be (mis)constructed from
+        text files but there is no known instance of this in the
+        past 20 years. Discrepancies involving the digital sample
+        (tick) on which the event occurs are pathological, something
+        in the A/D recording failed.  Discrepancies where sample
+        ticks align but event code values differ typically indicate
+        logpoking but there is no way to determine programmatically
+        because the logpoked values can be anything for any reason.
+
+        EEG data underruns. This can happen when dig fails and doesn't
+        flush a data buffer. Rare but it happens.  The eeg + log data
+        array columns have to be the same length, the choice is to pad
+        the EEG data or drop the trailing log codes. Neither is good,
+        the log events may have useful info ... stim and response
+        codes. But these are available in other ways. For EEG data
+        analysis, it is worse to pretend EEG data was recorded when it
+        wasn't.
+
+        Spurious event code 0 in the log. The crw marktrack 0 value is
+        reserved for "no event" so a event code 0 in the log is a
+        contradiction in terms. It is a fixable data error if the eeg
+        marktrack at the corresponding tick is zero. If not, it is an
+        eeg v. log code mismatch and left as such. There is one known
+        case of the former and none of the latter.
 
         Each dig record contains 256 sweeps == samples == ticks. Within a
-        record, each sweep is a  clock tick by definition. The records in
-        sequence comprise all the sweeps and provides. 
+        record, each sweep is a clock tick by definition. The records in
+        sequence comprise all the sweeps and provides.
+
 
         .. TO DO: some day patch mkio to yield rather than copy eeg
 
         """
 
-        # load crw
+        # modicum of guarding
+        log_options = ["aligned", "as_is", "from_eeg", "none"]
+        if not with_log_events in log_options:
+            msg = f"with_log_events must be one of these: {' '.join(log_options)}"
+            raise ValueError(msg)
+
+        if log_f is None and with_log_events in ["aligned", "as_is"]:
+            msg = (
+                f"with_log_events={with_log_events} requires a log file: log_f"
+            )
+            raise ValueError(msg)
+
+        if log_f is not None and with_log_events in ["from_eeg", "none"]:
+            msg = f"to use with_log_events={with_log_events}, set log_f=None"
+            raise ValueError(msg)
+
+        # ------------------------------------------------------------
+        # eeg data are read "as is"
+        # ------------------------------------------------------------
         with open(eeg_f, "rb") as fr:
             (
                 channel_names,
@@ -3231,74 +3378,96 @@ class mkh5:
                 eeg,
                 dig_header,
             ) = mkio.read_raw(fr, dtype="int16")
-        n_ticks = len(raw_evcodes)  # eeg.shape[0]
-
-        # load log, screen out 0's and codes at ticks beyond data fringe
-        tmp_log = []
-        with open(log_f, "rb") as fid:
-            for (code, tick, condition, flag) in mkio.read_log(fid):
-                if n_ticks <= tick:
-                    msg = (
-                        "uh oh ... log has events beyond the raw data."
-                        " Check raw vs log for discrepancies or else."
-                        " Discarding these log events as out of bounds: "
-                    )
-                    warnings.warn(msg, LogRawEventCodeMismatch)
-                elif code == 0:
-                    msg = (
-                        "Trimming illegal log event code 0 at clock tick {0}. "
-                        "Make sure you know how it got there"
-                    ).format(code)
-                    warnings.warn(msg)
-                else:
-                    # non-zero code, in bounds so add to the list
-                    tmp_log.append((code, tick, condition, flag))
-
-        # compare screened log event codes with raw event codes
-        raw_events = raw_evcodes[np.where(raw_evcodes != 0)[0]]
+        assert len(raw_evcodes) == eeg.shape[0], "bug, please report"
+        n_ticks = len(raw_evcodes)
+        raw_event_ticks = np.where(raw_evcodes != 0)[0]
+        raw_events = raw_evcodes[raw_event_ticks]
         n_raw_events = len(raw_events)
-        n_log_events = len(tmp_log)
 
-        # not enough log codes is fatal. raw does not have ccodes
-        # needed for calibration.
-        if n_log_events < n_raw_events:
-            msg = (
-                "uh oh ... fewer events in the log than raw. "
-                "To use mkpy.mkh5 you must rebuild a valid log"
-                "from a raw2asci -events dump then asci2log. "
-                "To simply load raw data use mkpy.mkio.read_raw()"
+        # ------------------------------------------------------------
+        # log data may get tidied
+        # log_data[evcode, crw_tick, ccode, log_flag]
+        # ------------------------------------------------------------
+        log_data = None
+        if log_f is not None:
+            with open(log_f, "rb") as fid:
+                log_data = np.array([row for row in mkio.read_log(fid)])
+
+            # log event code ticks are not allowed to exceed EEG data ticks
+            # under any circumstances. This can happen when dig crashes
+
+            is_trailer = log_data[:, 1] > raw_event_ticks[-1]
+            if any(is_trailer):
+                oob_events = log_data[is_trailer]
+                msg = (
+                    f"{eeg_f} eeg data underrun {log_f}, "
+                    f"dropping trailing log events {oob_events}"
+                )
+                warnings.warn(msg, LogRawEventCodeMismatch)
+                log_data = log_data[~is_trailer]
+
+        if with_log_events == "aligned":
+            # aligned (default) is mkpy.mkh5 <= 0.2.2 legacy behavior
+            assert log_data is not None, "bug, please report"
+
+            # log zero codes are spurious iff the eeg marktrack at that tick is also 0
+            is_spurious_zero = (log_data[:, 0] == 0) & (
+                raw_evcodes[log_data[:, 1]] == 0
             )
-            raise (RuntimeError(msg))
+            if any(is_spurious_zero):
+                msg = f"dropping spurious 0 event code(s) in {log_f}: {log_data[is_spurious_zero]}"
+                warnings.warn(msg)
+                assert all(
+                    log_data[is_spurious_zero][:, 0] == 0
+                ), "this is a bug, please report"
+                log_data = log_data[~is_spurious_zero]
 
-        # to get here we have the same number of raw and log event
-        # codes at the same ticks though the codes may be different
-        assert n_raw_events == len(tmp_log)
-        assert all([raw_evcodes[tick] != 0 for _, tick, _, _ in tmp_log])
+            # fail if eeg and log event code ticks differ
+            if not np.array_equal(log_data[:, 1], raw_event_ticks):
+                align_msg = "eeg and log event code ticks do not align"
+                raise RuntimeError(align_msg)
 
-        # # too many log codes is merely dangerous ...
-        # if n_log_events > n_raw_events:
-        #     msg = ('careful ... more events in the log than raw. The raw may be truncated '
-        #            'at the end and/or pathologically misaligned. Figure out which.')
-        #     warnings.warn(msg, LogRawEventCodeMismatch)
+            # ticks are aligned if we get here, but warn of different values, e.g., logpoked
+            mismatch_events = log_data[log_data[:, 0] != raw_events]
+            if len(mismatch_events) > 0:
+                mismatch_msg = (
+                    "These log event codes differ from the EEG codes, "
+                    "make sure you know why\n{mismatch_events}"
+                )
+                warnings.warn(mismatch_msg, LogRawEventCodeMismatch)
 
-        # # 1. check log <-> raw event code consistency
-        # for i,(code, tick, condition, flag) in enumerate(tmp_log):
+        elif with_log_events == "as_is":
+            assert log_data is not None, "bug, please report"
+            warnings.warn(
+                f"not checking for event code mismatches in {eeg_f} and {log_f}"
+            )
 
-        #     #  find some non-zero event code or other at the log clock or die
-        #     if raw_evcodes[tick] == 0:
-        #         msg = (('mismatch raw sample {0} event code {1}: log sample {2}'
-        #                 ' event code {3}').format(i, raw_evcodes[i], tick, code))
-        #         raise ValueError(msg)
+        elif with_log_events == "from_eeg":
+            assert log_data is None, "bug, please report"
+            warnings.warn(
+                f"setting all log_evcodes to match EEG event codes codes in {eeg_f} "
+            )
+            log_data = np.array(
+                [(raw_evcodes[tick], tick, 0, 0) for tick in raw_event_ticks]
+            )
 
-        #     # warn if it is a mismatch ... could be logpoked or serious error
-        #     if code != raw_evcodes[tick]:
-        #         msg = (('mismatch at raw sample {0} event code {1}: log sample {2}'
-        #                 ' event code {3}').format(i, raw_evcodes[i], tick, code))
-        #         warnings.warn(msg, LogRawEventCodeMismatch)
+        elif with_log_events == "none":
+            assert log_data is None, "bug, please report"
+            warnings.warn(
+                f"setting all log_evcodes, log_ccodes, log_flags to 0"
+            )
+            log_data = np.zeros(
+                (len(raw_events), 4), dtype="i4"
+            )  # evcode, tick, ccode, log_flag
+        else:
+            raise ValueError(
+                f"bad parameter value: with_log_events={with_log_events}"
+            )
 
-        # build datablocks in earnest
-
-        # tick and log info stream dtypes
+        # ------------------------------------------------------------
+        # construct output structured array
+        # ------------------------------------------------------------
+        #  tick and log info stream dtypes
         dt_names = [
             "dblock_ticks",
             "crw_ticks",
@@ -3337,7 +3506,7 @@ class mkh5:
         data["raw_evcodes"] = raw_evcodes
 
         # load the .log streams
-        for (code, tick, condition, flag) in tmp_log:
+        for (code, tick, condition, flag) in log_data:
             data["log_evcodes"][tick] = code
             data["log_ccodes"][tick] = condition
             data["log_flags"][tick] = flag
@@ -3379,11 +3548,14 @@ class mkh5:
 
         # decorate constant columns with more useful info
         attr["eeg_file"] = eeg_f
-        attr["log_file"] = log_f
+        attr["log_file"] = log_f if log_f is not None else "None"
         attr["uuid"] = str(uuid.uuid4())
         for k, fname in {"eeg_file_md5": eeg_f, "log_file_md5": log_f}.items():
-            with open(fname, "rb") as f:
-                attr[k] = hashlib.md5(f.read()).hexdigest()
+            if fname is not None:
+                with open(fname, "rb") as f:
+                    attr[k] = hashlib.md5(f.read()).hexdigest()
+            else:
+                attr[k] = "None"
 
         # New version returns the header and stuff as a dict
         # jsonification occurs in dblock CRUD
@@ -3398,9 +3570,11 @@ class mkh5:
         dblock : h5py.Dataset
             an open, readable mkh5 datablock, dblock_N
         slicer : numpy.ndarray, dtype=dtype _evticks
-            i.e., tuples (start_samps, anchor_samps, stop_samps), 
+            i.e., tuples (start_samps, anchor_samps, stop_samps)
 
-        Returns a copy of the data 
+        Returns
+        -------
+            a copy of the data
 
         """
         epochs_data = []

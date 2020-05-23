@@ -8,6 +8,7 @@ import warnings
 class CodeTagger:
     """Tag pattern-matched sequences of time-indexed integer with key:value metadata.
 
+
     In the intended use case
 
     * the integer values are event-markers recorded on an event or
@@ -32,7 +33,15 @@ class CodeTagger:
     The mechanism here is general, abstracting away from the source of
     the integer 1-D arrays and the intended purpose of the metadata.
 
-    Usage
+
+    .. note::
+
+       Starting with mkpy v0.2.1 codemaps allow but do not require
+       an `Index`.
+
+
+
+    Notes
     -----
 
     The UI for specifying a code tag map can be any of these file types
@@ -77,7 +86,7 @@ class CodeTagger:
             YAML indentation that PyYAML yaml.load can handle.
 
             1. must have one YAML document with two keys: ``columns`` and ``rows``.
-            2. the first two column items must be `Index` and `regexp`.
+            2. the columns must start with `regexp`
             3. the columns may continue ad lib.
             4. each row must be a YAML sequence with the same number of items as there are columns
 

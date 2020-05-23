@@ -1,6 +1,7 @@
 """test module for primary mkh5 class methods and attributes"""
 
 import pytest
+import pandas as pd
 import numpy as np
 import h5py
 import pprint
@@ -19,6 +20,7 @@ from .config import (
     CAL_ARGS,
     S01,
     S05,
+    CALSTEST,
     irb_data,
     mkpy,
 )
@@ -950,122 +952,120 @@ def test_mkh5_correctness():
     os.remove(TEST_H5)
 
 
-# def test_LocDat():
-
-#     print("testing LocDat 3-D cartesian x,y,z")
-#     x = 1.0; y = 2.5; z = -3.1
-#     mylocdat = mkh5.LocDat('electrode', 'lle',
-#                             'cartesian', [1.0, 2.5,-3.1],
-#                             distance_units = 'cm')
-#     assert(np.isclose(mylocdat.x, x))
-#     assert(np.isclose(mylocdat.y, y))
-#     assert(np.isclose(mylocdat.z, z))
-
-#     # test some topo polar -> cartesian 3D transformations
-#     # polar args: radius phi theta
-#     r = 1.0
-#     print("testing LocDat 3-D polar at right temporal line")
-#     mylocdat = mkh5.LocDat('electrode', 'lle',
-#                             'polar', [r, 90, 0],
-#                             angle_units='degrees',
-#                             distance_units = 'cm')
-
-#     assert(np.isclose(mylocdat.x, r))
-#     assert(np.isclose(mylocdat.y, 0.0))
-#     assert(np.isclose(mylocdat.z, 0.0))
-
-#     print("testing LocDat 3-D polar at midline prefrontal")
-#     mylocdat = mkh5.LocDat('electrode', 'lle',
-#                             'polar', [r, 90, 90],
-#                             angle_units='degrees',
-#                             distance_units = 'cm')
-#     assert(np.isclose(mylocdat.x, 0))
-#     assert(np.isclose(mylocdat.y, r))
-#     assert(np.isclose(mylocdat.z, 0.0))
-
-#     print("testing LocDat 3-D polar at vertex")
-#     mylocdat = mkh5.LocDat('electrode', 'lle',
-#                             'polar', [r, 0, 0],
-#                             angle_units='degrees',
-#                             distance_units = 'cm')
-#     assert(np.isclose(mylocdat.x, 0.0))
-#     assert(np.isclose(mylocdat.y, 0.0))
-#     assert(np.isclose(mylocdat.z, r))
+wle_valerr = pytest.mark.xfail(strict=True, raises=ValueError)
+wle_runerr = pytest.mark.xfail(strict=True, raises=RuntimeError)
 
 
-# def test_load_log_eeg_event_mismatch(eeg_f='data/lm20.crw'):
-#     '''test that eeg and log event codes mistmatches throw warnings'''
+@pytest.mark.parametrize(
+    "log_f,wle",
+    [
+        # correct log file
+        pytest.param(S01["log_f"], None),  # default mkpy.mkh5 <= 0.2.2
+        pytest.param(S01["log_f"], "aligned"),
+        pytest.param(S01["log_f"], "as_is"),
+        # incorrect same-length log file (S05) must fail on default,
+        # and explicit "aligned", pass "as_is"
+        pytest.param(S05["log_f"], None, marks=wle_runerr),
+        pytest.param(S05["log_f"], "aligned", marks=wle_runerr),
+        pytest.param(S05["log_f"], "as_is"),  # risky but allowed
+        # can't give a log file and not use it
+        pytest.param(S01["log_f"], "from_eeg", marks=wle_valerr),
+        pytest.param(S01["log_f"], "none", marks=wle_valerr),
+        # log_f is None
+        pytest.param(None, "from_eeg"),
+        pytest.param(None, "none"),
+        # bad log_f, with_log_events arg combinations should all fail
+        pytest.param(None, None, marks=wle_valerr),
+        pytest.param(None, "aligned", marks=wle_valerr),
+        pytest.param(None, "as_is", marks=wle_valerr),
+        # over length wrong log throws truncation warning, fails properly on
+        # event tick mismatch
+        pytest.param(CALSTEST["log_f"], None, marks=wle_runerr),
+    ],
+)
+def test_with_log_events(log_f, wle):
+    def read_log_txt(log_f_txt):
+        log_data = pd.read_csv(log_f_txt, sep="\s+")[
+            ["evtcode", "clock_ticks", "ccode", "flags"]
+        ]
+        return log_data
 
-#     myeeg = mkh5.mkh5(eeg_f)
+    sid = S01["gid"]
+    eeg_f = S01["eeg_f"]
+    yhdr_f = S01["yhdr_f"]
 
-#     ## deliberately corrupt some eeg event codes
-#     event_ptrs = (myeeg.events['eeg_evcodes'] > 0).nonzero()[0]
-#     myeeg.events['eeg_evcodes'][event_ptrs[[1,3,5]]] = -37
+    wle_test = mkh5.mkh5(TEST_H5)
+    wle_test.reset_all()
+    if wle is None:
+        wle_test.create_mkdata(sid, eeg_f, log_f, yhdr_f)
+        wle_test.append_mkdata(sid, eeg_f, log_f, yhdr_f)
+    else:
+        wle_test.create_mkdata(sid, eeg_f, log_f, yhdr_f, with_log_events=wle)
+        wle_test.append_mkdata(sid, eeg_f, log_f, yhdr_f, with_log_events=wle)
 
-#     log_f = re.sub('.crw$|.raw$', '.log', eeg_f)
+    # check correctness
+    if log_f is not None:
+        log_data = read_log_txt(str(log_f) + ".txt")
 
-#     print("loading log {0}".format(log_f))
-#     myeeg.load_log(log_f)
+    dbpaths = wle_test.dblock_paths
+    for dbpath in dbpaths:
+        _, data = wle_test.get_dblock(wle_test.dblock_paths[0])
+        dblock_raw_evcodes = data[data["raw_evcodes"] != 0]["raw_evcodes"]
+        dblock_log_evcodes = data[data["log_evcodes"] != 0]["log_evcodes"]
 
-#     xlog_f = re.sub('.crw$|.raw$', 'x.log', eeg_f)
-#     print("loading artifact marked log {0}".format(log_f))
-#     myeeg.load_log(log_f)
+        # read log codes from data file and confirm they match the
+        # logcat2 text dumps
+        if wle in ["as_is"]:
+            assert all(
+                dblock_log_evcodes
+                == log_data["evtcode"][: len(dblock_log_evcodes)]
+            )
 
-# def test_create_epoch(eeg_f='data/lm20.crw'):
-#     myeeg = mkh5.mkh5(eeg_f)
-#     my_event_stream = myeeg.events['eeg_evcodes']
+        if wle is "from_eeg":
+            assert all(dblock_raw_evcodes == dblock_log_evcodes)
 
-#     # default is an epoch for every event in the marktrack ... lots
-#     myeeg.create_epoch('bin_all', my_event_stream, 500, 2)
+        if wle is "none":
+            for col in ["log_evcodes", "log_ccodes", "log_flags"]:
+                assert all(
+                    np.equal(0, data[col])
+                ), f"non-zero values in {col} with_log_events='none'"
 
-# def test_update_epoch(eeg_f='data/lm20.crw'):
-#     myeeg = mkh5.mkh5(eeg_f)
-#     my_event_stream = np.zeros_like(myeeg.events['eeg_evcodes'])
-#     my_event_stream[[1000, 2000, 3000]] = 1
-
-#     # default is an epoch for every event in the marktrack ... lots
-#     myeeg.create_epoch('test_epoch', my_event_stream, 500, 2)
-
-#     my_event_stream[[1000, 2000, 3000, 4000]] = 1
-#     myeeg.update_epoch('test_epoch', my_event_stream, 500, 2)
-
-
-# def test_md5(eeg_f='data/lm20.crw'):
-#     ''' compare python hashlib md5 digest to openssh via system call'''
-#     import subprocess
-#     import binascii
-
-#     # load up the eeg_f which includes md5 digest calculation
-#     myeeg = mkh5.mkh5(eeg_f)
-
-#     # run the linux openssl version
-#     ssh_md5_str = subprocess.run(["openssl", "dgst", "-md5", eeg_f],
-#                                  stdout=subprocess.PIPE).stdout.split()[1]
-#     ssh_md5 = ssh_md5_str.decode('utf8')
-#     print("myeeg._get_headinfo('eegmd5'): {0}".format(myeeg._get_headinfo('eegmd5')))
-#     print("ssh_md5: {0}".format(ssh_md5))
-#     assert myeeg._get_headinfo('eegmd5') == ssh_md5
+    os.remove(TEST_H5)
 
 
-# def test_calibration(eeg_f='data/lm20.crw'):
-#     '''calibration routine with sensible default values'''
+@irb_data
+@pytest.mark.parametrize(
+    "wle,log_f",
+    [
+        pytest.param(
+            None, "sarc_cal525.log", marks=pytest.mark.xfail(strict=True)
+        ),
+        pytest.param(
+            "aligned", "sarc_cal525", marks=pytest.mark.xfail(strict=True)
+        ),
+        pytest.param("as_is", "sarc_cal525.log"),
+        pytest.param("from_eeg", None),
+        pytest.param("none", None),
+    ],
+)
+def test_irb_load_bad_log(wle, log_f):
+    """seana's split-session Sarcasm files"""
 
-#     print("initializing with {0}".format(eeg_f))
-#     myeeg = mkh5.mkh5(eeg_f)
-#     log_f = re.sub('.crw$|.raw$', '.log', eeg_f)
+    crw_f = IRB_DIR / "mkdig/sarc_cal525.crw"
+    if log_f is not None:
+        log_f = IRB_DIR / "mkdig" / log_f
+    yhdr_f = IRB_DIR / "mkdig/sarc01.yhdr"
 
-#     print("loading log eeg_f {0}".format(log_f))
-#     myeeg.load_log(log_f)
+    h5f = IRB_DIR / "mkh5" / "test_load_bad.h5"
+    pfx = "sarc01"
 
-#     print("calibrating ...")
-#     myeeg.calibrate(
-#         n_points = 3,     # points to average on either side of cursor
-#         cal_size = 10,    # uV
-#         polarity = 1,     # of calibration pulse
-#         lo_cursor = -30,  # ms
-#         hi_cursor = 30)
+    sarc01 = mkh5.mkh5(h5f)
+    sarc01.reset_all()
 
-#     # print("plotting cals")
-#     # myeeg.plotcals()
-
-# # FIX ME: add tests for mismatching data, cal files
+    if wle is None:
+        # default is "aligned", this should fail
+        sarc01.create_mkdata(pfx, crw_f, log_f, yhdr_f)
+        sarc01.append_mkdata(pfx, crw_f, log_f, yhdr_f)
+    else:
+        sarc01.create_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)
+        sarc01.append_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)

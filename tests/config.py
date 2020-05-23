@@ -52,6 +52,13 @@ S05 = {
     "yhdr_f": TEST_DIR("data/S05.yhdr"),
 }
 
+CALSTEST = {
+    "gid": "calstest",
+    "h5f": TEST_DIR("data/calstest.h5"),
+    "eeg_f": TEST_DIR("data/calstest.crw"),
+    "log_f": TEST_DIR("data/calstest.log"),
+    "yhdr_f": TEST_DIR("data/calstest.yhdr"),
+}
 
 # pytest decorator for skipping tests on UCSD EEG data
 irb_data = pytest.mark.skipif(

@@ -280,7 +280,7 @@ In addition
 File types
 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-    A code tag map can be any of these file types:
+    A codemap can be any of these file types:
 
      Excel
        an .xlsx file and (optional) named worksheet readable by
@@ -304,7 +304,7 @@ File types
         Excel and Tabbed-text
             1. the data must be tabular in n rows and m columns (i,j >= 2)
             2. column labels must be in the first row
-            3. the column labels must include 'regexp'
+            3. the columns must includel, 'regexp', by convention the first column
             4. there must be at least one tag column, there may be more
 
 	    +------------+--------------+------------------+
@@ -323,7 +323,7 @@ File types
             YAML indentation that PyYAML yaml.load can handle.
 
             1. must have one YAML document with two keys: ``columns`` and ``rows``.
-            2. the first two column items must be `Index` and `regexp`.
+            2. the first column item must be `regexp`.
             3. the columns may continue ad lib.
             4. each row must be a YAML sequence with the same number of items as there are columns
 
@@ -333,28 +333,19 @@ File types
 
            ---
            'columns':
-             [Index, regexp, probability, frequency, source]
+             [regexp, probability, frequency, source]
            'rows':
-             - [1, '(#1)', hi,   880, oboe]
-             - [2, '(#2)', hi,   440, oboe]
-             - [3, '(#3)', lo,   880, oboe]
-             - [4, '(#4)', lo,   440, oboe]
-             - [5, '(#5)', hi,   880, tuba]
-             - [6, '(#6)', hi,   440, tuba]
-             - [7, '(#7)', lo,   880, tuba]
-             - [8, '(#8)', lo,   440, tuba]
+             - ['(#1)', hi,   880, oboe]
+             - ['(#2)', hi,   440, oboe]
+             - ['(#3)', lo,   880, oboe]
+             - ['(#4)', lo,   440, oboe]
+             - ['(#5)', hi,   880, tuba]
+             - ['(#6)', hi,   440, tuba]
+             - ['(#7)', lo,   880, tuba]
+             - ['(#8)', lo,   440, tuba]
 
     Row value data types
 
-    Index : ( str, int )
-        data type is not checked, violate at your own risk. Each code
-        pattern may but need not have a unique Index.
- 
-        Example index sequences:
-          1,2,3, ...
-          id_1, id_2, id_3, ...
-          hi/880/oboe, hi/440/oboe, lo/880/oboe ...
-          
     regexp :  regular expresion (`flanker* (#anchor) flanker*`)
         This is the code sequence search pattern.  Log codes are
         separated by a single whitespace for matching. The ``regexp``
@@ -378,6 +369,7 @@ File types
     matched codes in useful ways, e.g., by specifying factors and
     levels of experimental design, or numeric values for regression
     modeling or ...
+
 
 Notes
 ~~~~~~
