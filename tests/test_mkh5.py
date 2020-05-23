@@ -1069,6 +1069,3 @@ def test_irb_load_bad_log(wle, log_f):
     else:
         sarc01.create_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)
         sarc01.append_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)
-
-
-
