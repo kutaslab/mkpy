@@ -567,9 +567,7 @@ class CodeTagger:
             raise TypeError(msg)
 
         # stringify the code list for matching against the code pattern
-        sep = (
-            " "
-        )  # the single whitespace delimiter, critical for pattern matching
+        sep = " "  # the single whitespace delimiter, critical for pattern matching
         code_str = ""
         for e in evcodes:
             code_str += "{0}{1}".format(sep, e)
