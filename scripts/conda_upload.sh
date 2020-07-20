@@ -1,4 +1,3 @@
-# Notes: mkpy
 # Anaconda Cloud package uploader.
 # 
 # Runs but doesn't attempt the upload unless 
@@ -17,17 +16,12 @@ fi
 # intended for TravisCI deploy but can be tricked into running locally
 if [[ "$TRAVIS" != "true" || -z "$TRAVIS_BRANCH" || -z "${PACKAGE_NAME}" ]]; then
     echo "conda_upload.sh is meant to run on TravisCI"
-    echo "if you know what you are doing, fake it locally like so:"
-    echo 'export TRAVIS="true"; export PACKAGE_NAME="mkpy"; export TRAVIS_BRANCH="a_branch_name"' 
     exit -2
 fi
 
-# set parent of conda-bld, the else isn't needed for travis, simplifies local testing
-if [ $USER = "travis" ]; then
-    bld_prefix="/home/travis/miniconda"  # from the .travis.yml
-else
-    bld_prefix=${CONDA_PREFIX}
-fi
+# set parent of conda-bld or use $CONDA_PREFIX for local testing
+# bld_prefix=${CONDA_PREFIX}
+bld_prefix="/home/travis/miniconda"  # from the .travis.yml
 
 # on travis there should be a single linux-64 package tarball. insist
 tarball=`/bin/ls -1 ${bld_prefix}/conda-bld/linux-64/${PACKAGE_NAME}-*-*.tar.bz2`
@@ -44,8 +38,8 @@ version=`echo $tarball | sed -n "s/.*${PACKAGE_NAME}-\(.\+\)-.*/\1/p"`
 # just the numeric major.minor.patch portion of version, possibly empty
 mmp=`echo $version | sed -n "s/\(\([0-9]\+\.\)\{1,2\}[0-9]\+\).*/\1/p"`
 
-# Are we building a release version according to the convention that
-# releases are tagged vMajor.Minor.Release?
+# Are we refreshing master or building a release version according to
+# the convention that releases are tagged vMajor.Minor.Release?
 #
 # * if $version = $mmp then version is a strict numeric
 #   Major.Minor.Patch, not further decorated, e.g., with .dev this or
@@ -53,31 +47,54 @@ mmp=`echo $version | sed -n "s/\(\([0-9]\+\.\)\{1,2\}[0-9]\+\).*/\1/p"`
 # 
 # * the github release tag, e.g., v0.0.0 shows up in the Travis build
 #   as the branch name so $TRAVIS_BRANCH = v$mmp enforces the
-#   vMajor.Minor.Patch release tag convention for conda uploads.
-if [[ "${version}" = "$mmp" && $TRAVIS_BRANCH = v$mmp ]]; then
-    is_release="true"
-    label_param="--label main"
-else
-    is_release="false"
-    label_param="--label pre-release"
+#   vMajor.Minor.Patch release tag convention for conda upload to main
+
+# assume this is a dry run unless TRAVIS_BRANCH informs otherwise
+# deviations from M.N.P versions are always dry-runs, e.g., M.N.P.dev1
+
+label="dry-run"
+if [[ "${version}" = "$mmp" ]]; then
+
+    # commit to master uploads to /pre-release
+    if [[ $TRAVIS_BRANCH = "master" ]]; then
+	label="pre-release"
+    fi
+
+    # a github release tagged vM.N.P uploads to /main
+    if [[ $TRAVIS_BRANCH = v"$mmp" ]]; then
+	label="main"
+    fi
 fi
+
+# build for multiple platforms ... who knows it might work
+mkdir -p ${bld_prefix}/conda-convert/linux-64
+cp ${tarball} ${bld_prefix}/conda-convert/linux-64
+cd ${bld_prefix}/conda-convert
+conda convert -p linux-64 -p osx-64 -p win-64  linux-64/${PACKAGE_NAME}*tar.bz2
 
 # POSIX trick sets $ANACONDA_TOKEN if unset or empty string 
 ANACONDA_TOKEN=${ANACONDA_TOKEN:-[not_set]}
-conda_cmd="anaconda --token $ANACONDA_TOKEN upload ${tarball} ${label_param}"
+conda_cmd="anaconda --token $ANACONDA_TOKEN upload ./**/${PACKAGE_NAME}*.tar.bz2 --label ${label} --skip-existing"
 
 # thus far ...
 echo "conda meta.yaml version: $version"
 echo "package name: $PACKAGE_NAME"
 echo "conda-bld: ${bld_prefix}/conda-bld/linux-64"
 echo "tarball: $tarball"
+echo "travis tag: $TRAVIS_TAG"
 echo "travis branch: $TRAVIS_BRANCH"
-echo "is_release: $is_release"
+echo "conda label: ${label}"
 echo "conda upload command: ${conda_cmd}"
+echo "platforms:"
+echo "$(ls ./**/${PACKAGE_NAME}*.tar.bz2)"
 
-# let TravisCI upload pre-releases to Anaconda Cloud ... useful for testing
-if [[ $ANACONDA_TOKEN != "[not_set]" && $is_release = "true" ]]; then
-# if [[ $ANACONDA_TOKEN != "[not_set]" ]]; then
+# if the token is in the ENV and this is a release/tagged commit or equivalent
+#    attempt the upload 
+# else
+#    skip the upload and exit happy
+if [[ $ANACONDA_TOKEN != "[not_set]" && ( $label = "main" || $label = "pre-release" ) ]]; then
+
+    conda install anaconda-client
 
     echo "uploading to Anconda Cloud: $PACKAGE_NAME$ $version ..."
     if ${conda_cmd}; then
@@ -90,4 +107,3 @@ else
     echo "$PACKAGE_NAME $TRAVIS_BRANCH $version conda_upload.sh dry run ... OK"
 fi
 exit 0
-
