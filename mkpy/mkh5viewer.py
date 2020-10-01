@@ -1356,7 +1356,7 @@ class H5View(ttk.Treeview):
         # switch on the type of data to initialize w/
         self.h5view_df = None
 
-        if layer is "dblock":
+        if layer == "dblock":
             # for the data block view
             self.h5view_df = pd.DataFrame(
                 self.model.mkh5.data_blocks, columns=["dblock_path"]

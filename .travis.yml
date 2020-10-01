@@ -1,7 +1,21 @@
 # mkpy requires a current GIT_TOKEN on TravisCI kutaslab/mkpy
 env:
+  global:
     - PACKAGE_NAME: mkpy   # for the conda_upload.sh deploy script
+
 language: minimal
+
+jobs:
+  include:
+    - name: "3.6 build"
+      env: PYV=3.6
+    - name: "3.7 build"
+      env: PYV=3.7
+    - name: "3.8 build"
+      env: PYV=3.8
+    - name: "default python build"
+      env: PYV=""
+
 before_install:
     # b.c conda build GIT_BUILD_STR works (or not) in mysterious ways ...
     # pfx g means ordinary commit, r means github tagged vM.N.P release
@@ -14,22 +28,25 @@ before_install:
     - hash -r
     - conda config --set always_yes yes --set changeps1 no
     - conda info -a
+
 install:
-    - conda install -q conda-build conda-verify
-    - conda build conda -c defaults -c conda-forge
-    - conda create --name mkpy_env mkpy -c local -c defaults -c conda-forge
-    - conda activate mkpy_env  # so tests run in env as installed by conda
-    - conda install black pytest-cov
-    - conda list
-    - lscpu
-    - python -c 'import numpy; numpy.show_config()'
-    - python -c 'import mkpy'
+  - conda install -q conda-build conda-verify
+  - conda build --python=${PYV} -c defaults -c conda-forge conda
 
 script:
-    - black --check --verbose --line-length=79 .
-    - pytest --disable-warnings --cov=mkpy
+  # install and test py 3.x variants
+  - conda create -n pyenv_${PYV} python=${PYV} spudtr -c local -c defaults -c conda-forge
+  - conda activate pyenv_${PYV}
+  - conda install black pytest pytest-cov
+  - conda list
+  - lscpu
+  - python -c 'import numpy; numpy.show_config()'
+  - black --check --verbose .
+  # - pytest --cov=spudtr
+
 after_success:
     - pip install codecov && codecov
+
 before_deploy:
     - pip install sphinx sphinx_rtd_theme jupyter nbsphinx nbconvert!=5.4
     - conda install -c conda-forge pandoc
@@ -38,10 +55,11 @@ before_deploy:
     - sphinx-apidoc -e -f -o mkpy/docs/source/ mkpy ./tests/ ./mkpy/dpath/* ./setup.py
     - make -C mkpy/docs html
     - touch mkpy/docs/_build/html/.nojekyll
+
 deploy:
     - provider: script
       skip_cleanup: true
-      script: bash ./scripts/conda_upload.sh
+      script: bash ./ci/conda_upload.sh
       on:
           all_branches: true
 
@@ -49,9 +67,10 @@ deploy:
       skip_cleanup: true
       github_token: $GITHUB_TOKEN
       keep-history: true
-      on:
-          branch: master
-          # all_branches: true
       target_branch: gh-pages  # that's the default anyway, just to be explicit
       local_dir: mkpy/docs/_build/html
+      on:
+          branch: master
+          condition: $PYV == "3.8"
+
 

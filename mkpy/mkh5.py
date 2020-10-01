@@ -1465,6 +1465,10 @@ class mkh5:
             epoch_dt_names.append(c)
             epoch_dt_types.append(event_table[c].dtype.__str__())
 
+        # events have sample ticks, epochs add timestamps
+        epoch_dt_names += ["match_time", "anchor_time", "anchor_time_delta"]
+        epoch_dt_types += ["int64"] * 3
+
         # construct the new dtype and initialize the epoch np.array
         epoch_dt = np.dtype(list(zip(epoch_dt_names, epoch_dt_types)))
         epochs = np.ndarray(shape=(len(event_table),), dtype=epoch_dt)
@@ -1523,8 +1527,17 @@ class mkh5:
                 else:
                     # if in bounds, overwrite np.nan with the epoch start and duration
                     is_in_bounds[i] = True
+
+                    # set match and anchor tick, time, deltas
                     e["epoch_match_tick_delta"] = epoch_match_tick_delta
                     e["epoch_ticks"] = duration_samp
+
+                    # add timestamps
+                    e["match_time"] = int(0)
+                    e["anchor_time_delta"] = int(mkh5._samp2ms(e["match_tick"] - e["anchor_tick"], srate))
+                    e["anchor_time"] = e["anchor_time_delta"]  # for consistency w/ epochs data columns
+
+
 
         # drop out of bounds epochs and check epochs are consistent
         epochs = epochs[is_in_bounds]
@@ -1571,7 +1584,7 @@ class mkh5:
         try:
             with h5py.File(self.h5_fname, "r") as h5:
                 epochs_names = [t for t in h5[mkh5.EPOCH_TABLES_PATH].keys()]
-        except:
+        except Exception:
             pass
         return epochs_names
 
@@ -1867,11 +1880,6 @@ class mkh5:
 
                 # merge epoch table, match_time, and datablock stream table column names
                 all_cols = list(event_info.dtype.names)
-                all_cols.append("match_time")  # matched code timestamp
-                all_cols.append("anchor_time")  # anchor code timestamp
-                all_cols.append(
-                    "anchor_time_delta"
-                )  # time between match and anchor
                 for c in epoch_streams.dtype.names:
                     if c not in all_cols:
                         all_cols.append(c)
@@ -1897,16 +1905,12 @@ class mkh5:
                 for n in epoch_dt_names:
                     if n in epoch_streams.dtype.names:
                         epoch_dt_types.append(epoch_streams.dtype[n])
-                    elif n in [
-                        "match_time",
-                        "anchor_time",
-                        "anchor_time_delta",
-                    ]:
-                        epoch_dt_types.append("int64")
                     elif n in e.dtype.names:
                         epoch_dt_types.append(event_info.dtype[n])
+                    else:
+                        raise ValueError(f"column {n} not found in dblock or epoch table")
 
-                # define dtype and initialize
+                # # define dtype and initialize
                 epoch_dt = np.dtype(list(zip(epoch_dt_names, epoch_dt_types)))
                 epoch = np.ndarray(shape=(nsamp,), dtype=np.dtype(epoch_dt))
 
@@ -1915,8 +1919,11 @@ class mkh5:
                 # the epoch event.
                 srate = e["dblock_srate"]
                 for n in epoch_dt_names:
+                    # these are already time-varying
                     if n in epoch_streams.dtype.names:
                         epoch[n] = epoch_streams[n]
+
+                    # generate match, anchor time stamps and deltas
                     elif n == "match_time":
                         epoch[n] = [
                             int(mkh5._samp2ms(x - e["match_tick"], srate))
@@ -1935,7 +1942,10 @@ class mkh5:
                                 )
                             )
                             for x in range(start_samp, stop_samp)
+
                         ]
+
+                    # broadcast event info 
                     elif n in event_info.dtype.names:
                         epoch[n] = event_info[n]
                     else:
@@ -3030,6 +3040,10 @@ class mkh5:
         warnings.warn(msg, FutureWarning)
         return self.dblock_paths
 
+    @property
+    def epochs_names(self):
+        return self.get_epochs_table_names()
+
     #
     def _load_eeg(self, eeg_f):
         """kutaslab .crw or .raw data loader, also populates self.dig_header
@@ -3123,7 +3137,7 @@ class mkh5:
 
             if (
                 self._get_dig_header(k) is None
-                or self._get_dig_header(k) is ""
+                or self._get_dig_header(k) == ""
             ):
                 raise (ValueError("dig_header {0} value not found".format(k)))
 
