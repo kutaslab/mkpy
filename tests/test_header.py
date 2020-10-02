@@ -32,9 +32,7 @@ def test_HeaderIO_update_from_dict_overwrite_existing():
     hio._header = {**base_dict, "key1": "A", "key2": "B"}
 
     # ---------------------------- RUN ----------------------------------
-    hio._update_from_dict(
-        {**base_dict, "key1": "C", "key3": "D"}, keep_existing=False
-    )
+    hio._update_from_dict({**base_dict, "key1": "C", "key3": "D"}, keep_existing=False)
 
     # --------------------------- CHECK ---------------------------------
     assert hio._header == {**base_dict, "key1": "C", "key2": "B", "key3": "D"}

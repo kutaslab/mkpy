@@ -214,9 +214,7 @@ class PyYarf(object):
                 has_yarf.append(True)
             else:
                 # build an empty one
-                yarf_doc = dict(
-                    [(k, v) for k, v in self._yarf_doc_template.items()]
-                )
+                yarf_doc = dict([(k, v) for k, v in self._yarf_doc_template.items()])
                 # print('loading empty yarf_doc', dbpath)
                 yarf_doc["dblock_path"] = dbpath
                 has_yarf.append(False)
@@ -225,12 +223,9 @@ class PyYarf(object):
 
         # none is OK, all is OK, some but not all is probably pathological
         if any(has_yarf) and not all(has_yarf):
-            missing = [
-                h5.data_blocks[i] for i, d in enumerate(has_yarf) if d is False
-            ]
+            missing = [h5.data_blocks[i] for i, d in enumerate(has_yarf) if d is False]
             msg = (
-                "uh oh ... missing pygarv info in headers of {0} "
-                "dblocks {1}"
+                "uh oh ... missing pygarv info in headers of {0} " "dblocks {1}"
             ).format(mkh5_f, missing)
             raise ValueError(msg)
 
@@ -273,17 +268,15 @@ class PyYarf(object):
 
         # name?
         if yarf_doc["name"] != PyYarf._yarf_doc_template["name"]:
-            msg = ("yarf doc 'name': {0} " "must be {1}").format(
-                yarf_doc["name"]
-            )
+            msg = ("yarf doc 'name': {0} " "must be {1}").format(yarf_doc["name"])
             raise ValueError(msg)
 
         # if there are tests are they a list?
         if yarf_doc["tests"] is not None:
             if not isinstance(yarf_doc["tests"], list):
-                msg = (
-                    "yarf doc 'tests': {0} " "must be a list of tests"
-                ).format(yarf_doc["tests"])
+                msg = ("yarf doc 'tests': {0} " "must be a list of tests").format(
+                    yarf_doc["tests"]
+                )
                 raise ValueError(msg)
             for i, t in enumerate(yarf_doc["tests"]):
                 if not isinstance(t, list):
@@ -291,10 +284,7 @@ class PyYarf(object):
                     raise ValueError(msg)
 
                 for param_spec in t:
-                    if (
-                        not isinstance(param_spec, dict)
-                        or len(param_spec.keys()) != 1
-                    ):
+                    if not isinstance(param_spec, dict) or len(param_spec.keys()) != 1:
                         msg = (
                             '.yarf {0}:  test parameter "{1}" is not '
                             "a {{key:value}} pair"
@@ -431,13 +421,8 @@ class PyGarvTest(OrderedDict):
                 raise TypeError(msg)
 
             # prevent string overrun
-            if (
-                isinstance(value, str)
-                and len(value) > PyGarvTest._max_path_len
-            ):
-                msg = (
-                    "string length exceeds {0} for {1}: {2} ... {3}" ""
-                ).format(
+            if isinstance(value, str) and len(value) > PyGarvTest._max_path_len:
+                msg = ("string length exceeds {0} for {1}: {2} ... {3}" "").format(
                     PyGarvTest._max_path_len, key, value[0:10], value[-10:]
                 )
                 raise RuntimeError(msg)
@@ -448,9 +433,7 @@ class PyGarvTest(OrderedDict):
                     re.compile(value)
                 except Exception as err:
                     msg = "bad regexp pattern: {0}".format(value)
-                    msg += " ... {0}".format(
-                        " ".join([arg for arg in err.args])
-                    )
+                    msg += " ... {0}".format(" ".join([arg for arg in err.args]))
                     raise ValueError(msg)
 
             # cross-check
@@ -698,9 +681,7 @@ class PyGarv(object):
                 "name": "pygarv",
                 "tests": [],
                 "fails": [],
-                "pygarv": np.zeros(
-                    shape=(len(dblock),), dtype=dblock["pygarv"].dtype
-                ),
+                "pygarv": np.zeros(shape=(len(dblock),), dtype=dblock["pygarv"].dtype),
             }
             self.tr_docs.append(tr_doc)
 
@@ -814,9 +795,7 @@ class PyGarv(object):
                 any(tr_doc["pygarv"] != 0)
                 and all(len(fail) == 0 for fail in tr_doc["fails"])
             ):
-                msg = "tr_docs[{0}] fails and pygarv do not agree".format(
-                    dbp_idx
-                )
+                msg = "tr_docs[{0}] fails and pygarv do not agree".format(dbp_idx)
                 raise ValueError(msg)
 
             # check that non-zero bits in the tr_doc['pygarv'] still
@@ -845,7 +824,9 @@ class PyGarv(object):
                         "]: {0}".format(tr_doc["fails"])
                     )
                     logging.error(pp.pformat(log_msg))
-                    err_msg = "probable pygarv bug ... see the latest .mkpy/logs for details"
+                    err_msg = (
+                        "probable pygarv bug ... see the latest .mkpy/logs for details"
+                    )
                     raise ValueError(err_msg)
 
     def _reset_tests(self):
@@ -1012,9 +993,7 @@ class PyGarv(object):
         results = dict(
             name="results",
             dblock_path=yarf_dbp,
-            pygarv=np.zeros(
-                shape=(len(dblock),), dtype=dblock["pygarv"].dtype
-            ),
+            pygarv=np.zeros(shape=(len(dblock),), dtype=dblock["pygarv"].dtype),
             fails=None,
         )
 
@@ -1025,9 +1004,7 @@ class PyGarv(object):
         # otherwise run the tests in yarf test list
 
         # init to whatever dtype is in the dblock['pygarv']
-        results["pygarv"] = np.zeros(
-            shape=(len(dblock),), dtype=dblock["pygarv"].dtype
-        )
+        results["pygarv"] = np.zeros(shape=(len(dblock),), dtype=dblock["pygarv"].dtype)
 
         # compute the bit fiddled pygarv artifact mask
         for i, t in enumerate(yarf_test_list):
@@ -1054,16 +1031,12 @@ class PyGarv(object):
 
             # update the results['pygarv'] stream from the boolean result
             # by OR masking the ith bit where the test fails
-            results["pygarv"] = self._encode_pygarv_stream(
-                i, result, results["pygarv"]
-            )
+            results["pygarv"] = self._encode_pygarv_stream(i, result, results["pygarv"])
 
         # map the fiddled bits back to indices of the test in
         # tr_doc that failed ... this is for visualization, human
         # consumption at run time, not stored in mkh5 hdr or dblock
-        results["fails"] = self._decode_pygarv_stream(
-            results["pygarv"], tr_doc
-        )
+        results["fails"] = self._decode_pygarv_stream(results["pygarv"], tr_doc)
         if tr_doc["fails"] != results["fails"]:
             msg = ("updating test results: {0}").format(tr_doc)
             warnings.warn(msg)
@@ -1116,7 +1089,9 @@ class PyGarv(object):
                 raise ValueError(msg)
 
             if tr_doc["dblock_path_idx"] != dbp_idx:
-                msg = "uh oh ... mkh5 v. tr_doc dblock_path_idx mismatch in _update_mkh5"
+                msg = (
+                    "uh oh ... mkh5 v. tr_doc dblock_path_idx mismatch in _update_mkh5"
+                )
                 raise ValueError(msg)
 
             try:
@@ -1129,12 +1104,8 @@ class PyGarv(object):
                     hio.get(dblock)  # fetch header, this dblock
 
                     # brittle ... accessing header dict directly
-                    hio._header["pygarv"] = self._get_yarf_doc_from_tr_doc(
-                        tr_doc
-                    )
-                    hio.set(
-                        dblock
-                    )  # modded header jsonified into dblock.attrs
+                    hio._header["pygarv"] = self._get_yarf_doc_from_tr_doc(tr_doc)
+                    hio.set(dblock)  # modded header jsonified into dblock.attrs
             except Exception as err:
                 msg = (
                     "\nVERY VERY BAD ... pygarving {0} {1} failed part "
@@ -1208,9 +1179,7 @@ class PyGarv(object):
     #             result[ev_idx] = True  # mark this event sample bad
     #     return result
 
-    @PyGarvTest(
-        "ppa", stream=str, threshold=float, prestim=float, poststim=float
-    )
+    @PyGarvTest("ppa", stream=str, threshold=float, prestim=float, poststim=float)
     def ppa(hdr, dblock, *args, **kwargs):
         r"""tag event if any stream regexp match has peak-to-peak amplitude excursion
 
@@ -1250,9 +1219,7 @@ class PyGarv(object):
         poststim_samps = mkh5.mkh5._ms2samp(poststim_ms, hdr["samplerate"])
 
         n_samps = len(dblock)
-        result = np.full(
-            shape=(n_samps,), fill_value=False
-        )  # init no artifacts
+        result = np.full(shape=(n_samps,), fill_value=False)  # init no artifacts
         ev_idxs = np.where(dblock["log_evcodes"] > 0)[0]
         for ev_idx in ev_idxs:
             for stream in test_streams:
@@ -1320,9 +1287,7 @@ class PyGarv(object):
         if win_len <= 0:
             raise ValueError("maxflat nsamp must be > 0")
 
-        print(
-            "running mxflat_event", threshold, win_len, prestim_ms, poststim_ms
-        )
+        print("running mxflat_event", threshold, win_len, prestim_ms, poststim_ms)
         prestim_samps = mkh5.mkh5._ms2samp(prestim_ms, hdr["samplerate"])
         poststim_samps = mkh5.mkh5._ms2samp(poststim_ms, hdr["samplerate"])
 
@@ -1331,8 +1296,7 @@ class PyGarv(object):
         ev_idxs = np.where(dblock["log_evcodes"] > 0)[0]
         for ev_idx in ev_idxs:
             interval = slice(
-                max(0, ev_idx - prestim_samps),
-                min(n_samps, ev_idx + poststim_samps),
+                max(0, ev_idx - prestim_samps), min(n_samps, ev_idx + poststim_samps),
             )
             for stream in test_streams:
                 ev_view = dblock[stream][interval].view()
@@ -1366,13 +1330,11 @@ class PyGarv(object):
         ev_idxs = np.where(dblock["log_evcodes"] > 0)[0]
         for ev_idx in ev_idxs:
             interval = slice(
-                max(0, ev_idx - prestim_samps),
-                min(n_samps, ev_idx + poststim_samps),
+                max(0, ev_idx - prestim_samps), min(n_samps, ev_idx + poststim_samps),
             )
             if (
                 np.ptp(
-                    dblock[interval][stream].view()
-                    - dblock[interval][stream2].view()
+                    dblock[interval][stream].view() - dblock[interval][stream2].view()
                 )
                 > threshold
             ):
@@ -1411,9 +1373,7 @@ class PyGarv(object):
         return result
 
     # this test takes two extra params w/ numpy dtypes str, float
-    param_types = dict(
-        stream=str, stream2=str, threshold=float, interval=float
-    )
+    param_types = dict(stream=str, stream2=str, threshold=float, interval=float)
 
     @PyGarvTest("cppadif", **param_types)
     def cppadif(hdr, dblock, *args, **kwargs):
@@ -1468,9 +1428,7 @@ class PyGarv(object):
         for i in range(test_idx, n_tests - 1):
             mask -= (mask >> i & 1) << i  # zero out the ith bit
             mask += ((mask >> (i + 1)) & 1) << i  # copy i+1 bit to ith bit
-        mask -= (
-            mask >> (n_tests - 1) & 1
-        ) << n_tests - 1  # zero out the last bit
+        mask -= (mask >> (n_tests - 1) & 1) << n_tests - 1  # zero out the last bit
         self.tr_docs[dbp_idx]["pygarv"] = mask.copy()
 
     def _update_tr_docs(self, dbp_idx, test_idx, test):
@@ -1917,7 +1875,5 @@ if __name__ == "__main__":
         # run pygarv to mod the file
         print("pygarv marking artifacts ...")
         pg = PyGarv(mkh5_f=args_dict["mkh5_f"])
-        pg._update_tr_docs_from_yaml_f(
-            yarf_f=args_dict["yarf_f"]
-        )  # load yarf tests
+        pg._update_tr_docs_from_yaml_f(yarf_f=args_dict["yarf_f"])  # load yarf tests
         pg._update_mkh5()  # actually mod the h5 file

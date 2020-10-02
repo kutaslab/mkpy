@@ -279,9 +279,7 @@ def _read_compressed_chunk(stream, nchans):
     if not ncode_records_minus_one_buf:
         return None
     # Code track (run length encoded):
-    (ncode_records_minus_one,) = struct.unpack(
-        "<B", ncode_records_minus_one_buf
-    )
+    (ncode_records_minus_one,) = struct.unpack("<B", ncode_records_minus_one_buf)
     ncode_records = ncode_records_minus_one + 1
     code_records = []
     for i in range(ncode_records):
@@ -293,9 +291,7 @@ def _read_compressed_chunk(stream, nchans):
     # Data bytes (delta encoded and packed into variable-length integers):
     (ncompressed_words,) = struct.unpack("<H", stream.read(2))
     compressed_data = stream.read(ncompressed_words * 2)
-    data_chunk = _decompress_crw_chunk(
-        compressed_data, ncompressed_words, nchans
-    )
+    data_chunk = _decompress_crw_chunk(compressed_data, ncompressed_words, nchans)
     return (codes_list, data_chunk)
 
 
@@ -320,26 +316,17 @@ def read_log(fo):
         #     = struct.unpack("<HHHBB", event)
 
         # TPU ... 2-byte event codes can be negative, i.e. short
-        (code, tick_hi, tick_lo, condition, flag) = struct.unpack(
-            "<hHHBB", event
-        )
+        (code, tick_hi, tick_lo, condition, flag) = struct.unpack("<hHHBB", event)
 
         yield (code, (tick_hi << 16 | tick_lo), condition, flag)  # NJS
 
 
 def load(
-    f_raw,
-    f_log,
-    dtype=np.float64,
-    delete_channels=[],
-    calibrate=True,
-    **kwargs,
+    f_raw, f_log, dtype=np.float64, delete_channels=[], calibrate=True, **kwargs,
 ):
 
     # read the raw and sanity check the records ...
-    channel_names, raw_codes, record_counts, data, info = read_raw(
-        f_raw, dtype
-    )
+    channel_names, raw_codes, record_counts, data, info = read_raw(f_raw, dtype)
     assert all(record_counts == np.arange(len(record_counts)))
 
     # read the log
@@ -422,9 +409,7 @@ def write_erp_as_avg(erp, stream):
     # well):
     if s16_per_10uV > s16_max:
         s16_per_10uV = s16_max
-    integer_data = np.array(
-        np.round(s16_per_10uV * resampled_data / 10.0), dtype="<i2"
-    )
+    integer_data = np.array(np.round(s16_per_10uV * resampled_data / 10.0), dtype="<i2")
 
     header["epoch_len"] = epoch_len_ms
     header["nchans"] = integer_data.shape[1]
@@ -445,9 +430,7 @@ def write_erp_as_avg(erp, stream):
     elif len(erp.channel_names) <= 32:
         header["chndes"] = np.asarray(erp.channel_names, dtype="S4").tostring()
     else:
-        assert (
-            False
-        ), "Channel name writing for large montages not yet supported"
+        assert False, "Channel name writing for large montages not yet supported"
     if "experiment" in erp.metadata:
         header["expdes"] = erp.metadata["experiment"]
     if "subject" in erp.metadata:

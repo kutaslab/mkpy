@@ -133,9 +133,7 @@ def test_irb_event_table_b():
 
     # test export event
     print("exporting event table")
-    mydat.export_event_table(
-        event_table, TEST_DIR("data/test_event_table_b.fthr")
-    )
+    mydat.export_event_table(event_table, TEST_DIR("data/test_event_table_b.fthr"))
 
     mydat.export_event_table(
         event_table, TEST_DIR("data/test_event_table_b.txt"), format="txt"
@@ -260,9 +258,7 @@ def test_non_unique_event_table_index(sheet):
         elif len(row_slice) in [2, 3]:
             # duplicate indices, multiple rows match, make sure the
             # the right number comes back
-            assert (
-                row_slice["word_lag"].all() in events[sheet]["word_lags_2_3"]
-            )
+            assert row_slice["word_lag"].all() in events[sheet]["word_lags_2_3"]
         elif len(row_slice) == 209:
             assert row_slice["word_lag"].unique()[0] == "cal"
         else:
@@ -330,9 +326,7 @@ def test_p3_yaml_codemap_ccode(codemap):
     assert event_table.shape == events[codemap]["event_shape"]
     print(f"{ytbl} event_table {event_table.shape}")
 
-    counts = pd.crosstab(
-        event_table.bin, [event_table.log_flags > 0], margins=True
-    )
+    counts = pd.crosstab(event_table.bin, [event_table.log_flags > 0], margins=True)
     counts.columns = [str(col) for col in counts.columns]
 
     coi = ["regexp", "bin", "tone", "stim", "accuracy", "acc_type"]
