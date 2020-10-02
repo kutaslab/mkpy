@@ -30,19 +30,20 @@ before_install:
     - conda info -a
 
 install:
-  - conda install -q conda-build conda-verify
+  # package version jinja in meta.yaml needs cython in root for setup.py imports
+  - conda install -q python=${PYV} numpy cython conda-build conda-verify
   - conda build --python=${PYV} -c defaults -c conda-forge conda
 
 script:
   # install and test py 3.x variants
-  - conda create -n pyenv_${PYV} python=${PYV} spudtr -c local -c defaults -c conda-forge
+  - conda create -n pyenv_${PYV} python=${PYV} mkpy -c local -c defaults -c conda-forge
   - conda activate pyenv_${PYV}
   - conda install black pytest pytest-cov
   - conda list
   - lscpu
   - python -c 'import numpy; numpy.show_config()'
   - black --check --verbose .
-  # - pytest --cov=spudtr
+  - pytest --cov=mkpy
 
 after_success:
     - pip install codecov && codecov
