@@ -31,12 +31,5 @@ def test_path_paths_empty_key_allowed():
 
 def test_path_paths_int_keys():
     mkpy.dpath.path.validate(
-        [
-            ["I", dict],
-            ["am", dict],
-            ["path", dict],
-            [0, dict],
-            ["of", dict],
-            [2, int],
-        ]
+        [["I", dict], ["am", dict], ["path", dict], [0, dict], ["of", dict], [2, int],]
     )

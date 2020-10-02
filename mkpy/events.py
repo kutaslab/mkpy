@@ -242,9 +242,9 @@ def build_event_table(h5_fname, code_map, header_map_f):
         dblock_df = build_dblock_df(nonzero)
 
         # merge them to get the event table
-        event_table = match_df.merge(
-            header_df, how="left", on="dblock_path"
-        ).merge(dblock_df, how="left", on=["dblock_path", "dblock_ticks"])
+        event_table = match_df.merge(header_df, how="left", on="dblock_path").merge(
+            dblock_df, how="left", on=["dblock_path", "dblock_ticks"]
+        )
 
         # we love pandas, but we want to make sure no information is lost
         # first, we check that no rows from the match_df are missing
@@ -266,17 +266,15 @@ def build_match_df(dblocks_and_paths, code_map):
 
     match_dfs = (
         (
-            find_evcodes(
-                row.regexp, db["dblock_ticks"], db["log_evcodes"]
-            ).assign(Index=row.Index, dblock_path=dbp)
+            find_evcodes(row.regexp, db["dblock_ticks"], db["log_evcodes"]).assign(
+                Index=row.Index, dblock_path=dbp
+            )
         )
         for db, dbp in dblocks_and_paths
         for row in code_map.itertuples()
     )
 
-    nonempty_match_dfs = [
-        match_df for match_df in match_dfs if not match_df.empty
-    ]
+    nonempty_match_dfs = [match_df for match_df in match_dfs if not match_df.empty]
 
     match_df = pd.concat(nonempty_match_dfs, ignore_index=True)
     match_df = match_df.join(code_map, on="Index")

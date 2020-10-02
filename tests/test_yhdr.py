@@ -43,16 +43,12 @@ def test_load():
                     dpath.path.paths_only([k for k in p])
                     for p in dpath.path.paths(hdr, leaves=False)
                 ]
-                slash_keys_only = [
-                    "/".join([str(s) for s in sp]) for sp in keys_only
-                ]
+                slash_keys_only = ["/".join([str(s) for s in sp]) for sp in keys_only]
                 keys_vals = [
                     dpath.path.paths_only([k for k in p])
                     for p in dpath.path.paths(hdr, leaves=True)
                 ]  # , path=[mykeys])]
-                slash_keys_vals = [
-                    "/".join([str(s) for s in sp]) for sp in keys_vals
-                ]
+                slash_keys_vals = ["/".join([str(s) for s in sp]) for sp in keys_vals]
 
         except Exception as fail:
             msg = "uh oh ... trouble with " + yhdr_f

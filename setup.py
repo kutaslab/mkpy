@@ -15,21 +15,19 @@ from mkpy import get_ver
 __version__ = get_ver()
 
 # enforce conda meta.yaml semantic version == package __init__
-jinja_version = f'{{% set version = "{__version__}" %}}'
-meta_yaml_f = "./conda/meta.yaml"
-with open(meta_yaml_f) as f:
-    conda_ver = re.match(r"^" + jinja_version, f.read())
-    if not conda_ver:
-        fail_msg = (
-            "conda/meta.yaml must start with a jinja variable line exactly"
-            f"like this: {jinja_version}"
-        )
-        raise Exception(fail_msg)
+# jinja_version = f'{{% set version = "{__version__}" %}}'
+# meta_yaml_f = "./conda/meta.yaml"
+# with open(meta_yaml_f) as f:
+#     conda_ver = re.match(r"^" + jinja_version, f.read())
+#     if not conda_ver:
+#         fail_msg = (
+#             "conda/meta.yaml must start with a jinja variable line exactly"
+#             f"like this: {jinja_version}"
+#         )
+#         raise Exception(fail_msg)
 
 extensions = [
-    Extension(
-        "mkpy._mkh5", ["mkpy/_mkh5.pyx"], include_dirs=[np.get_include()]
-    )
+    Extension("mkpy._mkh5", ["mkpy/_mkh5.pyx"], include_dirs=[np.get_include()])
 ]
 
 setup(

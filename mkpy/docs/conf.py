@@ -54,9 +54,7 @@ napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
 
-mathjax_path = (
-    "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"
-)
+mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
@@ -73,9 +71,7 @@ master_doc = "index"
 # General information about the project.
 project = "mkpy"
 copyright = "2017-2019 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith"
-author = (
-    "Thomas P. Urbach, Andrey Portnoy, extending code from Nathaniel Smith"
-)
+author = "Thomas P. Urbach, Andrey Portnoy, extending code from Nathaniel Smith"
 
 # The version info for the project you're documenting, acts as replacement for
 # |version| and |release|, also used in various other places throughout the
@@ -163,14 +159,7 @@ latex_elements = {
 # (source start file, target name, title,
 #  author, documentclass [howto, manual, or own class]).
 latex_documents = [
-    (
-        master_doc,
-        "mkpy.tex",
-        "mkpy Documentation",
-        "Thomas P. Urbach",
-        "manual",
-        False,
-    )
+    (master_doc, "mkpy.tex", "mkpy Documentation", "Thomas P. Urbach", "manual", False,)
 ]
 
 

@@ -16,6 +16,7 @@ from . import dpath
 
 __version__ = "0.2.4.dev0"
 
+
 def get_ver():
     # check semantic version format in __init__.py and meta.yaml matches
     pf_ver = re.search(r"(?P<ver_str>\d+\.\d+\.\d+\S*)", __version__)
@@ -52,9 +53,7 @@ Path(log_dir).mkdir(parents=True, exist_ok=True)
 
 # .log files will be put in ~/.mkpy/logs and have timestamps for filenames
 log_filename = log_dir.joinpath(current_datetime).with_suffix(".log")
-logging.basicConfig(
-    filename=log_filename, format="%(message)s", level=logging.DEBUG
-)
+logging.basicConfig(filename=log_filename, format="%(message)s", level=logging.DEBUG)
 
 
 def current_function():
@@ -103,9 +102,7 @@ def log_exceptions(indent_level):
         @functools.wraps(function)
         def wrapper(*args, **kwargs):
             logging.info(
-                indent(
-                    level=indent_level, text="FUNCTION " + function.__name__
-                )
+                indent(level=indent_level, text="FUNCTION " + function.__name__)
             )
 
             try:
@@ -118,27 +115,19 @@ def log_exceptions(indent_level):
 
                 # if DEBUG (or lower) logging level set, log the arguments
                 logging.debug(
-                    indent(
-                        level=indent_level + 1, text="Positional arguments:"
-                    )
+                    indent(level=indent_level + 1, text="Positional arguments:")
                 )
                 for i, arg in enumerate(args):
                     text = "Argument " + str(i) + ":"
                     logging.debug(indent(level=indent_level + 2, text=text))
-                    logging.debug(
-                        indent(level=indent_level + 3, text=pformat(arg))
-                    )
+                    logging.debug(indent(level=indent_level + 3, text=pformat(arg)))
                 if kwargs:
                     logging.debug(
-                        indent(
-                            level=indent_level + 1, text="Keyword arguments:"
-                        )
+                        indent(level=indent_level + 1, text="Keyword arguments:")
                     )
                     for kwarg in kwargs:
                         text = kwarg + ":"
-                        logging.debug(
-                            indent(level=indent_level + 2, text=text)
-                        )
+                        logging.debug(indent(level=indent_level + 2, text=text))
                         logging.debug(
                             indent(level=indent_level + 3, text=pformat(kwarg))
                         )

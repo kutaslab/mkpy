@@ -241,9 +241,7 @@ class mkh5:
 
         def __init__(self):
             """wake up"""
-            self._json_key = (
-                "json_header"  # key used to access h5py.Dataset.attrs[]
-            )
+            self._json_key = "json_header"  # key used to access h5py.Dataset.attrs[]
             self._header = None
             self._slicer = None
 
@@ -280,9 +278,7 @@ class mkh5:
                 )
             assert self._json_key in dblock.attrs.keys()
             json_str = dblock.attrs[self._json_key]
-            self._header = json.loads(
-                json_str
-            )  # decode json into the header dict
+            self._header = json.loads(json_str)  # decode json into the header dict
             self._check_streams(
                 dblock
             )  # are header streams 1-1 with datablock columns?
@@ -309,7 +305,9 @@ class mkh5:
             # good to go ...jsonify stuff the string into the hdf5 attribute
             json_header = json.dumps(self._header)
             if len(json_header) > 2 ** 16:
-                msg = "jsonified header info exceeds 64KB ... too big for hdf5 attribute"
+                msg = (
+                    "jsonified header info exceeds 64KB ... too big for hdf5 attribute"
+                )
                 raise ValueError(msg)
             dblock.attrs[self._json_key] = json_header
 
@@ -505,10 +503,7 @@ class mkh5:
 
             slices = list()
             hdr_paths = [
-                p
-                for p in dpath.path.paths(
-                    self._header, dirs=False, leaves=False
-                )
+                p for p in dpath.path.paths(self._header, dirs=False, leaves=False)
             ]
             for k, v in self._slicer.items():
                 this_slice = None
@@ -599,9 +594,7 @@ class mkh5:
             for sv in slash_vals:
                 # gate keeper
                 if not (
-                    isinstance(sv, tuple)
-                    and len(sv) == 2
-                    and isinstance(sv[0], str)
+                    isinstance(sv, tuple) and len(sv) == 2 and isinstance(sv[0], str)
                 ):
                     msg = (
                         "to set header with slashpath use a ('slash/path', value) 2-ple"
@@ -618,9 +611,7 @@ class mkh5:
                     # print('setting existing key ', sv[0], 'old: ', old_val, 'new: ', sv[1])
                     nset = dpath.util.set(self._header, sv[0], sv[1])
                     if nset is None:
-                        raise RuntimeError(
-                            "failed to set " + sv[0] + " = " + sv[1]
-                        )
+                        raise RuntimeError("failed to set " + sv[0] + " = " + sv[1])
             self._check_header()
 
         def _load_yaml_docs(self, yml_f):
@@ -644,9 +635,7 @@ class mkh5:
 
                 if "name" not in hdoc.keys():
                     msg = "\n{0}\n".format(self._load_yaml_docs.__doc__)
-                    msg += "{0} document {1} does not have a name".format(
-                        yml_f, i
-                    )
+                    msg += "{0} document {1} does not have a name".format(yml_f, i)
                     raise mkh5.YamlHeaderFormatError(msg)
 
                 if len(hdoc["name"]) == 0:
@@ -656,9 +645,7 @@ class mkh5:
                     raise mkh5.YamlHeaderFormatError(msg)
 
                 if hdoc["name"] in doc_names:
-                    msg = "{0} duplicate document name {1}".format(
-                        yml_f, hdoc["name"]
-                    )
+                    msg = "{0} duplicate document name {1}".format(yml_f, hdoc["name"])
                     raise mkh5.YamlHeaderFormatError(msg)
 
                 else:
@@ -820,9 +807,7 @@ class mkh5:
                 try:
                     assert col in self.header["streams"].keys()
                     assert jdx == self.header["streams"][col]["jdx"]
-                    assert (
-                        dblock.dtype[col] == self.header["streams"][col]["dt"]
-                    )
+                    assert dblock.dtype[col] == self.header["streams"][col]["dt"]
                 except:
                     msg = "uh oh ... header['streams'] is missing a data block column"
                     raise TypeError(msg)
@@ -967,9 +952,7 @@ class mkh5:
            the skipper and scans all dblocks in the data group
 
         """
-        dblock_paths = h5tools.get_dblock_paths(
-            self.h5_fname, h5_data_group_path
-        )
+        dblock_paths = h5tools.get_dblock_paths(self.h5_fname, h5_data_group_path)
 
         for dbp in dblock_paths:
             hdr, dblock = self.get_dblock(dbp)
@@ -1130,9 +1113,7 @@ class mkh5:
 
                                     # ok, this is the tick of the pattern match
                                     # and it must be unique
-                                    tick_idx = np.where(
-                                        dblock_ticks == match_tick
-                                    )[0]
+                                    tick_idx = np.where(dblock_ticks == match_tick)[0]
                                     assert len(tick_idx) == 1
 
                                     sample_data = [
@@ -1140,23 +1121,11 @@ class mkh5:
                                         ("data_group", dgp),
                                         ("dblock_path", dbp),
                                         ("dblock_tick_idx", tick_idx[0]),
-                                        (
-                                            "dblock_ticks",
-                                            dblock_ticks[tick_idx][0],
-                                        ),
+                                        ("dblock_ticks", dblock_ticks[tick_idx][0],),
                                         ("crw_ticks", crw_ticks[tick_idx][0]),
-                                        (
-                                            "raw_evcodes",
-                                            raw_evcodes[tick_idx][0],
-                                        ),
-                                        (
-                                            "log_evcodes",
-                                            log_evcodes[tick_idx][0],
-                                        ),
-                                        (
-                                            "log_ccodes",
-                                            log_ccodes[tick_idx][0],
-                                        ),
+                                        ("raw_evcodes", raw_evcodes[tick_idx][0],),
+                                        ("log_evcodes", log_evcodes[tick_idx][0],),
+                                        ("log_ccodes", log_ccodes[tick_idx][0],),
                                         ("log_flags", log_flags[tick_idx][0]),
                                         (
                                             "epoch_match_tick_delta",
@@ -1175,13 +1144,9 @@ class mkh5:
 
                                     # extend sample_data w/ the match info and code map row
                                     sample_data = (
-                                        sample_data
-                                        + mm
-                                        + list(zip(cm.index, cm))
+                                        sample_data + mm + list(zip(cm.index, cm))
                                     )
-                                    match_list.append(
-                                        (sample_data)
-                                    )  # list of tuples
+                                    match_list.append((sample_data))  # list of tuples
                                     # pprint.pprint(match_list)
 
         # handle no matches ...
@@ -1199,9 +1164,7 @@ class mkh5:
             self._h5_check_events(self.h5_fname, event_table)
             return event_table
         else:
-            raise RuntimeError(
-                "uh oh ... no events found for {0}".format(code_map_f)
-            )
+            raise RuntimeError("uh oh ... no events found for {0}".format(code_map_f))
 
     def _h5_check_events(self, h5_f, e_table):
         """check the match event in event or epoch table agrees with the
@@ -1265,9 +1228,7 @@ class mkh5:
         for c in min_cols:
             if not c in e_table.columns:
                 msg = 'mkh5 event table column "{0}"'.format(c)
-                msg += "  is missing, all these are mandatory:" + " ".join(
-                    min_cols
-                )
+                msg += "  is missing, all these are mandatory:" + " ".join(min_cols)
                 raise RuntimeError(msg)
 
         with h5py.File(h5_f, "r") as h5:
@@ -1284,9 +1245,7 @@ class mkh5:
                     assert e["match_code"] == data["log_evcodes"]
                 else:
                     assert e["anchor_code"] == data["log_evcodes"]
-                check_cols = [
-                    col for col in e.index if col in data.dtype.names
-                ]
+                check_cols = [col for col in e.index if col in data.dtype.names]
                 for col in check_cols:
                     assert data[col] == e[col]
 
@@ -1534,10 +1493,12 @@ class mkh5:
 
                     # add timestamps
                     e["match_time"] = int(0)
-                    e["anchor_time_delta"] = int(mkh5._samp2ms(e["match_tick"] - e["anchor_tick"], srate))
-                    e["anchor_time"] = e["anchor_time_delta"]  # for consistency w/ epochs data columns
-
-
+                    e["anchor_time_delta"] = int(
+                        mkh5._samp2ms(e["match_tick"] - e["anchor_tick"], srate)
+                    )
+                    e["anchor_time"] = e[
+                        "anchor_time_delta"
+                    ]  # for consistency w/ epochs data columns
 
         # drop out of bounds epochs and check epochs are consistent
         epochs = epochs[is_in_bounds]
@@ -1707,9 +1668,7 @@ class mkh5:
                     try:
                         np.array([v]).astype(np.string_)
                     except Exception as fail:
-                        msg = ("\nvalue: {0}\n" "column: {1}").format(
-                            v, series.name
-                        )
+                        msg = ("\nvalue: {0}\n" "column: {1}").format(v, series.name)
                         print(msg)
                         raise fail
 
@@ -1872,9 +1831,7 @@ class mkh5:
                     if epoch_streams.dtype[name] == "float16":
                         f4_streams_dtype.append((name, "float32"))
                     else:
-                        f4_streams_dtype.append(
-                            (name, epoch_streams.dtype[name])
-                        )
+                        f4_streams_dtype.append((name, epoch_streams.dtype[name]))
                 f4_streams_dtype = np.dtype(f4_streams_dtype)
                 epoch_streams = np.array(epoch_streams, dtype=f4_streams_dtype)
 
@@ -1908,7 +1865,9 @@ class mkh5:
                     elif n in e.dtype.names:
                         epoch_dt_types.append(event_info.dtype[n])
                     else:
-                        raise ValueError(f"column {n} not found in dblock or epoch table")
+                        raise ValueError(
+                            f"column {n} not found in dblock or epoch table"
+                        )
 
                 # # define dtype and initialize
                 epoch_dt = np.dtype(list(zip(epoch_dt_names, epoch_dt_types)))
@@ -1918,6 +1877,7 @@ class mkh5:
                 # varying columns, then propagate the new info from
                 # the epoch event.
                 srate = e["dblock_srate"]
+                assert e["match_time"] == 0
                 for n in epoch_dt_names:
                     # these are already time-varying
                     if n in epoch_streams.dtype.names:
@@ -1936,16 +1896,11 @@ class mkh5:
                         ]
                     elif n == "anchor_time_delta":
                         epoch[n] = [
-                            int(
-                                mkh5._samp2ms(
-                                    x - e["anchor_tick_delta"], srate
-                                )
-                            )
+                            int(mkh5._samp2ms(x - e["anchor_tick_delta"], srate))
                             for x in range(start_samp, stop_samp)
-
                         ]
 
-                    # broadcast event info 
+                    # broadcast event info
                     elif n in event_info.dtype.names:
                         epoch[n] = event_info[n]
                     else:
@@ -1955,7 +1910,6 @@ class mkh5:
                             )
                         )
                 # ------------------------------------------------------------
-
                 yield (epoch)
 
     def get_epochs(self, epochs_name, format="numpy", columns=None):
@@ -2017,9 +1971,7 @@ class mkh5:
 
         return epochs, attrs
 
-    def export_epochs(
-        self, epochs_name, epochs_f, file_format="h5", columns=None
-    ):
+    def export_epochs(self, epochs_name, epochs_f, file_format="h5", columns=None):
         """write previously set epochs to data in the specified file format
 
         Recommended epoch export formats for cross-platform data interchange
@@ -2091,20 +2043,14 @@ class mkh5:
 
             # dump with pandas
             if file_format == "pdh5":
-                epochs.to_hdf(
-                    epochs_f, key=epochs_name, format="fixed", mode="w"
-                )
+                epochs.to_hdf(epochs_f, key=epochs_name, format="fixed", mode="w")
             elif file_format == "feather":
                 epochs.to_feather(epochs_f)
             elif file_format == "txt":
                 # don't write row count index
                 epochs.to_csv(epochs_f, sep="\t", index=False)
             else:
-                msg(
-                    "unknown file epoch export file format: {0}".format(
-                        file_format
-                    )
-                )
+                msg("unknown file epoch export file format: {0}".format(file_format))
                 raise TypeError(msg)
 
         return None
@@ -2116,9 +2062,7 @@ class mkh5:
 
     # data settin ops
     # def _h5_update_eeg_data(self, h5f, group_name, attr, data, yhdr, *args, **kwargs):
-    def _h5_update_eeg_data(
-        self, h5f, group_name, header, data, *args, **kwargs
-    ):
+    def _h5_update_eeg_data(self, h5f, group_name, header, data, *args, **kwargs):
 
         """database-like CRUD to push .crw/.log data into the mkh5 format
 
@@ -2289,14 +2233,7 @@ class mkh5:
 
     # create a new data set in specified group
     def create_mkdata(
-        self,
-        h5_path,
-        eeg_f,
-        log_f,
-        yhdr_f,
-        *args,
-        with_log_events="aligned",
-        **kwargs,
+        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs,
     ):
         """Convert Kutas lab ERPSS `.crw` and `.log` to the 
         `mkh5` hdf5 format.
@@ -2391,9 +2328,7 @@ class mkh5:
             log_f = str(log_f)
         yhdr_f = str(yhdr_f)
 
-        (attr, data) = self._read_raw_log(
-            eeg_f, log_f, with_log_events=with_log_events
-        )
+        (attr, data) = self._read_raw_log(eeg_f, log_f, with_log_events=with_log_events)
 
         hio = mkh5.HeaderIO()
         hio.new(attr, yhdr_f)  # merge the .crw and yhdr into the new header
@@ -2408,9 +2343,7 @@ class mkh5:
                 raise fail
 
         # write out the data into hdf5 datablocks+attributes
-        self._h5_update_eeg_data(
-            self.h5_fname, h5_path, hio, data, *args, **kwargs
-        )
+        self._h5_update_eeg_data(self.h5_fname, h5_path, hio, data, *args, **kwargs)
 
         # FIX ME
         # self._check_data()
@@ -2421,14 +2354,7 @@ class mkh5:
     # add eeg data to a group under the same header
     # ------------------------------------------------------------
     def append_mkdata(
-        self,
-        h5_path,
-        eeg_f,
-        log_f,
-        yhdr_f,
-        *args,
-        with_log_events="aligned",
-        **kwargs,
+        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs,
     ):
         """Append .crw, .log, .yhdr to an existing h5_path
 
@@ -2667,9 +2593,7 @@ class mkh5:
         # iterate by the dblocks found and update
         with h5py.File(self.h5_fname, "r+") as h5:
             for h5_dblock_path, hdr_slash_vals in by_dblock.items():
-                self._h5_update_header(
-                    h5[h5_dblock_path], hdr_slash_vals, **kwargs
-                )
+                self._h5_update_header(h5[h5_dblock_path], hdr_slash_vals, **kwargs)
 
     def gethead(self, pattern):
         """ get header values as a list of (slashpath, value) 2-ples suitable for passing to edhead"""
@@ -2717,23 +2641,16 @@ class mkh5:
         with h5py.File(self.h5_fname, "r") as h5:
             for db_slashpath in db_slashpaths:
                 for dbs in db_slashpath:
-                    hio = (
-                        self.HeaderIO()
-                    )  # abundance of caution we are starting fresh
+                    hio = self.HeaderIO()  # abundance of caution we are starting fresh
                     hio.get(h5[dbs])
-                    hdr_paths = dpath.path.paths(
-                        hio.header, dirs=False, leaves=False
-                    )
+                    hdr_paths = dpath.path.paths(hio.header, dirs=False, leaves=False)
                     for hdr_path in hdr_paths:
                         slash_path = "/".join([str(p[0]) for p in hdr_path])
                         full_path = dbs + "/" + slash_path
                         m = re.search(pattern, full_path)
                         if m:
                             matches.append(
-                                (
-                                    full_path,
-                                    dpath.path.get(hio.header, hdr_path),
-                                )
+                                (full_path, dpath.path.get(hio.header, hdr_path),)
                             )
                     del hio
         if len(matches) == 0:
@@ -2752,10 +2669,7 @@ class mkh5:
         # headinfo = self.headinfo(**kwargs)
         headinfo = self._get_head(".+")
         h5_paths = np.unique(
-            [
-                re.match(r".*dblock_\d+", x).group()
-                for x in [y[0] for y in headinfo]
-            ]
+            [re.match(r".*dblock_\d+", x).group() for x in [y[0] for y in headinfo]]
         )
 
         info = ""
@@ -2774,17 +2688,13 @@ class mkh5:
                     info += "Data: {0}\n".format(h5[n][...].shape)
                     for col in h5[n].dtype.names:
                         info += "  {0} {1}".format(col, h5[n].dtype[col].name)
-                        info += "  {0} .. {1}".format(
-                            h5[n][col][0:5], h5[n][col][-5:]
-                        )
+                        info += "  {0} .. {1}".format(h5[n][col][0:5], h5[n][col][-5:])
                         mqm = np.percentile(h5[n][col], [0, 25, 50, 75, 100])
                         info += " min-q-max: {0}\n".format(mqm)
                 elif isinstance(h5[n], h5py.Group):
                     pass
                 else:
-                    raise ValueError(
-                        "unknown h5py type: {0}".format(type(h5[n]))
-                    )
+                    raise ValueError("unknown h5py type: {0}".format(type(h5[n])))
                 info += "\n"
         return info
 
@@ -2945,11 +2855,7 @@ class mkh5:
 
                 # fail if chan names don't match
                 if not cal_info.keys() == set(
-                    [
-                        k
-                        for k, col in strms.items()
-                        if "dig_chan_" in col["source"]
-                    ]
+                    [k for k, col in strms.items() if "dig_chan_" in col["source"]]
                 ):
                     calchans = [c for c in cal_info.keys()]
                     print(
@@ -2996,9 +2902,7 @@ class mkh5:
                     # self._h5_set_dblock_attrs(dblock, streams=[(chan_jdx, 'calibrated', True),
                     #                                           (chan_jdx, 'cals', info)])
                     # chan_jdx = strms[chan]['jdx'] # dict version
-                    cal_slash_vals += [
-                        ("streams/" + chan + "/calibrated", True)
-                    ]
+                    cal_slash_vals += [("streams/" + chan + "/calibrated", True)]
                     cal_slash_vals += [("streams/" + chan + "/cals", info)]
 
                 self._h5_update_header(dblock, cal_slash_vals)
@@ -3106,10 +3010,11 @@ class mkh5:
         # check for data errors in crw/raw
         max_chunk = max(self.dig_chunks["dig_chunks"])
         if not all(
-            self.dig_chunks["dig_chunks"]
-            == np.repeat(range(max_chunk + 1), 256)
+            self.dig_chunks["dig_chunks"] == np.repeat(range(max_chunk + 1), 256)
         ):
-            errmsg = "{0} eeg dig records are not sequential, file may be corrupted: {1}"
+            errmsg = (
+                "{0} eeg dig records are not sequential, file may be corrupted: {1}"
+            )
             errmsg = errmsg.format(self.dig_header["eegfile"], self.dig_chunks)
             warnings.warn(errmsg, DigRecordsNotSequential)
 
@@ -3135,10 +3040,7 @@ class mkh5:
             if not k in self.dig_header.keys():
                 raise (ValueError("dig_header key {0} not found".format(k)))
 
-            if (
-                self._get_dig_header(k) is None
-                or self._get_dig_header(k) == ""
-            ):
+            if self._get_dig_header(k) is None or self._get_dig_header(k) == "":
                 raise (ValueError("dig_header {0} value not found".format(k)))
 
         # ------------------------------------------------------------
@@ -3242,9 +3144,7 @@ class mkh5:
 
         return epochs
 
-    def _get_dblock_slicer_from_eventstream(
-        self, event_stream, presamp, duration
-    ):
+    def _get_dblock_slicer_from_eventstream(self, event_stream, presamp, duration):
         """returns np.array of _dblock_slicer_dtype for non-zero events in event_stream
     
         Parameters
@@ -3372,9 +3272,7 @@ class mkh5:
             raise ValueError(msg)
 
         if log_f is None and with_log_events in ["aligned", "as_is"]:
-            msg = (
-                f"with_log_events={with_log_events} requires a log file: log_f"
-            )
+            msg = f"with_log_events={with_log_events} requires a log file: log_f"
             raise ValueError(msg)
 
         if log_f is not None and with_log_events in ["from_eeg", "none"]:
@@ -3467,16 +3365,12 @@ class mkh5:
 
         elif with_log_events == "none":
             assert log_data is None, "bug, please report"
-            warnings.warn(
-                f"setting all log_evcodes, log_ccodes, log_flags to 0"
-            )
+            warnings.warn(f"setting all log_evcodes, log_ccodes, log_flags to 0")
             log_data = np.zeros(
                 (len(raw_events), 4), dtype="i4"
             )  # evcode, tick, ccode, log_flag
         else:
-            raise ValueError(
-                f"bad parameter value: with_log_events={with_log_events}"
-            )
+            raise ValueError(f"bad parameter value: with_log_events={with_log_events}")
 
         # ------------------------------------------------------------
         # construct output structured array
@@ -3527,9 +3421,7 @@ class mkh5:
 
         # load eeg stream data
         for c, ch_name in enumerate(channel_names):
-            data[ch_name.decode("utf8")] = np.array(
-                eeg[:, c], dtype=mkh5._mk_EEG
-            )
+            data[ch_name.decode("utf8")] = np.array(eeg[:, c], dtype=mkh5._mk_EEG)
 
         # capture the new numpy metadata for variable columns
         # as a sequence to preserve column order
@@ -3706,9 +3598,7 @@ class mkh5:
                 # bad cals have been manually logpoked
                 # if any((g['log_ccodes'] == cal_ccode) & (g['log_evcodes'] < 0)):
                 neg_cal_events = g["log_evcodes"][
-                    np.where(
-                        (g["log_ccodes"] == cal_ccode) & (g["log_evcodes"] < 0)
-                    )
+                    np.where((g["log_ccodes"] == cal_ccode) & (g["log_evcodes"] < 0))
                 ]
                 if any(neg_cal_events):
                     msg = (
@@ -3726,9 +3616,7 @@ class mkh5:
                 if len(cal_event_ptrs) > 0:
                     # we have a cal block
                     print("Found cals in {0}".format(g.name))
-                    cal_dblock_ids.append(
-                        "{0}{1}".format(h5f, g.name)
-                    )  # log it
+                    cal_dblock_ids.append("{0}{1}".format(h5f, g.name))  # log it
 
                     # FIX ME: this is rude, we already knew this at dblock_0
                     # but this way it reports where the cals were found
@@ -3751,17 +3639,12 @@ class mkh5:
                         raise RuntimeError(msg)
 
                     # check sample rate and channels against the previous block (if any)
-                    if (
-                        not (srate is None)
-                        and hio.header["samplerate"] != srate
-                    ):
+                    if not (srate is None) and hio.header["samplerate"] != srate:
                         raise ValueError(
                             "srate in block {0}: {1}".format(
                                 gn, hio.header["samplerate"]
                             )
-                            + "does not match previous data block: {0}".format(
-                                srate
-                            )
+                            + "does not match previous data block: {0}".format(srate)
                         )
 
                     if not (nchans is None) and hio.header["nchans"] != nchans:
@@ -3769,9 +3652,7 @@ class mkh5:
                             "number of channels in block {0}: {1}".format(
                                 gn, hio.header["nchans"]
                             )
-                            + "does not match previous data block: {0}".format(
-                                nchans
-                            )
+                            + "does not match previous data block: {0}".format(nchans)
                         )
 
                     # set params this datablock ...
@@ -3793,10 +3674,7 @@ class mkh5:
                     # returns an nd.array, access by data column name
                     # return subarray: duration samples x epochs
                     # (cal_slicer, fails) = self._get_dblock_slicer_from_eventstream(g['raw_evcodes'], presamp, duration)
-                    (
-                        cal_slicer,
-                        fails,
-                    ) = self._get_dblock_slicer_from_eventstream(
+                    (cal_slicer, fails,) = self._get_dblock_slicer_from_eventstream(
                         g["log_evcodes"], presamp, duration
                     )
                     if len(fails) > 0:
@@ -3806,9 +3684,7 @@ class mkh5:
                             )
                         )
 
-                    cal_stacks.append(
-                        mkh5._h5_get_slices_from_datablock(g, cal_slicer)
-                    )
+                    cal_stacks.append(mkh5._h5_get_slices_from_datablock(g, cal_slicer))
 
             # typically cals in one dblock tho no harm in more if they are good
             if len(cal_stacks) < 1:
@@ -3838,9 +3714,7 @@ class mkh5:
             # colmdat = json.loads(g.attrs['streams']) # deprecated
             # chan_names = [c['name'] for c in strms if 'dig_chan_' in c['source']] # list version
             chan_names = [
-                c["name"]
-                for k, c in strms.items()
-                if "dig_chan_" in c["source"]
+                c["name"] for k, c in strms.items() if "dig_chan_" in c["source"]
             ]  # dict version
             cal_factors = dict()
 
@@ -3974,23 +3848,15 @@ class mkh5:
             a = ax[int(c / n_col), c % n_col]
             # a.set_axis_bgcolor('k')
             a.set_facecolor("k")
-            a.set_ylabel(
-                ch, color="lightgray", rotation=0, horizontalalignment="left"
-            )
+            a.set_ylabel(ch, color="lightgray", rotation=0, horizontalalignment="left")
 
             # box the points averaged
-            a.axvspan(
-                lo_span[0], lo_span[-1], color="c", alpha=0.5
-            )  # ymax=0.5,
-            a.axvspan(
-                hi_span[0], hi_span[-1], color="c", alpha=0.5
-            )  # ymax=0.5,
+            a.axvspan(lo_span[0], lo_span[-1], color="c", alpha=0.5)  # ymax=0.5,
+            a.axvspan(hi_span[0], hi_span[-1], color="c", alpha=0.5)  # ymax=0.5,
             # mark the cursors
             a.axvline(lo_cursor, color="r")
             a.axvline(hi_cursor, color="r")
-            lpc = a.plot(
-                cal_samps, cal_stack[ch], ".-", color=calcolors[c % 2]
-            )
+            lpc = a.plot(cal_samps, cal_stack[ch], ".-", color=calcolors[c % 2])
 
         f.set_facecolor("black")
         st = (
@@ -4036,9 +3902,7 @@ class LocDat:
           * phi = 0 points to the vertex, 90 points to the temporal line
     """
 
-    def __init__(
-        self, type, label, coord, pos, distance_units=None, angle_units=None
-    ):
+    def __init__(self, type, label, coord, pos, distance_units=None, angle_units=None):
         """initialize LocDat
 
         Parameters
