@@ -1,14 +1,13 @@
 {% set data = load_setup_py_data() %}
 
-# {% set version = "0.2.5.dev0" %}
+# legacy pins for reference mkpy <=0.2.3
 # {% set np_pin = "1.16.4" %}
 # {% set py_pin = "3.6" %}
-# {{ data.get('version') }}
 
 package:
   name: mkpy
-  # version: 0.2.4.dev0  
   version: {{ data.get('version') }}
+
 source:
   # path: ../
   git_url: ../  # to enable GIT_X_Y env vars

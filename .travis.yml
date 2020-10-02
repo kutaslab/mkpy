@@ -46,10 +46,10 @@ script:
   - pytest --cov=mkpy
 
 after_success:
-    - pip install codecov && codecov
+    - conda install codecov && codecov
 
 before_deploy:
-    - pip install sphinx sphinx_rtd_theme jupyter nbsphinx nbconvert!=5.4
+    - conda install -c defaults -c conda-forge sphinx sphinx_rtd_theme jupyter nbsphinx nbconvert!=5.4
     - conda install -c conda-forge pandoc
     - conda install anaconda-client
     - conda list
