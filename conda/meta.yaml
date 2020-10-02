@@ -33,7 +33,7 @@ requirements:
     - matplotlib
     - pandas >=1.0
     - pytables
-    - pyarrow >=1.0
+    - pyarrow >=1.0,!=1.0.1  # release fights with pandas
     - xlrd
     - PyYAML
     - yamllint
