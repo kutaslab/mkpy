@@ -168,13 +168,18 @@ def test_inspectors():
     mydat.create_mkdata(S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"])
     mydat.calibrate_mkdata(S01["gid"], **CAL_ARGS)
 
-    assert len(re.findall(r"(S01)", mydat.info())) == 972
+    # check mkh5 versioning in header
+    for dblock_path in mydat.dblock_paths:
+        hdr, _ = mydat.get_dblock(dblock_path)
+        assert hdr["mkh5_version"] == mkh5.__version__
+
+    assert len(re.findall(r"(S01)", mydat.info())) == 1016
 
     # capture headinfo
     f = io.StringIO()
     with contextlib.redirect_stdout(f):
         mydat.headinfo()
-    assert len(re.findall(r"S01", f.getvalue())) == 971
+    assert len(re.findall(r"S01", f.getvalue())) == 1015
     f.close()
 
     # ------------------------------------------------------------
@@ -187,13 +192,13 @@ def test_inspectors():
             mydat.create_mkdata(
                 expt + "/" + fs["gid"], fs["eeg_f"], fs["log_f"], fs["yhdr_f"]
             )
-    assert len(re.findall(r"(S0[15])", mydat.info())) == 1968
+    assert len(re.findall(r"(S0[15])", mydat.info())) == 2144
 
     # test headinfo and info for multiexpt
     f = io.StringIO()
     with contextlib.redirect_stdout(f):
         mydat.headinfo()
-    assert len(re.findall(r"S0[15]", f.getvalue())) == 1964
+    assert len(re.findall(r"S0[15]", f.getvalue())) == 2140
     f.close()
 
     # ------------------------------------------------------------
@@ -976,15 +981,15 @@ def test_with_log_events(log_f, wle):
 
         # read log codes from data file and confirm they match the
         # logcat2 text dumps
-        if wle in ["as_is"]:
+        if wle == ["as_is"]:
             assert all(
                 dblock_log_evcodes == log_data["evtcode"][: len(dblock_log_evcodes)]
             )
 
-        if wle is "from_eeg":
+        if wle == "from_eeg":
             assert all(dblock_raw_evcodes == dblock_log_evcodes)
 
-        if wle is "none":
+        if wle == "none":
             for col in ["log_evcodes", "log_ccodes", "log_flags"]:
                 assert all(
                     np.equal(0, data[col])
