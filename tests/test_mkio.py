@@ -8,6 +8,9 @@ import pytest
 
 from .config import TEST_DIR, mkpy
 from mkpy import mkio
+from mkpy import get_ver
+
+__version__ = get_ver()
 
 
 def fetch_test_dir():
@@ -432,17 +435,69 @@ def test_read_header_compressed_and_raw():
         dtype="|S4",
     )
 
+    # expected_info = {
+    #     "name": "dig",
+    #     "magic": None,  # to be defined right before test time
+    #     "subdesc": b"Subject p3 2008-08-20",
+    #     "expdesc": b"brown-1",
+    #     "odelay": 8,
+    #     "samplerate": expected_hz,
+    #     "recordduration": 256 * seconds_per_tick,  # see calculation of hz
+    #     "recordsize": 256,
+    #     "nrawrecs": 0,  # in this case
+    #     "nchans": expected_nchans,
+    # }
+
     expected_info = {
         "name": "dig",
-        "magic": None,  # to be defined right before test time
+        "magic": None,  # hardcoded at test
         "subdesc": b"Subject p3 2008-08-20",
         "expdesc": b"brown-1",
         "odelay": 8,
-        "samplerate": expected_hz,
-        "recordduration": 256 * seconds_per_tick,  # see calculation of hz
+        "samplerate": 250.0,
+        "recordduration": 1.024,
         "recordsize": 256,
-        "nrawrecs": 0,  # in this case
-        "nchans": expected_nchans,
+        "nrawrecs": 0,
+        "nchans": 32,
+        "mkh5_version": __version__,  # new in 0.2.4
+        "raw_dig_header": {
+            "magic": None,  # harcoded at test
+            "epoch_len": 0,
+            "nchans": 32,
+            "sums": 0,
+            "tpfuncs": 0,
+            "pp10uv": 0,
+            "verpos": 0,
+            "odelay": 8,
+            "totevnt": 0,
+            "10usec_per_tick": 400,
+            "time": 0,
+            "cond_code": 0,
+            "presam": 0,
+            "trfuncs": 0,
+            "totrr": 0,
+            "totrej": 0,
+            "sbcode": 0,
+            "cprecis": 1,
+            "dummy1": 0,
+            "decfact": 0,
+            "dh_flag": 0,
+            "dh_item": 0,
+            "rfcnts": [0, 0, 0, 0, 0, 0, 0, 0],
+            "rftypes": "",
+            "chndes": "lle\x00lhz\x00MiPfLLPfRLPfLMPfRMPfLDFrRDFrLLFrRLFrLMFrRMFrLMCeRMCeMiCeMiPaLDCeRDCeLDPaRDPaLMOcRMOcLLTeRLTeLLOcRLOcMiOcA2\x00\x00HEOGrle\x00rhz",
+            "subdes": "Subject p3 2008-08-20",
+            "sbcdes": "",
+            "condes": "",
+            "expdes": "brown-1",
+            "pftypes": "",
+            "chndes2": "",
+            "flags": 0,
+            "nrawrecs": 0,
+            "idxofflow": 0,
+            "idxoffhi": 0,
+            "chndes3": "",
+        },
     }
 
     # -----------------------------------------------------------------------#
@@ -459,7 +514,9 @@ def test_read_header_compressed_and_raw():
         actual_info,
     ) = mkio._read_header(raw_file)
 
-    expected_info["magic"] = 0x17A5
+    actual_magic = actual_info["raw_dig_header"]["magic"]
+    assert actual_magic == 0x17A5
+    expected_info["magic"] = expected_info["raw_dig_header"]["magic"] = actual_magic
     assert expected_info == actual_info
     assert expected_nchans == actual_nchans
     assert expected_RAW_reader == actual_RAW_reader
@@ -479,7 +536,20 @@ def test_read_header_compressed_and_raw():
         actual_info,
     ) = mkio._read_header(crw_file)
 
-    expected_info["magic"] = 0x97A5
+    actual_magic = actual_info["raw_dig_header"]["magic"]
+    assert actual_magic == 0x97A5
+    expected_info["magic"] = expected_info["raw_dig_header"]["magic"] = actual_magic
+    for key, val in actual_info.items():
+        print("actual", key, val)
+        try:
+            assert val == expected_info[key]
+        except:
+            print("expected", key, expected_info[key])
+            import pdb
+
+            pdb.set_trace()
+            pass
+
     assert expected_info == actual_info
     assert expected_nchans == actual_nchans
     assert expected_COMPRESSED_reader == actual_COMPRESSED_reader

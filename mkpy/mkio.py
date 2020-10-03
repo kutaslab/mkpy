@@ -18,6 +18,7 @@ import gzip
 import math
 import os
 from mkpy._mkh5 import _decompress_crw_chunk
+from mkpy import get_ver
 
 # ----------
 # 2. Helpers
@@ -181,7 +182,16 @@ def _read_header(stream):
     # extract channel name codes from header
     channel_names = _get_channel_names(header)
 
-    # build info dict
+    # capture complete and jsonifiable. new in 0.2.4
+    raw_dig_header = dict()
+    for key in header.dtype.names:
+        val = header[key]
+        if np.isscalar(val):
+            val = val.item().decode("utf-8") if isinstance(val, bytes) else val.item()
+        else:
+            val = val.tolist()
+        raw_dig_header[key] = val
+
     info = dict(
         {
             "name": "dig",
@@ -194,6 +204,8 @@ def _read_header(stream):
             "recordsize": 256,
             "nrawrecs": header["nrawrecs"],
             "nchans": header["nchans"],
+            "mkh5_version": get_ver(),  # new in 0.2.4
+            "raw_dig_header": raw_dig_header,
         }
     )
 

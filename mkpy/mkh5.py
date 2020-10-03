@@ -228,6 +228,8 @@ class mkh5:
             # ('uuid_file', str),     # not implemented
             "streams": dict,  #  items are 1-1 (unordered) for dblock columns
             "h5_dataset": str,  # set upon construction to the dblock h5py.Dataset.name
+            "mkh5_version": str,  # mkh5.__version__  added mkh5 0.2.4
+            "raw_dig_header": dict,  # complete dig header dump for reference added mkh5 0.2.4
         }
 
         # minimal stream item upon loading into .crw/.log info into a mkh5.dblock_N
@@ -1402,12 +1404,12 @@ class mkh5:
         # # move Index into columns for santizing
         # event_table = event_table.reset_index("Index")
 
-        # remap pandas 'O' dtype columns to hdf5 friendly np.arrays if possible
+        # remap pandas 'O' dtype columns to hdf5 friendly np.arrays if
+        # possible.  Run column-wise so exception messages are
+        # informative.  Run on a copy so the nan handler can mod the
+        # series in place, else pd warning "setting value on copy"
         tidy_table = pd.DataFrame()
         for c in event_table.columns:
-            # do by column so failures are diagnostic. Pass in a copy
-            # so nan handling can mod the series in place without
-            # pd warning "setting value on copy"
             tidy_table[c] = self._pd_series_to_hdf5(event_table[c].copy())
         event_table = tidy_table
 
@@ -1428,9 +1430,9 @@ class mkh5:
         epoch_dt_names += ["match_time", "anchor_time", "anchor_time_delta"]
         epoch_dt_types += ["int64"] * 3
 
-        # construct the new dtype and initialize the epoch np.array
+        # construct the new dtype and initialize epochs table array
         epoch_dt = np.dtype(list(zip(epoch_dt_names, epoch_dt_types)))
-        epochs = np.ndarray(shape=(len(event_table),), dtype=epoch_dt)
+        epochs = np.zeros(shape=(len(event_table),), dtype=epoch_dt)
 
         # set the epoch_id counting index and copy the tidied event table
         epochs["epoch_id"] = [idx for idx in range(len(event_table))]
@@ -1441,7 +1443,7 @@ class mkh5:
         #    interval from the function arguments
         hio = self.HeaderIO()
 
-        # init with nan and set to ms if epoch is in bounds
+        # whitelist in bound epochs
         is_in_bounds = np.zeros(len(epochs)).astype(bool)
         with h5py.File(self.h5_fname, "r+") as h5:
             # for i,e in event_table.iterrows():
@@ -1458,11 +1460,25 @@ class mkh5:
                         "{3}"
                     ).format(dbp, hio.header["samplerate"], i, srate)
                     raise ValueError(msg)
+
                 epoch_match_tick_delta = mkh5._ms2samp(tmin_ms, srate)
                 start_samp = e["match_tick"] + epoch_match_tick_delta
-                duration_samp = mkh5._ms2samp(
-                    tmax_ms - tmin_ms, srate
-                )  # must be non-negative
+                duration_samp = mkh5._ms2samp(tmax_ms - tmin_ms, srate)
+
+                # set match and anchor tick, time, deltas
+                e["epoch_match_tick_delta"] = epoch_match_tick_delta
+                e["epoch_ticks"] = duration_samp
+
+                # update the timestamps
+                e["match_time"] = int(0)
+                e["anchor_time_delta"] = int(
+                    mkh5._samp2ms(e["match_tick"] - e["anchor_tick"], srate)
+                )
+                e["anchor_time"] = e[
+                    "anchor_time_delta"
+                ]  # for consistency w/ epochs data columns
+
+                # bounds check with messages
                 if duration_samp <= 0:
                     msg = (
                         "epoch interval {0} {1} is less than one sample at "
@@ -1484,21 +1500,8 @@ class mkh5:
                     )
                     continue
                 else:
-                    # if in bounds, overwrite np.nan with the epoch start and duration
+                    # if in bounds update epoch match offset
                     is_in_bounds[i] = True
-
-                    # set match and anchor tick, time, deltas
-                    e["epoch_match_tick_delta"] = epoch_match_tick_delta
-                    e["epoch_ticks"] = duration_samp
-
-                    # add timestamps
-                    e["match_time"] = int(0)
-                    e["anchor_time_delta"] = int(
-                        mkh5._samp2ms(e["match_tick"] - e["anchor_tick"], srate)
-                    )
-                    e["anchor_time"] = e[
-                        "anchor_time_delta"
-                    ]  # for consistency w/ epochs data columns
 
         # drop out of bounds epochs and check epochs are consistent
         epochs = epochs[is_in_bounds]
@@ -1871,7 +1874,8 @@ class mkh5:
 
                 # # define dtype and initialize
                 epoch_dt = np.dtype(list(zip(epoch_dt_names, epoch_dt_types)))
-                epoch = np.ndarray(shape=(nsamp,), dtype=np.dtype(epoch_dt))
+                # epoch = np.ndarray(shape=(nsamp,), dtype=np.dtype(epoch_dt))
+                epoch = np.zeros(shape=(nsamp,), dtype=np.dtype(epoch_dt))
 
                 # take the stream names first to protect the time
                 # varying columns, then propagate the new info from
@@ -2996,7 +3000,7 @@ class mkh5:
     def _check_mkh5(self):
         """error check structure and contents of self.eeg"""
 
-        raise NotImplemented("FIX ME: code predates from mkh5 data format")
+        raise NotImplemented("FIX ME: this code predates from mkh5 data format")
 
         # ------------------------------------------------------------
         # eeg
@@ -3440,7 +3444,7 @@ class mkh5:
             # dblock_cols.append(col_dict) # list version
             dblock_cols.update({col_desc[0][1]: col_dict})  # dict version
 
-        # FIX ME ... check we don't clobber dig_head info
+        # FIX ME ... check we don't clobber dig_head info??
 
         attr = {"streams": dblock_cols}
         # patch np dtypes for jsonification ... ugh
