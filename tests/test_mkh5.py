@@ -173,13 +173,13 @@ def test_inspectors():
         hdr, _ = mydat.get_dblock(dblock_path)
         assert hdr["mkh5_version"] == mkh5.__version__
 
-    assert len(re.findall(r"(S01)", mydat.info())) == 1016
+    assert len(re.findall(r"(S01)", mydat.info())) == 1032  # 1016
 
     # capture headinfo
     f = io.StringIO()
     with contextlib.redirect_stdout(f):
         mydat.headinfo()
-    assert len(re.findall(r"S01", f.getvalue())) == 1015
+    assert len(re.findall(r"S01", f.getvalue())) == 1031  # 1015
     f.close()
 
     # ------------------------------------------------------------
@@ -192,13 +192,13 @@ def test_inspectors():
             mydat.create_mkdata(
                 expt + "/" + fs["gid"], fs["eeg_f"], fs["log_f"], fs["yhdr_f"]
             )
-    assert len(re.findall(r"(S0[15])", mydat.info())) == 2144
+    assert len(re.findall(r"(S0[15])", mydat.info())) == 2208  # 2144
 
     # test headinfo and info for multiexpt
     f = io.StringIO()
     with contextlib.redirect_stdout(f):
         mydat.headinfo()
-    assert len(re.findall(r"S0[15]", f.getvalue())) == 2140
+    assert len(re.findall(r"S0[15]", f.getvalue())) == 2204  # 2140
     f.close()
 
     # ------------------------------------------------------------
