@@ -223,6 +223,7 @@ class mkh5:
             # set during when mkh5._read_raw_log() reads .crw, .log
             "eeg_file": str,  # .crw file name as passed to _read_raw_log
             "eeg_file_md5": str,
+            "eeg_file_stat": dict,  # os.stat() info same as pathlib.Path().stat()
             "log_file": str,  # .log file name as passed to _read_raw_log
             "log_file_md5": str,
             # ('uuid_file', str),     # not implemented
@@ -3457,7 +3458,13 @@ class mkh5:
                 attr[k] = v
 
         # decorate constant columns with more useful info
+        stat_result = Path(eeg_f).stat()
+        eeg_file_stat = dict(
+            [(st, getattr(stat_result, st)) for st in dir(stat_result) if "st_" in st]
+        )
+
         attr["eeg_file"] = eeg_f
+        attr["eeg_file_stat"] = eeg_file_stat
         attr["log_file"] = log_f if log_f is not None else "None"
         attr["uuid"] = str(uuid.uuid4())
         for k, fname in {"eeg_file_md5": eeg_f, "log_file_md5": log_f}.items():
