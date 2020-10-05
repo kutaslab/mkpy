@@ -7,7 +7,7 @@ function cset2epset(expname,varargin)
 %  >> cset2epset(expname,varargin)
 %
 % Required Inputs:
-%   expname    = name of set file without sub#
+%   expname    = name of set file without group#
 %
 %   NOTE: All file names should be strings and should include the
 %   file's path unless the file is in the current working directory.
@@ -32,10 +32,10 @@ function cset2epset(expname,varargin)
 %               how much to report about what they're doing during
 %               runtime) set by the optional function argument 'verblevel'
 %
-% >> expname = 'for_matlab';
-% >> evtype = 'critverb_fit';
-% >> tbtype = 'short_epochs';
-% >> filepath = '/mnt/cube/home/wec017/mkh52set_local/output';
+% >> expname = '[name of.set without group#]';
+% >> evtype = '[column name]';
+% >> tbtype = '[eptable name]';
+% >> filepath = '[output path]';
 %
 % >> cset2epset(expname,'tbtype',tbtype,'evtype',evtype,'setfilepath',filepath);
 %
