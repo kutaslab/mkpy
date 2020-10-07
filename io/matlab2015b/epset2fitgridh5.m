@@ -39,7 +39,8 @@ function epset2fitgridh5(expname,varargin)
 
 % %Input Parser
 p = inputParser;
-%Note: the order of the required arguments needs to match precisely their
+%Note: the order of the required arguments needs to match precisely
+%with their
 %order in the function definition (which is also the order used by p.parse
 %below)
 p.addRequired('expname',@ischar);
@@ -49,7 +50,6 @@ p.addParamValue('setfilepath',[],@(x) ischar(x) | iscell(x));
 p.parse(expname,varargin{:});
 global VERBLEVEL
 VERBLEVEL=p.Results.verblevel;
-%
 
 %Show settings of all arguments
 if VERBLEVEL>0
@@ -205,7 +205,6 @@ end
 % types we are using for the file may have different sizes than
 % the corresponding native types, we must manually calculate the
 % offset of each member.
-%
 filetype = H5T.create ('H5T_COMPOUND', sum(type_size));
 for fd = 1:length(sFields),
     H5T.insert (filetype,...
