@@ -28,16 +28,14 @@ function epset2fitgridh5(expname,varargin)
 %               how much to report about what they're doing during
 %               runtime) set by the optional function argument 'verblevel'
 
-% >> expname = 'for_matlab';
-% >> filepath = '/mnt/cube/home/wec017/mkh52set_local/output';
+% >> expname = '[name of.set without group#]';
+% >> filepath = '[output path]';
 %
 % >> epset2fitgridh5(expname,'tbtype',tbtype,'evtype',evtype,'setfilepath',filepath);
 %
 %
 % Author: Wen-Hsuan Chan
 % KutasLab 01/2019
-
-addpath(genpath('/mnt/cube/home/wec017/mkh52set_remote/functions'))
 
 % %Input Parser
 p = inputParser;

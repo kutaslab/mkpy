@@ -44,8 +44,6 @@ function cset2epset(expname,varargin)
 % KutasLab 01/2018
 %
 
-addpath(genpath('/mnt/cube/home/wec017/mkh52set_remote/functions'))
-
 % %Input Parser
 p = inputParser;
 %Note: the order of the required arguments needs to match precisely their
