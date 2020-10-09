@@ -1386,25 +1386,6 @@ class mkh5:
         # ------------------------------------------------------------
         print("Sanitizing event table data types for mkh5 epochs table ...")
 
-        # enforce Index data type is str or int
-        # try:
-        #     msg = None
-        #     if event_table.index.values.dtype == np.dtype("O"):
-        #         maxbytes = max(
-        #             [len(x) for x in event_table.index.values.astype(bytes)]
-        #         )
-        #         index_dt_type = "S" + str(maxbytes)
-        #     elif event_table.index.values.dtype == np.dtype(int):
-        #         index_dt_type = "int"
-        #     else:
-        #         msg = "uh oh, cannot convert event table index column to bytes or integer"
-        # except Exception as err:
-        #     print(msg)
-        #     raise err
-
-        # # move Index into columns for santizing
-        # event_table = event_table.reset_index("Index")
-
         # remap pandas 'O' dtype columns to hdf5 friendly np.arrays if
         # possible.  Run column-wise so exception messages are
         # informative.  Run on a copy so the nan handler can mod the
@@ -1417,9 +1398,10 @@ class mkh5:
         # 2. define a numpy compound data type to hold the event_table
         # info and region refs
 
-        # start with epoch_id
+        # start with epoch_id index
         epoch_dt_names = ["epoch_id"]
-        epoch_dt_types = ["uint64"]
+        # epoch_dt_types = ["uint64"]  # < 0.2.4  pandas.Index unfriendly
+        epoch_dt_types = ["int64"]  # >= 0.2.4  pandas.Index friendly
 
         # continue new dtype for event info columns, mapped to hdf5 compatible np.dtype
         event_table_types = [event_table[c].dtype for c in event_table.columns]
@@ -1899,11 +1881,15 @@ class mkh5:
                             int(mkh5._samp2ms(x - e["anchor_tick"], srate))
                             for x in range(start_samp, stop_samp)
                         ]
+
+                    # broadcast the constants across the times
                     elif n == "anchor_time_delta":
-                        epoch[n] = [
-                            int(mkh5._samp2ms(x - e["anchor_tick_delta"], srate))
-                            for x in range(start_samp, stop_samp)
-                        ]
+                        epoch[n] = int(mkh5._samp2ms(e["anchor_tick_delta"], srate))
+                        # epoch[n] = [
+                        #     int(mkh5._samp2ms(e["anchor_tick_delta"], srate))
+                        #     for x in range(start_samp, stop_samp)
+                        # ]
+                        # broadcast the time delta
 
                     # broadcast event info
                     elif n in event_info.dtype.names:
@@ -1914,6 +1900,7 @@ class mkh5:
                                 n
                             )
                         )
+
                 # ------------------------------------------------------------
                 yield (epoch)
 
