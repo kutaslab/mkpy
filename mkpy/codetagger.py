@@ -597,11 +597,7 @@ class CodeTagger:
                     idx = didx
                     dlim = delim_at
 
-                    anchor_idx, anchor_group_idx, anchor_tick = (
-                        None,
-                        None,
-                        None,
-                    )
+                    anchor_idx, anchor_group_idx, anchor_tick = (None, None, None)
 
                     #  this index points to the anchor capture group in m.groups()
                     anchor_group_idx = anchor[0] + 1
@@ -659,9 +655,9 @@ class CodeTagger:
                                     ("anchor_str", m.group(anchor_group_idx)),
                                     ("match_str", m.group(mgi)),
                                     ("anchor_code", evcodes[anchor_idx]),
-                                    ("match_code", evcodes[idx + i],),  # evcodes[idx],
+                                    ("match_code", evcodes[idx + i]),  # evcodes[idx],
                                     ("anchor_tick", anchor_tick),
-                                    ("match_tick", ticks[idx + i],),  # ticks[idx]
+                                    ("match_tick", ticks[idx + i]),  # ticks[idx]
                                     (
                                         "anchor_tick_delta",
                                         int(ticks[idx + i]) - int(anchor_tick),

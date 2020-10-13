@@ -372,14 +372,7 @@ def test_pd_series_to_hdf5():
     n_each = 1
     print("Go tests Pass 1. homogenous scalar types")
     test_types = dict()
-    for st in [
-        int_like,
-        uint_like,
-        float_like,
-        complex_like,
-        str_like,
-        bool_like,
-    ]:
+    for st in [int_like, uint_like, float_like, complex_like, str_like, bool_like]:
         test_types.update(st)
     run_test(test_types, n_each=n_each)
 
@@ -505,7 +498,7 @@ def test_export_epochs():
         # find log event codes in the data and decorate them according
         # to the code map
         event_table = eeg_h5.get_event_table(
-            MKPY_IN / (exp + "_code_map." + codemap_ext), MKPY_IN / (exp + ".yhdx"),
+            MKPY_IN / (exp + "_code_map." + codemap_ext), MKPY_IN / (exp + ".yhdx")
         )
 
         # mark the epochs

@@ -645,14 +645,7 @@ class PyGarv(object):
         # instances in the same namespace inherit test specs set
         # during previous calls
 
-        for attrib in [
-            "_catalog",
-            "mkh5",
-            "mkh5_f",
-            "dblock_paths",
-            "yarf",
-            "tr_docs",
-        ]:
+        for attrib in ["_catalog", "mkh5", "mkh5_f", "dblock_paths", "yarf", "tr_docs"]:
             setattr(self, attrib, None)
 
         # clear tests in case of carry over from previous test runs
@@ -1239,12 +1232,7 @@ class PyGarv(object):
         return result
 
     @PyGarvTest(
-        "maxflat",
-        stream=str,
-        threshold=float,
-        nsamp=int,
-        prestim=float,
-        poststim=float,
+        "maxflat", stream=str, threshold=float, nsamp=int, prestim=float, poststim=float
     )
     def maxflat(hdr, dblock, *args, **kwargs):
         r"""tag events on regex stream for flat runs
@@ -1296,7 +1284,7 @@ class PyGarv(object):
         ev_idxs = np.where(dblock["log_evcodes"] > 0)[0]
         for ev_idx in ev_idxs:
             interval = slice(
-                max(0, ev_idx - prestim_samps), min(n_samps, ev_idx + poststim_samps),
+                max(0, ev_idx - prestim_samps), min(n_samps, ev_idx + poststim_samps)
             )
             for stream in test_streams:
                 ev_view = dblock[stream][interval].view()
@@ -1330,7 +1318,7 @@ class PyGarv(object):
         ev_idxs = np.where(dblock["log_evcodes"] > 0)[0]
         for ev_idx in ev_idxs:
             interval = slice(
-                max(0, ev_idx - prestim_samps), min(n_samps, ev_idx + poststim_samps),
+                max(0, ev_idx - prestim_samps), min(n_samps, ev_idx + poststim_samps)
             )
             if (
                 np.ptp(
