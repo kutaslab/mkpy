@@ -141,7 +141,7 @@ def values(obj, glob, separator="/", afilter=None, dirs=True):
     return [
         x[1]
         for x in mkpy.dpath.util.search(
-            obj, glob, yielded=True, separator=separator, afilter=afilter, dirs=dirs,
+            obj, glob, yielded=True, separator=separator, afilter=afilter, dirs=dirs
         )
     ]
 
@@ -172,10 +172,7 @@ def search(obj, glob, yielded=False, separator="/", afilter=None, dirs=True):
         for path in _inner_search(obj, globlist, separator, dirs=dirs):
             try:
                 val = mkpy.dpath.path.get(obj, path, view=False, afilter=afilter)
-                yield (
-                    separator.join(map(str, mkpy.dpath.path.paths_only(path))),
-                    val,
-                )
+                yield (separator.join(map(str, mkpy.dpath.path.paths_only(path))), val)
             except mkpy.dpath.exceptions.FilteredValue:
                 pass
 

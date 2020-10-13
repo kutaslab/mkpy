@@ -333,9 +333,7 @@ def read_log(fo):
         yield (code, (tick_hi << 16 | tick_lo), condition, flag)  # NJS
 
 
-def load(
-    f_raw, f_log, dtype=np.float64, delete_channels=[], calibrate=True, **kwargs,
-):
+def load(f_raw, f_log, dtype=np.float64, delete_channels=[], calibrate=True, **kwargs):
 
     # read the raw and sanity check the records ...
     channel_names, raw_codes, record_counts, data, info = read_raw(f_raw, dtype)

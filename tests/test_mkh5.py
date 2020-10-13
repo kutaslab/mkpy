@@ -113,7 +113,7 @@ def test_create_mkdata_hdf5_options():
         mydat = mkh5.mkh5(TEST_H5)
         mydat.reset_all()  # start fresh
         mydat.create_mkdata(
-            S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"], compression="gzip",
+            S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"], compression="gzip"
         )
     except Exception as fail:
         print("mkh5.create_mkdata() failed")

@@ -169,7 +169,7 @@ def match(path, glob):
             )
         else:  # Default to Python 2
             return all(
-                map(fnmatch.fnmatch, map(str, paths_only(path)), map(str, ss_glob),)
+                map(fnmatch.fnmatch, map(str, paths_only(path)), map(str, ss_glob))
             )
 
     return False

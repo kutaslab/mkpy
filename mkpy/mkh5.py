@@ -1301,7 +1301,7 @@ class mkh5:
            name of an mkh5 format HDF5 file, e.g., self.h5_fname or other
         epochs_table_name : str
            name of an epochs table, must exist in h5_f
-        
+
         Returns
         -------
         None
@@ -1404,13 +1404,21 @@ class mkh5:
         epoch_dt_types = ["int64"]  # >= 0.2.4  pandas.Index friendly
 
         # continue new dtype for event info columns, mapped to hdf5 compatible np.dtype
-        event_table_types = [event_table[c].dtype for c in event_table.columns]
+        # event_table_types = [event_table[c].dtype for c in event_table.columns]
         for i, c in enumerate(event_table.columns):
             epoch_dt_names.append(c)
             epoch_dt_types.append(event_table[c].dtype.__str__())
 
-        # events have sample ticks, epochs add timestamps
+        # events have sample ticks, epochs add timestamps for human readability
         epoch_dt_names += ["match_time", "anchor_time", "anchor_time_delta"]
+        epoch_dt_types += ["int64"] * 3
+
+        # TPU discrete time interval (DITI) tags ahead for future
+        # diti_0 = sample = dlbock_tick index where interval time == 0
+        # diti_delta = +/- interval start relative to diti_0 in samples/ticks
+        # diti_length = interval length in samples
+        epoch_dt_names += ["diti_t0", "diti_t0_delta", "diti_length"]
+        # diti_0, diti_len should be unint but pandas.Index squawks
         epoch_dt_types += ["int64"] * 3
 
         # construct the new dtype and initialize epochs table array
@@ -1426,12 +1434,48 @@ class mkh5:
         #    interval from the function arguments
         hio = self.HeaderIO()
 
-        # whitelist in bound epochs
+        # fetch sampling rate
+        srates = np.unique(epochs["dblock_srate"])
+        assert len(srates) == 1, "epochs['dblock_srate'] varies"
+        srate = srates[0]
+
+        # scalar epoch start offset and duration in samples
+        epoch_match_tick_delta = mkh5._ms2samp(tmin_ms, srate)
+        duration_samps = mkh5._ms2samp(tmax_ms - tmin_ms, srate)
+
+        # (variable) match_tick in place from the event table, set
+        # set the (constant) offset and duration columns
+        epochs["epoch_match_tick_delta"] = epoch_match_tick_delta
+        epochs["epoch_ticks"] = duration_samps
+
+        # update the timestamps
+        epochs["match_time"] = int(0)
+        epochs["anchor_time_delta"] = np.array(
+            [
+                int(mkh5._samp2ms(atd, srate))
+                for atd in epochs[
+                    "anchor_tick_delta"
+                ]  #  epochs["match_tick"] - e["anchor_tick"]
+            ]
+        )
+        # anchor_time == anchor_time_delta here at  match_time = 0, tho
+        # varies by time in epochs data
+        epochs["anchor_time"] = epochs["anchor_time_delta"]
+
+        # new 0.2.4, discrete time interval (DITI) timelock, delta, duration
+        # columns, redundant now included for future DITI tagging
+        epochs["diti_t0"] = epochs["match_tick"]
+        epochs["diti_t0_delta"] = epoch_match_tick_delta
+        epochs["diti_length"] = duration_samps
+
+        # ------------------------------------------------------------
+        # error check
+        # whitelist in bound epochs  FIX ME ... no need to iterate
         is_in_bounds = np.zeros(len(epochs)).astype(bool)
+        start_samps = epochs["match_tick"] + epoch_match_tick_delta
         with h5py.File(self.h5_fname, "r+") as h5:
             # for i,e in event_table.iterrows():
             for i, e in enumerate(epochs):
-                srate = e["dblock_srate"]
 
                 # check event table sampling rate agrees w/ dblock
                 dbp = e["dblock_path"]
@@ -1444,25 +1488,8 @@ class mkh5:
                     ).format(dbp, hio.header["samplerate"], i, srate)
                     raise ValueError(msg)
 
-                epoch_match_tick_delta = mkh5._ms2samp(tmin_ms, srate)
-                start_samp = e["match_tick"] + epoch_match_tick_delta
-                duration_samp = mkh5._ms2samp(tmax_ms - tmin_ms, srate)
-
-                # set match and anchor tick, time, deltas
-                e["epoch_match_tick_delta"] = epoch_match_tick_delta
-                e["epoch_ticks"] = duration_samp
-
-                # update the timestamps
-                e["match_time"] = int(0)
-                e["anchor_time_delta"] = int(
-                    mkh5._samp2ms(e["match_tick"] - e["anchor_tick"], srate)
-                )
-                e["anchor_time"] = e[
-                    "anchor_time_delta"
-                ]  # for consistency w/ epochs data columns
-
-                # bounds check with messages
-                if duration_samp <= 0:
+                # bounds check with messages per epoch
+                if duration_samps <= 0:
                     msg = (
                         "epoch interval {0} {1} is less than one sample at "
                         "{3} ... increase the interval"
@@ -1470,13 +1497,13 @@ class mkh5:
                     raise ValueError(msg)
 
                 # move on after bounds check
-                if start_samp < 0:
+                if start_samps[i] < 0:
                     warnings.warn(
                         "data error: pre-stimulus interval is out of bounds left ... "
                         + "skipping epoch {0}".format(e)
                     )
                     continue
-                elif start_samp + duration_samp > len(h5[dbp]):
+                elif start_samps[i] + duration_samps > len(h5[dbp]):
                     warnings.warn(
                         "data error: post-stimulus interval is out of bounds right ... "
                         + "skipping epoch {0}".format(e)
@@ -1885,11 +1912,6 @@ class mkh5:
                     # broadcast the constants across the times
                     elif n == "anchor_time_delta":
                         epoch[n] = int(mkh5._samp2ms(e["anchor_tick_delta"], srate))
-                        # epoch[n] = [
-                        #     int(mkh5._samp2ms(e["anchor_tick_delta"], srate))
-                        #     for x in range(start_samp, stop_samp)
-                        # ]
-                        # broadcast the time delta
 
                     # broadcast event info
                     elif n in event_info.dtype.names:
