@@ -2451,8 +2451,7 @@ class mkh5:
             # with data ... data.dtype is automatic
             del h5[sub_id]
 
-    # FIX ME, this can call _h5_get_dblock_slice
-    def get_dblock(self, h5_path):
+    def get_dblock(self, h5_path, header=True, dblock=True):
         """return a copy of header dict and numpy ndarray from the mkh5
         datablock at h5_path
 
@@ -2460,17 +2459,42 @@ class mkh5:
         Parameters
         ----------
         h5_path : string
-          full slashpath to a datablock in this mkh5 instance
+            full HDF5 slashpath to a datablock in this mkh5 instance
+        header : bool {True}, optional
+            return the header
+        dblock : bool {True}, optional
+            return the dblock dataset
 
+        Returns
+        -------
+        hdr, data
+
+        Raises
+        ------
+        ValueError if header and dblock are both False
         """
+        for key, val in [("header", header), ("dblock", dblock)]:
+            if not isinstance(val, bool):
+                ValueError(f"{key} must be True or False")
 
-        with h5py.File(self.h5_fname, "r") as h5:
-            hio = self.HeaderIO()
-            hio.get(h5[h5_path])
-            header = hio.header
-            # dblock = copy.deepcopy(h5[h5_path].value) # deprecated
-            dblock = copy.deepcopy(h5[h5_path][...])
-        return (header, dblock)
+        if header:
+            with h5py.File(self.h5_fname, "r") as h5:
+                hio = self.HeaderIO()
+                hio.get(h5[h5_path])
+                hdr = hio.header
+
+        if dblock:
+            with h5py.File(self.h5_fname, "r") as h5:
+                data = copy.deepcopy(h5[h5_path][...])
+
+        if header and dblock:
+            return hdr, data
+        elif header:
+            return hdr
+        elif dblock:
+            return data
+        else:
+            raise ValueError("header and dblock cannot both be False")
 
     def _h5_get_dblock_slice(self, h5_f, h5_path, db_slice=None):
         """return a copy of header dict and numpy ndarray slice from the mkh5
