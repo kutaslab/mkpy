@@ -46,32 +46,33 @@ script:
   - pytest --cov=mkpy
 
 after_success:
-    - conda install codecov && codecov
+  - conda install codecov && codecov
 
 before_deploy:
-    - conda install -c defaults -c conda-forge sphinx sphinx_rtd_theme jupyter nbsphinx nbconvert!=5.4
-    - conda install -c conda-forge pandoc
-    - conda install anaconda-client
-    - conda list
-    - sphinx-apidoc -e -f -o mkpy/docs/source/ mkpy ./tests/ ./mkpy/dpath/* ./setup.py
-    - make -C mkpy/docs html
-    - touch mkpy/docs/_build/html/.nojekyll
+  - conda install -c defaults -c conda-forge sphinx sphinx_rtd_theme jupyter nbsphinx nbconvert!=5.4
+  - conda install -c conda-forge pandoc
+  - conda install anaconda-client
+  - conda list
+  - sphinx-apidoc -e -f -o mkpy/docs/source/ mkpy ./tests/ ./mkpy/dpath/* ./setup.py
+  - make -C mkpy/docs html
+  - touch mkpy/docs/_build/html/.nojekyll
 
 deploy:
-    - provider: script
-      skip_cleanup: true
-      script: bash ./ci/conda_upload.sh
-      on:
-          all_branches: true
+  - provider: script
+    skip_cleanup: true
+    script: bash ./ci/conda_upload.sh
+    on:
+      all_branches: true
+      condition: $PYV =~ 3\.[678]
 
-    - provider: pages
-      skip_cleanup: true
-      github_token: $GITHUB_TOKEN
-      keep-history: true
-      target_branch: gh-pages  # that's the default anyway, just to be explicit
-      local_dir: mkpy/docs/_build/html
-      on:
-          branch: master
-          condition: $PYV == "3.8"
+  - provider: pages
+    skip_cleanup: true
+    github_token: $GITHUB_TOKEN
+    keep-history: true
+    target_branch: gh-pages  # that's the default anyway, just to be explicit
+    local_dir: mkpy/docs/_build/html
+    on:
+      branch: master
+      condition: $PYV == "3.8"
 
 
