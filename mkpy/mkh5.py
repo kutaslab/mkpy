@@ -1414,11 +1414,11 @@ class mkh5:
         epoch_dt_types += ["int64"] * 3
 
         # TPU discrete time interval (DITI) tags ahead for future
-        # diti_0 = sample = dlbock_tick index where interval time == 0
-        # diti_delta = +/- interval start relative to diti_0 in samples/ticks
-        # diti_length = interval length in samples
-        epoch_dt_names += ["diti_t0", "diti_t0_delta", "diti_length"]
-        # diti_0, diti_len should be unint but pandas.Index squawks
+        # diti_t_0 = sample = dlbock_tick index where interval time == 0
+        # diti_hop = +/- interval start relative to diti_t_0 in samples/ticks
+        # diti_len = interval length in samples
+        epoch_dt_names += ["diti_t_0", "diti_hop", "diti_len"]
+        # diti_t_0, diti_len should be uint but pandas.Index squawks
         epoch_dt_types += ["int64"] * 3
 
         # construct the new dtype and initialize epochs table array
@@ -1455,18 +1455,18 @@ class mkh5:
                 int(mkh5._samp2ms(atd, srate))
                 for atd in epochs[
                     "anchor_tick_delta"
-                ]  #  epochs["match_tick"] - e["anchor_tick"]
+                ]  # epochs["match_tick"] - e["anchor_tick"]
             ]
         )
         # anchor_time == anchor_time_delta here at  match_time = 0, tho
         # varies by time in epochs data
         epochs["anchor_time"] = epochs["anchor_time_delta"]
 
-        # new 0.2.4, discrete time interval (DITI) timelock, delta, duration
-        # columns, redundant now included for future DITI tagging
-        epochs["diti_t0"] = epochs["match_tick"]
-        epochs["diti_t0_delta"] = epoch_match_tick_delta
-        epochs["diti_length"] = duration_samps
+        # new 0.2.4, discrete time interval (DITI) time lock, shift, length
+        # columns. Redundant for now, included for future DITI tagging
+        epochs["diti_t_0"] = epochs["match_tick"]
+        epochs["diti_hop"] = epoch_match_tick_delta
+        epochs["diti_len"] = duration_samps
 
         # ------------------------------------------------------------
         # error check
