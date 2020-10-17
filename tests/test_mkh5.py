@@ -95,9 +95,7 @@ def test_create_mkdata():
     try:
         mydat = mkh5.mkh5(TEST_H5)
         mydat.reset_all()
-        mydat.create_mkdata(
-            S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"]
-        )
+        mydat.create_mkdata(S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"])
     except Exception as fail:
         raise fail
 
@@ -115,11 +113,7 @@ def test_create_mkdata_hdf5_options():
         mydat = mkh5.mkh5(TEST_H5)
         mydat.reset_all()  # start fresh
         mydat.create_mkdata(
-            S01["gid"],
-            S01["eeg_f"],
-            S01["log_f"],
-            S01["yhdr_f"],
-            compression="gzip",
+            S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"], compression="gzip"
         )
     except Exception as fail:
         print("mkh5.create_mkdata() failed")
@@ -134,15 +128,11 @@ def test_create_mkdata_hdf5_options():
         S01["yhdr_f"],
         pytest.param(
             TEST_DIR("data/26chan_bad_yaml.yhdr"),
-            marks=pytest.mark.xfail(
-                raises=mkpy.mkh5.mkh5.YamlHeaderFormatError
-            ),
+            marks=pytest.mark.xfail(raises=mkpy.mkh5.mkh5.YamlHeaderFormatError),
         ),
         pytest.param(
             TEST_DIR("data/26chan_bad_locs.yhdr"),
-            marks=pytest.mark.xfail(
-                raises=mkpy.mkh5.mkh5.YamlHeaderFormatError
-            ),
+            marks=pytest.mark.xfail(raises=mkpy.mkh5.mkh5.YamlHeaderFormatError),
         ),
     ],
 )
@@ -178,13 +168,18 @@ def test_inspectors():
     mydat.create_mkdata(S01["gid"], S01["eeg_f"], S01["log_f"], S01["yhdr_f"])
     mydat.calibrate_mkdata(S01["gid"], **CAL_ARGS)
 
-    assert len(re.findall(r"(S01)", mydat.info())) == 972
+    # check mkh5 versioning in header
+    for dblock_path in mydat.dblock_paths:
+        hdr, _ = mydat.get_dblock(dblock_path)
+        assert hdr["mkh5_version"] == mkh5.__version__
+
+    assert len(re.findall(r"(S01)", mydat.info())) == 1032  # 1016
 
     # capture headinfo
     f = io.StringIO()
     with contextlib.redirect_stdout(f):
         mydat.headinfo()
-    assert len(re.findall(r"S01", f.getvalue())) == 971
+    assert len(re.findall(r"S01", f.getvalue())) == 1031  # 1015
     f.close()
 
     # ------------------------------------------------------------
@@ -197,13 +192,13 @@ def test_inspectors():
             mydat.create_mkdata(
                 expt + "/" + fs["gid"], fs["eeg_f"], fs["log_f"], fs["yhdr_f"]
             )
-    assert len(re.findall(r"(S0[15])", mydat.info())) == 1968
+    assert len(re.findall(r"(S0[15])", mydat.info())) == 2208  # 2144
 
     # test headinfo and info for multiexpt
     f = io.StringIO()
     with contextlib.redirect_stdout(f):
         mydat.headinfo()
-    assert len(re.findall(r"S0[15]", f.getvalue())) == 1964
+    assert len(re.findall(r"S0[15]", f.getvalue())) == 2204  # 2140
     f.close()
 
     # ------------------------------------------------------------
@@ -214,14 +209,9 @@ def test_inspectors():
         mydat.headinfo("expt2")
     expt2_hinfo = f.getvalue()
     assert all(
-        [
-            re.match(r"(^expt2|^$)", x) is not None
-            for x in expt2_hinfo.split("\n")
-        ]
+        [re.match(r"(^expt2|^$)", x) is not None for x in expt2_hinfo.split("\n")]
     )
-    assert all(
-        [re.match(r"(^expt1)", x) is None for x in expt2_hinfo.split("\n")]
-    )
+    assert all([re.match(r"(^expt1)", x) is None for x in expt2_hinfo.split("\n")])
 
     # illegal ... should return None and raise warning
     bad_chooser1 = "samplerate/S05"  # wrong order
@@ -278,30 +268,18 @@ def test_get_set_head():
             pprint.pprint(hio.header["streams"][c])
 
     mydat = mkh5.mkh5(TEST_H5)  # re-open w/out obliteration
-    new_info = mydat.gethead(
-        "S01/dblock_0.*(experiment|(MiPa|dblock_ticks|crw_ticks))"
-    )
+    new_info = mydat.gethead("S01/dblock_0.*(experiment|(MiPa|dblock_ticks|crw_ticks))")
     test_vals = [
-        (k, v)
-        for k, v in new_info
-        if "dblock_0/streams" in k or "/experiment" in k
+        (k, v) for k, v in new_info if "dblock_0/streams" in k or "/experiment" in k
     ]
     h5_path = "S01/dblock_0"
     for k, v in test_vals:
         # print(k)
         if k == h5_path + "/experiment" and v != "new_expt_name":
-            msg = (
-                "sethead failed to assign key=value: "
-                "experiment='new_expt_name'"
-            )
+            msg = "sethead failed to assign key=value: " "experiment='new_expt_name'"
             raise ValueError(msg)
-        if (
-            k == h5_path + "streams/dblock_ticks/name"
-            and v != "new_dblock_ticks"
-        ):
-            msg = "sethead failed to assign {0} new_dblock_ticks: {1}".format(
-                k, v
-            )
+        if k == h5_path + "streams/dblock_ticks/name" and v != "new_dblock_ticks":
+            msg = "sethead failed to assign {0} new_dblock_ticks: {1}".format(k, v)
             raise ValueError(msg)
         if k == h5_path + "streams/crw_ticks/stream" and v != "new_crw_ticks":
             msg = "sethead failed to assign {0}: new_crw_ticks".format(k, v)
@@ -468,11 +446,7 @@ def test_irb_calibrate_same_crw():
                 if "dig_chan_" in v["source"]:
                     scale_by = None
                     scale_by = v["cals"]["scale_by"]
-                    print(
-                        "{0} {1:4s} {2:5.3f}".format(
-                            subid, v["name"], scale_by
-                        )
-                    )
+                    print("{0} {1:4s} {2:5.3f}".format(subid, v["name"], scale_by))
 
     # ensure calibrating twice throws an error ...
     try:
@@ -480,9 +454,7 @@ def test_irb_calibrate_same_crw():
     except Exception as fail:
         print("OK ... caught attempted double calibration")
     else:
-        raise RuntimeError(
-            "uh oh ... failed to catch an attempted double calibration"
-        )
+        raise RuntimeError("uh oh ... failed to catch an attempted double calibration")
     os.remove(h5f)
     os.remove(stub_h5f)
 
@@ -937,16 +909,10 @@ def test_mkh5_correctness():
     hdr, muv_dblock = mydat.get_dblock("S01/dblock_0")
 
     assert all(
-        [
-            np.isclose(muv_0[i], muv_dblock[0][i], rtol=1e-3)
-            for i in range(n_cols)
-        ]
+        [np.isclose(muv_0[i], muv_dblock[0][i], rtol=1e-3) for i in range(n_cols)]
     )
     assert all(
-        [
-            np.isclose(muv_n[i], muv_dblock[-1][i], rtol=1e-3)
-            for i in range(n_cols)
-        ]
+        [np.isclose(muv_n[i], muv_dblock[-1][i], rtol=1e-3) for i in range(n_cols)]
     )
 
     os.remove(TEST_H5)
@@ -1015,16 +981,15 @@ def test_with_log_events(log_f, wle):
 
         # read log codes from data file and confirm they match the
         # logcat2 text dumps
-        if wle in ["as_is"]:
+        if wle == ["as_is"]:
             assert all(
-                dblock_log_evcodes
-                == log_data["evtcode"][: len(dblock_log_evcodes)]
+                dblock_log_evcodes == log_data["evtcode"][: len(dblock_log_evcodes)]
             )
 
-        if wle is "from_eeg":
+        if wle == "from_eeg":
             assert all(dblock_raw_evcodes == dblock_log_evcodes)
 
-        if wle is "none":
+        if wle == "none":
             for col in ["log_evcodes", "log_ccodes", "log_flags"]:
                 assert all(
                     np.equal(0, data[col])
@@ -1037,12 +1002,8 @@ def test_with_log_events(log_f, wle):
 @pytest.mark.parametrize(
     "wle,log_f",
     [
-        pytest.param(
-            None, "sarc_cal525.log", marks=pytest.mark.xfail(strict=True)
-        ),
-        pytest.param(
-            "aligned", "sarc_cal525", marks=pytest.mark.xfail(strict=True)
-        ),
+        pytest.param(None, "sarc_cal525.log", marks=pytest.mark.xfail(strict=True)),
+        pytest.param("aligned", "sarc_cal525", marks=pytest.mark.xfail(strict=True)),
         pytest.param("as_is", "sarc_cal525.log"),
         pytest.param("from_eeg", None),
         pytest.param("none", None),

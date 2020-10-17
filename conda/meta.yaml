@@ -1,10 +1,12 @@
-{% set version = "0.2.4" %}
-{% set np_pin = "1.16.4" %}
-{% set py_pin = "3.6" %}
+{% set data = load_setup_py_data() %}
+
+# legacy pins for reference mkpy <=0.2.3
+# {% set np_pin = "1.16.4" %}
+# {% set py_pin = "3.6" %}
 
 package:
   name: mkpy
-  version: {{ version }}
+  version: {{ data.get('version') }}
 
 source:
   # path: ../
@@ -12,27 +14,29 @@ source:
 
 build:
   script: python setup.py install --single-version-externally-managed --record=record.txt
-  string: {{ environ.get("GIT_ABBREV_COMMIT", "no_git_abbrev_commit") }}_{{ environ.get("PKG_BUILDNUM", "no_pkg_buildnum") }}
+  string: py{{environ.get("CONDA_PY", "XX")}}{{environ.get("GIT_ABBREV_COMMIT", "no_git_abbrev_commit") }}_{{ environ.get("PKG_BUILDNUM", "no_pkg_buildnum") }}
 
 requirements:
-  # build ... all moved to host
+  build:
+    - {{ compiler('c') }}
+    - {{ compiler('cxx') }}
   host:
-    - python ={{ py_pin }}  # else cython uses Python 3.7
-    - numpy =={{ np_pin }}
-    - Cython
-
+    - python {{ python }}
+    - setuptools
+    - cython
+    - numpy
   run:
-    - python ={{ py_pin }}  # cythonize with 3.6
-    - numpy =={{ np_pin }}  # { pin_compatible('numpy') }}
+    - python {{ python }}
+    - numpy
     - h5py
     - matplotlib
-    - pandas
+    - pandas >=1.0
     - pytables
-    - pyarrow
+    - pyarrow >=1.0,!=1.0.1  # release fights with pandas
     - xlrd
     - PyYAML
     - yamllint
-    - pytest  !=5.3.4 # include so users can run tests, bad release fights with nose
+    - pytest  !=5.3.4 # so users can run tests, bad release fights with nose
     - nose  # for legacy dpath tests
 
 test:

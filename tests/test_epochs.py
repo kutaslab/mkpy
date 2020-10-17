@@ -74,12 +74,8 @@ def test_irb_create_epochs():
         raise RuntimeError(msg)
 
     try:
-        missing_col = [
-            x for x in event_table.columns if not x == "dblock_ticks"
-        ]
-        myh5.set_epochs(
-            "should_have_failed", event_table[missing_cols], -500, 1000
-        )
+        missing_col = [x for x in event_table.columns if not x == "dblock_ticks"]
+        myh5.set_epochs("should_have_failed", event_table[missing_cols], -500, 1000)
     except Exception as fail:
         print("OK ... caught missing event column exception")
     else:
@@ -312,9 +308,7 @@ def test_pd_series_to_hdf5():
                                 for s in series
                             ]
                         )
-                        series_h5 = pd.Series(
-                            [s.decode("utf8") for s in series_h5]
-                        )
+                        series_h5 = pd.Series([s.decode("utf8") for s in series_h5])
                         if not all(series_str == series_h5):
                             failed = True
                     else:
@@ -328,9 +322,9 @@ def test_pd_series_to_hdf5():
                             ):
                                 failed = True
                     if failed:
-                        err_msg = (
-                            "series - hdf5 round trip failed on {0}"
-                        ).format(series)
+                        err_msg = ("series - hdf5 round trip failed on {0}").format(
+                            series
+                        )
                         raise TypeError(err_msg)
 
                     # if we make it here ...
@@ -364,15 +358,11 @@ def test_pd_series_to_hdf5():
     result_labels = dict([(1, "OK"), (0, "Fail")])
 
     missing = [np.nan, None]
-    int_like = dict(
-        int_like=[int, np.int, np.int_, np.int32, np.int64]
-    )  # np.int16,
+    int_like = dict(int_like=[int, np.int, np.int_, np.int32, np.int64])  # np.int16,
     uint_like = dict(
         uint_like=[np.uint, np.uint8, np.uint64]
     )  #  # np.uint32, np.uint16,
-    float_like = dict(
-        float_like=[float, np.float, np.float_, np.float32, np.float64]
-    )
+    float_like = dict(float_like=[float, np.float, np.float_, np.float32, np.float64])
     complex_like = dict(complex_like=[np.complex, np.complex_, np.complex128])
     str_like = dict(
         str_like=[str, bytes, np.bytes_, np.unicode_]
@@ -382,14 +372,7 @@ def test_pd_series_to_hdf5():
     n_each = 1
     print("Go tests Pass 1. homogenous scalar types")
     test_types = dict()
-    for st in [
-        int_like,
-        uint_like,
-        float_like,
-        complex_like,
-        str_like,
-        bool_like,
-    ]:
+    for st in [int_like, uint_like, float_like, complex_like, str_like, bool_like]:
         test_types.update(st)
     run_test(test_types, n_each=n_each)
 
@@ -515,8 +498,7 @@ def test_export_epochs():
         # find log event codes in the data and decorate them according
         # to the code map
         event_table = eeg_h5.get_event_table(
-            MKPY_IN / (exp + "_code_map." + codemap_ext),
-            MKPY_IN / (exp + ".yhdx"),
+            MKPY_IN / (exp + "_code_map." + codemap_ext), MKPY_IN / (exp + ".yhdx")
         )
 
         # mark the epochs
@@ -534,13 +516,9 @@ def test_export_epochs():
 
             if mkpy_epx_np[col].dtype.type == np.bytes_:
                 # byte-like
-                assert all(
-                    [x.decode() for x in mkpy_epx_np[col]] == mkpy_epx_pd[col]
-                )
+                assert all([x.decode() for x in mkpy_epx_np[col]] == mkpy_epx_pd[col])
 
-            elif any(np.isnan(mkpy_epx_np[col])) or any(
-                np.isnan(mkpy_epx_pd[col])
-            ):
+            elif any(np.isnan(mkpy_epx_np[col])) or any(np.isnan(mkpy_epx_pd[col])):
                 # nan
                 assert all(np.isnan(mkpy_epx_np[col])) and all(
                     np.isnan(mkpy_epx_pd[col])

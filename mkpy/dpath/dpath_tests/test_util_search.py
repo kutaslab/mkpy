@@ -4,13 +4,9 @@ import mkpy.dpath as dpath
 def test_search_paths_with_separator():
     dict = {"a": {"b": {"c": {"d": 0, "e": 1, "f": 2}}}}
     paths = ["a", "a;b", "a;b;c", "a;b;c;d", "a;b;c;e", "a;b;c;f"]
-    for (path, value) in dpath.util.search(
-        dict, "/**", yielded=True, separator=";"
-    ):
+    for (path, value) in dpath.util.search(dict, "/**", yielded=True, separator=";"):
         assert path in paths
-    for (path, value) in dpath.util.search(
-        dict, ["**"], yielded=True, separator=";"
-    ):
+    for (path, value) in dpath.util.search(dict, ["**"], yielded=True, separator=";"):
         assert path in paths
 
 
@@ -33,31 +29,15 @@ def test_search_afilter():
 
     dict = {"a": {"view_failure": "a", "b": {"c": {"d": 0, "e": 1, "f": 2}}}}
     paths = ["a/b/c/e", "a/b/c/f"]
-    for (path, value) in dpath.util.search(
-        dict, "/**", yielded=True, afilter=afilter
-    ):
+    for (path, value) in dpath.util.search(dict, "/**", yielded=True, afilter=afilter):
         assert path in paths
-    assert (
-        "view_failure"
-        not in dpath.util.search(dict, "/**", afilter=afilter)["a"]
-    )
-    assert (
-        "d"
-        not in dpath.util.search(dict, "/**", afilter=afilter)["a"]["b"]["c"]
-    )
+    assert "view_failure" not in dpath.util.search(dict, "/**", afilter=afilter)["a"]
+    assert "d" not in dpath.util.search(dict, "/**", afilter=afilter)["a"]["b"]["c"]
 
-    for (path, value) in dpath.util.search(
-        dict, ["**"], yielded=True, afilter=afilter
-    ):
+    for (path, value) in dpath.util.search(dict, ["**"], yielded=True, afilter=afilter):
         assert path in paths
-    assert (
-        "view_failure"
-        not in dpath.util.search(dict, ["**"], afilter=afilter)["a"]
-    )
-    assert (
-        "d"
-        not in dpath.util.search(dict, ["**"], afilter=afilter)["a"]["b"]["c"]
-    )
+    assert "view_failure" not in dpath.util.search(dict, ["**"], afilter=afilter)["a"]
+    assert "d" not in dpath.util.search(dict, ["**"], afilter=afilter)["a"]["b"]["c"]
 
 
 def test_search_globbing():
@@ -65,9 +45,7 @@ def test_search_globbing():
     paths = ["a/b/c/d", "a/b/c/f"]
     for (path, value) in dpath.util.search(dict, "/a/**/[df]", yielded=True):
         assert path in paths
-    for (path, value) in dpath.util.search(
-        dict, ["a", "**", "[df]"], yielded=True
-    ):
+    for (path, value) in dpath.util.search(dict, ["a", "**", "[df]"], yielded=True):
         assert path in paths
 
 

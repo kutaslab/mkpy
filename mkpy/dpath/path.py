@@ -34,9 +34,7 @@ def path_types(obj, path):
         if issubclass(cur.__class__, MutableMapping) and elem in cur:
             result.append([elem, cur[elem].__class__])
             cur = cur[elem]
-        elif issubclass(cur.__class__, MutableSequence) and int(elem) < len(
-            cur
-        ):
+        elif issubclass(cur.__class__, MutableSequence) and int(elem) < len(cur):
             elem = int(elem)
             result.append([elem, cur[elem].__class__])
             cur = cur[elem]
@@ -171,11 +169,7 @@ def match(path, glob):
             )
         else:  # Default to Python 2
             return all(
-                map(
-                    fnmatch.fnmatch,
-                    map(str, paths_only(path)),
-                    map(str, ss_glob),
-                )
+                map(fnmatch.fnmatch, map(str, paths_only(path)), map(str, ss_glob))
             )
 
     return False

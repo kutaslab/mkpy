@@ -79,9 +79,7 @@ def test_types_set():
 
 
 def test_types_get_list_of_dicts():
-    tdict = TstMapping(
-        {"a": TstMapping({"b": TstSequence([{0: 0}, {0: 1}, {0: 2}])})}
-    )
+    tdict = TstMapping({"a": TstMapping({"b": TstSequence([{0: 0}, {0: 1}, {0: 2}])})})
     res = dpath.path.get(
         tdict, dpath.path.path_types(tdict, ["a", "b", 0, 0]), view=True
     )

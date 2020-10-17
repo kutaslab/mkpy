@@ -1,4 +1,4 @@
-"""cross various regexp patterns w/ event code sequences verify output
+r"""cross various regexp patterns w/ event code sequences verify output
 
 Event codes
    - length: 1-5

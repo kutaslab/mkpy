@@ -121,9 +121,7 @@ def set_styles():
     # PyGarv Treeview --------------------------------------------------
     # Scarlet Red	ef2929	cc0000	a40000
     style.configure(
-        "pygarv_style.TLabelframe",
-        bgc=generic_frame_bgc,
-        font=(fnt_family, fnt_size),
+        "pygarv_style.TLabelframe", bgc=generic_frame_bgc, font=(fnt_family, fnt_size),
     )
 
     style.configure(
@@ -308,14 +306,10 @@ class PyGarvEditorDashboard(ttk.Frame):
         self.file_io = ttk.LabelFrame(self, text="File (.yarf)")
         self.file_io.pack(side="top", fill="x", expand=0)
 
-        import_yarf = ttk.Button(
-            self.file_io, text="Import", command=self._on_import
-        )
+        import_yarf = ttk.Button(self.file_io, text="Import", command=self._on_import)
         import_yarf.pack(side="left", expand=0)
 
-        export_yarf = ttk.Button(
-            self.file_io, text="Export", command=self._on_export
-        )
+        export_yarf = ttk.Button(self.file_io, text="Export", command=self._on_export)
         export_yarf.pack(side="left", expand=0)
 
         # stub to track test running
@@ -466,9 +460,7 @@ class PyGarvCatalogView(ttk.LabelFrame):
         # lookup the pygarv docstring
         test_name = self.catalog_tree.item(test_iid)["text"]
         pg_test = getattr(self.model.pg, test_name)
-        description = pg_test.run.__doc__.split("\n")[
-            0
-        ]  # first line of docstring
+        description = pg_test.run.__doc__.split("\n")[0]  # first line of docstring
         # self.test_doc.config(text=description)
         self.config(text="Catalog: {0}".format(description))
 
@@ -521,12 +513,8 @@ class PyGarvTestView(ttk.LabelFrame):
         self.test_tree.bind("<Motion>", self._entry_widget_position_handler)
         self.test_tree.bind("<Button-4>", self._entry_widget_position_handler)
         self.test_tree.bind("<Button-5>", self._entry_widget_position_handler)
-        self.test_tree.bind(
-            "<Shift-Button-4>", self._entry_widget_position_handler
-        )
-        self.test_tree.bind(
-            "<Shift-Button-5>", self._entry_widget_position_handler
-        )
+        self.test_tree.bind("<Shift-Button-4>", self._entry_widget_position_handler)
+        self.test_tree.bind("<Shift-Button-5>", self._entry_widget_position_handler)
 
         # populate with model.yarf_doc tests
         self._test_tree_from_tr_doc()
@@ -547,9 +535,7 @@ class PyGarvTestView(ttk.LabelFrame):
             test_name = e.widget.item(catalog_tree_iid)["text"]
             test_specs = getattr(self.model.pg, test_name)
 
-            test_iid = self.test_tree.insert(
-                "", "end", text=test_name, open=True
-            )
+            test_iid = self.test_tree.insert("", "end", text=test_name, open=True)
             # children col 1 2 are user editable param, value
             for k, v in test_specs.items():
                 if k != "test":  # in ['dblock_path', 'test']:
@@ -582,21 +568,15 @@ class PyGarvTestView(ttk.LabelFrame):
             tt_idx = self.test_tree.index(
                 tt_iid
             )  # ith root index == ith yarf_doc['tests'] test
-            tt_item = self.test_tree.item(
-                tt_iid
-            )  # data values from the tree item
-            tt_test_name = tt_item[
-                "text"
-            ]  # should correspond to PyGarvTest['test']
+            tt_item = self.test_tree.item(tt_iid)  # data values from the tree item
+            tt_test_name = tt_item["text"]  # should correspond to PyGarvTest['test']
 
             # lookup the test
             pg_test = getattr(self.model.pg, tt_test_name)
             pg_test.reset()
 
             # update dblock path
-            pg_test["dblock_path"] = self.model.dblock_paths[
-                self.model.dbp_idx
-            ]
+            pg_test["dblock_path"] = self.model.dblock_paths[self.model.dbp_idx]
 
             # scrape user settable parameter values from the test_tree
             for param_iid in self.test_tree.get_children(tt_iid):
@@ -695,9 +675,7 @@ class PyGarvTestView(ttk.LabelFrame):
 
         self.update_idletasks()  # or else the bbox may not yet be known
         p, v = self.test_tree.item(tt_iid)["values"]
-        x, y, w, h = self.test_tree.bbox(
-            tt_iid, column="value"
-        )  # relative to widget
+        x, y, w, h = self.test_tree.bbox(tt_iid, column="value")  # relative to widget
 
         # overlay a ttk.Entry on the value being edited
         entry = ttk.Entry(self)
@@ -746,9 +724,7 @@ class PyGarvTestView(ttk.LabelFrame):
         for n, wdgt in self.children.items():
             if hasattr(wdgt, "x_y_tt_iid"):
                 self.update_idletasks()  # or else the bbox may not yet be known
-                x, y, w, h = self.test_tree.bbox(
-                    wdgt.x_y_tt_iid, column="value"
-                )
+                x, y, w, h = self.test_tree.bbox(wdgt.x_y_tt_iid, column="value")
                 wdgt.place(x=x, y=y)
         self.update_idletasks()  # lest the display lags ... ??
         return "break"
@@ -800,12 +776,8 @@ class PyGarvTestView(ttk.LabelFrame):
 
         # from the Treeview
         # fetch tree root ids, e.g., ('I001', 'I006')
-        tt_item = self.test_tree.item(
-            test_iid
-        )  # data values from the tree item
-        tt_test_name = tt_item[
-            "text"
-        ]  # should correspond to PyGarvTest['test']
+        tt_item = self.test_tree.item(test_iid)  # data values from the tree item
+        tt_test_name = tt_item["text"]  # should correspond to PyGarvTest['test']
 
         # for dblock dbp_idx, ith tree root index == ith tr_doc['tests'] test
         test_idx = self.test_tree.index(test_iid)
@@ -1028,9 +1000,7 @@ class Model:
         if len(self.dblock_paths) == 0:
             raise ValueError(
                 (
-                    "found no mkh5.dblocks in "
-                    "{0} ... not mkh5 format or empty?"
-                    ""
+                    "found no mkh5.dblocks in " "{0} ... not mkh5 format or empty?" ""
                 ).format(self.mkh5_f)
             )
 
@@ -1068,9 +1038,7 @@ class Model:
                 # print('updating Model.dblock_path', dblock_path)
                 self.dblock_path = dblock_path
                 self.dbp_idx = self.dblock_paths.index(self.dblock_path)
-                self.header, self.dblock = self.mkh5.get_dblock(
-                    self.dblock_path
-                )
+                self.header, self.dblock = self.mkh5.get_dblock(self.dblock_path)
             except Exception as err:
                 msg = "{0} failed on {1}".format(*err.args(), dblock_path)
                 err.args = (msg,)
@@ -1228,9 +1196,7 @@ class DataView(tk.PanedWindow):
         streams_panel.pack(expand=1, fill="both")
 
         streams_panel.add(TraceView(self, self.model, name="traces"))
-        streams_panel.add(
-            DBlockView(self, self.model, height=50, name="dblock_table")
-        )
+        streams_panel.add(DBlockView(self, self.model, height=50, name="dblock_table"))
         streams_panel.sash_place(0, 0, 450)
 
         # bound shrinkage and set sash position
@@ -1293,9 +1259,7 @@ class H5Nav(ttk.Notebook):
     """ Tab 1 (default) is dblocks, other tabs are epochs """
 
     def __init__(self, parent, *args, **kwargs):
-        super().__init__(
-            parent, *args, style="h5nav_style.TNotebook", **kwargs
-        )
+        super().__init__(parent, *args, style="h5nav_style.TNotebook", **kwargs)
         self.model = parent.model
 
         # always have default dblock tab
@@ -1356,7 +1320,7 @@ class H5View(ttk.Treeview):
         # switch on the type of data to initialize w/
         self.h5view_df = None
 
-        if layer is "dblock":
+        if layer == "dblock":
             # for the data block view
             self.h5view_df = pd.DataFrame(
                 self.model.mkh5.data_blocks, columns=["dblock_path"]
@@ -1381,9 +1345,7 @@ class H5View(ttk.Treeview):
 
         # pull the columns out of whatever table we have
         db_columns = list(self.h5view_df.columns)
-        ttk.Treeview.__init__(
-            self, style="h5view_style.Treeview", columns=db_columns
-        )
+        ttk.Treeview.__init__(self, style="h5view_style.Treeview", columns=db_columns)
 
         self.column("#0", width=0, stretch=False)
         for c in db_columns:
@@ -1414,9 +1376,7 @@ class H5View(ttk.Treeview):
 
         # slice the dblock path string and dblock tick integer the selected table row
 
-        this_dblock_path = h5view_df_row["values"][
-            self["columns"].index("dblock_path")
-        ]
+        this_dblock_path = h5view_df_row["values"][self["columns"].index("dblock_path")]
         self.model.update_model(this_dblock_path)
 
         try:
@@ -1554,10 +1514,7 @@ class DBlockView(ttk.Treeview):
                 self.cursor_id = ""
             else:
                 raise ValueError(
-                    (
-                        "uh oh ... TreeViewSelect trouble in "
-                        "DBlockView.set_vp_cursor"
-                    )
+                    ("uh oh ... TreeViewSelect trouble in " "DBlockView.set_vp_cursor")
                 )
 
         # set viewport cursor sample index or None from cursor_id
@@ -1589,9 +1546,7 @@ class DBlockView(ttk.Treeview):
         if self.traces.dashboard.is_event_view:
             if self.traces.dashboard.anchor_event_data is not None:
                 self.yview_moveto(0)
-                self.yview_scroll(
-                    self.traces.dashboard.anchor_vp_offset, "units"
-                )
+                self.yview_scroll(self.traces.dashboard.anchor_vp_offset, "units")
 
         self._set_vp_info()
         data = self.vp_ys
@@ -1638,11 +1593,7 @@ class TraceView(ttk.Frame):
 
             # epoch info in dblock and vp index units
             self._data = {
-                "anchor": {
-                    "dblock_idx": None,
-                    "vp_offset": None,
-                    "event_data": None,
-                },
+                "anchor": {"dblock_idx": None, "vp_offset": None, "event_data": None,},
                 "prestim": {"dblock_idx": None, "vp_offset": None},
                 "poststim": {"dblock_idx": None, "vp_offset": None},
             }
@@ -1740,9 +1691,7 @@ class TraceView(ttk.Frame):
 
             self.prestim_label.grid(row=3, column=0, sticky=tk.N + tk.W + tk.E)
             #            self.anchor_label.grid(row=3, column=1,  sticky=tk.N+tk.W+tk.E)
-            self.poststim_label.grid(
-                row=3, column=2, sticky=tk.N + tk.W + tk.E
-            )
+            self.poststim_label.grid(row=3, column=2, sticky=tk.N + tk.W + tk.E)
 
             self.prestim_sc.grid(row=4, column=0, sticky=tk.N + tk.W + tk.E)
             self.anchor_sc.grid(row=4, column=1, sticky=tk.N + tk.W + tk.E)
@@ -1815,9 +1764,7 @@ class TraceView(ttk.Frame):
                 # moving the anchor so reconfigure boundary scale limits
                 # self.prestim_sc.config(from_ = 0, to = val)
                 self.prestim_sc.config(from_=val, to=0)
-                self.poststim_sc.config(
-                    from_=0, to=self.parent.vp_len - val - 1
-                )
+                self.poststim_sc.config(from_=0, to=self.parent.vp_len - val - 1)
 
             else:
                 raise ValueError("unknown scale label")
@@ -1990,9 +1937,7 @@ class TraceView(ttk.Frame):
             scroll_by = self.get_scroll_by()
 
             # model.next_event returns idx if nothing found
-            next_idx = self.model.next_event(
-                idx, direction, pygarv_type=scroll_by
-            )
+            next_idx = self.model.next_event(idx, direction, pygarv_type=scroll_by)
 
             if next_idx != idx:
                 # found something new, update the dash data
@@ -2029,9 +1974,7 @@ class TraceView(ttk.Frame):
             srate = self.model.header["samplerate"]
             for n in [vp_idx0, vp_idx1, db_len]:
                 if units == "seconds":
-                    val = "{0:>10.3f}".format(
-                        mkh5.mkh5._samp2ms(n, srate) / 1000.0
-                    )
+                    val = "{0:>10.3f}".format(mkh5.mkh5._samp2ms(n, srate) / 1000.0)
                 else:
                     val = n
                 status_specs.append(val)
@@ -2173,8 +2116,7 @@ class TraceView(ttk.Frame):
                 # this version paints in 0 to vp_len * x_scale
                 # canvas_x = [ int( i * self.x_scale) for i in range(self.parent.vp_len) ]
                 canvas_x = [
-                    int(i * self.x_scale)
-                    for i in [ii - self.parent.vp_idx for ii in x]
+                    int(i * self.x_scale) for i in [ii - self.parent.vp_idx for ii in x]
                 ]
 
                 # nudge all traces up by y border pad to avoid clipping first
@@ -2226,9 +2168,7 @@ class TraceView(ttk.Frame):
             ttk.Scrollbar.set(self, self.position[0], self.position[1])
 
     def __init__(self, parent, model, *args, **kwargs):
-        super().__init__(
-            parent, *args, style="TraceView.TLabelframe", **kwargs
-        )
+        super().__init__(parent, *args, style="TraceView.TLabelframe", **kwargs)
         self.parent = parent
         self.model = model
         self.canvas = tk.Canvas(self, background="black")
@@ -2411,9 +2351,7 @@ class TraceView(ttk.Frame):
         else:
             # prevent scrolling past the data
             # print('new vp_idx {0}'.format(self.vp_idx))
-            self.vp_idx = max(
-                0, min(vp_idx, len(self.model.dblock) - self.vp_len)
-            )
+            self.vp_idx = max(0, min(vp_idx, len(self.model.dblock) - self.vp_len))
 
         # set xs all the way to end of vp
         self.vp_xs = [self.vp_idx + ii for ii in range(self.vp_len)]
@@ -2469,18 +2407,10 @@ class TraceView(ttk.Frame):
         self.canvas.bind("<Shift-Left>", self._trace_xview_scroll)
         self.canvas.bind("<Shift-Right>", self._trace_xview_scroll)
 
-        self.canvas.bind(
-            "<Up>", lambda e: self.canvas.yview_scroll(-1, "units")
-        )
-        self.canvas.bind(
-            "<Down>", lambda e: self.canvas.yview_scroll(1, "units")
-        )
-        self.canvas.bind(
-            "<Shift-Up>", lambda e: self.canvas.yview_scroll(-1, "page")
-        )
-        self.canvas.bind(
-            "<Shift-Down>", lambda e: self.canvas.yview_scroll(1, "page")
-        )
+        self.canvas.bind("<Up>", lambda e: self.canvas.yview_scroll(-1, "units"))
+        self.canvas.bind("<Down>", lambda e: self.canvas.yview_scroll(1, "units"))
+        self.canvas.bind("<Shift-Up>", lambda e: self.canvas.yview_scroll(-1, "page"))
+        self.canvas.bind("<Shift-Down>", lambda e: self.canvas.yview_scroll(1, "page"))
 
     def _trace_xview_scroll(self, e):
 
@@ -2691,9 +2621,7 @@ class TraceView(ttk.Frame):
         # FIX ME ... see y_border_pad
         # add + 2 for first and last trace head room
         if hasattr(self, "traces"):
-            traces_height = (
-                (len(self.traces) + 2) * self.y_offset * self.y_scale
-            )
+            traces_height = (len(self.traces) + 2) * self.y_offset * self.y_scale
         else:
             traces_height = 0
 
@@ -2707,9 +2635,7 @@ class TraceView(ttk.Frame):
         # print('reset_scrollregion()', scrollregion_width)
 
         scrollregion_height = int(max(y_sb_height, traces_height))
-        self.canvas.config(
-            scrollregion=(0, 0, scrollregion_width, scrollregion_height)
-        )
+        self.canvas.config(scrollregion=(0, 0, scrollregion_width, scrollregion_height))
         return (scrollregion_width, scrollregion_height)
 
     @property
@@ -2851,11 +2777,7 @@ class TraceView(ttk.Frame):
 
             # configure trace attributes
             self.canvas.itemconfig(
-                t.canvas_id,
-                tag=t.label,
-                fill=t.fill,
-                width=t.width,
-                activewidth=2,
+                t.canvas_id, tag=t.label, fill=t.fill, width=t.width, activewidth=2,
             )
 
             label_nudge = 10  # pts
@@ -3067,9 +2989,7 @@ class TraceView(ttk.Frame):
             for ii, s in enumerate(streams):
 
                 # x slicer
-                vp_slice = slice(
-                    fail["x0"] - self.vp_idx, fail["x1"] - self.vp_idx + 1
-                )
+                vp_slice = slice(fail["x0"] - self.vp_idx, fail["x1"] - self.vp_idx + 1)
 
                 # y index into traces by stream label ... scary
                 trace_idx = trace_idxs[s]
@@ -3130,9 +3050,7 @@ class TraceView(ttk.Frame):
             #         pdb.set_trace()
 
             p.canvas_id = self.canvas.create_line(p.canvas_pts)
-            self.canvas.itemconfig(
-                p.canvas_id, tag=p.label, fill="red", width=3
-            )
+            self.canvas.itemconfig(p.canvas_id, tag=p.label, fill="red", width=3)
 
     # cursor grob
     def init_vp_cursor(self):

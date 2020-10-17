@@ -222,9 +222,7 @@ class CodeTagger:
         # uh oh ...
         for fail in fails:
             print(f"failed {fail[0]}: {fail[1]}")
-        raise IOError(
-            f"failed to load {cmf} as an xlsx, YAML, or text code map"
-        )
+        raise IOError(f"failed to load {cmf} as an xlsx, YAML, or text code map")
 
         self._check_mapper(self.code_map)
 
@@ -273,9 +271,7 @@ class CodeTagger:
 
         """
         # use !named_sheet if there is one, else default to 0 == first
-        cmf_reob = re.match(
-            r"(?P<xl_f>.+\.xls[xm])[\!]*(?P<sheet_name>.*)$", cmf
-        )
+        cmf_reob = re.match(r"(?P<xl_f>.+\.xls[xm])[\!]*(?P<sheet_name>.*)$", cmf)
         xl_f = cmf_reob["xl_f"]
         sheet_name = cmf_reob["sheet_name"]
         if len(sheet_name) == 0:
@@ -309,9 +305,7 @@ class CodeTagger:
         if not isinstance(mapper, dict):
             msg = (
                 "code tag map file is not a yaml map: "
-                + "yaml.load({0}).__class__ == {1}".format(
-                    self.cmf, mapper.__class__
-                )
+                + "yaml.load({0}).__class__ == {1}".format(self.cmf, mapper.__class__)
             )
             raise ValueError(msg)
 
@@ -417,19 +411,13 @@ class CodeTagger:
 
         """
 
-        in_patt = self._pattern_to_str(
-            pattern
-        )  # coerce input to a sensible r.e.
+        in_patt = self._pattern_to_str(pattern)  # coerce input to a sensible r.e.
 
         # define capture groups, supressing greedy matching w/ ? is essential
-        capt_group_patt = (
-            r"\((?!\?\:).+?\)"  # any ( ) except non-capturing (?: )
-        )
+        capt_group_patt = r"\((?!\?\:).+?\)"  # any ( ) except non-capturing (?: )
 
         # anchor_patt = r'\(#[-]{0,1}\d+\)' # matches integer code literals only
-        anchor_patt = (
-            r"\(#.+\)"  # allow anchor pattern (# ...)  allows patterns
-        )
+        anchor_patt = r"\(#.+\)"  # allow anchor pattern (# ...)  allows patterns
 
         # look up the capture groups including anchors
         capture_groups = [g for g in re.finditer(capt_group_patt, in_patt)]
@@ -609,11 +597,7 @@ class CodeTagger:
                     idx = didx
                     dlim = delim_at
 
-                    anchor_idx, anchor_group_idx, anchor_tick = (
-                        None,
-                        None,
-                        None,
-                    )
+                    anchor_idx, anchor_group_idx, anchor_tick = (None, None, None)
 
                     #  this index points to the anchor capture group in m.groups()
                     anchor_group_idx = anchor[0] + 1
@@ -645,19 +629,14 @@ class CodeTagger:
                             # ... make a list, possibly singleton
                             enumevcodes = [
                                 (i, c)
-                                for i, c in enumerate(
-                                    m.group(mgi).strip().split(" ")
-                                )
+                                for i, c in enumerate(m.group(mgi).strip().split(" "))
                             ]
 
                             # check the slicing and dicing ...
                             # the code (sequence) at this index must match the string pattern
                             # assert all([c == str(evcodes[idx+i]) for i,c in enumevcodes])
                             if any(
-                                [
-                                    c != str(evcodes[idx + i])
-                                    for i, c in enumevcodes
-                                ]
+                                [c != str(evcodes[idx + i]) for i, c in enumevcodes]
                             ):
                                 msg = (
                                     "uh oh, horrible bug #2 in the event code finder"
@@ -676,15 +655,9 @@ class CodeTagger:
                                     ("anchor_str", m.group(anchor_group_idx)),
                                     ("match_str", m.group(mgi)),
                                     ("anchor_code", evcodes[anchor_idx]),
-                                    (
-                                        "match_code",
-                                        evcodes[idx + i],
-                                    ),  # evcodes[idx],
+                                    ("match_code", evcodes[idx + i]),  # evcodes[idx],
                                     ("anchor_tick", anchor_tick),
-                                    (
-                                        "match_tick",
-                                        ticks[idx + i],
-                                    ),  # ticks[idx]
+                                    ("match_tick", ticks[idx + i]),  # ticks[idx]
                                     (
                                         "anchor_tick_delta",
                                         int(ticks[idx + i]) - int(anchor_tick),
