@@ -1,14 +1,11 @@
-from pathlib import Path
 import h5py
 import numpy as np
-import pdb
-import pprint
 import os
-import warnings
 import pandas as pd
-import tables  # mkpy >= v0.1.9 import tables here, else pandas->importlib->pathspec errors
 
-from matplotlib import pyplot as plt
+# running mkpy/tests pytest throws the error, running mkpy pytest is OK
+# mkpy >= v0.1.9 import tables here, else pandas->importlib->pathspec errors
+# import tables
 
 from .config import TEST_DIR, IRB_DIR, GET_IRB_MKDIG, CAL_ARGS, irb_data, mkpy
 from mkpy import mkh5
@@ -25,7 +22,6 @@ def test_irb_epochs_out_of_bounds():
     myh5 = mkh5.mkh5(h5_f)
     myh5.reset_all()  # start fresh
     myh5.create_mkdata(subid, *GET_IRB_MKDIG(subid))
-    pts, pulse, lo, hi, ccode = 3, 10, -50, 50, 0
     myh5.calibrate_mkdata(subid, **CAL_ARGS)
 
     event_table = myh5.get_event_table(code_map_f)
