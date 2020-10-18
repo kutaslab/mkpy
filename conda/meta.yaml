@@ -38,6 +38,8 @@ requirements:
     - yamllint
     - pytest  !=5.3.4 # so users can run tests, bad release fights with nose
     - nose  # for legacy dpath tests
+    - requests  # TravisCI pytests download test data files too large for github
+    - mne  # could be an optional dependency but ...
 
 test:
   imports:

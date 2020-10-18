@@ -3,7 +3,7 @@ from copy import deepcopy
 import pytest
 import numpy as np
 import requests  # URL IO
-from mkpy import dpath   # local fork of dpath
+from mkpy import dpath  # local fork of dpath
 
 import mne
 from .config import TEST_DIR
@@ -28,7 +28,7 @@ for filename in [ZENODO_RAW_F, ZENODO_EPOCHS_F]:
         continue
     print(f"downloading {DATA_DIR / filename} from {TEST_DATA_URL} ... please wait")
     resp = requests.get(TEST_DATA_URL + str(filename))
-    with open(DATA_DIR / filename, 'wb') as _fd:
+    with open(DATA_DIR / filename, "wb") as _fd:
         _fd.write(resp.content)
         h5 = mkh5.mkh5(DATA_DIR / filename)
         h5.data_blocks
@@ -38,6 +38,7 @@ TEST_EPOCHS_MKH5_FILE = DATA_DIR / ZENODO_EPOCHS_F
 
 # ------------------------------------------------------------
 # Backend and QC checks
+
 
 def test__check_api_params_raw():
     """RawMkh5 keyword parameters"""
@@ -55,51 +56,36 @@ def test__check_api_params_raw():
     # ------------------------------------------------------------
     # fail on unknown kwarg
     with pytest.raises(ValueError):
-        mkh5mne._check_api_params(
-            RawMkh5, TEST_RAW_MKH5_FILE, not_a_kw="arg"
-        )
+        mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, not_a_kw="arg")
 
     # dblock paths
-    mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=None
-    )
+    mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=None)
     mkh5mne._check_api_params(
         RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"]
     )
 
     for fail, param in [
-            (TypeError, "not_a_list"),
-            (TypeError, [1, 2, 3]),  # not a list of str
-            (mkh5mne.Mkh5DblockPathError, ["no_such_dblock_path"])
+        (TypeError, "not_a_list"),
+        (TypeError, [1, 2, 3]),  # not a list of str
+        (mkh5mne.Mkh5DblockPathError, ["no_such_dblock_path"]),
     ]:
         with pytest.raises(fail):
-            mkh5mne._check_api_params(
-                RawMkh5,
-                TEST_RAW_MKH5_FILE,
-                dblock_paths=param
-            )
+            mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=param)
 
     # garv interval
     for kwval in [[-500, 1500, "ms"], [-0.50, 1.5, "s"]]:
-        mkh5mne._check_api_params(
-            RawMkh5,
-            TEST_EPOCHS_MKH5_FILE,
-            garv_interval=kwval
-        )
+        mkh5mne._check_api_params(RawMkh5, TEST_EPOCHS_MKH5_FILE, garv_interval=kwval)
     for exception, kwval in [
-            (ValueError, [1, 2]),
-            (ValueError, [1, 2, "not_ms_or_s"]),
-            (TypeError,  ["a", 2, "ms"]),
-            (ValueError,  [500, 500, "ms"]),
-            (ValueError,  [500, -500, "ms"]),
+        (ValueError, [1, 2]),
+        (ValueError, [1, 2, "not_ms_or_s"]),
+        (TypeError, ["a", 2, "ms"]),
+        (ValueError, [500, 500, "ms"]),
+        (ValueError, [500, -500, "ms"]),
     ]:
         with pytest.raises(exception):
             mkh5mne._check_api_params(
-                RawMkh5,
-                TEST_EPOCHS_MKH5_FILE,
-                garv_interval=kwval
+                RawMkh5, TEST_EPOCHS_MKH5_FILE, garv_interval=kwval
             )
-
 
     # smoke test RawMkh5, EpochsMkh5 w/  yaml file  go, no-go
     mkh5mne._check_api_params(
@@ -107,11 +93,8 @@ def test__check_api_params_raw():
     )
     with pytest.raises(mkh5mne.ApparatusYamlFileError):
         mkh5mne._check_api_params(
-            RawMkh5,
-            TEST_RAW_MKH5_FILE,
-            apparatus_yaml=TEST_APPARATUS_YAML + "X"
+            RawMkh5, TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML + "X"
         )
-
 
     # ignore_keys param go, no-go
     mkh5mne._check_api_params(
@@ -120,12 +103,8 @@ def test__check_api_params_raw():
     for bad_ignore_keys in [(1, 2), ["meas_id", 3.5]]:
         with pytest.raises(ValueError):
             mkh5mne._check_api_params(
-
-                RawMkh5,
-                TEST_RAW_MKH5_FILE,
-                ignore_keys=bad_ignore_keys
-        )
-
+                RawMkh5, TEST_RAW_MKH5_FILE, ignore_keys=bad_ignore_keys
+            )
 
 
 @pytest.mark.parametrize("key", ["fail_on_info", "fail_on_montage"])
@@ -133,17 +112,11 @@ def test__check_api_params_raw():
 def test__check_api_params_fail_on_info_montage(key, val):
 
     # smoke test RawMkh5, EpochsMkh5 w/  yaml file
-    mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, **{key: val}
-    )
+    mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, **{key: val})
 
     val = "X"
     with pytest.raises(TypeError):
-        mkh5mne._check_api_params(
-            RawMkh5,
-            TEST_RAW_MKH5_FILE,
-            **{key: val}
-        )
+        mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, **{key: val})
 
 
 @pytest.mark.parametrize(
@@ -153,26 +126,20 @@ def test__check_api_params_fail_on_info_montage(key, val):
         "quiet",
         "debug",
         pytest.param(
-            "not_a_level",
-            marks=pytest.mark.xfail(strict=True, reason=ValueError)
+            "not_a_level", marks=pytest.mark.xfail(strict=True, reason=ValueError)
         ),
-        pytest.param(
-            None,
-            marks=pytest.mark.xfail(strict=True, reason=ValueError)
-        ),
-    ]
+        pytest.param(None, marks=pytest.mark.xfail(strict=True, reason=ValueError)),
+    ],
 )
 @pytest.mark.parametrize(
     "_class, _test_file, _class_kwargs",
     [
         (RawMkh5, TEST_RAW_MKH5_FILE, None),
-        #(EpochsMkh5, TEST_EPOCHS_MKH5_FILE, {"epochs_name": "ms100"}) 
-    ]
+        # (EpochsMkh5, TEST_EPOCHS_MKH5_FILE, {"epochs_name": "ms100"})
+    ],
 )
-def test__check_api_params_verbose(
-    _class, _test_file, _class_kwargs, verb_level
-):
-    
+def test__check_api_params_verbose(_class, _test_file, _class_kwargs, verb_level):
+
     kwargs = {}
     if _class_kwargs:
         kwargs.update(_class_kwargs)
@@ -201,7 +168,6 @@ def test__validate_hdr_for_mne():
         ("apparatus/fiducials/lpa", None),
         ("apparatus/fiducials/rpa", None),
         ("apparatus/fiducials/nasion", None),
-
         # key: value errors
         ("h5_dataset", "not_a/dblock_X"),
         ("samplerate", "X"),
@@ -251,21 +217,20 @@ def test__parse_hdr_for_mne():
         hdr, dblock = h5.get_dblock(dblock_path)
         mkh5mne._parse_hdr_for_mne(hdr, dblock)
 
+
 @pytest.mark.parametrize(
     "garv_interval",
     [
         None,
         [-500, 1500, "ms"],
         pytest.param([1500, 500, "ms"], marks=pytest.mark.xfail(strict=True)),
-    ]
+    ],
 )
 @pytest.mark.parametrize("mkh5_f", [TEST_RAW_MKH5_FILE, TEST_EPOCHS_MKH5_FILE])
 def test__dblock_to_raw(mkh5_f, garv_interval):
     h5 = mkh5.mkh5(mkh5_f)
     for dblock_path in h5.dblock_paths:
-        mkh5mne._dblock_to_raw(
-            mkh5_f, dblock_path, garv_interval=garv_interval
-        )
+        mkh5mne._dblock_to_raw(mkh5_f, dblock_path, garv_interval=garv_interval)
 
 
 def test__is_equal_mne_info():
@@ -283,9 +248,7 @@ def test__is_equal_mne_info():
     # same, different info
     assert mkh5mne._is_equal_mne_info(info_a, info_a)
     assert not mkh5mne._is_equal_mne_info(info_a, info_b)
-    assert mkh5mne._is_equal_mne_info(
-        info_a, info_b, exclude=["subject_info"]
-    )
+    assert mkh5mne._is_equal_mne_info(info_a, info_b, exclude=["subject_info"])
 
     # same, different montage
     assert mkh5mne._is_equal_mne_montage(montage_a, montage_a)
@@ -297,10 +260,9 @@ def test__is_equal_mne_info():
         # reset for testing
         montage_b_bad = deepcopy(montage_b)
         setattr(montage_b_bad, bad_key, "X")
-        result = mkh5mne._is_equal_mne_montage(
-            montage_a, montage_b_bad, verbose=True
-        )
+        result = mkh5mne._is_equal_mne_montage(montage_a, montage_b_bad, verbose=True)
         assert result is False
+
 
 # ------------------------------------------------------------
 # User API tests
@@ -317,35 +279,18 @@ def test_read_raw_epochs_mkh5():
         ["open/dblock_0"],
         pytest.param(
             ["open/dblock_X"],
-            marks=pytest.mark.xfail(
-                strict=True,
-                reason=mkh5mne.Mkh5DblockPathError
-            )
+            marks=pytest.mark.xfail(strict=True, reason=mkh5mne.Mkh5DblockPathError),
         ),
-        pytest.param(
-            37.2,
-            marks=pytest.mark.xfail(
-                strict=True,
-                reason=TypeError
-            )
-        ),
-        pytest.param(
-            [1, 2, 3],
-            marks=pytest.mark.xfail(
-                strict=True,
-                reason=TypeError
-            )
-        ),
-    ]
+        pytest.param(37.2, marks=pytest.mark.xfail(strict=True, reason=TypeError)),
+        pytest.param([1, 2, 3], marks=pytest.mark.xfail(strict=True, reason=TypeError)),
+    ],
 )
 def test_read_raw_mkh5(dbps):
     mkh5mne.read_raw_mkh5(TEST_RAW_MKH5_FILE, dblock_paths=dbps)
 
 
 def test_read_raw_mkh5_apparatus_yaml():
-    mkh5mne.read_raw_mkh5(
-        TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML
-    )
+    mkh5mne.read_raw_mkh5(TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML)
 
 
 @pytest.mark.parametrize("garv_interval", [None, [-500, 1500, "ms"]])
@@ -354,9 +299,7 @@ def test_read_write_raw(garv_interval):
     infix = "_".join([str(p) for p in garv_interval]) if garv_interval else "_None"
     raw_fif = f"test_read_write_garv{infix}-raw.fif"
     print("read/write test writing:", raw_fif)
-    raw_w = mkh5mne.read_raw_mkh5(
-        TEST_EPOCHS_MKH5_FILE, garv_interval=garv_interval
-    )
+    raw_w = mkh5mne.read_raw_mkh5(TEST_EPOCHS_MKH5_FILE, garv_interval=garv_interval)
     raw_w.save(raw_fif, overwrite=True)
     raw_r = mne.io.read_raw_fif(raw_fif, preload=True)
 
@@ -372,6 +315,5 @@ def test_read_write_raw(garv_interval):
     assert all(raw_w.annotations.description == raw_r.annotations.description)
     for attr in ["onset", "duration"]:
         assert np.allclose(
-            getattr(raw_w.annotations, attr),
-            getattr(raw_r.annotations, attr)
+            getattr(raw_w.annotations, attr), getattr(raw_r.annotations, attr)
         )

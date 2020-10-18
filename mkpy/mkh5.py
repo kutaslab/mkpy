@@ -230,7 +230,7 @@ class mkh5:
             "h5_dataset": str,  # set upon construction to the dblock h5py.Dataset.name
             "mkh5_version": str,  # ==mkh5.__version__  new in 0.2.4
             "raw_dig_header": dict,  # dig header bytes new in 0.2.4
-            "eeg_file_stat": dict,  # os.stat() new in 0.2.4 
+            "eeg_file_stat": dict,  # os.stat() new in 0.2.4
         }
 
         # minimal stream item upon loading into .crw/.log info into a mkh5.dblock_N
@@ -1139,11 +1139,11 @@ class mkh5:
                                         ("data_group", dgp),
                                         ("dblock_path", dbp),
                                         ("dblock_tick_idx", tick_idx[0]),
-                                        ("dblock_ticks", dblock_ticks[tick_idx][0],),
+                                        ("dblock_ticks", dblock_ticks[tick_idx][0]),
                                         ("crw_ticks", crw_ticks[tick_idx][0]),
-                                        ("raw_evcodes", raw_evcodes[tick_idx][0],),
-                                        ("log_evcodes", log_evcodes[tick_idx][0],),
-                                        ("log_ccodes", log_ccodes[tick_idx][0],),
+                                        ("raw_evcodes", raw_evcodes[tick_idx][0]),
+                                        ("log_evcodes", log_evcodes[tick_idx][0]),
+                                        ("log_ccodes", log_ccodes[tick_idx][0]),
                                         ("log_flags", log_flags[tick_idx][0]),
                                         (
                                             "epoch_match_tick_delta",
@@ -2262,7 +2262,7 @@ class mkh5:
 
     # create a new data set in specified group
     def create_mkdata(
-        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs,
+        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs
     ):
         """Convert Kutas lab ERPSS `.crw` and `.log` to the 
         `mkh5` hdf5 format.
@@ -2383,7 +2383,7 @@ class mkh5:
     # add eeg data to a group under the same header
     # ------------------------------------------------------------
     def append_mkdata(
-        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs,
+        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs
     ):
         """Append .crw, .log, .yhdr to an existing h5_path
 
@@ -2703,7 +2703,7 @@ class mkh5:
                         m = re.search(pattern, full_path)
                         if m:
                             matches.append(
-                                (full_path, dpath.path.get(hio.header, hdr_path),)
+                                (full_path, dpath.path.get(hio.header, hdr_path))
                             )
                     del hio
         if len(matches) == 0:
@@ -3733,7 +3733,7 @@ class mkh5:
                     # returns an nd.array, access by data column name
                     # return subarray: duration samples x epochs
                     # (cal_slicer, fails) = self._get_dblock_slicer_from_eventstream(g['raw_evcodes'], presamp, duration)
-                    (cal_slicer, fails,) = self._get_dblock_slicer_from_eventstream(
+                    (cal_slicer, fails) = self._get_dblock_slicer_from_eventstream(
                         g["log_evcodes"], presamp, duration
                     )
                     if len(fails) > 0:
