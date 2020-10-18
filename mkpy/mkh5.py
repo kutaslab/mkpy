@@ -223,14 +223,14 @@ class mkh5:
             # set during when mkh5._read_raw_log() reads .crw, .log
             "eeg_file": str,  # .crw file name as passed to _read_raw_log
             "eeg_file_md5": str,
-            "eeg_file_stat": dict,  # os.stat() info same as pathlib.Path().stat()
             "log_file": str,  # .log file name as passed to _read_raw_log
             "log_file_md5": str,
             # ('uuid_file', str),     # not implemented
             "streams": dict,  #  items are 1-1 (unordered) for dblock columns
             "h5_dataset": str,  # set upon construction to the dblock h5py.Dataset.name
-            "mkh5_version": str,  # mkh5.__version__  added mkh5 0.2.4
-            "raw_dig_header": dict,  # complete dig header dump for reference added mkh5 0.2.4
+            "mkh5_version": str,  # ==mkh5.__version__  new in 0.2.4
+            "raw_dig_header": dict,  # dig header bytes new in 0.2.4
+            "eeg_file_stat": dict,  # os.stat() new in 0.2.4 
         }
 
         # minimal stream item upon loading into .crw/.log info into a mkh5.dblock_N
@@ -748,8 +748,23 @@ class mkh5:
         def _check_header(self):
             """enforce mandatory minimum mkh5 header data structure"""
 
-            # check for mandatory keys and values of the right type
+            # version check new in 0.2.5
             header_keys = self._header.keys()
+            msg = None
+            if "mkh5_version" not in header_keys:
+                file_ver = "< 0.2.4"
+            else:
+                file_ver = self._header["mkh5_version"]
+
+            if not __version__ == file_ver:
+                msg = (
+                    f"You are using mkpy version {__version__}, the mkh5 file "
+                    f"version is {file_ver} the data processing is undefined and "
+                    "unpredictable. Rebuild the mkh5 file with this version "
+                    "or use the version of mkpy that created the mkh5 file."
+                )
+
+            # check for mandatory keys and values of the right type
             for h_key, dtype in self._mkh5_header_types.items():
                 if h_key not in header_keys:
                     msg = (

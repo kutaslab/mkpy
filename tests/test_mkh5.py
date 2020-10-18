@@ -27,7 +27,6 @@ from .config import (
 
 from mkpy import mkh5, h5tools
 
-
 # CRUD tests
 # ------------------------------------------------------------
 # mkh5 initialization tests
