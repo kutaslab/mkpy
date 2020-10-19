@@ -566,7 +566,7 @@ def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=[], **kwargs):
     dbp_i = dblock_paths[0]
     hdr_i, dblock_i = h5.get_dblock(dbp_i)
     info_i, montage_i = _hdr_dblock_to_info_montage(
-        hdr_i, dblock_i, apparatus_yaml=None
+        hdr_i, dblock_i, apparatus_yaml=apparatus_yaml
     )
 
     for dbp_j in dblock_paths[1:]:
