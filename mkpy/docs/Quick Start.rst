@@ -1,56 +1,22 @@
 .. _quick_start:
 
-Quick start
-===========
+Quick start with ``jupyter notebook``
+=====================================
 
+#. Conda  install ``mkpy`` and ``jupyter`` and activate the environment.
 
-Install ``mkpy``
-----------------
+#. In a terminal window navigate to the directory where you want
+   to work and run::
 
-``conda env (recommended)`` If you work on a 64-bit linux or fairly recent MacOS and
-are already using conda environments, install the latest versions
-X.Y.Z. from Anaconda Cloud like so
+     $ jupyter notebook
 
-* Minimal::
- 
-    conda create --name mkpy_env install mkpy=X.Y.Z -c kutaslab -c defaults -c conda-forge
-    
-* A scientific computing stack including ``mkpy``::
-    
-    conda create --name mkconda_X.Y.Z install mkpy -c kutaslab -c defaults -c conda-forge
+#. Open a notebook with a Python 3 kernel, and in the first code cell enter::
 
-
-``github`` Install from source::
-
-    git clone https://github.com/kutaslab/mkpy mkpy
-    cd mkpy
-    pip install .
-
-
-
-Launch ``mkpy``
--------------------
-
-#. Log into your server.
-
-#. Open a terminal window and navigate to the directory where you want
-   to work.
-
-#. Activate the conda environment to work in, e.g., ``mkconda-0.0.7_expt_4``
-
-#. At the shell prompt launch ``jupyter notebook``::
-
-     [turbach@mkgpu1 ~]$ jupyter notebook
-
-#. Find the jupyter window in your web browser and start a new notebook 
-   or open an existing one running the ``Python 3`` kernel.
-
-   In the first code cell enter::
-
-     from mkpy import mkh5
+     import mkpy.mkh5 as mkh5
      myh5 = mkh5.mkh5("some_file.h5")
 
-#. Have at it.
+#. The ``myh5`` instance is ready to go, the data will be stored
+   ``some_file.h5``, have at it.
 
 
 Single subject, single session workflow
@@ -260,7 +226,8 @@ Merging experimental data with EEG
     specifies what numeric event codes in the data get tagged with
     what experimental information
 
-  :ref:`yhdx` extract `key:value` from the HDF5 dblock headers as `column:values` in the event data table
+  :ref:`yhdx`
+    extract `key:value` from the HDF5 dblock headers as `column:values` in the event data table
 
   :meth:`~mkpy.mkh5.mkh5.get_event_table`
     look up and tag single-trial event codes and event code sequences

@@ -1,55 +1,76 @@
 Installation
 ============
 
-A copy of the ``mkpy`` package is cloned from the Kutas Lab local
-``git`` repository at ``/mnt/cube/mkgit`` and installed with ``pip``.
+Installing the latest stable mkpy with ``conda`` is strongly
+recommended. If you don't have conda installed yet, miniconda3
+(https://docs.conda.io/en/latest/miniconda.html#installing) is the way
+to go.
 
-.. Note:: `mkpy` is restricted to python 3.6 until other packages support 3.7
-
-
-Adding `mkpy` to an existing `conda` enviroment 
-------------------------------------------------
-
-To install `mkpy` in an existing python 3.6 conda environment at the
-terminal command line 
-are found. 
+As of mkpy v0.2.4, conda installations are compatible with Python 3.6,
+3.7, and 3.8.
 
 
-1. In a ``bash`` shell terminal, navigate to some scratch or
-   temp directory and activate the ``conda`` enviroment.
+Conda installation (recommended)
+--------------------------------
+
+Run these commands in a terminal window command shell. The named conda
+channels and their order is important. Replace `some_env` with a
+sensible environment name.
+
+* Install he latest stable version of ``mkpy`` and the most recent
+  versions of the compatible packages including Python in a fresh
+  conda environment:
+
+  .. code-block:: bash
+
+      create conda -n some_env -c kutaslab -c defaults -c conda-forge mkpy
+
+* Install for a specific version of Python, say 3.7:
+
+  .. code-block:: bash
+
+      create conda -n some_env -c kutaslab -c defaults -c conda-forge mkpy python=3.7
+
+
+* Install into an existing `conda` environment:
+
+  .. code-block:: bash
+  
+      conda activate some_env
+      conda install  -c kutaslab -c defaults -c conda-forge mkpy
+
+
+Install from source
+-------------------
+
+Clone the github repository into the current directory and run
+setup.py. Good luck. 
 
 .. code-block:: bash
 
-   conda activate my_env
+   git clone https://github.com/kutaslab/mkpy
 
-2. Clone the ``mkpy`` git repository into the current directory.
 
-.. code-block:: bash
 
-   git clone /mkgit/mkpy .
+Install from PyPI via pip 
+-------------------------
 
-4. Navigate to the `./mkpy` directory where the `setup.py` and
-   `requirements.txt` files are found and install the dependencies and
-   mkpy like so:
+Good luck.
 
 .. code-block:: bash
 
-   cd mkpy
-   pip install -r requirements.txt
-   pip install .
+    pip install mkpy
 
 
-Creating a new `conda` conda enviroment for  `mkpy`
----------------------------------------------------
+Development versions
+--------------------
 
-1. Run this with a sensible name in place of `some_env` and then
-follow the steps above.
+* At times a development version of mkpy runs ahead of the latest
+  stable release and can be conda installed.  It is strongly
+  recommended to install development versions in a fresh conda
+  environment or risk polluting an existing working environment.
 
-.. code-block:: bash
+  .. code-block:: bash
 
-    create conda -n some_env python=3.6 pip
-
-
-2. Follow the steps above for adding `mkpy` to an existing `conda`
-   enviroment.
+      create conda -n dev_env -c kutaslab/label/pre-release -c defaults -c conda-forge mkpy
 

@@ -70,7 +70,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "mkpy"
-copyright = "2017-2019 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith"
+copyright = "2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith"
 author = "Thomas P. Urbach, Andrey Portnoy, extending code from Nathaniel Smith"
 
 # The version info for the project you're documenting, acts as replacement for
@@ -121,6 +121,7 @@ html_theme = "sphinx_rtd_theme"
 # further.  For a list of options available for each theme, see the
 # documentation.
 #
+
 # html_theme_options = {}
 
 # Add any paths that contain custom static files (such as style sheets) here,

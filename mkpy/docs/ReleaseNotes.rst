@@ -1,18 +1,16 @@
 Release Notes
 =============
 
+Github Repository
+-----------------
 
-v0.1.6 
-------
-
-Minor patch to include nose in mkpy requirements so the mkpy/dpath
-tests run with conda package installation.
+https://github.com/kutaslab/mkpy/releases
 
 
-v0.1.5 
-------
+Initial Release
+---------------
 
-Release notes begin with version 0.1.5, the initial `mkpy`
+Release notes begin with version 0.1.5, the initial ``mkpy``
 release on github and corresponding conda package on the kutaslab
 Anaconda Cloud channel.
 
@@ -38,4 +36,5 @@ test suite runs on the Kutas Lab development server while mkpy
 installed via the conda or pypi packages or from the source on github
 can still run a working subset of tests to smoke test the
 installation.
+
 

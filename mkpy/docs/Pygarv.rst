@@ -1,5 +1,5 @@
-pygarv: EEG visualization dashboard
-====================================
+pygarv: EEG viewer
+==================
 
 ``pygarv`` is a command line utility that integrates EEG data
 visualization with an EEG artifact screening test editor. 
