@@ -59,22 +59,27 @@ def test__check_api_params_raw():
         mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, not_a_kw="arg")
 
     # dblock paths
-    mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=None)
     mkh5mne._check_api_params(
         RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"]
     )
 
     for fail, param in [
+        (AssertionError, None),
         (TypeError, "not_a_list"),
         (TypeError, [1, 2, 3]),  # not a list of str
-        (mkh5mne.Mkh5DblockPathError, ["no_such_dblock_path"]),
+        # (mkh5mne.Mkh5DblockPathError, ["no_such_dblock_path"]),
     ]:
         with pytest.raises(fail):
             mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=param)
 
     # garv interval
     for kwval in [[-500, 1500, "ms"], [-0.50, 1.5, "s"]]:
-        mkh5mne._check_api_params(RawMkh5, TEST_EPOCHS_MKH5_FILE, garv_interval=kwval)
+        mkh5mne._check_api_params(
+            RawMkh5,
+            TEST_EPOCHS_MKH5_FILE,
+            dblock_paths=["open/dblock_0"],
+            garv_interval=kwval,
+        )
     for exception, kwval in [
         (ValueError, [1, 2]),
         (ValueError, [1, 2, "not_ms_or_s"]),
@@ -84,26 +89,41 @@ def test__check_api_params_raw():
     ]:
         with pytest.raises(exception):
             mkh5mne._check_api_params(
-                RawMkh5, TEST_EPOCHS_MKH5_FILE, garv_interval=kwval
+                RawMkh5,
+                TEST_EPOCHS_MKH5_FILE,
+                dblock_paths=["open/dblock_0"],
+                garv_interval=kwval,
             )
 
     # smoke test RawMkh5, EpochsMkh5 w/  yaml file  go, no-go
     mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML
+        RawMkh5,
+        TEST_RAW_MKH5_FILE,
+        dblock_paths=["open/dblock_0"],
+        apparatus_yaml=TEST_APPARATUS_YAML,
     )
     with pytest.raises(mkh5mne.ApparatusYamlFileError):
         mkh5mne._check_api_params(
-            RawMkh5, TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML + "X"
+            RawMkh5,
+            TEST_RAW_MKH5_FILE,
+            dblock_paths=["open/dblock_0"],
+            apparatus_yaml=TEST_APPARATUS_YAML + "X",
         )
 
     # ignore_keys param go, no-go
     mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, ignore_keys=["subject_info", "meas_id"]
+        RawMkh5,
+        TEST_RAW_MKH5_FILE,
+        dblock_paths=["open/dblock_0"],
+        ignore_keys=["subject_info", "meas_id"],
     )
     for bad_ignore_keys in [(1, 2), ["meas_id", 3.5]]:
         with pytest.raises(ValueError):
             mkh5mne._check_api_params(
-                RawMkh5, TEST_RAW_MKH5_FILE, ignore_keys=bad_ignore_keys
+                RawMkh5,
+                TEST_RAW_MKH5_FILE,
+                dblock_paths=["open/dblock_0"],
+                ignore_keys=bad_ignore_keys,
             )
 
 
@@ -112,11 +132,15 @@ def test__check_api_params_raw():
 def test__check_api_params_fail_on_info_montage(key, val):
 
     # smoke test RawMkh5, EpochsMkh5 w/  yaml file
-    mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, **{key: val})
+    mkh5mne._check_api_params(
+        RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
+    )
 
     val = "X"
     with pytest.raises(TypeError):
-        mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, **{key: val})
+        mkh5mne._check_api_params(
+            RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
+        )
 
 
 @pytest.mark.parametrize(
@@ -144,7 +168,9 @@ def test__check_api_params_verbose(_class, _test_file, _class_kwargs, verb_level
     if _class_kwargs:
         kwargs.update(_class_kwargs)
     kwargs.update({"verbose": verb_level})
-    mkh5mne._check_api_params(_class, _test_file, **kwargs)
+    mkh5mne._check_api_params(
+        _class, _test_file, dblock_paths=["open/dblock_0"], **kwargs
+    )
 
 
 def test__validate_hdr_for_mne():
@@ -317,3 +343,13 @@ def test_read_write_raw(garv_interval):
         assert np.allclose(
             getattr(raw_w.annotations, attr), getattr(raw_r.annotations, attr)
         )
+
+
+@pytest.mark.skip(reson="file too large for travis")
+def test_large_read_raw():
+    LARGE_FILE = (
+        "/home/projects/logmets/private/data/eeg/lm_eeg_1_mkpy/test_lm_eeg_1.h5"
+    )
+    mne_raw = mkh5mne.read_raw_mkh5(
+        LARGE_FILE, apparatus_yaml=TEST_APPARATUS_YAML, skip_checks=True
+    )
