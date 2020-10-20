@@ -18,6 +18,8 @@ import mne
 from mne.io.constants import FIFF
 from mne.utils.numerics import object_hash  # for comparing MNE objects
 
+import pdb
+
 # TODO simple logging
 logger = logging.getLogger("mneio_mkh5")  # all for one, one for all
 logger.propoagate = False  # in case of multiple imports
@@ -123,8 +125,8 @@ class Mkh5DblockPathError(Exception):
     "object not found" without specifying what object.
     """
 
-    def __init__(self, mkh5_f, dbp):
-        msg = f"{mkh5_f} has no data block path {dbp}"
+    def __init__(self, fail_msg, mkh5_f, dbp):
+        msg = f"{fail_msg}: {mkh5_f} {dbp}"
         self.args = (msg,)
 
 
@@ -251,7 +253,6 @@ def _check_api_params(_class, mkh5_f, **kwargs):
         see module KEYWARGS
 
     """
-
     # mne and mkh5
     _check_package_versions()
 
@@ -284,11 +285,6 @@ def _check_api_params(_class, mkh5_f, **kwargs):
         raise Mkh5FileAccessError(msg)
 
     # ------------------------------------------------------------
-    # init
-    h5 = mkh5.mkh5(mkh5_f)  # init
-    all_dblock_paths = h5.dblock_paths
-
-    # ------------------------------------------------------------
     # verbose
     verbose = kwargs["verbose"]
     if verbose not in VERBOSE_LEVELS:
@@ -297,10 +293,8 @@ def _check_api_params(_class, mkh5_f, **kwargs):
 
     # ------------------------------------------------------------
     # e.g., dblock_paths=["group/dblock_0", "group/dblock_1", ...]  or all
-    if kwargs["dblock_paths"] is None:
-        dblock_paths = all_dblock_paths
-    else:
-        dblock_paths = kwargs["dblock_paths"]
+    assert kwargs["dblock_paths"] is not None, "set dblock_paths=[...], else very slow"
+    dblock_paths = kwargs["dblock_paths"]
 
     if not (
         isinstance(dblock_paths, list)
@@ -308,11 +302,6 @@ def _check_api_params(_class, mkh5_f, **kwargs):
     ):
         msg = f"dblock_paths={dblock_paths} must be a list of strings"
         raise TypeError(msg)
-
-    # preview mkh5 has the requested paths
-    for dblock_path in dblock_paths:
-        if dblock_path not in h5.dblock_paths:
-            raise Mkh5DblockPathError(mkh5_f, dblock_path)
 
     # ------------------------------------------------------------
     # e.g., garv_interval=[-500, 1500, "ms"]
@@ -559,8 +548,9 @@ def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=[], **kwargs):
         verbose = "info"  # fail informatively
 
     h5 = mkh5.mkh5(mkh5_f)
-    if dblock_paths is None:
-        dblock_paths = h5.dblock_paths
+
+    # enforce explicit dblock_paths kwarg
+    assert dblock_paths is not None, "set dblock_paths kwarg, else too slow"
 
     # check pairwise against first
     dbp_i = dblock_paths[0]
@@ -626,6 +616,12 @@ class RawMkh5(mne.io.BaseRaw):
         ignore_keys=IGNORE_INFO_KEYS,
     ):
 
+        if dblock_paths is None:
+            print(mkh5_f)
+            print("looking up data block paths, larger files take longer ...")
+            dblock_paths = mkh5.mkh5(mkh5_f).dblock_paths
+        print("ok")
+
         _kwargs = _check_api_params(
             RawMkh5,
             mkh5_f,
@@ -637,10 +633,6 @@ class RawMkh5(mne.io.BaseRaw):
             verbose=verbose,
             ignore_keys=ignore_keys,
         )
-
-        if dblock_paths is None:
-            dblock_paths = mkh5.mkh5(mkh5_f).dblock_paths
-
         _check_info_montage_across_dblocks(mkh5_f, **_kwargs)
 
         raw_dblocks = []
@@ -1207,8 +1199,11 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
 
     """
     h5 = mkh5.mkh5(mkh5_f)
+    try:
+        hdr, dblock = h5.get_dblock(dblock_path)
+    except Exception as fail:
+        raise Mkh5DblockPathError(str(fail), mkh5_f, dblock_path)
 
-    hdr, dblock = h5.get_dblock(dblock_path)
     info, montage = _hdr_dblock_to_info_montage(
         hdr, dblock, apparatus_yaml=apparatus_yaml
     )
@@ -1248,7 +1243,7 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
 
             # CRITICAL: The mkh5 epoch table indexes HDF5 data by
             # dblock_path, dblock_tick (row offset), the row sort
-            # order is undefined but MNE  squawks if event array
+            # order is undefined. MNE squawks if event array
             # sample indexes are not monotonically increasing.
             etn_dblock.sort_values("dblock_ticks", inplace=True)
 
@@ -1258,7 +1253,7 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
             # container for the new column of event codes
             etn_evcodes = np.zeros(
                 (1, len(raw_dblock)), dtype=raw_dblock.get_data()[0].dtype
-            )  # yes, (1, len)
+            )  # yes, (1, len) b.c. MNE wants chan x time
 
             # CRITICAL: copy over log_evcodes at just the epoch event ticks
             etn_evcodes[0, etn_dblock.dblock_ticks] = etn_dblock.log_evcodes
@@ -1449,7 +1444,6 @@ def read_raw_mkh5(
     Exceptions if data block paths or apparatus map information is
     misspecified.
     """
-
     return RawMkh5(
         mkh5_fname,
         garv_interval=garv_interval,
