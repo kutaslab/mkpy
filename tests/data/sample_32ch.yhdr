@@ -1,0 +1,482 @@
+---
+name: runsheet
+
+experiment: sample
+subid: s000
+
+license: Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA) 4.0
+
+notes: This work is licensed under a
+  Creative Commons Attribution-NonCommercial-ShareAlike 4.0
+  International
+  License. https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode
+
+
+---
+# Recording apparatus information used to populate MNE python and
+# EEGLAB data structures. For reproducibility this yaml doc should be
+# included in the mkpy.mkh5 .yhdr so it is baked into the mkh5 header
+# and travels with the data.
+
+name: apparatus
+
+# set for MNE python data import ... 26 "eeg", eog, misc are extra
+mne_montage_name: 26chan
+
+
+# ALL CHAN settings via YAML anchor-reference syntax
+common_ref: &A1 A1
+gain20K: &20K 20000
+gain10K: &10K 10000
+lp: &lp 100.0
+hp: &hp 000.01
+
+
+# Notes:
+#   * pos = positive input to differential bioamp
+#   * neg = negative input
+#   * #n indicates original dig header channel index
+
+# digitized EEG bioamp output data streams
+streams:
+  # 0
+  lle:
+    pos: lle
+    neg: *A1
+    gain: *10K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 1
+  lhz:
+    pos: lhz
+    neg: *A1
+    gain: *10K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 2
+  MiPf:
+    pos: MiPf
+    neg: *A1
+    gain: *10K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 3
+  LLPf:
+    pos: LLPf
+    neg: *A1
+    gain: *10K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 9
+  LLFr:
+    pos: LLFr
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 23
+  LLTe:
+    pos: LLTe
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 25
+  LLOc:
+    pos: LLOc
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 27
+  MiOc:
+    pos: MiOc
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 7
+  LDFr:
+    pos: LDFr
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 17
+  LDCe:
+    pos: LDCe
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 19
+  LDPa:
+    pos: LDPa
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 5
+  LMPf:
+    pos: LMPf
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 11
+  LMFr:
+    pos: LMFr
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 13
+  LMCe:
+    pos: LMCe
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 21
+  LMOc:
+    pos: LMOc
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 15
+  MiCe:
+    pos: MiCe
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 16
+  MiPa:
+    pos: MiPa
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 30
+  rle:
+    pos: rle
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 31
+  rhz:
+    pos: rhz
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 28
+  A2:
+    pos: A2
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 4
+  RLPf:
+    pos: RLPf
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 10
+  RLFr:
+    pos: RLFr
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 24
+  RLTe:
+    pos: RLTe
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 26
+  RLOc:
+    pos: RLOc
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 8
+  RDFr:
+    pos: RDFr
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 18
+  RDCe:
+    pos: RDCe
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 20
+  RDPa:
+    pos: RDPa
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 6
+  RMPf:
+    pos: RMPf
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 12
+  RMFr:
+    pos: RMFr
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 14
+  RMCe:
+    pos: RMCe
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 22
+  RMOc:
+    pos: RMOc
+    neg: *A1
+    gain: *20K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eeg
+
+  # 29
+  HEOG:
+    pos: lhz
+    neg: rhz
+    gain: *10K
+    hphz: *hp
+    lphz: *lp
+    mne_type: eog
+
+
+# 3D RAS based on a measured red cap
+
+space:
+  coordinates: cartesian
+  distance_unit: cm
+  orientation: ras
+fiducials:
+  lpa:
+    x: -6.9
+    y: 0.0
+    z: 0.0
+  nasion:
+    x: 0.0
+    y: 8.5
+    z: 0.0
+  rpa:
+    x: 6.9
+    y: 0.0
+    z: 0.0
+sensors:
+  A1:
+    x: -6.2
+    y: -3.4
+    z: -0.1
+  A2:
+    x: 6.2
+    y: -3.4
+    z: -0.1
+  GND:
+    x: 0.0
+    y: 9.6
+    z: 8.5
+  LDCe:
+    x: -7.0
+    y: 0.6
+    z: 10.2
+  LDFr:
+    x: -5.7
+    y: 4.8
+    z: 10.0
+  LDPa:
+    x: -5.8
+    y: -3.3
+    z: 10.1
+  LLFr:
+    x: -7.7
+    y: 2.5
+    z: 5.1
+  LLOc:
+    x: -5.0
+    y: -6.6
+    z: 6.1
+  LLPf:
+    x: -5.7
+    y: 7.2
+    z: 5.0
+  LLTe:
+    x: -7.8
+    y: -2.2
+    z: 5.5
+  LMCe:
+    x: -3.9
+    y: -0.3
+    z: 13.3
+  LMFr:
+    x: -2.7
+    y: 4.3
+    z: 13.2
+  LMOc:
+    x: -2.3
+    y: -5.8
+    z: 10.2
+  LMPf:
+    x: -2.3
+    y: 8.2
+    z: 9.9
+  MiCe:
+    x: 0.0
+    y: 1.7
+    z: 14.7
+  MiOc:
+    x: 0.0
+    y: -8.3
+    z: 6.0
+  MiPa:
+    x: 0.0
+    y: -2.7
+    z: 13.2
+  MiPf:
+    x: 0.0
+    y: 9.8
+    z: 5.6
+  RDCe:
+    x: 7.0
+    y: 0.6
+    z: 10.2
+  RDFr:
+    x: 5.7
+    y: 4.8
+    z: 10.0
+  RDPa:
+    x: 5.8
+    y: -3.3
+    z: 10.1
+  RLFr:
+    x: 7.7
+    y: 2.5
+    z: 5.1
+  RLOc:
+    x: 5.0
+    y: -6.6
+    z: 6.1
+  RLPf:
+    x: 5.7
+    y: 7.2
+    z: 5.0
+  RLTe:
+    x: 7.8
+    y: -2.2
+    z: 5.5
+  RMCe:
+    x: 3.9
+    y: -0.3
+    z: 13.3
+  RMFr:
+    x: 2.7
+    y: 4.3
+    z: 13.2
+  RMOc:
+    x: 2.3
+    y: -5.8
+    z: 10.2
+  RMPf:
+    x: 2.3
+    y: 8.2
+    z: 9.9
+  lhz:
+    x: -6.7
+    y: 5.5
+    z: 1.1
+  lle:
+    x: -4.5
+    y: 7.7
+    z: -1.7
+  rhz:
+    x: 6.7
+    y: 5.5
+    z: 1.1
+  rle:
+    x: 4.5
+    y: 7.7
+    z: -1.7
