@@ -18,7 +18,6 @@ import mne
 from mne.io.constants import FIFF
 from mne.utils.numerics import object_hash  # for comparing MNE objects
 
-import pdb
 
 # TODO simple logging
 logger = logging.getLogger("mneio_mkh5")  # all for one, one for all
@@ -408,7 +407,7 @@ def _is_equal_mne_info(info_a, info_b, exclude=[], verbose=False):
        "file_id" which change file_id timestamps with .fif saves.
 
     Returns
-    ------
+    -------
     bool:
        True if info structure contets are the same to within
        floating-point precision, False otherwise.
@@ -1181,8 +1180,9 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
 
     Returns
     -------
-    mne_raw : mne.RawArray
-
+    mne.RawArray
+        with channel locations from apparatus_yaml and mkh5 epochs tables
+        JSONified and tucked into the Info["description"]
 
     Notes
     -----
@@ -1286,76 +1286,14 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
 
     # ------------------------------------------------------------
     # seed the MNE annotations with the data block path at time == 0
-    annotations_df = pd.DataFrame(
-        dict(kind="dblock_path", onset=0.0, duration=0.0, description=dblock_path),
-        index=[0],
-    )
-
-    # could build event annotations like so ...
-    # event annotations
-    # log_evcodes, code_times = raw_dblock["log_evcodes"]
-    # log_evcodes = log_evcodes.T.squeeze().astype(int)
-    # cdxs = np.where(log_evcodes != 0)[0]
-    # log_evcode_onsets = code_times[cdxs]
-
-    # annotations_df.append(
-    #     pd.DataFrame.from_dict(
-    #         dict(
-    #             kind=["event"] * len(cdxs),
-    #             onset=log_evcode_onsets,
-    #             duration=np.zeros(len(cdxs)),
-    #             description=[str(log_evcodes[cdx]) for cdx in cdxs]
-    #         )
-    #     )
-    # )
-
-    # add garv annotations,  validated in _check_api_params
-    if garv_interval:
-
-        # usage: garv_interval=[-500, 1500, "ms"]
-        garv_start, garv_stop, garv_unit = garv_interval
-        if garv_unit == "ms":
-            t_factor = 1000.0
-        if garv_unit == "s":
-            t_factor = 1.0
-
-        garv_start = garv_start / t_factor
-        garv_stop = garv_stop / t_factor
-        garv_duration = garv_stop - garv_start
-
-        log_flags, times = raw_dblock["log_flags"]
-        log_flags = log_flags.T.squeeze().astype(int)
-
-        # look up the garv flagged events
-        gvidxs = np.where(log_flags > 0)[0]
-        log_flag_times = times[gvidxs]
-
-        # constrain the garv annotation intervals to the data block bounds
-        min_t = 0
-        max_t = np.floor(len(raw_dblock) / hdr["samplerate"])
-        kinds = ["garv"] * len(gvidxs)
-        onsets = [max(min_t, t) for t in (log_flag_times + garv_start)]
-        durations = [min(max_t, x) for x in [garv_duration] * len(gvidxs)]
-        # build the integer garv code into the description
-        descriptions = [
-            f"bad_garv_{log_flags[log_flag_idx]}" for log_flag_idx in gvidxs
-        ]
-        garv_df = pd.DataFrame.from_dict(
-            dict(kind=kinds, onset=onsets, duration=durations, description=descriptions)
-        )
-        print(f"adding garv annotations {dblock_path}")
-        print(garv_df)
-        annotations_df = annotations_df.append(garv_df)
-
-    annotations_df.sort_values(["onset", "kind"], inplace=True)
     raw_dblock.set_annotations(
-        mne.Annotations(
-            annotations_df["onset"].to_numpy(),
-            annotations_df["duration"].to_numpy(),
-            annotations_df["description"],
-            orig_time=None,
-        )
+        mne.Annotations(onset=0.0, duration=0.0, description=dblock_path)
     )
+
+    # add log_evocdes garv annotations, if any. validated in _check_api_params
+    if garv_interval:
+        bad_garvs = get_garv_bads(raw_dblock, "log_evcodes", garv_interval)
+        raw_dblock.set_annotations(raw_dblock.annotations + bad_garvs)
 
     return raw_dblock, epochs_table_descr
 
@@ -1421,7 +1359,7 @@ def _check_mne_raw_mkh5_epochs(raw_mkh5, epochs_name):
 # API
 # ------------------------------------------------------------
 def read_raw_mkh5(
-    mkh5_fname,
+    mkh5_file,
     garv_interval=None,
     dblock_paths=None,
     apparatus_yaml=None,
@@ -1429,28 +1367,264 @@ def read_raw_mkh5(
     fail_on_montage=True,
     verbose="info",
 ):
-    """Convert all or some data blocks in an mkh5 file into an MNE raw.
+
+    """Read an mkh5 data file into MNE raw format""
+
+    The mkh5 EEG data, events are converted to mne.BaseRaw for use
+    with native MNE methods. The mkh5 timelock events and tags in the
+    epochs tables are added to the raw data and mne.Info for use as
+    MNE events and metadata with mne.Epochs(raw, events, metadata,
+    ...).
+
 
     Parameters
     ----------
-    mkh5_filename: str
+    mkh5_file: str
         File path to a mkpy.mkh5 HDF5 file
 
     dblock_paths : {None, list of str}, optional
-        If set this selects dblock_paths to use in the mkh5 file, the
-        default is to use all in the order returned by mkh5.dblock_paths.
+        Selects dblock_paths and order to concatenate into the
+        mne.Raw.  The default is to use all data blocks in the order
+        returned by ``mkh5.dblock_paths``.
+
+    garv_interval : list [pre, post, {"ms" | "s"}], optional
+
+        If present, all events on the ``log_evcodes`` data channel are
+        bracketed with an MNE annotation in the time interval between
+        `pre` to `post` seconds relative to the event with description
+        `BAD_garv_N` where N is the integer log_flag code.
+
+    fail_on_info : bool {False}, optional
+        If True, this enforces strict mne.Info identity across the
+        mkh5 data blocks being concatenated. If False (default), some
+        deviations between mne.Info for the mkh5 data blocks are
+        allowed, e.g., for pooling multiple subject files into an
+        experiment or separate cals for a single subject.
+
+    fail on montage : bool {True}, optional
+       If True (default), the mne.Montage created from the mkh5 header
+       data streams and channel locations must be the same for all the
+       data blocks. If False, the montage may vary across mkh5 data
+       blocks; behavior in this case is unpredictable.
+
+    verbose : NotImplemented
+
+    Returns
+    -------
+    RawMkh5
+        subclassed from mne.BaseRaw for use as native MNE.
 
     Raises
     ------
     Exceptions if data block paths or apparatus map information is
-    misspecified.
+    misspecified or the info and montage test flags are set and fail.
+
+
+    Notes
+    -----
+
+    EEG and events. The mkh5 data block columns are converted to mne
+    channels and concatenated into a single mne Raw in the order given
+    by `dblock_paths,` the default is to convert the entire mkh5 file
+    in `mkh5.dblock_paths` order.
+
+    Epochs. The mkh5 epochs table timelocking events are indexed to
+    the mne.Raw data samples and the epoch tables stored as a JSON string
+    in mne.Info["description"]. The complete epochs table is recovered
+    by JSON loading the ``mne.Info["description"] and converting the
+    `epochs_name` dictionary to a pandas.DataFrame. This yields a
+    well-formed mne.Epochs.metadata for the events on the
+    `epochs_name` stim channel.
+
+    TODO: The mkh5 epochs data, i.e., time-lock events, discrete time
+    intervals, and mixed data-type tags would do better as an
+    attribute of mne.BaseRaw, e.g., mne.Raw._ditidata. Discrete time
+    intervals indexed for (onset, hop, duration) with mixed-type tags
+    subsume the spaghetti of MNE events, epochs, and epochs metadata,
+    annotations and the discrete time model avoids cumulative rounding
+    error issues of floating-point times.
+
     """
     return RawMkh5(
-        mkh5_fname,
+        mkh5_file,
         garv_interval=garv_interval,
         dblock_paths=dblock_paths,
         fail_on_info=fail_on_info,
         fail_on_montage=fail_on_montage,
         apparatus_yaml=apparatus_yaml,
         verbose=verbose,
+    )
+
+
+def get_garv_bads(mne_raw, event_channel, garv_interval, garv_channel="log_flags"):
+    """bracket events with mne BAD_garv annotations
+
+    This timelocks the annotation to all events on event channel that
+    have a non-zero codes on the log_flags column, e.g., as given by
+    as given by running avg -x -a subNN.arf to set log_flags in
+    subNN.log.
+
+    Parameters
+    ----------
+    mne_raw : mne.Raw
+        mne.Raw data object converted from mkh5
+    event_channel : str
+        name of the mne channel with events to bracket with BAD_garv annotations
+    garv_interval : list of [start, stop, unit]
+         start and stop are human readable numeric times relative to
+         the event, unit is "ms" or "s"
+    garv_channel : str, optional
+         name of the channel to check for non-zero codes at time-lock
+         events. The default="log_flags" is where avg -x puts garv rejects,
+         other routines may use other channels.
+
+    Returns
+    -------
+    mne.Annotations
+        formatted as ``BAD_garv_int`` for triggering mne's drop by
+        annotation mechanism.
+
+    """
+
+    # modicum of validation
+    msg = None
+    try:
+        garv_start, garv_stop, garv_unit = garv_interval
+        if not garv_start < garv_stop:
+            raise ValueError("bad interval")
+        if garv_unit == "s":
+            pass
+        elif garv_unit == "ms":
+            garv_start /= 1000.0
+            garv_stop /= 1000.0
+        else:
+            raise ValueError("bad units")
+    except Exception as fail:
+        msg = str(fail)
+    if msg:
+        msg += (
+            "garv_interval=[start, stop, units] with numeric start < stop "
+            "and units s or ms"
+        )
+        raise ValueError(msg)
+
+    garv_duration = garv_stop - garv_start
+
+    # epoch event channel column
+    event_ch = mne_raw.get_data(event_channel)[0].astype(int)
+
+    # artifact channel column
+    garv_ch = mne_raw.get_data(garv_channel)[0].astype(int)
+
+    # lookup where in the recording the event is > 0 and log_flag > 0
+    bad_garv_ticks = np.where((event_ch > 0) & (garv_ch > 0))[0]
+
+    # lower bound of annotation is time=0, upper bound is max time
+    min_t = 0
+    max_t = np.floor(len(event_ch) / mne_raw.info["sfreq"])
+
+    # trim onset underruns and duration overruns, else
+    onsets = [
+        max(min_t, t) for t in (bad_garv_ticks / mne_raw.info["sfreq"]) + garv_start
+    ]
+
+    durations = [
+        garv_duration - min(0, x) for x in max_t - (np.array(onsets) + garv_duration)
+    ]
+
+    # build the integer garv code into the description
+    descriptions = [f"BAD_garv_{garv_ch[idx]}" for idx in bad_garv_ticks]
+
+    # convert to mne format annotations
+    bad_garvs = mne.Annotations(
+        onset=onsets,
+        duration=durations,
+        description=descriptions,
+        orig_time=mne_raw.annotations.orig_time,
+    )
+    return bad_garvs
+
+
+def get_epochs_metadata(mne_raw, epochs_name):
+    """retrieve mkh5 epochs table dataframe from mne.Raw.info["description"]
+
+
+    Parameters
+    ----------
+    mne_raw : mne.Raw
+       converted from a mkpy.mkh5 file that contains at least one
+       named epochs table.
+
+    epochs_name : str
+       name of the epochs_table
+
+    Returns
+    -------
+    pandas.DataFrame
+        mne.Epochs.metadata format, one row per epoch corresponding to
+        the time-locking event at time=0.
+
+    """
+    try:
+        descr = json.loads(mne_raw.info["description"])
+        mkh5_epochs = descr["mkh5_epoch_tables"]
+        metadata = mkh5_epochs[epochs_name]
+    except Exception as fail:
+        msg = (
+            f"{str(fail)} ... could load {epochs_name} from mne.Info['description'], "
+            f"check it is in mkh5.get_epochs_table_names() before converting mkh5 "
+            "to MNE raw format."
+        )
+        raise ValueError(msg)
+    return pd.DataFrame(metadata)
+
+
+def get_epochs(mne_raw, epochs_name, metadata_columns=[], **kwargs):
+    """retrieve mkh5 epochs table dataframe from mne.Raw.info["description"]
+
+    The mne.Epoch interval [tmin, tmax] matches the tmin_ms, tmax_ms
+    interval mkh5.set_epochs(epochs_name, events, tmin_ms, tmax_ms).
+
+    Parameters
+    ----------
+    mne_raw : mne.Raw
+       The raw must have been converted from a mkpy.mkh5 file that
+       contains at least one named epochs table.
+
+    epochs_name : str
+       Name of the epochs_table to get.
+
+    metadata_columns: list of str, optional
+       Specify which metadata columns to include with the epochs,
+       default is all.
+
+    **kwargs
+       kwargs passed to mne.Epochs()
+
+    Returns
+    -------
+        mne.Epochs
+
+    """
+    events = mne.find_events(mne_raw, epochs_name)
+    metadata = get_epochs_metadata(mne_raw, epochs_name)
+
+    # epoch interval start, stop in seconds, relative to
+    # timelocking event at mne_raw_ticks
+    tmins = metadata["diti_hop"] / mne_raw.info["sfreq"]
+    tmaxs = (metadata["diti_len"] / mne_raw.info["sfreq"]) + tmins
+
+    # true by construction of mkh5 epochs or die
+    assert (
+        len(np.unique(tmins)) == len(np.unique(tmaxs)) == 1
+    ), "irregular mkh5 epoch diti_hop, diti_len"
+
+    tmin = tmins[0]
+    tmax = tmaxs[0]
+
+    if len(metadata_columns) > 0:
+        metadata = metadata[metadata_columns]
+
+    return mne.Epochs(
+        mne_raw, events, tmin=tmin, tmax=tmax, metadata=metadata, **kwargs
     )
