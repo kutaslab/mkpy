@@ -403,7 +403,5 @@ def test_get_epochs():
         "accuracy",
         "acc_type",
     ]
-    epochs_coi = mkh5mne.get_epochs(
-        raw_mkh5, epochs_name="ms100", metadata_columns=coi
-    )
+    epochs_coi = mkh5mne.get_epochs(raw_mkh5, epochs_name="ms100", metadata_columns=coi)
     assert all(epochs_coi.metadata.columns == coi)
