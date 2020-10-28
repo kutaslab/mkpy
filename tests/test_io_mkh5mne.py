@@ -319,7 +319,7 @@ def test_read_raw_mkh5_apparatus_yaml():
     mkh5mne.read_raw_mkh5(TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML)
 
 
-@pytest.mark.parametrize("garv_interval", [None, [-500, 1500, "ms"]])
+@pytest.mark.parametrize("garv_interval", [[-500, 1500, "ms"], None])
 def test_read_write_raw(garv_interval):
 
     infix = "_".join([str(p) for p in garv_interval]) if garv_interval else "_None"
@@ -345,11 +345,63 @@ def test_read_write_raw(garv_interval):
         )
 
 
-@pytest.mark.skip(reson="file too large for travis")
-def test_large_read_raw():
-    LARGE_FILE = (
-        "/home/projects/logmets/private/data/eeg/lm_eeg_1_mkpy/test_lm_eeg_1.h5"
+def test_get_garv_bads():
+
+    onsets = [44.048, 45.176, 54.112, 63.556, 96.576, 103.392, 118.416]
+    durations = [0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024]
+    descriptions = ["BAD_garv_48"] * 3 + ["BAD_garv_32"] + ["BAD_garv_48"] * 3
+    dbps = mkh5.mkh5(TEST_EPOCHS_MKH5_FILE).dblock_paths
+    raw_mkh5 = mkh5mne.read_raw_mkh5(
+        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[0:1],  # one block to shorten test time
     )
-    mne_raw = mkh5mne.read_raw_mkh5(
-        LARGE_FILE, apparatus_yaml=TEST_APPARATUS_YAML, skip_checks=True
+    bad_garvs = mkh5mne.get_garv_bads(raw_mkh5, "ms100", garv_interval=[-12, 12, "ms"])
+    assert all(bad_garvs.onset == onsets)
+    assert all(bad_garvs.duration == durations)
+    assert all(bad_garvs.description == descriptions)
+
+
+def test_get_epochs():
+    """smoke test get_mkh5_epochs which also traverses get_epochs_metadata"""
+
+    dbps = mkh5.mkh5(TEST_EPOCHS_MKH5_FILE).dblock_paths
+    raw_mkh5 = mkh5mne.read_raw_mkh5(
+        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[0:1],  # one block to shorten test time
     )
+
+    metadata = mkh5mne.get_epochs_metadata(raw_mkh5, epochs_name="ms100")
+    epochs = mkh5mne.get_epochs(
+        raw_mkh5,
+        epochs_name="ms100",
+        baseline=(None, 0),  # mne syntax for prestim baseline
+        preload=True,
+    )
+    assert all(epochs.metadata.columns == metadata.columns)
+
+    coi = [
+        "epoch_id",
+        "data_group",
+        "dblock_path",
+        "dblock_ticks",
+        "mne_dblock_path_idx",
+        "mne_raw_ticks",
+        "match_tick",
+        "anchor_tick",
+        "diti_t_0",
+        "diti_hop",
+        "diti_len",
+        "instrument",
+        "bin",
+        "tone",
+        "stim",
+        "log_evcodes",
+        "log_flags",
+        "log_ccodes",
+        "regexp",
+        "match_time",
+        "match_code",
+        "anchor_code",
+        "accuracy",
+        "acc_type",
+    ]
+    epochs_coi = mkh5mne.get_epochs(raw_mkh5, epochs_name="ms100", metadata_columns=coi)
+    assert all(epochs_coi.metadata.columns == coi)
