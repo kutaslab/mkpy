@@ -113,7 +113,8 @@ jobs:
         run: |
           conda build --python=$PY_VER -c defaults -c conda-forge conda
           tarball=$(conda build --python=$PY_VER conda --output)
-          conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
+          # not converting b.c. of Cythonization
+          # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
           echo "::set-output name=conda-tarball::$tarball"
 
       # black and pytest in the py3X conda env

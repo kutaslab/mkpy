@@ -34,6 +34,8 @@ for filename in [ZENODO_RAW_F, ZENODO_EPOCHS_F]:
 
 TEST_RAW_MKH5_FILE = DATA_DIR / ZENODO_RAW_F
 TEST_EPOCHS_MKH5_FILE = DATA_DIR / ZENODO_EPOCHS_F
+assert TEST_RAW_MKH5_FILE.exists()
+assert TEST_EPOCHS_MKH5_FILE.exists()
 
 # ------------------------------------------------------------
 # Backend and QC checks
