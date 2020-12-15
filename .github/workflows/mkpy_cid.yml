@@ -50,7 +50,7 @@
 name: mkpy_cid
 on:
   push:
-    branches: [mkpy_cid]
+    branches: ['*']
     tags-ignore: v[0-9]+.[0-9]+.[0-9]  # else double runs on published release
   pull_request:
   release:
@@ -58,7 +58,7 @@ on:
 
   schedule:
     # min hour day month year. digit = when, / = step by, * = all
-    - cron: '0 */30 * * *'
+    - cron: '0 0 */1 * *'
 
 env:
   PACKAGE_NAME: mkpy
