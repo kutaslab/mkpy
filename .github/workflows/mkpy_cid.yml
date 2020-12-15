@@ -47,7 +47,7 @@
 #   push event. Pushed stable release tags are ignored to prevent
 #   double workflow runs.
 
-name: mkpy-cid
+name: mkpy_cid
 on:
   push:
     branches:
