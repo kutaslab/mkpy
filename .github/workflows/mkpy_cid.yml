@@ -144,9 +144,10 @@ jobs:
           make -C mkpy/docs html
           touch mkpy/docs/_build/html/.nojekyll
 
-      - name: build python package sdist
-        if: ${{ matrix.py_ver == env.DEPLOY_PY_VER }}
-        run: python setup.py sdist
+      # skip ... mkpy is packaged for conda only 
+      # - name: build python package sdist
+      #   if: ${{ matrix.py_ver == env.DEPLOY_PY_VER }}
+      #   run: python setup.py sdist
 
       # ------------------------------------------------------------
       # 3. Deploy
@@ -233,27 +234,28 @@ jobs:
           git commit -a -m "deploy type $DEPLOY_TYPE python $DEPLOY_PY_VER"
           git push -u origin gh-pages --force
 
-      - name: deploy python package M.N.P.devX to test.pypi.org
-        if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'pre-release' }}
-        env:
-          TEST_PYPI_TOKEN: ${{ secrets.test_pypi_token }}
-        # trailing / on pypi repos is required
-        run: >-
-          twine upload
-          --repository-url https://test.pypi.org/legacy/
-          -u __token__
-          -p "$TEST_PYPI_TOKEN"
-          --skip-existing
-          dist/*
+      # mkpy doesn't deploy to pypi
+      # - name: deploy python package M.N.P.devX to test.pypi.org
+      #   if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'pre-release' }}
+      #   env:
+      #     TEST_PYPI_TOKEN: ${{ secrets.test_pypi_token }}
+      #   # trailing / on pypi repos is required
+      #   run: >-
+      #     twine upload
+      #     --repository-url https://test.pypi.org/legacy/
+      #     -u __token__
+      #     -p "$TEST_PYPI_TOKEN"
+      #     --skip-existing
+      #     dist/*
 
-      # upload to pypi.org last to avoid burning stable version strings
-      - name: deploy python package release vM.N.P to pypi.org
-        if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
-        env:
-          PYPI_TOKEN: ${{ secrets.pypi_token }}
-        run: >-
-          twine upload
-          --repository-url https://upload.pypi.org/legacy/
-          -u __token__
-          -p "$PYPI_TOKEN"
-          dist/*
+      # # upload to pypi.org last to avoid burning stable version strings
+      # - name: deploy python package release vM.N.P to pypi.org
+      #   if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
+      #   env:
+      #     PYPI_TOKEN: ${{ secrets.pypi_token }}
+      #   run: >-
+      #     twine upload
+      #     --repository-url https://upload.pypi.org/legacy/
+      #     -u __token__
+      #     -p "$PYPI_TOKEN"
+      #     dist/*
