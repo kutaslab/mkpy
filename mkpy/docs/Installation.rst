@@ -6,7 +6,7 @@ recommended. If you don't have conda installed yet, miniconda3
 (https://docs.conda.io/en/latest/miniconda.html#installing) is the way
 to go.
 
-As of mkpy v0.2.4, conda installations are compatible with Python 3.6,
+As of mkpy v0.2.4+, conda installations are compatible with Python 3.6,
 3.7, and 3.8.
 
 
@@ -52,23 +52,19 @@ setup.py. Good luck.
 
 
 
-Install from PyPI via pip 
--------------------------
-
-Good luck.
-
-.. code-block:: bash
-
-    pip install mkpy
+pip installation from PyPI is not supported
+--------------------------------------------
 
 
-Development versions
---------------------
+Install pre-release versions under development
+----------------------------------------------
 
 * At times a development version of mkpy runs ahead of the latest
-  stable release and can be conda installed.  It is strongly
-  recommended to install development versions in a fresh conda
-  environment or risk polluting an existing working environment.
+  stable release and is available for conda installation.  It is
+  strongly recommended to install development versions into a fresh
+  conda environment or risk modifiying an existing working environment
+  in unintended and/or undesireable ways with upgraded or downgraded
+  dependencies.
 
   .. code-block:: bash
 
