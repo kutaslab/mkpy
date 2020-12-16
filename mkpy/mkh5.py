@@ -437,7 +437,7 @@ class mkh5:
                 sheet_name = 0
 
             slicer = pd.read_excel(
-                xl_f, sheet_name=sheet_name, header=0  # , index_col="Index"
+                xl_f, sheet_name=sheet_name, header=0, engine="openpyxl"  # , index_col="Index"
             )
 
             if slicer is not None:

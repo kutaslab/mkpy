@@ -33,8 +33,8 @@ requirements:
     - pandas >=1.0
     - pytables
     - pyarrow >=1.0,!=1.0.1  # release fights with pandas
-    - xlrd  >=2.0  # xlrd is is end of life, in 12/2020 dropped all formats but xlsxlrd 
-    - openpyxl  # pandas 0.1+ for xlsx, see https://github.com/pandas-dev/pandas/issues/28547
+    # - xlrd  >=2.0  # xlrd is end of life, 12/2020 *dropped* all but xls 
+    - openpyxl  # pandas 0.1+ for xlsx, https://github.com/pandas-dev/pandas/issues/28547
     - PyYAML
     - yamllint
     - pytest  !=5.3.4 # so users can run tests, bad release fights with nose
