@@ -33,13 +33,14 @@ requirements:
     - pandas >=1.0
     - pytables
     - pyarrow >=1.0,!=1.0.1  # release fights with pandas
-    - xlrd
+    # - xlrd  >=2.0  # xlrd is end of life, 12/2020 *dropped* all but xls 
+    - openpyxl  # pandas 0.1+ for xlsx, https://github.com/pandas-dev/pandas/issues/28547
     - PyYAML
     - yamllint
     - pytest  !=5.3.4 # so users can run tests, bad release fights with nose
     - nose  # for legacy dpath tests
     - requests  # TravisCI pytests download test data files too large for github
-    - mne  # could be an optional dependency but ...
+    - mne >=0.20 # could be an optional dependency but ...
 
 test:
   imports:

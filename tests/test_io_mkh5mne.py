@@ -18,23 +18,24 @@ DATA_DIR.mkdir(parents=True, exist_ok=True)
 TEST_APPARATUS_YAML = str(DATA_DIR / "mne_32chan_apparatus.yml")
 
 # ------------------------------------------------------------
-# TravisCI needs to download the big mkh5 .h5 files, usually skip for local testing
+# CI needs to download the big mkh5 .h5 files, usually skip for local testing
 # Zenodo version 0.0.4 for mkpy 0.2.4
 TEST_DATA_URL = r"https://zenodo.org/record/4099632/files/"
 ZENODO_RAW_F = "sub000eeg.h5"
 ZENODO_EPOCHS_F = "sub000p3.h5"
 for filename in [ZENODO_RAW_F, ZENODO_EPOCHS_F]:
-    if "TRAVIS" not in os.environ.keys():
-        continue
-    print(f"downloading {DATA_DIR / filename} from {TEST_DATA_URL} ... please wait")
-    resp = requests.get(TEST_DATA_URL + str(filename))
-    with open(DATA_DIR / filename, "wb") as _fd:
-        _fd.write(resp.content)
-        h5 = mkh5.mkh5(DATA_DIR / filename)
-        h5.data_blocks
+    if "GITHUB_ACTIONS" in os.environ.keys():
+        print(f"downloading {DATA_DIR / filename} from {TEST_DATA_URL} ... please wait")
+        resp = requests.get(TEST_DATA_URL + str(filename))
+        with open(DATA_DIR / filename, "wb") as _fd:
+            _fd.write(resp.content)
+            h5 = mkh5.mkh5(DATA_DIR / filename)
+            h5.data_blocks
 
 TEST_RAW_MKH5_FILE = DATA_DIR / ZENODO_RAW_F
 TEST_EPOCHS_MKH5_FILE = DATA_DIR / ZENODO_EPOCHS_F
+assert TEST_RAW_MKH5_FILE.exists()
+assert TEST_EPOCHS_MKH5_FILE.exists()
 
 # ------------------------------------------------------------
 # Backend and QC checks
