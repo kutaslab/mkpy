@@ -59,7 +59,7 @@ napoleon_use_ivar = True
 sphinx_gallery_conf = {
     "examples_dirs": ["../examples"],
     "gallery_dirs": ["examples_gallery"],
-    "filename_pattern": "/[a-zA-Z]+"
+    "filename_pattern": "/[a-zA-Z]+",
 }
 
 

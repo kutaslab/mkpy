@@ -29,36 +29,28 @@ print(type(eeg_raw))
 eeg_raw.plot(
     scalings={"eeg": 5e-5, "eog": 1e-4},  # scale eog and eeg channels separately
     start=282.0,  # seconds into the recording
-    n_channels=39  # EEG + event channels
+    n_channels=39,  # EEG + event channels
 )
 
 #%%
 # mne.Raw with events and epochs
 # ------------------------------
-#  
+#
 # The events in this oddball paradigm were tagged with a codemap and used
 # to set epochs of different lengths.
 
 p3_h5_f = "mkh5_data/sub000p3.h5"
 
 # reusable plot parameters
-p3_raw_kws = dict(
-    scalings={"eeg": 5e-5, "eog": 1e-4},
-    start=10.0,
-    n_channels=39
-)
+p3_raw_kws = dict(scalings={"eeg": 5e-5, "eog": 1e-4}, start=10.0, n_channels=39)
 
 p3_raw = mkh5mne.read_raw_mkh5(p3_h5_f)
 p3_raw.plot(**p3_raw_kws)
 
-#%% 
+#%%
 # This mkh5mne helper method converts garv log_flags artifact events to "BAD_garv" mne.Annotations
-# for use with native MNE data screening. 
+# for use with native MNE data screening.
 
-garv_bads = mkh5mne.get_garv_bads(
-    p3_raw, 
-    "ms1500",  
-    garv_interval=[-750, 750, "ms"]
-)
+garv_bads = mkh5mne.get_garv_bads(p3_raw, "ms1500", garv_interval=[-750, 750, "ms"])
 
 print(garv_bads, garv_bads.description)
