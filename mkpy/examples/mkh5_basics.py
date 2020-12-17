@@ -1,6 +1,6 @@
 """
-mkh5 common use cases
-=====================
+mkh5 basics
+===========
 """
 
 # %%
