@@ -63,7 +63,7 @@ sphinx_gallery_conf = {
 }
 
 
-mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"
+# mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]
