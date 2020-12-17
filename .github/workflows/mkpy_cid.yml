@@ -116,6 +116,7 @@ jobs:
           # not converting b.c. of Cythonization
           # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
           echo "::set-output name=conda-tarball::$tarball"
+          echo "conda build tarball: " $tarball
 
       # black and pytest in the py3X conda env
       - name: >-
