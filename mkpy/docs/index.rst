@@ -28,23 +28,19 @@ mkpy
 .. toctree::
    :maxdepth: 5
 
-   Most_Used
-
-.. toctree::
-   :maxdepth: 5
-
-   Output Files.rst
-
-.. toctree::
-   :maxdepth: 5
-
-   User_Files.rst
+   CheatSheet
 
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
+	 
+   UserGuide
 
-   Pygarv.rst
+
+.. toctree::
+   :maxdepth: 2
+
+   examples_gallery/index.rst
 
 
 .. toctree::

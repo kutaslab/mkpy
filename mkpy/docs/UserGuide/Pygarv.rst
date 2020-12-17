@@ -6,7 +6,7 @@ visualization with an EEG artifact screening test editor.
 
 .. _pygarv_all_views:
 
-.. figure:: _images/viewer_all_views.png
+.. figure:: ../_images/viewer_all_views.png
    :scale: 75 %
    :alt: pygarv_all_views
 
@@ -24,7 +24,7 @@ Panel dividers slide to hide or show the different views:
 EEG waveforms
 --------------
 
-.. figure:: _images/viewer_trace_view.png
+.. figure:: ../_images/viewer_trace_view.png
    :scale: 75 %
    :alt: pygarv_traces
    
@@ -36,7 +36,7 @@ EEG waveforms
 EEG Data table
 ---------------
 
-.. figure:: _images/viewer_dblock_table.png
+.. figure:: ../_images/viewer_dblock_table.png
    :scale: 75 %
    :alt: pygarv_data
 
@@ -48,7 +48,7 @@ EEG Data table
 Header 
 --------
 
-.. figure:: _images/viewer_headinfo_view.png
+.. figure:: ../_images/viewer_headinfo_view.png
    :scale: 75 %
    :alt: pygarv_header
 
@@ -60,7 +60,7 @@ Header
 Datablock directory
 -------------------------
 
-.. figure:: _images/viewer_dblock_path_view.png
+.. figure:: ../_images/viewer_dblock_path_view.png
    :scale: 75 %
    :alt: pygarv_data_blocks
 
@@ -72,7 +72,7 @@ Datablock directory
 Tagged events and epochs 
 -------------------------
 
-.. figure:: _images/viewer_epoch_table_view.png
+.. figure:: ../_images/viewer_epoch_table_view.png
    :scale: 75 %
    :alt: pygarv_epochs
 
@@ -84,7 +84,7 @@ Tagged events and epochs
 EEG artifact screening test editor
 -----------------------------------
 
-.. figure:: _images/viewer_pygarv_view.png
+.. figure:: ../_images/viewer_pygarv_view.png
    :scale: 75 %
    :alt: pygarv_artifact_tests
 

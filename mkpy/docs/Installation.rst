@@ -1,5 +1,5 @@
-Installation
-============
+Installation (64-bit linux only)
+================================
 
 Installing the latest stable mkpy with ``conda`` is strongly
 recommended. If you don't have conda installed yet, miniconda3
@@ -17,7 +17,7 @@ Run these commands in a linux terminal window bash shell. The named
 conda channels and their order is important. Replace `some_env` with a
 sensible environment name.
 
-* Install he latest stable version of ``mkpy`` and the most recent
+* Install the latest stable version of ``mkpy`` and the most recent
   versions of the compatible packages including Python in a fresh
   conda environment:
 
@@ -32,7 +32,7 @@ sensible environment name.
       create conda -n some_env -c kutaslab -c defaults -c conda-forge python=3.7 mkpy
 
 
-* Install into an existing `conda` environment:
+* Install into an existing conda environment:
 
   .. code-block:: bash
   
@@ -43,9 +43,9 @@ sensible environment name.
 Conda install a pre-release development version
 -----------------------------------------------
 
-* At times a development version of mkpy runs ahead of the latest
-  stable release and is available for conda installation.  It is
-  strongly recommended to install development versions into a fresh
+* At times an updated development version of mkpy runs ahead of the
+  latest stable release and is available for conda installation.  It
+  is strongly recommended to install development versions into a fresh
   conda environment or risk modifiying an existing working environment
   in unintended and/or undesireable ways with upgraded or downgraded
   dependencies.
@@ -55,19 +55,39 @@ Conda install a pre-release development version
       create conda -n dev_env -c kutaslab/label/pre-release -c defaults -c conda-forge mkpy
 
 
-Install from source
--------------------
+Install from source (discouraged)
+---------------------------------
 
-Clone the github repository into the current directory and run
-setup.py. Good luck. 
+Clone the github repository into the current directory and pip install
+the to the local source into the current environment's `site-packages`
 
 .. code-block:: bash
 
    git clone https://github.com/kutaslab/mkpy
+   cd mkpy
+   pip install .
 
 
+Install editable source code (development mode)
+-----------------------------------------------
 
-pip installation from PyPI: not supported
------------------------------------------
+Python package installation ordinarily puts a frozen snapshot of the
+package into the current environment's `site-packages`. If you want to
+modify the mkpy source and have the changes show up when you import
+the package and call the methods you install in "development mode" 
+which puts a link to your souce code directory in "site-packages". 
+
+.. code-block:: bash
+
+   git clone https://github.com/kutaslab/mkpy
+   cd mkpy
+   pip install . -e
+
+
+pip installation from PyPI
+--------------------------
+
+Not implemented. Install from source if you want the source; if you
+need dependency management, use conda.
 
 

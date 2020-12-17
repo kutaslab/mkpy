@@ -6,7 +6,7 @@ Module Index
 .. toctree::
    :maxdepth: 5
 
-   ./api_source/mkpy.rst
+   ./api_source/mkpy_api.rst
 
 
 

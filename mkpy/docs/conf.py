@@ -47,12 +47,21 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
     #    'numpydoc',
+    "sphinx_gallery.gen_gallery",
 ]
 
 # TPU added sphinx.ext.napoleon extension and set these
 napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
+
+# TPU added sphinx gallery
+sphinx_gallery_conf = {
+    "examples_dirs": ["../examples"],
+    "gallery_dirs": ["examples_gallery"],
+    "filename_pattern": "/[a-zA-Z]+"
+}
+
 
 mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"
 
