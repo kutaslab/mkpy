@@ -182,6 +182,12 @@ def _read_header(stream):
     # extract channel name codes from header
     channel_names = _get_channel_names(header)
 
+    # TPU all 16 or 32 4-byte names come back w/ trailing "" names
+    # when nchan != 16 or 32. Drop them so channel_names agrees with nchans
+    assert all([len(chn) > 0 for chn in channel_names[:header["nchans"]]])
+    assert all([len(chn) == 0 for chn in channel_names[header["nchans"]:]])
+    channel_names = channel_names[:header["nchans"]]
+
     # capture complete and jsonifiable. new in 0.2.4
     raw_dig_header = dict()
     for key in header.dtype.names:
