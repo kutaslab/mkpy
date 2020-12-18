@@ -24,6 +24,9 @@
 # sys.path.insert(0, os.path.abspath("."))
 # sys.path.insert(0, os.path.abspath("../.."))
 
+# sys.path updating is not needed when mkpy has been conda installed,
+# e.g., by the CI job runner or pip installed in development mode: pip
+# install . -e
 from mkpy import get_ver
 
 # hide for TravisCI gh-pages build
