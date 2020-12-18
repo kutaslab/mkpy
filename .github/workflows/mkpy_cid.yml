@@ -239,7 +239,7 @@ jobs:
           git config user.name "$user_name"
           git remote add origin "https://${user_name}:${{ secrets.github_token }}@github.com/${GITHUB_REPOSITORY}"
           git checkout --orphan $GH_PAGES_BRANCH
-          git add -A
+          git add -A .
           git commit -a -m "deploy type $DEPLOY_TYPE python $DEPLOY_PY_VER"
           git push -u origin $GH_PAGES_BRANCH --force
 
