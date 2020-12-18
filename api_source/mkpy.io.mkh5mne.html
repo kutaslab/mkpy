@@ -1,0 +1,493 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.io.mkh5mne module &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Release Notes" href="../ReleaseNotes.html" />
+    <link rel="prev" title="mkpy.io package" href="mkpy.io.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Reference.html#module-index">Module Index</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="mkpy_api.html">mkh5, event tags, epochs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="mkpy_api.html#mne-python-reader">MNE Python reader</a><ul class="current">
+<li class="toctree-l4 current"><a class="reference internal" href="mkpy.io.html">mkpy.io package</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Reference.html#alphabetical-index"><span class="xref std std-ref">Alphabetical Index</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../Reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="mkpy_api.html">mkh5, event tags, epochs</a> &raquo;</li>
+        
+          <li><a href="mkpy.io.html">mkpy.io package</a> &raquo;</li>
+        
+      <li>mkpy.io.mkh5mne module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_source/mkpy.io.mkh5mne.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mkpy.io.mkh5mne">
+<span id="mkpy-io-mkh5mne-module"></span><h1>mkpy.io.mkh5mne module<a class="headerlink" href="#module-mkpy.io.mkh5mne" title="Permalink to this headline">¶</a></h1>
+<p>import mkpy5 HDF5 data files to MNE Raw and Epochs, savable as .fif files</p>
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.ApparatusYamlFileError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">ApparatusYamlFileError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#ApparatusYamlFileError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.ApparatusYamlFileError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>yaml file didn’t open for any reason</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.EpochsMkh5ColumnNameError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">EpochsMkh5ColumnNameError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em>, <em class="sig-param"><span class="n">epochs_name</span></em>, <em class="sig-param"><span class="n">col</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#EpochsMkh5ColumnNameError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.EpochsMkh5ColumnNameError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>non-existent epochs_id or time column in the epochs table</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.EpochsMkh5EpochsNameError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">EpochsMkh5EpochsNameError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em>, <em class="sig-param"><span class="n">epochs_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#EpochsMkh5EpochsNameError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.EpochsMkh5EpochsNameError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>tried to access a non-existent epochs table</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.EpochsMkh5ExcludedDataBlockError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">EpochsMkh5ExcludedDataBlockError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em>, <em class="sig-param"><span class="n">epochs_name</span></em>, <em class="sig-param"><span class="n">missing_dblocks</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#EpochsMkh5ExcludedDataBlockError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.EpochsMkh5ExcludedDataBlockError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>tried to access a non-existent epochs table</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.EpochsMkh5NonZeroTimestamps">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">EpochsMkh5NonZeroTimestamps</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em>, <em class="sig-param"><span class="n">epochs_name</span></em>, <em class="sig-param"><span class="n">col</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#EpochsMkh5NonZeroTimestamps"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.EpochsMkh5NonZeroTimestamps" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">ValueError</span></code></p>
+<p>raised if values in the the specified mkh5 timestamp column vary or differ from the timelock=value</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5DblockInfoMismatch">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5DblockInfoMismatch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg_1</span></em>, <em class="sig-param"><span class="n">msg_2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5DblockInfoMismatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5DblockInfoMismatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>raised if MNE info structures differ, e.g., across mkh5 dblocks</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5DblockMontageMismatch">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5DblockMontageMismatch</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg_1</span></em>, <em class="sig-param"><span class="n">msg_2</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5DblockMontageMismatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5DblockMontageMismatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>raised if MNE montage structures differ, e.g., across mkh5 dblocks</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5DblockPathError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5DblockPathError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">fail_msg</span></em>, <em class="sig-param"><span class="n">mkh5_f</span></em>, <em class="sig-param"><span class="n">dbp</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5DblockPathError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5DblockPathError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>tried to access a non-existent datablock</p>
+<p>h5py also throws an error but the message is generic
+“object not found” without specifying what object.</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5FileAccessError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5FileAccessError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">msg</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5FileAccessError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5FileAccessError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5HeaderKeyError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5HeaderKeyError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">dblock_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bad</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5HeaderKeyError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5HeaderKeyError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mkpy.io.mkh5mne.Mkh5HeaderError</span></code></p>
+<p>Missing a key required for MNE import</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5HeaderTypeError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5HeaderTypeError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">dblock_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bad</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5HeaderTypeError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5HeaderTypeError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mkpy.io.mkh5mne.Mkh5HeaderError</span></code></p>
+<p>illegal value for MNE import</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5HeaderValueError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5HeaderValueError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">message</span></em>, <em class="sig-param"><span class="n">dblock_path</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">bad</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5HeaderValueError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5HeaderValueError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mkpy.io.mkh5mne.Mkh5HeaderError</span></code></p>
+<p>value is the wrong type for MNE import</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.io.mkh5mne.Mkh5InfoUpdateError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">Mkh5InfoUpdateError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mne_info_key</span></em>, <em class="sig-param"><span class="n">bad_value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#Mkh5InfoUpdateError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.Mkh5InfoUpdateError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>report failed info update attempts</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.io.mkh5mne.RawMkh5">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">RawMkh5</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em>, <em class="sig-param"><span class="n">garv_interval</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dblock_paths</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fail_on_info</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fail_on_montage</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">apparatus_yaml</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">'info'</span></em>, <em class="sig-param"><span class="n">ignore_keys</span><span class="o">=</span><span class="default_value">['file_id', 'meas_id', 'proj_name', 'subject_info']</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#RawMkh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.RawMkh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">mne.io.base.BaseRaw</span></code></p>
+<p>Raw MNE compatible object from mkpy.mkh5 HDF5 data file</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mkh5_f</strong> (<em>str</em>) – file path to existing mkpy.mkh5 data file 0.2.4+</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>We maintain dblock -&gt; RawArray and let MNE handle the
+bookeeping for knitting RawArrays together. Not future
+proof but perhaps more future resistant.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.io.mkh5mne.get_epochs">
+<code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">get_epochs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mne_raw</span></em>, <em class="sig-param"><span class="n">epochs_name</span></em>, <em class="sig-param"><span class="n">metadata_columns</span><span class="o">=</span><span class="default_value">[]</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#get_epochs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.get_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>retrieve mkh5 epochs table dataframe from mne.Raw.info[“description”]</p>
+<p>The mne.Epoch interval [tmin, tmax] matches the tmin_ms, tmax_ms
+interval mkh5.set_epochs(epochs_name, events, tmin_ms, tmax_ms).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mne_raw</strong> (<em>mne.Raw</em>) – The raw must have been converted from a mkpy.mkh5 file that
+contains at least one named epochs table.</p></li>
+<li><p><strong>epochs_name</strong> (<em>str</em>) – Name of the epochs_table to get.</p></li>
+<li><p><strong>metadata_columns</strong> (<em>list of str, optional</em>) – Specify which metadata columns to include with the epochs,
+default is all.</p></li>
+<li><p><strong>**kwargs</strong> – kwargs passed to mne.Epochs()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mne.Epochs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.io.mkh5mne.get_epochs_metadata">
+<code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">get_epochs_metadata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mne_raw</span></em>, <em class="sig-param"><span class="n">epochs_name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#get_epochs_metadata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.get_epochs_metadata" title="Permalink to this definition">¶</a></dt>
+<dd><p>retrieve mkh5 epochs table dataframe from mne.Raw.info[“description”]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mne_raw</strong> (<em>mne.Raw</em>) – converted from a mkpy.mkh5 file that contains at least one
+named epochs table.</p></li>
+<li><p><strong>epochs_name</strong> (<em>str</em>) – name of the epochs_table</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>mne.Epochs.metadata format, one row per epoch corresponding to
+the time-locking event at time=0.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.io.mkh5mne.get_garv_bads">
+<code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">get_garv_bads</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mne_raw</span></em>, <em class="sig-param"><span class="n">event_channel</span></em>, <em class="sig-param"><span class="n">garv_interval</span></em>, <em class="sig-param"><span class="n">garv_channel</span><span class="o">=</span><span class="default_value">'log_flags'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#get_garv_bads"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.get_garv_bads" title="Permalink to this definition">¶</a></dt>
+<dd><p>bracket events with mne BAD_garv annotations</p>
+<p>This timelocks the annotation to all events on event channel that
+have a non-zero codes on the log_flags column, e.g., as given by
+as given by running avg -x -a subNN.arf to set log_flags in
+subNN.log.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mne_raw</strong> (<em>mne.Raw</em>) – mne.Raw data object converted from mkh5</p></li>
+<li><p><strong>event_channel</strong> (<em>str</em>) – name of the mne channel with events to bracket with BAD_garv annotations</p></li>
+<li><p><strong>garv_interval</strong> (<em>list of [start, stop, unit]</em>) – start and stop are human readable numeric times relative to
+the event, unit is “ms” or “s”</p></li>
+<li><p><strong>garv_channel</strong> (<em>str, optional</em>) – name of the channel to check for non-zero codes at time-lock
+events. The default=”log_flags” is where avg -x puts garv rejects,
+other routines may use other channels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>formatted as <code class="docutils literal notranslate"><span class="pre">BAD_garv_int</span></code> for triggering mne’s drop by
+annotation mechanism.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mne.Annotations</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.io.mkh5mne.read_raw_mkh5">
+<code class="sig-prename descclassname">mkpy.io.mkh5mne.</code><code class="sig-name descname">read_raw_mkh5</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_file</span></em>, <em class="sig-param"><span class="n">garv_interval</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dblock_paths</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">apparatus_yaml</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fail_on_info</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">fail_on_montage</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">verbose</span><span class="o">=</span><span class="default_value">'info'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#read_raw_mkh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.io.mkh5mne.read_raw_mkh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read an mkh5 data file into MNE raw format</p>
+<p>The mkh5 EEG data, events are converted to mne.BaseRaw for use
+with native MNE methods. The mkh5 timelock events and tags in the
+epochs tables are added to the raw data and mne.Info for use as
+MNE events and metadata with mne.Epochs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mkh5_file</strong> (<em>str</em>) – File path to a mkpy.mkh5 HDF5 file</p></li>
+<li><p><strong>dblock_paths</strong> (<em>{None, list of str}, optional</em>) – Selects dblock_paths and order to concatenate into the
+mne.Raw.  The default is to use all data blocks in the order
+returned by <code class="docutils literal notranslate"><span class="pre">mkh5.dblock_paths</span></code>.</p></li>
+<li><p><strong>garv_interval</strong> (<em>list [pre, post, {“ms” | “s”}], optional</em>) – If present, all events on the <code class="docutils literal notranslate"><span class="pre">log_evcodes</span></code> data channel are
+bracketed with an MNE annotation in the time interval between
+pre to post seconds relative to the event with description
+BAD_garv_N where N is the integer log_flag code.</p></li>
+<li><p><strong>fail_on_info</strong> (<em>bool {False}, optional</em>) – If True, this enforces strict mne.Info identity across the
+mkh5 data blocks being concatenated. If False (default), some
+deviations between mne.Info for the mkh5 data blocks are
+allowed, e.g., for pooling multiple subject files into an
+experiment or separate cals for a single subject.</p></li>
+<li><p><strong>fail on montage</strong> (<em>bool {True}, optional</em>) – If True (default), the mne.Montage created from the mkh5 header
+data streams and channel locations must be the same for all the
+data blocks. If False, the montage may vary across mkh5 data
+blocks; behavior in this case is unpredictable.</p></li>
+<li><p><strong>verbose</strong> (<em>NotImplemented</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>subclassed from mne.BaseRaw for use as native MNE.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p><a class="reference internal" href="#mkpy.io.mkh5mne.RawMkh5" title="mkpy.io.mkh5mne.RawMkh5">RawMkh5</a></p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exceptions</strong> – if data block paths or apparatus map information is
+    misspecified or the info and montage test flags are set and fail.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>EEG and events. The mkh5 data block columns are converted to</dt><dd><p>mne channels and concatenated into a single mne Raw in the
+order given by <cite>dblock_paths</cite>. The default is to convert the
+entire mkh5 file in <cite>mkh5.dblock_paths</cite> order.</p>
+</dd>
+<dt>Epochs. The mkh5 epochs table timelocking events are indexed to</dt><dd><p>the mne.Raw data samples and the epoch tables stored as a JSON
+string in mne.Info[“description”]. The complete epochs table
+is recovered by JSON loading the <code class="docutils literal notranslate"><span class="pre">mne.Info[&quot;description&quot;]</span></code> and
+converting the <cite>epochs_name</cite> dictionary to a
+pandas.DataFrame. This yields a well-formed
+mne.Epochs.metadata for the events on the <cite>epochs_name</cite> stim
+channel.</p>
+</dd>
+<dt>TODO: The mkh5 epochs data, i.e., time-lock events, discrete time</dt><dd><p>intervals, and mixed data-type tags would do better as an
+attribute of mne.BaseRaw, e.g., mne.Raw._ditidata. Discrete
+time intervals indexed for (onset, hop, duration) with
+mixed-type tags subsume the spaghetti of MNE events, epochs,
+and epochs metadata, annotations and the discrete time model
+avoids cumulative rounding error issues of floating-point
+times.</p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../ReleaseNotes.html" class="btn btn-neutral float-right" title="Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mkpy.io.html" class="btn btn-neutral float-left" title="mkpy.io package" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

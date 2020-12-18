@@ -1,0 +1,334 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>append separate cals &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="MNE I/O basics" href="../mkh5mne_basics/index.html" />
+    <link rel="prev" title="mkh5 basics" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">mkh5 basics</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">append separate cals</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#set-up">Set up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#create-subject-append-cals">Create subject, append cals</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../mkh5mne_basics/index.html">MNE I/O basics</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../ExamplesGallery.html">Examples Gallery</a> &raquo;</li>
+        
+          <li><a href="index.html">mkh5 basics</a> &raquo;</li>
+        
+      <li>append separate cals</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/examples_gallery/mkh5_basics/append_cals.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-gallery-mkh5-basics-append-cals-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="append-separate-cals">
+<span id="sphx-glr-examples-gallery-mkh5-basics-append-cals-py"></span><h1>append separate cals<a class="headerlink" href="#append-separate-cals" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="set-up">
+<h2>Set up<a class="headerlink" href="#set-up" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">from</span> <span class="nn">matplotlib</span> <span class="kn">import</span> <span class="n">pyplot</span> <span class="k">as</span> <span class="n">plt</span>  <span class="c1"># for inspecting cal pulses</span>
+<span class="kn">from</span> <span class="nn">mkpy</span> <span class="kn">import</span> <span class="n">mkh5</span>
+
+<span class="n">MKDIG_PATH</span> <span class="o">=</span> <span class="n">Path</span><span class="p">(</span><span class="s2">&quot;../mkdig_data&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;mkpy version&quot;</span><span class="p">,</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>mkpy version 0.2.5.dev5
+</pre></div>
+</div>
+</div>
+<div class="section" id="create-subject-append-cals">
+<h2>Create subject, append cals<a class="headerlink" href="#create-subject-append-cals" title="Permalink to this headline">¶</a></h2>
+<p>Use <a class="reference internal" href="../../api_source/mkpy.mkh5.html#mkpy.mkh5.mkh5.append_mkdata" title="mkpy.mkh5.mkh5.append_mkdata"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mkh5.append_mkdata()</span></code></a> to
+combine EEG recordings  and separately recorded calibration data in
+a single .h5 file prior to converting A/D samples to <span class="math notranslate nohighlight">\(\mu\)</span> V.</p>
+<p>Set EEG and calibration data file names</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">crw</span> <span class="o">=</span> <span class="n">MKDIG_PATH</span> <span class="o">/</span> <span class="s2">&quot;sub000p3.crw&quot;</span>  <span class="c1"># EEG recording</span>
+<span class="n">log</span> <span class="o">=</span> <span class="n">MKDIG_PATH</span> <span class="o">/</span> <span class="s2">&quot;sub000p3.x.log&quot;</span>  <span class="c1"># events</span>
+<span class="n">yhdr</span> <span class="o">=</span> <span class="n">MKDIG_PATH</span> <span class="o">/</span> <span class="s2">&quot;sub000p3.yhdr&quot;</span>  <span class="c1"># extra header info</span>
+
+<span class="n">cals_crw</span> <span class="o">=</span> <span class="n">MKDIG_PATH</span> <span class="o">/</span> <span class="s2">&quot;sub000c.crw&quot;</span>
+<span class="n">cals_log</span> <span class="o">=</span> <span class="n">MKDIG_PATH</span> <span class="o">/</span> <span class="s2">&quot;sub000c.log&quot;</span>
+<span class="n">cals_yhdr</span> <span class="o">=</span> <span class="n">MKDIG_PATH</span> <span class="o">/</span> <span class="s2">&quot;sub000c.yhdr&quot;</span>
+</pre></div>
+</div>
+<p>Convert .crw/.log to mkh5 format .h5.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p3_h5_f</span> <span class="o">=</span> <span class="s2">&quot;example_sub000p3.h5&quot;</span>
+<span class="n">p3_h5</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="n">p3_h5_f</span><span class="p">)</span>
+<span class="n">p3_h5</span><span class="o">.</span><span class="n">reset_all</span><span class="p">()</span>
+<span class="n">p3_h5</span><span class="o">.</span><span class="n">create_mkdata</span><span class="p">(</span><span class="s2">&quot;sub000&quot;</span><span class="p">,</span> <span class="n">crw</span><span class="p">,</span> <span class="n">log</span><span class="p">,</span> <span class="n">yhdr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Append calibration data to the existing <code class="docutils literal notranslate"><span class="pre">sub000</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p3_h5</span><span class="o">.</span><span class="n">append_mkdata</span><span class="p">(</span><span class="s2">&quot;sub000&quot;</span><span class="p">,</span> <span class="n">cals_crw</span><span class="p">,</span> <span class="n">cals_log</span><span class="p">,</span> <span class="n">cals_yhdr</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Convert EEG and calibration data A/D to microvolts.
+set re-usable calibration parameters</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">cal_kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+    <span class="n">n_points</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span>  <span class="c1"># samples to average</span>
+    <span class="n">cal_size</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>  <span class="c1"># uV</span>
+    <span class="n">lo_cursor</span><span class="o">=-</span><span class="mi">36</span><span class="p">,</span>  <span class="c1"># lo_cursor ms</span>
+    <span class="n">hi_cursor</span><span class="o">=</span><span class="mi">48</span><span class="p">,</span>  <span class="c1"># hi_cursor ms</span>
+    <span class="n">cal_ccode</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>  <span class="c1"># condition code</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>inspect the calibration pulses</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">f</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">p3_h5</span><span class="o">.</span><span class="n">plotcals</span><span class="p">(</span><span class="n">p3_h5_f</span><span class="p">,</span> <span class="s2">&quot;sub000&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">cal_kws</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img alt="calibration pulses from: example_sub000p3.h5 sub000 n_points=5 cal_size=10 lo_cursor=-36 hi_cursor=48 cal_ccode=0" class="sphx-glr-single-img" src="../../_images/sphx_glr_append_cals_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Plotting cals
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/mkh5.py:3673: UserWarning: negative event code(s) found for cal condition code 0 -16384
+  warnings.warn(msg)
+Found cals in /sub000/dblock_4
+</pre></div>
+</div>
+<p>Convert EEG and calibration data A/D to microvolts.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p3_h5</span><span class="o">.</span><span class="n">calibrate_mkdata</span><span class="p">(</span><span class="s2">&quot;sub000&quot;</span><span class="p">,</span> <span class="o">**</span><span class="n">cal_kws</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/mkh5.py:3673: UserWarning: negative event code(s) found for cal condition code 0 -16384
+  warnings.warn(msg)
+Found cals in /sub000/dblock_4
+Calibrating block /sub000/dblock_0 of 5: (31232,)
+Calibrating block /sub000/dblock_1 of 5: (32768,)
+Calibrating block /sub000/dblock_2 of 5: (31744,)
+Calibrating block /sub000/dblock_3 of 5: (32512,)
+Calibrating block /sub000/dblock_4 of 5: (28416,)
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  10.587 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-gallery-mkh5-basics-append-cals-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/0e14556dbaf063dca99ebd57d5a174c5/append_cals.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">append_cals.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/a62c71f7aea028547c9a5e1f67d1033a/append_cals.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">append_cals.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../mkh5mne_basics/index.html" class="btn btn-neutral float-right" title="MNE I/O basics" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="mkh5 basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

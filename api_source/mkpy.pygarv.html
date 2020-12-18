@@ -1,0 +1,729 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.pygarv module &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mkpy.mkio module" href="mkpy.mkio.html" />
+    <link rel="prev" title="mkpy.codetagger module" href="mkpy.codetagger.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Reference.html#module-index">Module Index</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mkpy_api.html">mkh5, event tags, epochs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mkpy.mkh5.html">mkpy.mkh5 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.codetagger.html">mkpy.codetagger module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">mkpy.pygarv module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.mkio.html">mkpy.mkio module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mkpy_api.html#mne-python-reader">MNE Python reader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Reference.html#alphabetical-index"><span class="xref std std-ref">Alphabetical Index</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../Reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="mkpy_api.html">mkh5, event tags, epochs</a> &raquo;</li>
+        
+      <li>mkpy.pygarv module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_source/mkpy.pygarv.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mkpy.pygarv">
+<span id="mkpy-pygarv-module"></span><h1>mkpy.pygarv module<a class="headerlink" href="#module-mkpy.pygarv" title="Permalink to this headline">¶</a></h1>
+<p>pygarv is the backend for marking artifacts in mkh5 data with tests defined in a YAML file</p>
+<p>Successful runs of tests and their results are stored in
+PyGarv.tr_docs a list of tr_doc dicts, one dict per h5 datablock.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>tr_doc[‘tests’]</strong> (<em>list</em>) – each item is a dict</p>
+</dd>
+</dl>
+<p>Examples</p>
+<ul>
+<li><p>tr_doc[‘tests’]</p>
+<blockquote>
+<div><div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">[</span> <span class="p">{</span><span class="s1">&#39;dblock_path_idx&#39;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+   <span class="s1">&#39;dblock_path&#39;</span><span class="p">:</span> <span class="s1">&#39;calstest/dblock_0&#39;</span><span class="p">,</span>
+   <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;pygarv&#39;</span><span class="p">,</span>
+   <span class="s1">&#39;tests&#39;</span><span class="p">:</span> <span class="p">[</span> <span class="p">[{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="s1">&#39;ppa&#39;</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;tag&#39;</span><span class="p">:</span> <span class="s1">&#39;amplitude exursions&#39;</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="s1">&#39;MiCe&#39;</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;threshold&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="mf">0.0</span><span class="p">}</span> <span class="p">],</span>
+              <span class="p">[{</span><span class="s1">&#39;test&#39;</span><span class="p">:</span> <span class="s1">&#39;ppadif&#39;</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;tag&#39;</span><span class="p">:</span> <span class="s1">&#39;amplitude exursions&#39;</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;stream&#39;</span><span class="p">:</span> <span class="s1">&#39;MiCe&#39;</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;threshold&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;interval&#39;</span><span class="p">:</span> <span class="mf">0.1</span><span class="p">},</span>
+               <span class="p">{</span><span class="s1">&#39;stream2&#39;</span><span class="p">:</span> <span class="s1">&#39;MiPa&#39;</span><span class="p">}</span> <span class="p">]</span> <span class="p">]},</span>
+
+    <span class="p">{</span><span class="s1">&#39;dblock_path_idx&#39;</span><span class="p">:</span> <span class="mi">1</span><span class="p">,</span>
+     <span class="s1">&#39;dblock_path&#39;</span><span class="p">:</span> <span class="s1">&#39;calstest/dblock_1&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;name&#39;</span><span class="p">:</span> <span class="s1">&#39;pygarv&#39;</span><span class="p">,</span>
+     <span class="s1">&#39;tests&#39;</span><span class="p">:</span> <span class="kc">None</span><span class="p">},</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+</div></blockquote>
+</li>
+</ul>
+<p>tr_doc[‘fails’] : list</p>
+<p>len(tr_doc[‘fails’] == len(tr_doc[‘tests’])
+where tr_doc[‘fails’][idx] is</p>
+<p>a list of (start, stop) intervals in dblock_tick indexes where tr_doc[‘test’] failed.
+tr_doc[‘pygarv’]</p>
+<ul>
+<li><p>The tests are specified as a YAML file .yarf.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">dblock_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">some_path</span>
+<span class="nt">dblock_path_idx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">unint</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pygarv</span>
+<span class="nt">tests</span><span class="p">:</span>
+<span class="p p-Indicator">-</span> <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">test_spec</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">test_spec</span>
+  <span class="l l-Scalar l-Scalar-Plain">...</span>
+  <span class="p p-Indicator">-</span> <span class="l l-Scalar l-Scalar-Plain">test_spec</span>
+</pre></div>
+</div>
+</li>
+<li><p>Each <cite>test_spec</cite> is a YAML map with a mandatory <cite>name</cite> and <cite>tag</cite>
+parameter and optional other paramters as needed for specific tests</p>
+<p>test: str
+tag: str</p>
+</li>
+</ul>
+<p>where</p>
+<blockquote>
+<div><p><cite>test</cite> names a pygarv test function, e.g., <cite>mxflat</cite>, <cite>ppadif</cite>
+<cite>tag</cite> is a user-defined descriptive tag, e.g., <em>blocking</em>, <em>heog</em>, <em>fancy test</em></p>
+</div></blockquote>
+<dl class="py class">
+<dt id="mkpy.pygarv.PyGarv">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.pygarv.</code><code class="sig-name descname">PyGarv</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em>, <em class="sig-param"><span class="n">yarf_f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>container to hold an inventory of functions for computing sample-wise
+artifact masks.</p>
+<p>When invoked at the command line, pygarv needs an mkh5 file to work with</p>
+<dl class="simple">
+<dt>There are two cases:</dt><dd><ul class="simple">
+<li><dl class="simple">
+<dt>has not been previously garved with _update_mkh5()</dt><dd><ul>
+<li><p>no pygarv test info in header</p></li>
+<li><p>pygarv data streams all zeros</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt>data has been previously garved with _update_mkh5()</dt><dd><ul>
+<li><p>pygarv test info appears in header</p></li>
+<li><p>test results are unknown, possibly None</p></li>
+<li><p>pygarv data stream state is unknown</p></li>
+</ul>
+</dd>
+</dl>
+</li>
+</ul>
+</dd>
+</dl>
+<p>On init the mkh5 file is scanned for previous runs, if found the
+pygarv data buffers (volatile) are synced with the info from the h5
+file.</p>
+<p>For each data block:</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>self.tr_docs are set to match the header[‘pygarv’] dict</p></li>
+<li><p>self.yarf_fails are set according to dblock[‘pygarv’], self.tr_docs</p></li>
+<li><p>the value of pygarv = run_test(db_idx) (what-if run) is
+checked against the dblock data, discrepanices throw a warning</p></li>
+</ul>
+</div></blockquote>
+<p>PyGarv now has persistent and volatile rejection data in
+alignment, suitable for viewing/editing in mkh5viewer</p>
+<p>PyGarvTest</p>
+<p>The PyGarvTest decorator handles all the default parameter
+name and type bookkeeping for specific tests</p>
+<p>To add a test to the catalog …</p>
+<p>1. implement a function that takes two args (hdr, dblock,
+**kwargs) and returns a boolean artifact mask of length dblock
+data samples where 0 = good, 1 = bad.</p>
+<p>The hdr (dict), and dblock (np.ndarray) are, e.g., as
+returned by hdr, dblock = mkh5.get_dblock(path_to_datablock)
+but can by any dict and dblock that expose variable needed to
+compute the artifact mask.</p>
+<ol class="arabic simple" start="2">
+<li><p>decorate it with &#64;PyGarvTest(test_name, [key=dtype, key=dtype])</p></li>
+</ol>
+<p>where test_name is the test name and the list of key_i=dtype_i
+optionally gives extra parameters named key_1, … key_n
+with data type dtype.</p>
+<dl class="py attribute">
+<dt id="mkpy.pygarv.PyGarv.cppa">
+<code class="sig-name descname">cppa</code><em class="property"> = {'interval': None, 'stream': None, 'tag': None, 'test': 'cppa', 'threshold': None}</em><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.cppa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.cppa" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="mkpy.pygarv.PyGarv.cppadif">
+<code class="sig-name descname">cppadif</code><em class="property"> = {'interval': None, 'stream': None, 'stream2': None, 'tag': None, 'test': 'cppadif', 'threshold': None}</em><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.cppadif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.cppadif" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="mkpy.pygarv.PyGarv.cstdev">
+<code class="sig-name descname">cstdev</code><em class="property"> = {'interval': None, 'stream': None, 'tag': None, 'test': 'cstdev', 'threshold': None}</em><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.cstdev"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.cstdev" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarv.get_catalog">
+<code class="sig-name descname">get_catalog</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.get_catalog"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.get_catalog" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarv.get_result">
+<code class="sig-name descname">get_result</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pg_test_result</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.get_result"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.get_result" title="Permalink to this definition">¶</a></dt>
+<dd><p>convenience wrapper to query a test result, decode the mask, and
+return with its test in a handy package.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pg_test_result</strong> (<em>a (tr_doc, pygarv_mask) tuple</em>) – as returned by run_* functions</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py attribute">
+<dt id="mkpy.pygarv.PyGarv.maxflat">
+<code class="sig-name descname">maxflat</code><em class="property"> = {'nsamp': None, 'poststim': None, 'prestim': None, 'stream': None, 'tag': None, 'test': 'maxflat', 'threshold': None}</em><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.maxflat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.maxflat" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="mkpy.pygarv.PyGarv.param_types">
+<code class="sig-name descname">param_types</code><em class="property"> = {'interval': &lt;class 'float'&gt;, 'stream': &lt;class 'str'&gt;, 'threshold': &lt;class 'float'&gt;}</em><a class="headerlink" href="#mkpy.pygarv.PyGarv.param_types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="mkpy.pygarv.PyGarv.ppa">
+<code class="sig-name descname">ppa</code><em class="property"> = {'poststim': None, 'prestim': None, 'stream': None, 'tag': None, 'test': 'ppa', 'threshold': None}</em><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.ppa"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.ppa" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py attribute">
+<dt id="mkpy.pygarv.PyGarv.ppadif">
+<code class="sig-name descname">ppadif</code><em class="property"> = {'poststim': None, 'prestim': None, 'stream': None, 'stream2': None, 'tag': None, 'test': 'ppadif', 'threshold': None}</em><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.ppadif"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.ppadif" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarv.run_dblock">
+<code class="sig-name descname">run_dblock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dbp_idx</span></em>, <em class="sig-param"><span class="n">tr_doc</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.run_dblock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.run_dblock" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run tests in the tr_doc for datablock at dbp_idx, returns 64-bit pygarv sample mask.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>dpb_idx</strong> (<em>uint</em>) – index of the ith dblock in self.dblock_paths</p></li>
+<li><p><strong>tr_doc</strong> (<em>dict</em>) – PyYarf format dict with tr_doc[‘tests’]</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><p>dict of results like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="p">{</span><span class="n">name</span><span class="p">:</span> <span class="s1">&#39;results&#39;</span><span class="p">,</span>
+ <span class="n">dblock_path</span><span class="p">:</span> <span class="nb">str</span> <span class="p">(</span><span class="o">==</span> <span class="n">the</span> <span class="n">yarf_dbp</span><span class="p">),</span>
+ <span class="n">pygarv</span> <span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">(</span><span class="n">shape</span><span class="o">=</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dblock</span><span class="p">),),</span>
+                     <span class="n">dtype</span><span class="o">=</span><span class="n">dblock</span><span class="p">[</span><span class="s1">&#39;pygarv&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">dtype</span><span class="p">),</span>
+ <span class="n">fails</span> <span class="p">:</span> <span class="nb">list</span> <span class="n">of</span> <span class="n">uint</span> <span class="mi">2</span><span class="o">-</span><span class="n">ples</span> <span class="p">(</span><span class="n">x0</span><span class="p">,</span> <span class="n">x1</span><span class="p">)}</span>
+</pre></div>
+</div>
+</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>results</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>The fails list amounts to an RLL compression of the boolean vector <cite>pygarv &gt; 0</cite></p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError if tr_doc</strong><strong>[</strong><strong>'dblock_path'</strong><strong>] </strong><strong>!= self.dblock_paths</strong><strong>[</strong><strong>dbp_idx</strong><strong>]</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarv.run_tests">
+<code class="sig-name descname">run_tests</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarv.run_tests"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarv.run_tests" title="Permalink to this definition">¶</a></dt>
+<dd><p>fetch tests and pygarv mask for all dblocks, does not modify mkh5</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><ul class="simple">
+<li><p><strong>pg_test_results</strong> (<em>list of 2-ples (tr_doc, pygarv_mask), one</em>)</p></li>
+<li><p><em>for each datablock in self.mkh5</em></p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.pygarv.PyGarvTest">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.pygarv.</code><code class="sig-name descname">PyGarvTest</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarvTest"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarvTest" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">collections.OrderedDict</span></code></p>
+<p>Decorator class for the PyGarv tests.</p>
+<p>This enforces an extensible standard form on PyGarv test specs and
+execution.</p>
+<p>The class derives from OrderedDict so it returns .keys() .values()
+.items() in fixed original parameter order. This is useful for
+populating test UI elements and reading writing YAML sequences
+without scrambling the key:value pairs the way a dict() might.</p>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>param_specs</strong> (<em>[(key,type), …]</em>) –</p>
+<dl class="simple">
+<dt>key<span class="classifier">str</span></dt><dd><p>parameter label</p>
+</dd>
+<dt>type<span class="classifier">Python type</span></dt><dd><p>required Python data type for values of the key</p>
+</dd>
+</dl>
+<p>(‘test’,str),
+(‘tag’, str),
+(‘stream’, str),</p>
+</dd>
+</dl>
+<ul>
+<li><p>Default test parameters (in sequence order)</p>
+<dl class="simple">
+<dt>test<span class="classifier">str</span></dt><dd><p>corresponds to the self._test() function that runs it</p>
+</dd>
+<dt>tag<span class="classifier">str</span></dt><dd><p>user specified descriptive tag for the test … anything sensible</p>
+</dd>
+<dt>stream<span class="classifier">str</span></dt><dd><p>name or regex pattern for primary dblock data stream(s) to run the test on</p>
+</dd>
+</dl>
+</li>
+<li><p>Optional test specific <cite>parameter:type</cite> pairs are defined in the
+decorator arguments</p></li>
+</ul>
+<dl class="field-list simple">
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><p><strong>ValueError</strong> – If the type of a test parameter differs from that in <code class="docutils literal notranslate"><span class="pre">param_specs</span></code></p>
+</dd>
+</dl>
+<ul>
+<li><p><code class="docutils literal notranslate"><span class="pre">PyGarvTest</span></code> overrides <code class="docutils literal notranslate"><span class="pre">OrderedDict.__setitem__()</span></code> with
+additional type checking on the value of test[‘key’] = value</p></li>
+<li><p>The class variable <code class="docutils literal notranslate"><span class="pre">param_specs</span></code> specifies mandatory
+<code class="docutils literal notranslate"><span class="pre">PyGarvTest</span></code> parameters and types.</p></li>
+<li><p>Optional decorator arguments can extend the mandatory parameters
+and types and will be automatically passed to the decorated test
+function.</p></li>
+<li><p>all PyGarvTest instances have _default_params with key, type</p></li>
+<li><p>optional decorater args extend PyGarvTest instances with additional params</p></li>
+<li><p>public CRUD API is standardized</p></li>
+<li><p>To preserve test spec order for display and yamlized round
+trips, test specs are stored internally as OrderedDicts and the
+setter/getter API wants and returns lists of dict, i.e.,
+..code-block:: python</p>
+<blockquote>
+<div><p>[{‘test’:’ppa’}, …{‘interval’:1500.0}]</p>
+</div></blockquote>
+</li>
+</ul>
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.run">
+<code class="sig-name descname">run</code><span class="sig-paren">(</span><em class="sig-param">hdr</em>, <em class="sig-param">dblock</em>, <em class="sig-param">\*\*kwargs</em><span class="sig-paren">)</span><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.run" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>hdr</strong> (<em>dict</em>) – metadata consulted in running the tests, e.g., sampling rate</p></li>
+<li><p><strong>dblock</strong> (<em>np.ndarray (named dtypes)</em>) – columns of data, typically accessed by dtype.name</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>results</strong> – sample-wise data rejection mask, 1=bad, 0=good</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.ndarray, dtype=bool, length = len(dblock)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.Usage">
+<code class="sig-name descname">Usage</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.Usage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt>
+<code class="sig-name descname">-----</code></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.get_specs">
+<code class="sig-name descname">get_specs</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarvTest.get_specs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.get_specs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.param_type">
+<code class="sig-name descname">param_type</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">param</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarvTest.param_type"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.param_type" title="Permalink to this definition">¶</a></dt>
+<dd><p>type of param</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.param_types">
+<em class="property">property </em><code class="sig-name descname">param_types</code><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.param_types" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.params">
+<em class="property">property </em><code class="sig-name descname">params</code><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.params" title="Permalink to this definition">¶</a></dt>
+<dd><p>names of the parameters this test as a list</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.reset">
+<code class="sig-name descname">reset</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarvTest.reset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.reset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.set_specs">
+<code class="sig-name descname">set_specs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">test_params</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyGarvTest.set_specs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.set_specs" title="Permalink to this definition">¶</a></dt>
+<dd><p>test_params is {key:value, … } for test keys,values</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.specs">
+<em class="property">property </em><code class="sig-name descname">specs</code><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.specs" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.specs_as_yaml">
+<em class="property">property </em><code class="sig-name descname">specs_as_yaml</code><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.specs_as_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns current specs as yaml string</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyGarvTest.types">
+<em class="property">property </em><code class="sig-name descname">types</code><a class="headerlink" href="#mkpy.pygarv.PyGarvTest.types" title="Permalink to this definition">¶</a></dt>
+<dd><p>data types of the values for the parameters as a list</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.pygarv.PyYarf">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.pygarv.</code><code class="sig-name descname">PyYarf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yarf_f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyYarf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyYarf" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>YAML test file I/O for PyGarv artifact test parameters</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>yarf_f</strong> (<em>str</em>) – file path to well-formed YAML with PyYarf test specification structure</p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>yarf_docs</strong> (<em>list</em>) – <p>each item is a yarf_doc dict that yamlizes in-out without modification
+..code-block:: python</p>
+<blockquote>
+<div><dl class="simple">
+<dt>{‘name’: ‘pygarv’ (str),</dt><dd><p>’dblock_path_idx’: n (uint)
+‘dblock_path’: path_to_a_mkh5_dblock (str),
+‘tests’: [ test_spec, … test_spec] (list)}</p>
+</dd>
+</dl>
+</div></blockquote>
+</p>
+</dd>
+</dl>
+<dl class="py method">
+<dt>
+<code class="sig-name descname">IO methods</code></dt>
+<dd><p>read yarf_docs from yaml
+write yarf_docs to yaml
+read yarf_docs from mkh5 headers</p>
+</dd></dl>
+
+<dl class="simple">
+<dt>PyYarf YAML format:</dt><dd><ul class="simple">
+<li><p>exactly one yaml document per mkh5 dblock_path</p></li>
+<li><p>each doc is a map with 3 keys: <cite>name</cite>, <cite>dblock_path</cite>, <cite>tests</cite></p></li>
+<li><p>the value of <cite>name</cite> must be <cite>pygarv</cite> (str)</p></li>
+<li><p>the value of <cite>dblock_path</cite> in the ith yaml doc must == mkh5.data_blocks[i] (str)</p></li>
+<li><p>the value of <cite>tests</cite> must be a list of test specifications (see PyGarvTest docs)</p></li>
+</ul>
+</dd>
+</dl>
+<p>Examples</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># generated by PyYarf</span>
+<span class="nn">---</span>
+<span class="nt">dblock_path_idx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">0</span>
+<span class="nt">dblock_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">calstest/dblock_0</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pygarv</span>
+<span class="nt">tests</span><span class="p">:</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">-</span> <span class="nt">test</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ppa_event</span>
+    <span class="p p-Indicator">-</span> <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tag1</span>
+    <span class="p p-Indicator">-</span> <span class="nt">stream</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MiPf</span>
+    <span class="p p-Indicator">-</span> <span class="nt">threshold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">20.0</span>
+    <span class="p p-Indicator">-</span> <span class="nt">prestim</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">500.0</span>
+    <span class="p p-Indicator">-</span> <span class="nt">poststim</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1500.0</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">-</span> <span class="nt">test</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ppa_event</span>
+    <span class="p p-Indicator">-</span> <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tag1</span>
+    <span class="p p-Indicator">-</span> <span class="nt">stream</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MiCe</span>
+    <span class="p p-Indicator">-</span> <span class="nt">threshold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">50.0</span>
+    <span class="p p-Indicator">-</span> <span class="nt">prestim</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">100.0</span>
+    <span class="p p-Indicator">-</span> <span class="nt">poststim</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1000.0</span>
+  <span class="p p-Indicator">-</span> <span class="p p-Indicator">-</span> <span class="nt">test</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">ppa_event</span>
+    <span class="p p-Indicator">-</span> <span class="nt">tag</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">tag1</span>
+    <span class="p p-Indicator">-</span> <span class="nt">stream</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">MiPa</span>
+    <span class="p p-Indicator">-</span> <span class="nt">threshold</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.0</span>
+    <span class="p p-Indicator">-</span> <span class="nt">prestim</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">10.0</span>
+    <span class="p p-Indicator">-</span> <span class="nt">poststim</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">200.0</span>
+<span class="nn">---</span>
+<span class="nt">dblock_path_idx</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">1</span>
+<span class="nt">dblock_path</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">calstest/dblock_1</span>
+<span class="nt">name</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">pygarv</span>
+<span class="nt">tests</span><span class="p">:</span> <span class="p p-Indicator">[]</span>
+</pre></div>
+</div>
+<dl class="py method">
+<dt id="mkpy.pygarv.PyYarf.check_yarf_doc">
+<code class="sig-name descname">check_yarf_doc</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yarf_doc</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyYarf.check_yarf_doc"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyYarf.check_yarf_doc" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyYarf.lint_yarf">
+<code class="sig-name descname">lint_yarf</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yarf_stream</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyYarf.lint_yarf"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyYarf.lint_yarf" title="Permalink to this definition">¶</a></dt>
+<dd><p>run yamllint on yarf_stream, if errors die informatively</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyYarf.read_from_mkh5">
+<code class="sig-name descname">read_from_mkh5</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyYarf.read_from_mkh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyYarf.read_from_mkh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>scan mkh5 dblock headers and dblock[‘pygarv’] stream artifact test info</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p><strong>yarf_docs</strong> – dict is a PyYarf format dict see PyYarf doc string for details</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>list of list of dict where</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyYarf.read_from_yaml">
+<code class="sig-name descname">read_from_yaml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yarf_f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyYarf.read_from_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyYarf.read_from_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>return yarf_doc list populated with yarf info, if any, from mkh5 dblock headers</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.pygarv.PyYarf.to_yaml">
+<code class="sig-name descname">to_yaml</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">yarf_docs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/pygarv.html#PyYarf.to_yaml"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.pygarv.PyYarf.to_yaml" title="Permalink to this definition">¶</a></dt>
+<dd><p>return yarf_docs YAML-ized as string suitable for serialization</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mkpy.mkio.html" class="btn btn-neutral float-right" title="mkpy.mkio module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mkpy.codetagger.html" class="btn btn-neutral float-left" title="mkpy.codetagger module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

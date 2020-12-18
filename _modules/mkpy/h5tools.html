@@ -1,0 +1,295 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.h5tools &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../mkpy.html">mkpy</a> &raquo;</li>
+        
+      <li>mkpy.h5tools</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mkpy.h5tools</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;:meta private:&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">h5py</span>
+
+
+<div class="viewcode-block" id="get_data_group_paths"><a class="viewcode-back" href="../../api_source/mkpy.h5tools.html#mkpy.h5tools.get_data_group_paths">[docs]</a><span class="k">def</span> <span class="nf">get_data_group_paths</span><span class="p">(</span><span class="n">h5f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return paths to all data groups that contain a dblock_0.</span>
+
+<span class="sd">    The paths are sorted lexicographically.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    h5f : str</span>
+<span class="sd">        HDF5 file name</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    group_paths : list of str</span>
+<span class="sd">        List of paths to data groups</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">group_paths</span> <span class="o">=</span> <span class="p">[]</span>
+
+    <span class="k">def</span> <span class="nf">group_criterion</span><span class="p">(</span><span class="n">name</span><span class="p">,</span> <span class="n">obj</span><span class="p">):</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">h5py</span><span class="o">.</span><span class="n">Group</span><span class="p">)</span> <span class="ow">and</span> <span class="s2">&quot;dblock_0&quot;</span> <span class="ow">in</span> <span class="n">obj</span><span class="p">:</span>
+            <span class="n">group_paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">name</span><span class="p">)</span>
+
+    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">h5f</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5</span><span class="p">:</span>
+        <span class="n">h5</span><span class="o">.</span><span class="n">visititems</span><span class="p">(</span><span class="n">group_criterion</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="nb">sorted</span><span class="p">(</span><span class="n">group_paths</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="get_dblock_paths"><a class="viewcode-back" href="../../api_source/mkpy.h5tools.html#mkpy.h5tools.get_dblock_paths">[docs]</a><span class="k">def</span> <span class="nf">get_dblock_paths</span><span class="p">(</span><span class="n">h5f</span><span class="p">,</span> <span class="n">h5_path</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Get dblock_N paths, in acquisition order, for the group at h5_path.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    -----------</span>
+<span class="sd">    h5f : str</span>
+<span class="sd">        HDF5 file name</span>
+<span class="sd">    h5_path : str</span>
+<span class="sd">        Path to group under `h5f` containing dblocks</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    dblock_paths : list of str</span>
+<span class="sd">        List of paths to dblocks</span>
+
+
+<span class="sd">    Examples</span>
+
+<span class="sd">    &gt;&gt;&gt; from mkpy import h5tools</span>
+<span class="sd">    &gt;&gt;&gt; h5tools.get_dblock_paths(&#39;calstest.h5&#39;, &#39;calstest&#39;)</span>
+<span class="sd">    [&#39;calstest/dblock_0&#39;,</span>
+<span class="sd">     &#39;calstest/dblock_1&#39;,</span>
+<span class="sd">     &#39;calstest/dblock_2&#39;,</span>
+<span class="sd">     &#39;calstest/dblock_3&#39;,</span>
+<span class="sd">     &#39;calstest/dblock_4&#39;]</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">h5f</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">h5_path</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">h5</span><span class="o">.</span><span class="n">keys</span><span class="p">():</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s1">&#39;Group &quot;</span><span class="si">{</span><span class="n">h5_path</span><span class="si">}</span><span class="s1">&quot; does not exist.&#39;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="n">dblocks_found</span> <span class="o">=</span> <span class="p">[</span><span class="n">d</span> <span class="k">for</span> <span class="n">d</span> <span class="ow">in</span> <span class="n">h5</span><span class="p">[</span><span class="n">h5_path</span><span class="p">]</span><span class="o">.</span><span class="n">keys</span><span class="p">()</span> <span class="k">if</span> <span class="s2">&quot;dblock&quot;</span> <span class="ow">in</span> <span class="n">d</span><span class="p">]</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">dblocks_found</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;No dblocks found under </span><span class="si">{</span><span class="n">h5f</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">h5_path</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># dblocks should be contiguously numbered 0, ..., n-1</span>
+    <span class="n">n_dblocks</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dblocks_found</span><span class="p">)</span>
+    <span class="n">dblocks_expected</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;dblock_</span><span class="si">{</span><span class="n">i</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">n_dblocks</span><span class="p">)]</span>
+
+    <span class="k">if</span> <span class="nb">set</span><span class="p">(</span><span class="n">dblocks_found</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">set</span><span class="p">(</span><span class="n">dblocks_expected</span><span class="p">):</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;Disordered dblocks in </span><span class="si">{</span><span class="n">h5f</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">h5_path</span><span class="si">}</span><span class="s2">: &quot;</span>
+        <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot;, &quot;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">dblocks_found</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="c1"># dblocks_expected is sorted and equal to found, so we use it</span>
+    <span class="n">dblock_paths</span> <span class="o">=</span> <span class="p">[</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">h5_path</span><span class="si">}</span><span class="s2">/</span><span class="si">{</span><span class="n">dblock</span><span class="si">}</span><span class="s2">&quot;</span> <span class="k">for</span> <span class="n">dblock</span> <span class="ow">in</span> <span class="n">dblocks_expected</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">dblock_paths</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

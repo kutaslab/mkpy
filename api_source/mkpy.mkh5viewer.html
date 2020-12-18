@@ -1,0 +1,872 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.mkh5viewer module &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>mkpy.mkh5viewer module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_source/mkpy.mkh5viewer.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mkpy.mkh5viewer">
+<span id="mkpy-mkh5viewer-module"></span><h1>mkpy.mkh5viewer module<a class="headerlink" href="#module-mkpy.mkh5viewer" title="Permalink to this headline">¶</a></h1>
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.Application">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">Application</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">mkh5_f</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tmp_yarf_f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Application"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Application" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Frame</span></code></p>
+<p>top level viewer frame</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.DBlockView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">DBlockView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#DBlockView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.DBlockView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Treeview</span></code></p>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.DBlockView.set_vp_cursor">
+<code class="sig-name descname">set_vp_cursor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#DBlockView.set_vp_cursor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.DBlockView.set_vp_cursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>vp cursor tracks dblock focus item, i.e., dblock row</p>
+<p>Responds to DblockView cursor selection virtual events, also
+called by TraceView cursor mouse dragging</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.Dashboard">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">Dashboard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Dashboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.PanedWindow</span></code></p>
+<p>wrapper around HeaderView, H5Nav</p>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.Dashboard.layout_dashboard_widgets">
+<code class="sig-name descname">layout_dashboard_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Dashboard.layout_dashboard_widgets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Dashboard.layout_dashboard_widgets" title="Permalink to this definition">¶</a></dt>
+<dd><p>note: dims controlled in appearance spec globals</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.DataView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">DataView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#DataView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.DataView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.PanedWindow</span></code></p>
+<p>wrapper around pygarv editor, traces and dblock datatable</p>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.DataView.layout_DV_widgets">
+<code class="sig-name descname">layout_DV_widgets</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#DataView.layout_DV_widgets"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.DataView.layout_DV_widgets" title="Permalink to this definition">¶</a></dt>
+<dd><p>note: dims controlled in appearance spec globals</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.EventView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">EventView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#EventView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.EventView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Frame</span></code></p>
+<p>lightweight wrapper for regular expression event finding, same
+search mechanism as mkh5.event_table()</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.H5Nav">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">H5Nav</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#H5Nav"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.H5Nav" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Notebook</span></code></p>
+<p>Tab 1 (default) is dblocks, other tabs are epochs</p>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.H5Nav.update_model_dblock_paths">
+<code class="sig-name descname">update_model_dblock_paths</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#H5Nav.update_model_dblock_paths"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.H5Nav.update_model_dblock_paths" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.H5View">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">H5View</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="n">layer</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#H5View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.H5View" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Treeview</span></code></p>
+<p>unified tabular viewer for data block (= a long epoch), events
+(a single sample epoch) and epoch tables</p>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.H5View.update_model_view">
+<code class="sig-name descname">update_model_view</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#H5View.update_model_view"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.H5View.update_model_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>handles clicks on H5view row.</p>
+<p>Each row of self.h5view_df has a dblock_path and match_ticks column.</p>
+<p>Selecting by mouse click or arrowing</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>update the main model to use the dblock at dblock_path</p></li>
+<li><p>move the viewport to the relevant tick</p></li>
+<li><p>switch the dashboard into event scroll mode and notify
+of the new event data</p></li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.HeaderView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">HeaderView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#HeaderView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.HeaderView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Labelframe</span></code></p>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.HeaderView.dict_to_tree">
+<code class="sig-name descname">dict_to_tree</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">d</span></em>, <em class="sig-param"><span class="n">tree_item</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#HeaderView.dict_to_tree"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.HeaderView.dict_to_tree" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.Model">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">Model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">tmp_yarf_f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Model" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>data model for the views</p>
+<p>This is the Model in the mkh5viewer Model-View architecture</p>
+<p><cite>dblock_paths</cite> and <cite>epoch_tables</cite> are set once upon init when the
+<cite>mkh5</cite> file is read.</p>
+<p>The rest track datablock and index pointers, updated in response
+to UI events.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>mkh5_f</strong> (<em>string</em>) – file path to current mkpy.mkh5 hdf5 format data file</p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>mkh5</strong> (<em>object</em>) – <a class="reference internal" href="mkpy.mkh5.html#mkpy.mkh5.mkh5" title="mkpy.mkh5.mkh5"><code class="xref py py-class docutils literal notranslate"><span class="pre">mkh5</span></code></a> instance that exposes the hdf5 data and methods</p></li>
+<li><p><strong>dblock_paths</strong> (<em>list of str</em>) – catalogue of all hdf5 slashpaths to mkh5 dblocks</p></li>
+<li><p><strong>epoch_tables</strong> (<em>list of str</em>) – each string is a slash path ‘_epoch_tables/*’ to an mkh5 epoch table dataset</p></li>
+<li><p><strong>dbp_idx</strong> (<em>uint</em>) – index of model’s current dblock_path</p></li>
+<li><p><strong>dblock_path</strong> (<em>string</em>) – slash path to the active mkpy.mkh5 data set, e.g.,
+<cite>sub01/dblock_0</cite> or <cite>exp1/S07/dblock_7</cite>.</p></li>
+<li><p><strong>dblock</strong> (<em>np.ndarray</em>) – current dblock data streams</p></li>
+<li><p><strong>header</strong> (<em>dict</em>) – current dblock header</p></li>
+<li><p><strong>pg</strong> (<a class="reference internal" href="mkpy.pygarv.html#mkpy.pygarv.PyGarv" title="mkpy.pygarv.PyGarv"><em>PyGarv</em></a><em>(</em><em>)</em>) – </p></li>
+<li><p><strong>pg.yarf_docs</strong> (<em>list</em>) – item at pg.yarf_docs[idx] is a list of tests to run on dblock at dblock_paths[idx]</p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.Model.export_yarf_docs">
+<code class="sig-name descname">export_yarf_docs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">filename</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Model.export_yarf_docs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Model.export_yarf_docs" title="Permalink to this definition">¶</a></dt>
+<dd><p>scrape yarf doc test info from tr_docs and dump to YAML .yarf file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.Model.get_pg_test_list">
+<code class="sig-name descname">get_pg_test_list</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Model.get_pg_test_list"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Model.get_pg_test_list" title="Permalink to this definition">¶</a></dt>
+<dd><p>return this dblock’s tr_doc test list, e.g., for populating a UI test tree</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.Model.next_event">
+<code class="sig-name descname">next_event</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">from_idx</span></em>, <em class="sig-param"><span class="n">direction</span></em>, <em class="sig-param"><span class="n">pygarv_type</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">event_col</span><span class="o">=</span><span class="default_value">'log_evcodes'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Model.next_event"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Model.next_event" title="Permalink to this definition">¶</a></dt>
+<dd><dl class="simple">
+<dt>return index of next or previous event in current</dt><dd><p>dblock model w/ pygarv type</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>from_idx</strong> (<em>unint</em>) – index in current data block to start from</p></li>
+<li><p><strong>direction</strong> (<em>int</em>) – 1 looks right, -1 looks left</p></li>
+<li><p><strong>pygarv_type</strong> (<em>str (None, ‘good’  ‘bad’)</em>) – None (default) ignores pygarv column, ‘good’ searches for
+pygarv == 0, bad searches pygarv &gt; 0</p></li>
+<li><p><strong>event_col</strong> (<em>str (‘log_evcodes’)</em>) – name dblock column to search for events. usually default,
+perhaps ‘crw_evcodes’</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>index of next event satisfying the criteria or from_idx if None are found</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.Model.update_model">
+<code class="sig-name descname">update_model</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dblock_path</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#Model.update_model"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.Model.update_model" title="Permalink to this definition">¶</a></dt>
+<dd><p>refresh index, path, and header, dblock data, and pygarv results</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dbp</strong> (<em>str</em>) – slashpath to dblock dataset</p>
+</dd>
+</dl>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.PyGarvCatalogView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">PyGarvCatalogView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#PyGarvCatalogView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.PyGarvCatalogView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Labelframe</span></code></p>
+<p>viewer/chooser for available PyGarvTest tests</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.PyGarvEditorDashboard">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">PyGarvEditorDashboard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#PyGarvEditorDashboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.PyGarvEditorDashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Frame</span></code></p>
+<p>wrapper for Editor UI controls</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.PyGarvEditorView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">PyGarvEditorView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#PyGarvEditorView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.PyGarvEditorView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.PanedWindow</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.PyGarvTestView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">PyGarvTestView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#PyGarvTestView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.PyGarvTestView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Labelframe</span></code></p>
+<p>viewer + parameter value editor for PyGarvTest datablock test params</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.PyGarvTreeView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">PyGarvTreeView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#PyGarvTreeView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.PyGarvTreeView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Treeview</span></code></p>
+<p>common container and styling wrapper for PyGarv catalog and dblock test views</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.PyGarvView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">PyGarvView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#PyGarvView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.PyGarvView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Labelframe</span></code></p>
+<p>thin wrapper around PyGarvEditor model-view for selecting, editing, deleting pygarv tests</p>
+<p>Fun facts</p>
+<ul>
+<li><p>the mkh5 data file is <em>not</em> modified</p></li>
+<li><p>View.model.pg maintains the local PyGarv() data model that tracks test results</p></li>
+<li><p>pygarv tests are tracked and run “what if”</p></li>
+<li><p>test results are are overlayed for viewing in the scope traces and table
+scope</p></li>
+<li><p>test doc may be exported as yaml *.yarf</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>open an editor for new/existing tests and hands them off to Model.pygarv to dry run</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+<p>Outline</p>
+<ul>
+<li><p>on init …</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>pygarv (comes with a built in catalog of implemented tests)</p></li>
+<li><p>walk the dblocks and scrape data for pygarv data stream and
+headers for any pygarv tests</p></li>
+<li><p>user edits create, delete, update the in-memory test specs</p></li>
+<li><p>when input validated for type, self.model.pg attemps to run the test</p></li>
+<li><p>success on running updates the self.pg.pg.tr_docs w/ the test and triggers
+a view._update() cascade</p></li>
+<li><p>failure returns the exception for handling by the viewer</p></li>
+<li><p>Export button dumps the .yarf YAML (= yarf_docs) for the tr_docs</p></li>
+<li><p>mini-console shows activity and messages</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.TraceView">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">TraceView</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Frame</span></code></p>
+<p>trace view of data drawn on tk.Canvas wrapped in a tk.Label frame</p>
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.TraceView.Trace">
+<em class="property">class </em><code class="sig-name descname">Trace</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">x</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">y</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">x_offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">y_offset</span><span class="o">=</span><span class="default_value">0</span></em>, <em class="sig-param"><span class="n">label</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">canvas_id</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">width</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">fill</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.Trace"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.Trace" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>scalable x,y tk.Canvas grobs</p>
+<p>The x and y are the 1-1 unscaled data, stretched into canvas_pts according
+to parent.x_scale, parent.x_scale</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>parent</strong> (<em>TraceView object</em>) – Assumed to have parent.x_scale, parent.y_scale, parent.canvas</p>
+</dd>
+<dt class="field-even">Variables</dt>
+<dd class="field-even"><p><strong>canvas_id</strong> (<em>int</em><em> (</em><em>None</em><em>)</em>) – canvas item index if Trace is currently rendered, else None.</p>
+</dd>
+</dl>
+<ul>
+<li><p>Construct:</p>
+<blockquote>
+<div><p>my_line = Trace(parent_trace_view) # container only
+my_line = Trace(parent_trace_view, x=x_data, y=ydata) # ready to render
+my_rect = Trace(parent_trace_view, x=(x0,x1), y=(y0,y1)) # ready to render</p>
+</div></blockquote>
+</li>
+<li><p>Update, optionally with new x,y data</p>
+<blockquote>
+<div><p>my_line.update() # rescale only
+my_line.update(x=x_data, y=y_data) # set x,y data and rescale</p>
+</div></blockquote>
+</li>
+<li><p>To render a Trace grob on a tk.canvas</p>
+<blockquote>
+<div><p>my_line.canvas_id = canvas.create_line(my_trace.canvas_pts, …)
+my_rect.canvas_id = canvas.create_rectangle(my_trace.canvas_pts, …)</p>
+</div></blockquote>
+</li>
+<li><p>To delete a Trace grob from a tk.canvas</p>
+<blockquote>
+<div><p>canvas.delete(my_trace.canvas_id)
+my_trace.canvas_id = None</p>
+</div></blockquote>
+</li>
+</ul>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.Trace.set_x_y">
+<code class="sig-name descname">set_x_y</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">x</span></em>, <em class="sig-param"><span class="n">y</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.Trace.set_x_y"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.Trace.set_x_y" title="Permalink to this definition">¶</a></dt>
+<dd><p>store data sample x, y and convert to canvas coords</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard">
+<em class="property">class </em><code class="sig-name descname">TraceDashboard</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceDashboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.Frame</span></code></p>
+<p>Status and UI controls for continuous vs. event/epoch scrolling</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong></p></li>
+<li><p><strong>model</strong></p></li>
+</ul>
+</dd>
+</dl>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.anchor">
+<em class="property">property </em><code class="sig-name descname">anchor</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.anchor" title="Permalink to this definition">¶</a></dt>
+<dd><p>The anchor value controls how to place the grid within the
+master when no row/column has any weight.</p>
+<p>The default anchor is nw.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.anchor_dblock_idx">
+<em class="property">property </em><code class="sig-name descname">anchor_dblock_idx</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.anchor_dblock_idx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.anchor_event_data">
+<em class="property">property </em><code class="sig-name descname">anchor_event_data</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.anchor_event_data" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.anchor_vp_offset">
+<em class="property">property </em><code class="sig-name descname">anchor_vp_offset</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.anchor_vp_offset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.find_next_anchor">
+<code class="sig-name descname">find_next_anchor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">direction</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceDashboard.find_next_anchor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.find_next_anchor" title="Permalink to this definition">¶</a></dt>
+<dd><p>look left or right for next event of current pygarv type</p>
+<p>This calls Model.next_event() according to the dashboard
+settings.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>direction</strong> (<em>int</em>) – -1 searches left, 1 searches right</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>new_vp_idx</strong> – viewport left-edge index to view the found event after
+taking the anchor offset into account.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>uint</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.get_scroll_by">
+<code class="sig-name descname">get_scroll_by</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceDashboard.get_scroll_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.get_scroll_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.is_event_view">
+<em class="property">property </em><code class="sig-name descname">is_event_view</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.is_event_view" title="Permalink to this definition">¶</a></dt>
+<dd><p>boolean True if scrolling by one of the event modes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.poststim">
+<em class="property">property </em><code class="sig-name descname">poststim</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.poststim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.poststim_dblock_idx">
+<em class="property">property </em><code class="sig-name descname">poststim_dblock_idx</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.poststim_dblock_idx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.poststim_vp_offset">
+<em class="property">property </em><code class="sig-name descname">poststim_vp_offset</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.poststim_vp_offset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.prestim">
+<em class="property">property </em><code class="sig-name descname">prestim</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.prestim" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.prestim_dblock_idx">
+<em class="property">property </em><code class="sig-name descname">prestim_dblock_idx</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.prestim_dblock_idx" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.prestim_vp_offset">
+<em class="property">property </em><code class="sig-name descname">prestim_vp_offset</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.prestim_vp_offset" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.set_anchor">
+<code class="sig-name descname">set_anchor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dblock_idx</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceDashboard.set_anchor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.set_anchor" title="Permalink to this definition">¶</a></dt>
+<dd><p>anchor at dblock index idx, update prestim and poststim from scales</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.set_dash_status_text">
+<code class="sig-name descname">set_dash_status_text</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">units</span><span class="o">=</span><span class="default_value">'seconds'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceDashboard.set_dash_status_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.set_dash_status_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>refresh the status report text</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>units</strong> (<em>str (‘samples’, ‘seconds’)</em>)</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.set_epoch_labels_text">
+<code class="sig-name descname">set_epoch_labels_text</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceDashboard.set_epoch_labels_text"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.set_epoch_labels_text" title="Permalink to this definition">¶</a></dt>
+<dd><p>synch epoch text labels w/ scale settings</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceDashboard.set_scroll_by">
+<code class="sig-name descname">set_scroll_by</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">scroll_by</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceDashboard.set_scroll_by"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceDashboard.set_scroll_by" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.TraceView.TraceHScrollbar">
+<em class="property">class </em><code class="sig-name descname">TraceHScrollbar</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceHScrollbar"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceHScrollbar" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.ttk.Scrollbar</span></code></p>
+<p>derived scrollbar to update xview from model on set</p>
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceHScrollbar.position">
+<em class="property">property </em><code class="sig-name descname">position</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceHScrollbar.position" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.TraceHScrollbar.set">
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.TraceHScrollbar.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.TraceHScrollbar.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the fractional values of the slider position (upper and
+lower ends as value between 0 and 1).</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.b1_drag">
+<code class="sig-name descname">b1_drag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.b1_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.b1_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.b2_drag">
+<code class="sig-name descname">b2_drag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.b2_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.b2_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.b3_drag">
+<code class="sig-name descname">b3_drag</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.b3_drag"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.b3_drag" title="Permalink to this definition">¶</a></dt>
+<dd><p>stub</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.bind_keys">
+<code class="sig-name descname">bind_keys</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.bind_keys"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.bind_keys" title="Permalink to this definition">¶</a></dt>
+<dd><p>bindings</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.bind_mouse">
+<code class="sig-name descname">bind_mouse</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.bind_mouse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.bind_mouse" title="Permalink to this definition">¶</a></dt>
+<dd><p>mouse bindings</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.canvas_get_focus">
+<code class="sig-name descname">canvas_get_focus</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.canvas_get_focus"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.canvas_get_focus" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.canvas_mouse_wheel">
+<code class="sig-name descname">canvas_mouse_wheel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.canvas_mouse_wheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.canvas_mouse_wheel" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.drag_vp_cursor">
+<code class="sig-name descname">drag_vp_cursor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.drag_vp_cursor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.drag_vp_cursor" title="Permalink to this definition">¶</a></dt>
+<dd><p>dragging mouse over moves viewport cursor and dblock selection</p>
+<p>This modifies dblock view selection to drive the cursor,
+indirect but synchronizes dblock selection and cursor</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.init_vp_cursor">
+<code class="sig-name descname">init_vp_cursor</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.init_vp_cursor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.init_vp_cursor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.mouse_wheel">
+<code class="sig-name descname">mouse_wheel</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.mouse_wheel"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.mouse_wheel" title="Permalink to this definition">¶</a></dt>
+<dd><p>handle mouse wheel</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.render_event_marks">
+<code class="sig-name descname">render_event_marks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.render_event_marks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.render_event_marks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.render_pygarv">
+<code class="sig-name descname">render_pygarv</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.render_pygarv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.render_pygarv" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.render_trace_dashboard">
+<code class="sig-name descname">render_trace_dashboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.render_trace_dashboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.render_trace_dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>render or hide the trace dashboard view grobs</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.render_traces">
+<code class="sig-name descname">render_traces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.render_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.render_traces" title="Permalink to this definition">¶</a></dt>
+<dd><p>fetch viewport info from model and render</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.render_vernier">
+<code class="sig-name descname">render_vernier</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.render_vernier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.render_vernier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.render_vp_cursor">
+<code class="sig-name descname">render_vp_cursor</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vp_cursor_idx</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.render_vp_cursor"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.render_vp_cursor" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.reset_event_marks">
+<code class="sig-name descname">reset_event_marks</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.reset_event_marks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.reset_event_marks" title="Permalink to this definition">¶</a></dt>
+<dd><p>called when viewport changes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.reset_pygarv">
+<code class="sig-name descname">reset_pygarv</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.reset_pygarv"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.reset_pygarv" title="Permalink to this definition">¶</a></dt>
+<dd><p>called when dblock or PyGarv.tr_docs test changes</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.reset_scrollregion">
+<code class="sig-name descname">reset_scrollregion</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.reset_scrollregion"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.reset_scrollregion" title="Permalink to this definition">¶</a></dt>
+<dd><p>change the canvas scrollregion on zoom params or window changes
+y scrollregion always needs to include all traces.
+x scrollregion is canvas width … _update_vp() sets vp_len data points</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.reset_trace_dashboard">
+<code class="sig-name descname">reset_trace_dashboard</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.reset_trace_dashboard"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.reset_trace_dashboard" title="Permalink to this definition">¶</a></dt>
+<dd><p>pull info from the trace dashboard view controls and render</p>
+<ul class="simple">
+<li><p>anchor marker</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.reset_traces">
+<code class="sig-name descname">reset_traces</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.reset_traces"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.reset_traces" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.reset_vernier">
+<code class="sig-name descname">reset_vernier</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.reset_vernier"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.reset_vernier" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.reset_vp">
+<code class="sig-name descname">reset_vp</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">vp_idx</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.reset_vp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.reset_vp" title="Permalink to this definition">¶</a></dt>
+<dd><p>set the TraceView viewport index and data slices of the current model.dblock</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>vp_idx</strong> (<em>int</em>) – dblock index (samples) of left edge of TraceView viewport</p></li>
+<li><p><strong>viewport start index values may come from keyboard/mouse TraceView navigation or</strong></p></li>
+<li><p><strong>be derived from epoch data lookup during table navigation</strong></p></li>
+<li><p><strong>The viewport length in samples is derived from the canvas</strong></p></li>
+<li><p><strong>scrollregion fraction of the canvas width (== len(dblock) * x_scale)</strong></p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.toggle_event_marks">
+<code class="sig-name descname">toggle_event_marks</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.toggle_event_marks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.toggle_event_marks" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.update_x_scale">
+<code class="sig-name descname">update_x_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.update_x_scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.update_x_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>handle time zoom</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.update_y_offset">
+<code class="sig-name descname">update_y_offset</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.update_y_offset"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.update_y_offset" title="Permalink to this definition">¶</a></dt>
+<dd><p>handle trace vertical spacing</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.update_y_scale">
+<code class="sig-name descname">update_y_scale</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">e</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#TraceView.update_y_scale"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.update_y_scale" title="Permalink to this definition">¶</a></dt>
+<dd><p>handle uV zoom</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5viewer.TraceView.viewport">
+<em class="property">property </em><code class="sig-name descname">viewport</code><a class="headerlink" href="#mkpy.mkh5viewer.TraceView.viewport" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5viewer.View">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">View</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">parent</span></em>, <em class="sig-param"><span class="n">model</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#View"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.View" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">tkinter.PanedWindow</span></code></p>
+<p>top_level view/controller, horizontal paned window with DataView, DashboardView</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>parent</strong> (<em>tk.object</em>)</p></li>
+<li><p><strong>model</strong> (<em>mkh5viewer.Model instance</em>) – see Model for details</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.mkh5viewer.launch_app">
+<code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">launch_app</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">mkh5_f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#launch_app"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.launch_app" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.mkh5viewer.set_styles">
+<code class="sig-prename descclassname">mkpy.mkh5viewer.</code><code class="sig-name descname">set_styles</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5viewer.html#set_styles"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5viewer.set_styles" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

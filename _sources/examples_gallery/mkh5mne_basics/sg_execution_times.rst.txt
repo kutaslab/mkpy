@@ -1,0 +1,12 @@
+
+:orphan:
+
+.. _sphx_glr_examples_gallery_mkh5mne_basics_sg_execution_times:
+
+Computation times
+=================
+**00:28.221** total execution time for **examples_gallery_mkh5mne_basics** files:
+
++-------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5mne_basics_read_raw.py` (``read_raw.py``) | 00:28.221 | 0.0 MB |
++-------------------------------------------------------------------------------+-----------+--------+

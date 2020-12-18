@@ -1,0 +1,538 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.events &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../mkpy.html">mkpy</a> &raquo;</li>
+        
+      <li>mkpy.events</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mkpy.events</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;:meta private:&quot;&quot;&quot;</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">h5py</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">.</span> <span class="kn">import</span> <span class="n">h5tools</span><span class="p">,</span> <span class="n">mkh5</span>
+
+
+<div class="viewcode-block" id="read_excel_codemap"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.read_excel_codemap">[docs]</a><span class="k">def</span> <span class="nf">read_excel_codemap</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="mi">0</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read Excel .xlsx file, return codemap pandas DataFrame.&quot;&quot;&quot;</span>
+
+    <span class="n">codemap</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
+        <span class="n">file</span><span class="p">,</span> <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet_name</span><span class="p">,</span> <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;Index&quot;</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;regexp&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">codemap</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;regexp&quot; column must be present.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">codemap</span></div>
+
+
+<div class="viewcode-block" id="read_txt_codemap"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.read_txt_codemap">[docs]</a><span class="k">def</span> <span class="nf">read_txt_codemap</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read tab-separated text file, return codemap pandas DataFrame.&quot;&quot;&quot;</span>
+
+    <span class="n">codemap</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="n">index_col</span><span class="o">=</span><span class="s2">&quot;Index&quot;</span><span class="p">)</span>
+    <span class="k">if</span> <span class="s2">&quot;regexp&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">codemap</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;regexp&quot; column must be present.&#39;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">codemap</span></div>
+
+
+<div class="viewcode-block" id="read_yaml_codemap"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.read_yaml_codemap">[docs]</a><span class="k">def</span> <span class="nf">read_yaml_codemap</span><span class="p">(</span><span class="n">file</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read YAML file, return codemap pandas DataFrame.&quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">file</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">f</span><span class="p">:</span>
+        <span class="n">yaml_dict</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+    <span class="n">_validate_yaml_dict</span><span class="p">(</span><span class="n">yaml_dict</span><span class="p">)</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">yaml_dict</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span>
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">yaml_dict</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span>
+
+    <span class="n">codemap</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">rows</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span><span class="o">.</span><span class="n">set_index</span><span class="p">(</span><span class="s2">&quot;Index&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">codemap</span></div>
+
+
+<span class="k">def</span> <span class="nf">_validate_yaml_dict</span><span class="p">(</span><span class="n">yaml_dict</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check validity of YAML file contents.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">yaml_dict</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="s2">&quot;YAML file must define a dictionary-like mapping, &quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;got a </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">yaml_dict</span><span class="p">)</span><span class="si">}</span><span class="s2"> instead.&quot;</span>
+        <span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;columns&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yaml_dict</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;YAML file must have a &quot;columns&quot; entry.&#39;</span><span class="p">)</span>
+
+    <span class="n">columns</span> <span class="o">=</span> <span class="n">yaml_dict</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">columns</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;columns&quot; must be a sequence (a list).&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;Index&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns</span> <span class="ow">or</span> <span class="s2">&quot;regexp&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">columns</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;Both &quot;Index&quot; and &quot;regexp&quot; columns must be present.&#39;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="s2">&quot;rows&quot;</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">yaml_dict</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;YAML file must have a &quot;rows&quot; entry.&#39;</span><span class="p">)</span>
+
+    <span class="n">rows</span> <span class="o">=</span> <span class="n">yaml_dict</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">rows</span><span class="p">,</span> <span class="nb">list</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s1">&#39;&quot;columns&quot; must be a sequence (a list).&#39;</span><span class="p">)</span>
+
+    <span class="n">ncols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">columns</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">row</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">or</span> <span class="nb">len</span><span class="p">(</span><span class="n">row</span><span class="p">)</span> <span class="o">!=</span> <span class="n">ncols</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;Each row must be a list &quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;and contain </span><span class="si">{</span><span class="n">ncols</span><span class="si">}</span><span class="s2"> items: </span><span class="si">{</span><span class="n">columns</span><span class="si">}</span><span class="s2">,</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="sa">f</span><span class="s2">&quot;but this row doesn&#39;t: </span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2">.&quot;</span>
+            <span class="p">)</span>
+
+
+<div class="viewcode-block" id="find_evcodes"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.find_evcodes">[docs]</a><span class="k">def</span> <span class="nf">find_evcodes</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">evcodes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run a regular expression search on an array of event codes.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+
+<span class="sd">    pattern : str</span>
+<span class="sd">        A regular expression pattern string containing exactly one anchor. For</span>
+<span class="sd">        a detailed explanation of the format, see notes below.</span>
+<span class="sd">    ticks, evcodes : NumPy arrays</span>
+<span class="sd">        Arrays of the same shape containing ticks and event codes of a single</span>
+<span class="sd">        data block from positions with nonzero event codes. Although the last</span>
+<span class="sd">        requirement is not mandatory, this is the intended use.</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    df : pandas DataFrame</span>
+<span class="sd">        DataFrame describing matches for the pattern.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">_validate_ticks_and_evcodes</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="n">evcodes</span><span class="p">)</span>
+    <span class="n">_validate_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+
+    <span class="c1"># the hash denotes the anchor group, we make it named</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="s2">&quot;(#&quot;</span><span class="p">,</span> <span class="s2">&quot;(?P&lt;anchor&gt;&quot;</span><span class="p">)</span>
+
+    <span class="c1"># group match should align with an alphanumeric word boundary on the right</span>
+    <span class="n">pattern</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;)&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;\b)&quot;</span><span class="p">)</span>
+
+    <span class="n">compiled_pattern</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+
+    <span class="c1"># this is necessary to identify anchor groups later</span>
+    <span class="n">anchor_group_id</span> <span class="o">=</span> <span class="n">compiled_pattern</span><span class="o">.</span><span class="n">groupindex</span><span class="p">[</span><span class="s2">&quot;anchor&quot;</span><span class="p">]</span>
+
+    <span class="c1"># convert evcodes to string so we can run regex</span>
+    <span class="n">sep</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>
+    <span class="n">codestring</span> <span class="o">=</span> <span class="n">sep</span> <span class="o">+</span> <span class="n">sep</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">evcodes</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+
+    <span class="c1"># map positions in code string to indices in evcodes</span>
+    <span class="n">sep_matches</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> <span class="n">codestring</span><span class="p">)</span>
+    <span class="n">position_to_index</span> <span class="o">=</span> <span class="p">{</span><span class="n">match</span><span class="o">.</span><span class="n">end</span><span class="p">():</span> <span class="n">i</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">match</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">sep_matches</span><span class="p">)}</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">position_to_index</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">evcodes</span><span class="p">)</span>
+
+    <span class="c1"># run regular expression search on the codestring</span>
+    <span class="n">matches</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">compiled_pattern</span><span class="p">,</span> <span class="n">codestring</span><span class="p">))</span>
+
+    <span class="c1"># collect information about each match aligned with a code</span>
+    <span class="n">matches_info</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;group&quot;</span><span class="p">:</span> <span class="n">group</span><span class="o">.</span><span class="n">strip</span><span class="p">(),</span>
+            <span class="s2">&quot;group_id&quot;</span><span class="p">:</span> <span class="n">group_id</span><span class="p">,</span>
+            <span class="s2">&quot;group_position&quot;</span><span class="p">:</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">group_id</span><span class="p">),</span>
+            <span class="s2">&quot;match_id&quot;</span><span class="p">:</span> <span class="n">match_id</span><span class="p">,</span>
+        <span class="p">}</span>
+        <span class="k">for</span> <span class="n">match_id</span><span class="p">,</span> <span class="n">match</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">matches</span><span class="p">)</span>
+        <span class="c1"># enumerate from index 1, since at 0 we have the universal match group</span>
+        <span class="k">for</span> <span class="n">group_id</span><span class="p">,</span> <span class="n">group</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">match</span><span class="o">.</span><span class="n">groups</span><span class="p">(),</span> <span class="mi">1</span><span class="p">)</span>
+        <span class="c1"># match must align with an eventcode position</span>
+        <span class="k">if</span> <span class="n">match</span><span class="o">.</span><span class="n">start</span><span class="p">()</span> <span class="ow">in</span> <span class="n">position_to_index</span>
+    <span class="p">]</span>
+
+    <span class="c1"># check that no group matched more than one code</span>
+    <span class="k">if</span> <span class="nb">any</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="s2">&quot;group&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span> <span class="o">!=</span> <span class="mi">1</span> <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">matches_info</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Groups must match one code.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># further manipulations are better done in pandas</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">matches_info</span><span class="p">)</span>
+    <span class="k">if</span> <span class="n">df</span><span class="o">.</span><span class="n">empty</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">df</span>
+
+    <span class="c1"># we need to recover indices from code positions in the code string</span>
+    <span class="n">indices</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;group_position&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">map</span><span class="p">(</span><span class="n">position_to_index</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dblock_ticks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">ticks</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;match_code&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">evcodes</span><span class="p">[</span><span class="n">indices</span><span class="p">]</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;is_anchor&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;group_id&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">anchor_group_id</span>
+
+    <span class="c1"># verify that matched codes are equal to corresponding evcodes</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;group&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span> <span class="o">==</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;match_code&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="n">df</span><span class="o">.</span><span class="n">drop</span><span class="p">([</span><span class="s2">&quot;group&quot;</span><span class="p">,</span> <span class="s2">&quot;group_position&quot;</span><span class="p">],</span> <span class="n">axis</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+    <span class="c1"># derive anchor information</span>
+    <span class="n">anchors</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="n">df</span><span class="p">[</span><span class="s2">&quot;is_anchor&quot;</span><span class="p">]]</span>
+    <span class="n">anchor_data</span> <span class="o">=</span> <span class="n">anchors</span><span class="p">[[</span><span class="s2">&quot;match_id&quot;</span><span class="p">,</span> <span class="s2">&quot;dblock_ticks&quot;</span><span class="p">,</span> <span class="s2">&quot;match_code&quot;</span><span class="p">]]</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;dblock_ticks&quot;</span><span class="p">:</span> <span class="s2">&quot;anchor_tick&quot;</span><span class="p">,</span> <span class="s2">&quot;match_code&quot;</span><span class="p">:</span> <span class="s2">&quot;anchor_code&quot;</span><span class="p">}</span>
+    <span class="p">)</span>
+    <span class="n">df</span> <span class="o">=</span> <span class="n">df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">anchor_data</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;match_id&quot;</span><span class="p">)</span>
+    <span class="n">df</span><span class="p">[</span><span class="s2">&quot;anchor_tick_delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;dblock_ticks&quot;</span><span class="p">]</span> <span class="o">-</span> <span class="n">df</span><span class="p">[</span><span class="s2">&quot;anchor_tick&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">df</span></div>
+
+
+<span class="k">def</span> <span class="nf">_validate_pattern</span><span class="p">(</span><span class="n">pattern</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Check that regex pattern conforms to type and format requirements.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="s2">&quot;Pattern must be a string.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">count</span><span class="p">(</span><span class="s2">&quot;(#&quot;</span><span class="p">)</span> <span class="o">!=</span> <span class="mi">1</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pattern must contain exactly one anchor group.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pattern</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">)</span> <span class="ow">or</span> <span class="n">pattern</span><span class="o">.</span><span class="n">endswith</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pattern cannot start or end with a whitespace.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="mi">2</span> <span class="o">*</span> <span class="s2">&quot; &quot;</span> <span class="ow">in</span> <span class="n">pattern</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;Pattern cannot contain consecutive whitespaces.&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_validate_ticks_and_evcodes</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="n">evcodes</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Ensure ticks and evcodes are NumPy arrays and have matching shapes.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">ticks</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;ticks must be a NumPy array, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">ticks</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">evcodes</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">ndarray</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;evcodes must be a NumPy array, not </span><span class="si">{</span><span class="nb">type</span><span class="p">(</span><span class="n">evcodes</span><span class="p">)</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">ticks</span><span class="o">.</span><span class="n">shape</span> <span class="o">!=</span> <span class="n">evcodes</span><span class="o">.</span><span class="n">shape</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+            <span class="sa">f</span><span class="s2">&quot;ticks and evcodes should have equal shape:</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="sa">f</span><span class="s2">&quot;ticks is </span><span class="si">{</span><span class="n">ticks</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">, evcodes is </span><span class="si">{</span><span class="n">evcodes</span><span class="o">.</span><span class="n">shape</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="p">)</span>
+
+
+<div class="viewcode-block" id="build_event_table"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.build_event_table">[docs]</a><span class="k">def</span> <span class="nf">build_event_table</span><span class="p">(</span><span class="n">h5_fname</span><span class="p">,</span> <span class="n">code_map</span><span class="p">,</span> <span class="n">header_map_f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Construct an event table from the provided codemap and header map file.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    h5_fname : str</span>
+<span class="sd">        HDF5 file name</span>
+<span class="sd">    code_map : pandas DataFrame</span>
+<span class="sd">        DataFrame containing at least columns Index and regexp. The regexp</span>
+<span class="sd">        column specifies regular expressions describing event code patterns.</span>
+<span class="sd">    header_map_f : str</span>
+<span class="sd">        header map file name, to be replaced by DataFrame</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    event_table : pandas DataFrame</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">with</span> <span class="n">h5py</span><span class="o">.</span><span class="n">File</span><span class="p">(</span><span class="n">h5_fname</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">h5</span><span class="p">:</span>
+
+        <span class="c1"># dblock census</span>
+        <span class="n">dblocks_and_paths</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">h5</span><span class="p">[</span><span class="n">dblock_path</span><span class="p">],</span> <span class="n">dblock_path</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dgroup_path</span> <span class="ow">in</span> <span class="n">h5tools</span><span class="o">.</span><span class="n">get_data_group_paths</span><span class="p">(</span><span class="n">h5_fname</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dblock_path</span> <span class="ow">in</span> <span class="n">h5tools</span><span class="o">.</span><span class="n">get_dblock_paths</span><span class="p">(</span><span class="n">h5_fname</span><span class="p">,</span> <span class="n">dgroup_path</span><span class="p">)</span>
+        <span class="p">]</span>
+
+        <span class="c1"># subset every dblock for nonzero event codes</span>
+        <span class="n">nonzero</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">dblock</span><span class="p">[</span><span class="n">dblock</span><span class="p">[</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">]</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">],</span> <span class="n">dblock_path</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">dblock</span><span class="p">,</span> <span class="n">dblock_path</span> <span class="ow">in</span> <span class="n">dblocks_and_paths</span>
+        <span class="p">]</span>
+
+        <span class="c1"># build three dataframes</span>
+        <span class="n">header_df</span> <span class="o">=</span> <span class="n">build_header_df</span><span class="p">(</span><span class="n">dblocks_and_paths</span><span class="p">,</span> <span class="n">header_map_f</span><span class="p">)</span>
+        <span class="n">match_df</span> <span class="o">=</span> <span class="n">build_match_df</span><span class="p">(</span><span class="n">nonzero</span><span class="p">,</span> <span class="n">code_map</span><span class="p">)</span>
+        <span class="n">dblock_df</span> <span class="o">=</span> <span class="n">build_dblock_df</span><span class="p">(</span><span class="n">nonzero</span><span class="p">)</span>
+
+        <span class="c1"># merge them to get the event table</span>
+        <span class="n">event_table</span> <span class="o">=</span> <span class="n">match_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">header_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;dblock_path&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span>
+            <span class="n">dblock_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;left&quot;</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;dblock_path&quot;</span><span class="p">,</span> <span class="s2">&quot;dblock_ticks&quot;</span><span class="p">]</span>
+        <span class="p">)</span>
+
+        <span class="c1"># we love pandas, but we want to make sure no information is lost</span>
+        <span class="c1"># first, we check that no rows from the match_df are missing</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">match_df</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">event_table</span><span class="p">)</span>
+
+        <span class="c1"># second, we want to make sure the merges were complete in the sense</span>
+        <span class="c1"># that no values are missing</span>
+        <span class="k">assert</span> <span class="n">event_table</span><span class="o">.</span><span class="n">notnull</span><span class="p">()</span><span class="o">.</span><span class="n">values</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+
+        <span class="c1"># finally, set epoch information</span>
+        <span class="n">event_table</span><span class="p">[</span><span class="s2">&quot;epoch_match_tick_delta&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="n">event_table</span><span class="p">[</span><span class="s2">&quot;epoch_ticks&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">event_table</span></div>
+
+
+<div class="viewcode-block" id="build_match_df"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.build_match_df">[docs]</a><span class="k">def</span> <span class="nf">build_match_df</span><span class="p">(</span><span class="n">dblocks_and_paths</span><span class="p">,</span> <span class="n">code_map</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Run pattern matcher on dblocks using codemap.&quot;&quot;&quot;</span>
+
+    <span class="n">match_dfs</span> <span class="o">=</span> <span class="p">(</span>
+        <span class="p">(</span>
+            <span class="n">find_evcodes</span><span class="p">(</span><span class="n">row</span><span class="o">.</span><span class="n">regexp</span><span class="p">,</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;dblock_ticks&quot;</span><span class="p">],</span> <span class="n">db</span><span class="p">[</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span>
+                <span class="n">Index</span><span class="o">=</span><span class="n">row</span><span class="o">.</span><span class="n">Index</span><span class="p">,</span> <span class="n">dblock_path</span><span class="o">=</span><span class="n">dbp</span>
+            <span class="p">)</span>
+        <span class="p">)</span>
+        <span class="k">for</span> <span class="n">db</span><span class="p">,</span> <span class="n">dbp</span> <span class="ow">in</span> <span class="n">dblocks_and_paths</span>
+        <span class="k">for</span> <span class="n">row</span> <span class="ow">in</span> <span class="n">code_map</span><span class="o">.</span><span class="n">itertuples</span><span class="p">()</span>
+    <span class="p">)</span>
+
+    <span class="n">nonempty_match_dfs</span> <span class="o">=</span> <span class="p">[</span><span class="n">match_df</span> <span class="k">for</span> <span class="n">match_df</span> <span class="ow">in</span> <span class="n">match_dfs</span> <span class="k">if</span> <span class="ow">not</span> <span class="n">match_df</span><span class="o">.</span><span class="n">empty</span><span class="p">]</span>
+
+    <span class="n">match_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">nonempty_match_dfs</span><span class="p">,</span> <span class="n">ignore_index</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="n">match_df</span> <span class="o">=</span> <span class="n">match_df</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">code_map</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="s2">&quot;Index&quot;</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">match_df</span></div>
+
+
+<div class="viewcode-block" id="build_header_df"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.build_header_df">[docs]</a><span class="k">def</span> <span class="nf">build_header_df</span><span class="p">(</span><span class="n">dblocks_and_paths</span><span class="p">,</span> <span class="n">header_map_f</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Collect header &#39;slicing&#39; data from given dblocks.&quot;&quot;&quot;</span>
+
+    <span class="n">hio</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="o">.</span><span class="n">HeaderIO</span><span class="p">()</span>
+    <span class="n">hio</span><span class="o">.</span><span class="n">set_slicer</span><span class="p">(</span><span class="n">header_map_f</span><span class="p">)</span>
+
+    <span class="n">header_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">dblock</span><span class="p">,</span> <span class="n">dblock_path</span> <span class="ow">in</span> <span class="n">dblocks_and_paths</span><span class="p">:</span>
+        <span class="n">hio</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">dblock</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="o">**</span><span class="nb">dict</span><span class="p">(</span><span class="n">hio</span><span class="o">.</span><span class="n">get_slices</span><span class="p">()),</span>
+            <span class="s2">&quot;dblock_path&quot;</span><span class="p">:</span> <span class="n">dblock_path</span><span class="p">,</span>
+            <span class="s2">&quot;data_group&quot;</span><span class="p">:</span> <span class="n">dblock</span><span class="o">.</span><span class="n">parent</span><span class="o">.</span><span class="n">name</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="s2">&quot;/&quot;</span><span class="p">),</span>
+            <span class="s2">&quot;dblock_srate&quot;</span><span class="p">:</span> <span class="n">hio</span><span class="o">.</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;samplerate&quot;</span><span class="p">],</span>
+        <span class="p">}</span>
+        <span class="n">header_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">header_data</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="build_dblock_df"><a class="viewcode-back" href="../../api_source/mkpy.events.html#mkpy.events.build_dblock_df">[docs]</a><span class="k">def</span> <span class="nf">build_dblock_df</span><span class="p">(</span><span class="n">dblocks_and_paths</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Make a DataFrame from a subset of dblock columns.&quot;&quot;&quot;</span>
+
+    <span class="n">dblock_dfs</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">dblock</span><span class="p">)</span><span class="o">.</span><span class="n">assign</span><span class="p">(</span><span class="n">dblock_path</span><span class="o">=</span><span class="n">dblock_path</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">dblock</span><span class="p">,</span> <span class="n">dblock_path</span> <span class="ow">in</span> <span class="n">dblocks_and_paths</span>
+    <span class="p">]</span>
+
+    <span class="n">cols</span> <span class="o">=</span> <span class="p">[</span>
+        <span class="s2">&quot;dblock_ticks&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;crw_ticks&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;raw_evcodes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;log_evcodes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;log_ccodes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;log_flags&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dblock_path&quot;</span><span class="p">,</span>
+    <span class="p">]</span>
+
+    <span class="n">dblock_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">concat</span><span class="p">(</span><span class="n">dblock_dfs</span><span class="p">)[</span><span class="n">cols</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">dblock_df</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

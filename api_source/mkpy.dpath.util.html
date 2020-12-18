@@ -1,0 +1,284 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.dpath.util module &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+      <li>mkpy.dpath.util module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_source/mkpy.dpath.util.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mkpy.dpath.util">
+<span id="mkpy-dpath-util-module"></span><h1>mkpy.dpath.util module<a class="headerlink" href="#module-mkpy.dpath.util" title="Permalink to this headline">¶</a></h1>
+<dl class="py function">
+<dt id="mkpy.dpath.util.delete">
+<code class="sig-prename descclassname">mkpy.dpath.util.</code><code class="sig-name descname">delete</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">glob</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">'/'</span></em>, <em class="sig-param"><span class="n">afilter</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/dpath/util.html#delete"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.dpath.util.delete" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a path glob, delete all elements that match the glob.</p>
+<p>Returns the number of deleted objects. Raises PathNotFound if no paths are
+found to delete.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.dpath.util.get">
+<code class="sig-prename descclassname">mkpy.dpath.util.</code><code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">glob</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">'/'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/dpath/util.html#get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.dpath.util.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an object which contains only one possible match for the given glob,
+return the value for the leaf matching the given glob.</p>
+<p>If more than one leaf matches the glob, ValueError is raised. If the glob is
+not found, KeyError is raised.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.dpath.util.merge">
+<code class="sig-prename descclassname">mkpy.dpath.util.</code><code class="sig-name descname">merge</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dst</span></em>, <em class="sig-param"><span class="n">src</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">'/'</span></em>, <em class="sig-param"><span class="n">afilter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">flags</span><span class="o">=</span><span class="default_value">4</span></em>, <em class="sig-param"><span class="n">_path</span><span class="o">=</span><span class="default_value">''</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/dpath/util.html#merge"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.dpath.util.merge" title="Permalink to this definition">¶</a></dt>
+<dd><p>Merge source into destination. Like dict.update() but performs
+deep merging.</p>
+<p>flags is an OR’ed combination of MERGE_ADDITIVE, MERGE_REPLACE, or
+MERGE_TYPESAFE.</p>
+<ul class="simple">
+<li><p>MERGE_ADDITIVE : List objects are combined onto one long
+list (NOT a set). This is the default flag.</p></li>
+<li><p>MERGE_REPLACE : Instead of combining list objects, when
+2 list objects are at an equal depth of merge, replace
+the destination with the source.</p></li>
+<li><p>MERGE_TYPESAFE : When 2 keys at equal levels are of different
+types, raise a TypeError exception. By default, the source
+replaces the destination in this situation.</p></li>
+</ul>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.dpath.util.new">
+<code class="sig-prename descclassname">mkpy.dpath.util.</code><code class="sig-name descname">new</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">path</span></em>, <em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">'/'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/dpath/util.html#new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.dpath.util.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>Set the element at the terminus of path to value, and create
+it if it does not exist (as opposed to ‘set’ that can only
+change existing keys).</p>
+<p>path will NOT be treated like a glob. If it has globbing
+characters in it, they will become part of the resulting
+keys</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.dpath.util.search">
+<code class="sig-prename descclassname">mkpy.dpath.util.</code><code class="sig-name descname">search</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">glob</span></em>, <em class="sig-param"><span class="n">yielded</span><span class="o">=</span><span class="default_value">False</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">'/'</span></em>, <em class="sig-param"><span class="n">afilter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirs</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/dpath/util.html#search"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.dpath.util.search" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a path glob, return a dictionary containing all keys
+that matched the given glob.</p>
+<p>If ‘yielded’ is true, then a dictionary will not be returned.
+Instead tuples will be yielded in the form of (path, value) for
+every element in the document that matched the glob.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.dpath.util.set">
+<code class="sig-prename descclassname">mkpy.dpath.util.</code><code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">glob</span></em>, <em class="sig-param"><span class="n">value</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">'/'</span></em>, <em class="sig-param"><span class="n">afilter</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/dpath/util.html#set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.dpath.util.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given a path glob, set all existing elements in the document
+to the given value. Returns the number of elements changed.</p>
+</dd></dl>
+
+<dl class="py function">
+<dt id="mkpy.dpath.util.values">
+<code class="sig-prename descclassname">mkpy.dpath.util.</code><code class="sig-name descname">values</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">obj</span></em>, <em class="sig-param"><span class="n">glob</span></em>, <em class="sig-param"><span class="n">separator</span><span class="o">=</span><span class="default_value">'/'</span></em>, <em class="sig-param"><span class="n">afilter</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">dirs</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/dpath/util.html#values"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.dpath.util.values" title="Permalink to this definition">¶</a></dt>
+<dd><p>Given an object and a path glob, return an array of all values which match
+the glob. The arguments to this function are identical to those of search(),
+and it is primarily a shorthand for a list comprehension over a yielded
+search call.</p>
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

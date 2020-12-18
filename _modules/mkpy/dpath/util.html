@@ -1,0 +1,481 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.dpath.util &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../../" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+        <script src="../../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../../mkpy.html">mkpy</a> &raquo;</li>
+        
+      <li>mkpy.dpath.util</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mkpy.dpath.util</h1><div class="highlight"><pre>
+<span></span><span class="c1"># import dpath.path</span>
+<span class="c1"># import dpath.exceptions</span>
+
+<span class="kn">import</span> <span class="nn">mkpy.dpath.path</span>
+<span class="kn">import</span> <span class="nn">mkpy.dpath.exceptions</span>
+
+<span class="kn">import</span> <span class="nn">traceback</span>
+
+<span class="k">try</span><span class="p">:</span>
+    <span class="c1"># python3, especially 3.8</span>
+    <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">MutableSequence</span>
+    <span class="kn">from</span> <span class="nn">collections.abc</span> <span class="kn">import</span> <span class="n">MutableMapping</span>
+<span class="k">except</span> <span class="ne">ImportError</span><span class="p">:</span>
+    <span class="c1"># python2</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">MutableSequence</span>
+    <span class="kn">from</span> <span class="nn">collections</span> <span class="kn">import</span> <span class="n">MutableMapping</span>
+
+<span class="n">MERGE_REPLACE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">1</span>
+<span class="n">MERGE_ADDITIVE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">2</span>
+<span class="n">MERGE_TYPESAFE</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">&lt;&lt;</span> <span class="mi">3</span>
+
+
+<span class="k">def</span> <span class="nf">__safe_path__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">separator</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a path and separator, return a list of path components. If path</span>
+<span class="sd">    is already a list, return it.</span>
+
+<span class="sd">    Note that a string path with the separator at index[0] will have the</span>
+<span class="sd">    separator stripped off. If you pass a list path, the separator is</span>
+<span class="sd">    ignored, and is assumed to be part of each key glob. It will not be</span>
+<span class="sd">    stripped.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="nb">issubclass</span><span class="p">(</span><span class="n">path</span><span class="o">.</span><span class="vm">__class__</span><span class="p">,</span> <span class="p">(</span><span class="n">MutableSequence</span><span class="p">)):</span>
+        <span class="k">return</span> <span class="n">path</span>
+    <span class="n">path</span> <span class="o">=</span> <span class="n">path</span><span class="o">.</span><span class="n">lstrip</span><span class="p">(</span><span class="n">separator</span><span class="p">)</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">separator</span><span class="p">)</span>
+    <span class="n">validated</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">elem</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+        <span class="n">key</span> <span class="o">=</span> <span class="n">elem</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">strkey</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">separator</span> <span class="ow">and</span> <span class="p">(</span><span class="n">separator</span> <span class="ow">in</span> <span class="n">strkey</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">InvalidKeyName</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2"> at </span><span class="si">{1}</span><span class="s2"> contains the separator </span><span class="si">{2}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">strkey</span><span class="p">,</span> <span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">validated</span><span class="p">),</span> <span class="n">separator</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="n">validated</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">strkey</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">path</span>
+
+
+<div class="viewcode-block" id="new"><a class="viewcode-back" href="../../../api_source/mkpy.dpath.util.html#mkpy.dpath.util.new">[docs]</a><span class="k">def</span> <span class="nf">new</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Set the element at the terminus of path to value, and create</span>
+<span class="sd">    it if it does not exist (as opposed to &#39;set&#39; that can only</span>
+<span class="sd">    change existing keys).</span>
+
+<span class="sd">    path will NOT be treated like a glob. If it has globbing</span>
+<span class="sd">    characters in it, they will become part of the resulting</span>
+<span class="sd">    keys</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">pathlist</span> <span class="o">=</span> <span class="n">__safe_path__</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">separator</span><span class="p">)</span>
+    <span class="n">pathobj</span> <span class="o">=</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">path_types</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pathlist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">pathobj</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">create_missing</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span></div>
+
+
+<div class="viewcode-block" id="delete"><a class="viewcode-back" href="../../../api_source/mkpy.dpath.util.html#mkpy.dpath.util.delete">[docs]</a><span class="k">def</span> <span class="nf">delete</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a path glob, delete all elements that match the glob.</span>
+
+<span class="sd">    Returns the number of deleted objects. Raises PathNotFound if no paths are</span>
+<span class="sd">    found to delete.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">deleted</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">paths</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">globlist</span> <span class="o">=</span> <span class="n">__safe_path__</span><span class="p">(</span><span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">_inner_search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">globlist</span><span class="p">,</span> <span class="n">separator</span><span class="p">):</span>
+        <span class="c1"># These are yielded back, don&#39;t mess up the dict.</span>
+        <span class="n">paths</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">path</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">paths</span><span class="p">:</span>
+        <span class="n">cur</span> <span class="o">=</span> <span class="n">obj</span>
+        <span class="n">prev</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">path</span><span class="p">:</span>
+            <span class="n">prev</span> <span class="o">=</span> <span class="n">cur</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">cur</span> <span class="o">=</span> <span class="n">cur</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]]</span>
+            <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+                <span class="c1"># This only happens when we delete X/Y and the next</span>
+                <span class="c1"># item in the paths is X/Y/Z</span>
+                <span class="k">pass</span>
+        <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">afilter</span><span class="p">)</span> <span class="ow">or</span> <span class="p">(</span><span class="n">afilter</span> <span class="ow">and</span> <span class="n">afilter</span><span class="p">(</span><span class="n">prev</span><span class="p">[</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">]])):</span>
+            <span class="n">prev</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">item</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">deleted</span> <span class="o">+=</span> <span class="mi">1</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">deleted</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">PathNotFound</span><span class="p">(</span>
+            <span class="s2">&quot;Could not find </span><span class="si">{0}</span><span class="s2"> to delete it&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">glob</span><span class="p">)</span>
+        <span class="p">)</span>
+    <span class="k">return</span> <span class="n">deleted</span></div>
+
+
+<div class="viewcode-block" id="set"><a class="viewcode-back" href="../../../api_source/mkpy.dpath.util.html#mkpy.dpath.util.set">[docs]</a><span class="k">def</span> <span class="nf">set</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a path glob, set all existing elements in the document</span>
+<span class="sd">    to the given value. Returns the number of elements changed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">changed</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">globlist</span> <span class="o">=</span> <span class="n">__safe_path__</span><span class="p">(</span><span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">_inner_search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">globlist</span><span class="p">,</span> <span class="n">separator</span><span class="p">):</span>
+        <span class="n">changed</span> <span class="o">+=</span> <span class="mi">1</span>
+        <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">set</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">value</span><span class="p">,</span> <span class="n">create_missing</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="n">afilter</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">changed</span></div>
+
+
+<div class="viewcode-block" id="get"><a class="viewcode-back" href="../../../api_source/mkpy.dpath.util.html#mkpy.dpath.util.get">[docs]</a><span class="k">def</span> <span class="nf">get</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given an object which contains only one possible match for the given glob,</span>
+<span class="sd">    return the value for the leaf matching the given glob.</span>
+
+<span class="sd">    If more than one leaf matches the glob, ValueError is raised. If the glob is</span>
+<span class="sd">    not found, KeyError is raised.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">ret</span> <span class="o">=</span> <span class="kc">None</span>
+    <span class="n">found</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">for</span> <span class="n">item</span> <span class="ow">in</span> <span class="n">search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">yielded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="n">separator</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">ret</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+                <span class="s2">&quot;mkpy.dpath.util.get() globs must match only one leaf : </span><span class="si">%s</span><span class="s2">&quot;</span> <span class="o">%</span> <span class="n">glob</span>
+            <span class="p">)</span>
+        <span class="n">ret</span> <span class="o">=</span> <span class="n">item</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">found</span> <span class="o">=</span> <span class="kc">True</span>
+    <span class="k">if</span> <span class="n">found</span> <span class="ow">is</span> <span class="kc">False</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">KeyError</span><span class="p">(</span><span class="n">glob</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">ret</span></div>
+
+
+<div class="viewcode-block" id="values"><a class="viewcode-back" href="../../../api_source/mkpy.dpath.util.html#mkpy.dpath.util.values">[docs]</a><span class="k">def</span> <span class="nf">values</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given an object and a path glob, return an array of all values which match</span>
+<span class="sd">    the glob. The arguments to this function are identical to those of search(),</span>
+<span class="sd">    and it is primarily a shorthand for a list comprehension over a yielded</span>
+<span class="sd">    search call.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="p">[</span>
+        <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">util</span><span class="o">.</span><span class="n">search</span><span class="p">(</span>
+            <span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">yielded</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="n">separator</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="n">afilter</span><span class="p">,</span> <span class="n">dirs</span><span class="o">=</span><span class="n">dirs</span>
+        <span class="p">)</span>
+    <span class="p">]</span></div>
+
+
+<div class="viewcode-block" id="search"><a class="viewcode-back" href="../../../api_source/mkpy.dpath.util.html#mkpy.dpath.util.search">[docs]</a><span class="k">def</span> <span class="nf">search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">yielded</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Given a path glob, return a dictionary containing all keys</span>
+<span class="sd">    that matched the given glob.</span>
+
+<span class="sd">    If &#39;yielded&#39; is true, then a dictionary will not be returned.</span>
+<span class="sd">    Instead tuples will be yielded in the form of (path, value) for</span>
+<span class="sd">    every element in the document that matched the glob.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">_search_view</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">afilter</span><span class="p">,</span> <span class="n">dirs</span><span class="p">):</span>
+        <span class="n">view</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="n">globlist</span> <span class="o">=</span> <span class="n">__safe_path__</span><span class="p">(</span><span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">_inner_search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">globlist</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">dirs</span><span class="o">=</span><span class="n">dirs</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="n">afilter</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+                <span class="n">merge</span><span class="p">(</span><span class="n">view</span><span class="p">,</span> <span class="n">val</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">FilteredValue</span><span class="p">:</span>
+                <span class="k">pass</span>
+        <span class="k">return</span> <span class="n">view</span>
+
+    <span class="k">def</span> <span class="nf">_search_yielded</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">afilter</span><span class="p">,</span> <span class="n">dirs</span><span class="p">):</span>
+        <span class="n">globlist</span> <span class="o">=</span> <span class="n">__safe_path__</span><span class="p">(</span><span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">)</span>
+        <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">_inner_search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">globlist</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">dirs</span><span class="o">=</span><span class="n">dirs</span><span class="p">):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">val</span> <span class="o">=</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">path</span><span class="p">,</span> <span class="n">view</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="n">afilter</span><span class="p">)</span>
+                <span class="k">yield</span> <span class="p">(</span><span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="nb">map</span><span class="p">(</span><span class="nb">str</span><span class="p">,</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">paths_only</span><span class="p">(</span><span class="n">path</span><span class="p">))),</span> <span class="n">val</span><span class="p">)</span>
+            <span class="k">except</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">exceptions</span><span class="o">.</span><span class="n">FilteredValue</span><span class="p">:</span>
+                <span class="k">pass</span>
+
+    <span class="k">if</span> <span class="n">afilter</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">dirs</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">yielded</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_search_yielded</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">afilter</span><span class="p">,</span> <span class="n">dirs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">_search_view</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">afilter</span><span class="p">,</span> <span class="n">dirs</span><span class="p">)</span></div>
+
+
+<span class="k">def</span> <span class="nf">_inner_search</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">glob</span><span class="p">,</span> <span class="n">separator</span><span class="p">,</span> <span class="n">dirs</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">leaves</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Search the object paths that match the glob.&quot;&quot;&quot;</span>
+    <span class="k">for</span> <span class="n">path</span> <span class="ow">in</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">paths</span><span class="p">(</span><span class="n">obj</span><span class="p">,</span> <span class="n">dirs</span><span class="p">,</span> <span class="n">leaves</span><span class="p">,</span> <span class="n">skip</span><span class="o">=</span><span class="kc">True</span><span class="p">):</span>
+        <span class="k">if</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">dpath</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">path</span><span class="p">,</span> <span class="n">glob</span><span class="p">):</span>
+            <span class="k">yield</span> <span class="n">path</span>
+
+
+<div class="viewcode-block" id="merge"><a class="viewcode-back" href="../../../api_source/mkpy.dpath.util.html#mkpy.dpath.util.merge">[docs]</a><span class="k">def</span> <span class="nf">merge</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">separator</span><span class="o">=</span><span class="s2">&quot;/&quot;</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">flags</span><span class="o">=</span><span class="n">MERGE_ADDITIVE</span><span class="p">,</span> <span class="n">_path</span><span class="o">=</span><span class="s2">&quot;&quot;</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Merge source into destination. Like dict.update() but performs</span>
+<span class="sd">    deep merging.</span>
+
+<span class="sd">    flags is an OR&#39;ed combination of MERGE_ADDITIVE, MERGE_REPLACE, or</span>
+<span class="sd">    MERGE_TYPESAFE.</span>
+
+<span class="sd">    * MERGE_ADDITIVE : List objects are combined onto one long</span>
+<span class="sd">      list (NOT a set). This is the default flag.</span>
+
+<span class="sd">    * MERGE_REPLACE : Instead of combining list objects, when</span>
+<span class="sd">      2 list objects are at an equal depth of merge, replace</span>
+<span class="sd">      the destination with the source.</span>
+
+<span class="sd">    * MERGE_TYPESAFE : When 2 keys at equal levels are of different</span>
+<span class="sd">      types, raise a TypeError exception. By default, the source</span>
+<span class="sd">      replaces the destination in this situation.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">afilter</span><span class="p">:</span>
+        <span class="c1"># Having merge do its own afiltering is dumb, let search do the</span>
+        <span class="c1"># heavy lifting for us.</span>
+        <span class="n">src</span> <span class="o">=</span> <span class="n">search</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="s2">&quot;**&quot;</span><span class="p">,</span> <span class="n">afilter</span><span class="o">=</span><span class="n">afilter</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">merge</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_typesafe</span><span class="p">(</span><span class="n">obj1</span><span class="p">,</span> <span class="n">obj2</span><span class="p">,</span> <span class="n">key</span><span class="p">,</span> <span class="n">path</span><span class="p">):</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">obj1</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">MERGE_TYPESAFE</span> <span class="o">==</span> <span class="n">MERGE_TYPESAFE</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="n">obj1</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj2</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span>
+                <span class="s2">&quot;Cannot merge objects of type </span><span class="si">{0}</span><span class="s2"> and </span><span class="si">{1}</span><span class="s2"> at </span><span class="si">{2}</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">obj1</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj2</span><span class="p">[</span><span class="n">key</span><span class="p">]),</span> <span class="n">path</span><span class="p">)</span>
+            <span class="p">)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">flags</span> <span class="o">&amp;</span> <span class="n">MERGE_TYPESAFE</span> <span class="o">!=</span> <span class="n">MERGE_TYPESAFE</span><span class="p">)</span> <span class="ow">and</span> <span class="p">(</span>
+            <span class="nb">type</span><span class="p">(</span><span class="n">obj1</span><span class="p">[</span><span class="n">key</span><span class="p">])</span> <span class="o">!=</span> <span class="nb">type</span><span class="p">(</span><span class="n">obj2</span><span class="p">[</span><span class="n">key</span><span class="p">])</span>
+        <span class="p">):</span>
+            <span class="n">obj1</span><span class="o">.</span><span class="n">pop</span><span class="p">(</span><span class="n">key</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">MutableMapping</span><span class="p">):</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
+            <span class="n">_check_typesafe</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">v</span><span class="p">,</span> <span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)]))</span>
+
+            <span class="k">if</span> <span class="ow">not</span> <span class="n">v</span> <span class="ow">in</span> <span class="n">dst</span><span class="p">:</span>
+                <span class="n">dst</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">[</span><span class="n">v</span><span class="p">],</span> <span class="p">(</span><span class="n">MutableMapping</span><span class="p">,</span> <span class="n">MutableSequence</span><span class="p">)):</span>
+                    <span class="n">dst</span><span class="p">[</span><span class="n">v</span><span class="p">]</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="n">v</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">merge</span><span class="p">(</span>
+                        <span class="n">dst</span><span class="p">[</span><span class="n">v</span><span class="p">],</span>
+                        <span class="n">src</span><span class="p">[</span><span class="n">v</span><span class="p">],</span>
+                        <span class="n">afilter</span><span class="o">=</span><span class="n">afilter</span><span class="p">,</span>
+                        <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span>
+                        <span class="n">_path</span><span class="o">=</span><span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">v</span><span class="p">)]),</span>
+                        <span class="n">separator</span><span class="o">=</span><span class="n">separator</span><span class="p">,</span>
+                    <span class="p">)</span>
+    <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">,</span> <span class="n">MutableSequence</span><span class="p">):</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">v</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">src</span><span class="p">):</span>
+            <span class="n">_check_typesafe</span><span class="p">(</span><span class="n">dst</span><span class="p">,</span> <span class="n">src</span><span class="p">,</span> <span class="n">i</span><span class="p">,</span> <span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]))</span>
+            <span class="n">dsti</span> <span class="o">=</span> <span class="n">i</span>
+            <span class="k">if</span> <span class="n">flags</span> <span class="o">&amp;</span> <span class="n">MERGE_ADDITIVE</span><span class="p">:</span>
+                <span class="n">dsti</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">dsti</span> <span class="o">&gt;=</span> <span class="nb">len</span><span class="p">(</span><span class="n">dst</span><span class="p">):</span>
+                <span class="n">dst</span> <span class="o">+=</span> <span class="p">[</span><span class="kc">None</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">dsti</span> <span class="o">-</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">dst</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">))</span>
+            <span class="k">if</span> <span class="n">dst</span><span class="p">[</span><span class="n">dsti</span><span class="p">]</span> <span class="o">==</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="n">dst</span><span class="p">[</span><span class="n">dsti</span><span class="p">]</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="p">(</span><span class="n">MutableMapping</span><span class="p">,</span> <span class="n">MutableSequence</span><span class="p">)):</span>
+                    <span class="n">dst</span><span class="p">[</span><span class="n">dsti</span><span class="p">]</span> <span class="o">=</span> <span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
+                <span class="k">else</span><span class="p">:</span>
+                    <span class="n">merge</span><span class="p">(</span>
+                        <span class="n">dst</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">src</span><span class="p">[</span><span class="n">i</span><span class="p">],</span>
+                        <span class="n">afilter</span><span class="o">=</span><span class="n">afilter</span><span class="p">,</span>
+                        <span class="n">flags</span><span class="o">=</span><span class="n">flags</span><span class="p">,</span>
+                        <span class="n">_path</span><span class="o">=</span><span class="n">separator</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">_path</span><span class="p">,</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)]),</span>
+                        <span class="n">separator</span><span class="o">=</span><span class="n">separator</span><span class="p">,</span>
+                    <span class="p">)</span></div>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

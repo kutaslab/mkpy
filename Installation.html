@@ -1,0 +1,304 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Installation (64-bit linux only) &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/doctools.js"></script>
+        <script src="_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Quick start with jupyter notebook" href="Quick%20Start.html" />
+    <link rel="prev" title="Introduction (0.2.5.dev5)" href="Introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation (64-bit linux only)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#conda-install-latest-stable-release-recommended">Conda install latest stable release (recommended)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#conda-install-a-pre-release-development-version">Conda install a pre-release development version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-from-source-discouraged">Install from source (discouraged)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-editable-source-code-development-mode">Install editable source code (development mode)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pip-installation-from-pypi">pip installation from PyPI</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="index.html">Docs</a> &raquo;</li>
+        
+      <li>Installation (64-bit linux only)</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="_sources/Installation.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="installation-64-bit-linux-only">
+<h1>Installation (64-bit linux only)<a class="headerlink" href="#installation-64-bit-linux-only" title="Permalink to this headline">¶</a></h1>
+<p>Installing the latest stable mkpy with <code class="docutils literal notranslate"><span class="pre">conda</span></code> is strongly
+recommended. If you don’t have conda installed yet, miniconda3
+(<a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html#installing">https://docs.conda.io/en/latest/miniconda.html#installing</a>) is the way
+to go.</p>
+<p>As of v0.2.4+, conda installed mkpy runs with Python 3.6, 3.7, and
+3.8.</p>
+<div class="section" id="conda-install-latest-stable-release-recommended">
+<h2>Conda install latest stable release (recommended)<a class="headerlink" href="#conda-install-latest-stable-release-recommended" title="Permalink to this headline">¶</a></h2>
+<p>Run these commands in a linux terminal window bash shell. The named
+conda channels and their order is important. Replace <cite>some_env</cite> with a
+sensible environment name.</p>
+<ul>
+<li><p>Install the latest stable version of <code class="docutils literal notranslate"><span class="pre">mkpy</span></code> and the most recent
+versions of the compatible packages including Python in a fresh
+conda environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>create conda -n some_env -c kutaslab -c defaults -c conda-forge mkpy
+</pre></div>
+</div>
+</li>
+<li><p>Install for a specific version of Python, say 3.7:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>create conda -n some_env -c kutaslab -c defaults -c conda-forge <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.7 mkpy
+</pre></div>
+</div>
+</li>
+<li><p>Install into an existing conda environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>conda activate some_env
+conda install  -c kutaslab -c defaults -c conda-forge mkpy
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="conda-install-a-pre-release-development-version">
+<h2>Conda install a pre-release development version<a class="headerlink" href="#conda-install-a-pre-release-development-version" title="Permalink to this headline">¶</a></h2>
+<ul>
+<li><p>At times an updated development version of mkpy runs ahead of the
+latest stable release and is available for conda installation.  It
+is strongly recommended to install development versions into a fresh
+conda environment or risk modifiying an existing working environment
+in unintended and/or undesireable ways with upgraded or downgraded
+dependencies.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>create conda -n dev_env -c kutaslab/label/pre-release -c defaults -c conda-forge mkpy
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="install-from-source-discouraged">
+<h2>Install from source (discouraged)<a class="headerlink" href="#install-from-source-discouraged" title="Permalink to this headline">¶</a></h2>
+<p>Clone the github repository into the current directory and pip install
+the to the local source into the current environment’s <cite>site-packages</cite></p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/kutaslab/mkpy
+<span class="nb">cd</span> mkpy
+pip install .
+</pre></div>
+</div>
+</div>
+<div class="section" id="install-editable-source-code-development-mode">
+<h2>Install editable source code (development mode)<a class="headerlink" href="#install-editable-source-code-development-mode" title="Permalink to this headline">¶</a></h2>
+<p>Python package installation ordinarily puts a frozen snapshot of the
+package into the current environment’s <cite>site-packages</cite>. If you want to
+modify the mkpy source and have the changes show up when you import
+the package and call the methods you install in “development mode”
+which puts a link to your souce code directory in “site-packages”.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>git clone https://github.com/kutaslab/mkpy
+<span class="nb">cd</span> mkpy
+pip install . -e
+</pre></div>
+</div>
+</div>
+<div class="section" id="pip-installation-from-pypi">
+<h2>pip installation from PyPI<a class="headerlink" href="#pip-installation-from-pypi" title="Permalink to this headline">¶</a></h2>
+<p>Not implemented. Install from source if you want the source; if you
+need dependency management, use conda.</p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="Quick%20Start.html" class="btn btn-neutral float-right" title="Quick start with jupyter notebook" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="Introduction.html" class="btn btn-neutral float-left" title="Introduction (0.2.5.dev5)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

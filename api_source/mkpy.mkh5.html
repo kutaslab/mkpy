@@ -1,0 +1,1125 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.mkh5 module &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/doctools.js"></script>
+        <script src="../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mkpy.codetagger module" href="mkpy.codetagger.html" />
+    <link rel="prev" title="mkh5, event tags, epochs" href="mkpy_api.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Reference.html#module-index">Module Index</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="mkpy_api.html">mkh5, event tags, epochs</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">mkpy.mkh5 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.codetagger.html">mkpy.codetagger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.pygarv.html">mkpy.pygarv module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.mkio.html">mkpy.mkio module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="mkpy_api.html#mne-python-reader">MNE Python reader</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Reference.html#alphabetical-index"><span class="xref std std-ref">Alphabetical Index</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../Reference.html">API Reference</a> &raquo;</li>
+        
+          <li><a href="mkpy_api.html">mkh5, event tags, epochs</a> &raquo;</li>
+        
+      <li>mkpy.mkh5 module</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../_sources/api_source/mkpy.mkh5.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="section" id="module-mkpy.mkh5">
+<span id="mkpy-mkh5-module"></span><h1>mkpy.mkh5 module<a class="headerlink" href="#module-mkpy.mkh5" title="Permalink to this headline">¶</a></h1>
+<dl class="py exception">
+<dt id="mkpy.mkh5.BadCalibrateCallError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">BadCalibrateCallError</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#BadCalibrateCallError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.BadCalibrateCallError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.BadChannelsError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">BadChannelsError</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#BadChannelsError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.BadChannelsError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.DigRecordsNotSequential">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">DigRecordsNotSequential</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#DigRecordsNotSequential"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.DigRecordsNotSequential" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserWarning</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.DuplicateLocationLabelError">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">DuplicateLocationLabelError</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#DuplicateLocationLabelError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.DuplicateLocationLabelError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.EpochSpansBoundary">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">EpochSpansBoundary</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#EpochSpansBoundary"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.EpochSpansBoundary" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserWarning</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5.LocDat">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">LocDat</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">type</span></em>, <em class="sig-param"><span class="n">label</span></em>, <em class="sig-param"><span class="n">coord</span></em>, <em class="sig-param"><span class="n">pos</span></em>, <em class="sig-param"><span class="n">distance_units</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">angle_units</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#LocDat"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.LocDat" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>map Kutas lab spherical coordinates and Brainsight
+.elp data files to 3-D cartesian XYZ</p>
+<p>Coordinates</p>
+<blockquote>
+<div><p>LocDat native positions are in Cartesian 3-space</p>
+<p>Origin is center of head</p>
+<p>Orientation is RAS: X+ = Right, Y+ = Anterior, Z+ = Superior</p>
+<p>Cartesian coordinates come in as triples: x, y, z</p>
+<p>Polar coordinates come in as triples: radius, theta, z</p>
+</div></blockquote>
+<p>Kutaslab</p>
+<blockquote>
+<div><p>Kutaslab topo coordinates are spherical come in as radius, theta, phi
+triples (see topofiles for theta, phi) and get mapped to x,y,z</p>
+<ul>
+<li><p>origin is between the ears (co-planar with 10-20 temporal line)</p></li>
+<li><p>vectors from the origin at angles (degrees)</p>
+<blockquote>
+<div><ul class="simple">
+<li><p>theta = 0 points toward right ear, along interaural line,
+90 points to forehead along midline</p></li>
+<li><p>phi = 0 points to the vertex, 90 points to the temporal line</p></li>
+</ul>
+</div></blockquote>
+</li>
+</ul>
+</div></blockquote>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.LogRawEventCodeMismatch">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">LogRawEventCodeMismatch</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#LogRawEventCodeMismatch"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.LogRawEventCodeMismatch" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserWarning</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.MightyWeenieCals">
+<em class="property">exception </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">MightyWeenieCals</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#MightyWeenieCals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.MightyWeenieCals" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">UserWarning</span></code></p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5.mkh5">
+<em class="property">class </em><code class="sig-prename descclassname">mkpy.mkh5.</code><code class="sig-name descname">mkh5</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h5name</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Import and prepare ERPSS single-trial data for cross-platform analysis.</p>
+<p>This class provides the user API for converting compressed binary
+EEG data files into readily accessible HDF5 files.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>h5_fname</strong> (<em>str</em>) – Path to a new or existing HDF5 file used as the database.</p>
+</dd>
+</dl>
+<dl class="py attribute">
+<dt id="mkpy.mkh5.mkh5.EPOCH_TABLES_PATH">
+<code class="sig-name descname">EPOCH_TABLES_PATH</code><em class="property"> = '_epoch_tables'</em><a class="headerlink" href="#mkpy.mkh5.mkh5.EPOCH_TABLES_PATH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.mkh5.EpochsTableDataError">
+<em class="property">exception </em><code class="sig-name descname">EpochsTableDataError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pd_data_type</span></em>, <em class="sig-param"><span class="n">series</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.EpochsTableDataError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.EpochsTableDataError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>raised for pd.Series data we can’t or won’t directly convert for HDF5</p>
+<p>These include mixed num-like and str-like * booleans with missing data</p>
+</dd></dl>
+
+<dl class="py class">
+<dt id="mkpy.mkh5.mkh5.HeaderIO">
+<em class="property">class </em><code class="sig-name descname">HeaderIO</code><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>private-ish helper class for managing mkh5 datablock header information</p>
+<p>mkh5 header structures are python dictionaries, serialized for
+hdf5 storage as JSON strings, and tucked into the hdf5
+attribute so they travel with the datablock.</p>
+<p>The dblock header holds information collected/generated from
+various sources. Some is read from dig .crw/.log file headers,
+some is generated at runtime as the dig data is converted to
+mkh5 format. Some is generated/merged in at runtime when the
+YAML YAML header info file is processed</p>
+<ul class="simple">
+<li><p>native .crw header from the info dict returned by
+mkio._read_header()</p></li>
+<li><p>mkh5/hdf5 info added by mkh5_read_raw_log()</p>
+<ul>
+<li><p>miscellanous</p></li>
+<li><p>data stream specs, 1-1 with the dblock data columns</p></li>
+</ul>
+</li>
+<li><p>supplementary information specified in a YAML format text
+file and loaded along with the <code class="docutils literal notranslate"><span class="pre">.crw</span></code> and <code class="docutils literal notranslate"><span class="pre">.log</span></code> files
+when they are converted to the dblock, HDF5 format.</p></li>
+</ul>
+<p>The .crw/.dig header can be extended by loading it from a YAML
+file. See _load_yhdr() docstring for specs.</p>
+<dl class="py exception">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.HeaderIOError">
+<em class="property">exception </em><code class="sig-name descname">HeaderIOError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO.HeaderIOError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.HeaderIOError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.YAMLClobberError">
+<em class="property">exception </em><code class="sig-name descname">YAMLClobberError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hio</span></em>, <em class="sig-param"><span class="n">keyword</span></em>, <em class="sig-param"><span class="n">yhdr_f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO.YAMLClobberError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.YAMLClobberError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>raised when a YAML header file tries to overwrite an mkh5 header reserved word</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.get">
+<code class="sig-name descname">get</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dblock</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO.get"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.get" title="Permalink to this definition">¶</a></dt>
+<dd><p>load header info from dblock into self._header</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dblock</strong> (<em>h5py.Dataset</em>) – The HDF5 dataset whose attribute ‘json_header’ holds the header JSON string.</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.get_slices">
+<code class="sig-name descname">get_slices</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO.get_slices"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.get_slices" title="Permalink to this definition">¶</a></dt>
+<dd><p>slice out data values from dblock header for use in event table columns</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slicer</strong> (<em>dict</em>) – dictionary of col_name: slash_pattern where,
+* col_name (string) is the dict key that will appear as a table column heading
+* search_path (list of strings) as [ ‘key1’, ‘key2’, … key_n] to probe header</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul class="simple">
+<li><p><strong>slicer</strong> (<em>list of 2-ples, possibly empty)</em>) – each tuple is (col_name, datum) where</p></li>
+<li><p><strong>datum</strong> (<em>object</em>) – leaf returned by dpath.util.get(self._header, search_path)</p></li>
+</ul>
+</p>
+</dd>
+<dt class="field-odd">Raises</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>RuntimeError if HeaderIO instance doesn't have self._header</strong><strong> or </strong><strong>self._slicer dicts</strong> – </p></li>
+<li><p><strong>RuntimeError if dpath.util.get finds multiple values</strong> – </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.header">
+<em class="property">property </em><code class="sig-name descname">header</code><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.header" title="Permalink to this definition">¶</a></dt>
+<dd><p>expose header data like a read-only attribute</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.new">
+<code class="sig-name descname">new</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">hdr_dict</span></em>, <em class="sig-param"><span class="n">yhdr_f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO.new"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.new" title="Permalink to this definition">¶</a></dt>
+<dd><p>merge a dictionary and dict from the YAML file into a well-formed
+mkh5 datablock header or die</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.set">
+<code class="sig-name descname">set</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">dblock</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO.set"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.set" title="Permalink to this definition">¶</a></dt>
+<dd><p>jsonify the current self._header as value of dblock.attrs[self._json_key]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>dblock</strong> (<em>h5py.Dataset</em>) – writeable mkh5 datablock reference</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.HeaderIO.set_slicer">
+<code class="sig-name descname">set_slicer</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">slicer_f</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.HeaderIO.set_slicer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.HeaderIO.set_slicer" title="Permalink to this definition">¶</a></dt>
+<dd><p>load YAML header slicer for selecting subsets of mkh5 header values</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slicer_f</strong> (<em>str</em>) – YAML file in mkh5 header slicer format</p>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>side effect: sets self._slicer</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<ul class="simple">
+<li><p>The mkh5 header is a tree structure (dict) with branches
+that terminate in data.</p></li>
+<li><p>The mkh5 header slicer is an mkh5 header subtree
+“template” that contains</p>
+<ul>
+<li><p>terminating branches only</p></li>
+<li><p>string labels as terminals, e.g., col_0, col_1</p></li>
+</ul>
+</li>
+</ul>
+<p>Ex. , [‘key_0’, ‘key_1’, … ‘key_i’, col_0]</p>
+<ul>
+<li><p>Walking through header slicer with dpath.util.get(path)
+fetches the data value at the end of the path and we
+label it with the slicer column name like so</p>
+<blockquote>
+<div><p>[ (col_0, val_0), … (col_n, val_n)]</p>
+</div></blockquote>
+</li>
+</ul>
+<p>This converts neatly to wide tabular format</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 36%" />
+<col style="width: 24%" />
+<col style="width: 40%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>col_0</p></th>
+<th class="head"><p>…</p></th>
+<th class="head"><p>col_j</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>value_1</p></td>
+<td><p>…</p></td>
+<td><p>value_n</p></td>
+</tr>
+</tbody>
+</table>
+<p>Examples</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># here is some YAML header info</span>
+<span class="nn">---</span>
+<span class="nt">runsheet</span><span class="p">:</span>
+  <span class="nt">age</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">22</span>
+  <span class="nt">SAT_math</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">720</span>
+  <span class="nt">SAT_verbal</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">680</span>
+  <span class="nt">handedness</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">L/L</span>
+  <span class="nt">mood_VAS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">4.5</span>
+</pre></div>
+</div>
+<p>The YAML header slicer follows matching paths into that header
+to pluck out the terminal data values (leafs) and (re-)label them</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="c1"># here is an extractor for the header</span>
+<span class="nn">---</span>
+<span class="nt">runsheet</span><span class="p">:</span>
+  <span class="nt">mood_VAS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mood</span>
+  <span class="nt">handedness</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fam_hand</span>
+  <span class="nt">age</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">age</span>
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">key:value</span></code> order does not matter</p>
+</div>
+<p>This next slicer specifies the same <strong>paths</strong> into the
+header tree and extracts exactly the same <strong>values</strong></p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span>
+<span class="nt">runsheet</span><span class="p">:</span>
+  <span class="nt">age</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">age</span>
+  <span class="nt">handedness</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">fam_hand</span>
+  <span class="nt">mood_VAS</span><span class="p">:</span> <span class="l l-Scalar l-Scalar-Plain">mood</span>
+</pre></div>
+</div>
+<p>The slicer paths are the same for both:</p>
+<blockquote>
+<div><p>runsheet/mood_VAS/mood</p>
+<p>runsheet/handedness/fam_hand</p>
+<p>runsheet/age/age</p>
+</div></blockquote>
+<p>Algorithm</p>
+<ul>
+<li><p>HeaderIO.get_slices() extracts the header values at the end of the path, i.e.,
+22, L/L, 4.5 and pairs each datum with its path-matching slicer label like so</p>
+<blockquote>
+<div><p>[ (sub_age, 22), (fam_hand, ‘L/L’) ]</p>
+</div></blockquote>
+</li>
+<li><p>mkh5.get_event_table() converts these to wide-format and
+merges them with the rest of the single trial event code
+column information it gets from the code tag mapper.</p>
+<blockquote>
+<div><p>sub_age fam_hand
+22      ‘L/L’</p>
+</div></blockquote>
+</li>
+</ul>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.mkh5.Mkh5CalError">
+<em class="property">exception </em><code class="sig-name descname">Mkh5CalError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.Mkh5CalError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.Mkh5CalError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>mkh5 calibration error</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.mkh5.Mkh5Error">
+<em class="property">exception </em><code class="sig-name descname">Mkh5Error</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.Mkh5Error"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.Mkh5Error" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>general purposes mkh5 error</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.mkh5.Mkh5FormatError">
+<em class="property">exception </em><code class="sig-name descname">Mkh5FormatError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.Mkh5FormatError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.Mkh5FormatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>raised on mkh5 format violations</p>
+</dd></dl>
+
+<dl class="py exception">
+<dt id="mkpy.mkh5.mkh5.YamlHeaderFormatError">
+<em class="property">exception </em><code class="sig-name descname">YamlHeaderFormatError</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">value</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.YamlHeaderFormatError"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.YamlHeaderFormatError" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">Exception</span></code></p>
+<p>informative errors for bad yhdr YAML files</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.append_mkdata">
+<code class="sig-name descname">append_mkdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h5_path</span></em>, <em class="sig-param"><span class="n">eeg_f</span></em>, <em class="sig-param"><span class="n">log_f</span></em>, <em class="sig-param"><span class="n">yhdr_f</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">with_log_events</span><span class="o">=</span><span class="default_value">'aligned'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.append_mkdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.append_mkdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Append .crw, .log, .yhdr to an existing h5_path</p>
+<p>Extend an existing sequence of datablocks <cite>h5_path/dblock_0</cite>,
+… <cite>h5_path/dblock_N</cite>, with the continuation,
+<cite>h5_path/dblock_N+1</cite>, …</p>
+<p>The intended applicaton is to combine <cite>.crw</cite>, <cite>.log</cite> files
+together that could or should be grouped, e.g., to add
+separately recorded cals, recover from dig crashes, to pool an
+individuals data recorded in different sessions.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h5_path</strong> (<em>str</em>) – The full slashpath location in the <cite>.h5</cite> file where the
+new data blocks will be stored in the hdf5 file. Must be
+the full slashpath from the root without the leading
+slash.</p></li>
+<li><p><strong>eeg_f</strong> (<em>str</em>) – file path to the <cite>.crw</cite> files.</p></li>
+<li><p><strong>log_f</strong> (<em>str or None</em>) – file path to corresponding <cite>.log</cite> file.</p></li>
+<li><p><strong>with_log_events</strong> (<em>str</em>) – how to handle the log event codes, see <cite>mkh5.create_mkdata()</cite> for details</p></li>
+<li><p><strong>yhdr_f</strong> (<em>string</em>) – path to the YAML header file.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Warning</strong> – If the new crw headers do not match the existing
+    group attributes</p>
+</dd>
+</dl>
+<div class="admonition seealso">
+<p class="admonition-title">See also</p>
+<p><a class="reference internal" href="#mkpy.mkh5.mkh5.create_mkdata" title="mkpy.mkh5.mkh5.create_mkdata"><code class="xref py py-meth docutils literal notranslate"><span class="pre">create_mkdata()</span></code></a></p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.calibrate_mkdata">
+<code class="sig-name descname">calibrate_mkdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">id_name</span></em>, <em class="sig-param"><span class="n">cal_size</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">polarity</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">lo_cursor</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">hi_cursor</span><span class="o">=</span><span class="default_value">30</span></em>, <em class="sig-param"><span class="n">n_points</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">cal_ccode</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_cals</span><span class="o">=</span><span class="default_value">None</span></em>, <em class="sig-param"><span class="n">use_file</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.calibrate_mkdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.calibrate_mkdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>fetch and apply normerp style calibration to raw/crw dataset.</p>
+<p>This locates two cursors, one on either side of a an
+event-triggered calibration square wave step and measures
+average values in the interval +/- n_points around the cursors
+separately at each EEG data stream. The magnitude of the
+difference is the measure of the step. The calibration scaling
+factor for that stream is the average of the (trimmed)
+calibration pulses.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>id_name</strong> (<em>str</em>) – h5 group name that is parent to mkpy format dblocks, id_name/dblocks</p></li>
+<li><p><strong>cal_size</strong> (<em>float</em>) – magnitude of calibration square wave step in microvolts, e.g., 10</p></li>
+<li><p><strong>polarity</strong> (<em>(1,0)</em>) – ignored, and should be deprecated. In ERPSS this inverts
+all waveforms … has nothing to do with calibration really.</p></li>
+<li><p><strong>lo_cursor</strong> (<em>float (positive value)</em>) – magnitude of the low cursor offset from the calibration
+event in milliseconds</p></li>
+<li><p><strong>hi_cursor</strong> (<em>float (positive value)</em>) – magnitude of the high cursor offset from the calibration
+event in milliseconds</p></li>
+<li><p><strong>n_points</strong> (<em>uint</em>) – number of points on either side of each cursor to measure,
+interval = 2*n_points + 1</p></li>
+<li><p><strong>cal_ccode</strong> (<em>uint (default = 0)</em>) – search for cal pulses only in dblocks where the ccode
+column == cal_ccode.  The standing kutas lab convention is
+cal ccode == 0</p></li>
+<li><p><strong>use_cals</strong> (str (None defaults to <cite>id_name</cite>)) – slashpath to an alternate h5 group containing dblocks with the cal pulses</p></li>
+<li><p><strong>use_file</strong> (str (None defaults to <cite>self.f_name</cite>)) – slashpath to an alternate mkpy format h5 data file.</p></li>
+</ul>
+</dd>
+</dl>
+<ol class="arabic">
+<li><p>Calibration pulses are often recorded into the same <cite>.crw</cite>
+file or a separate file following data acquisition and then
+mkh5.append()-ed to a group. In both cases, the cal pulses
+appear in dblocks sister to the EEG data they are used to
+calibrate.</p>
+<p>Consequently the default calibration behavior is to search
+the dblocks daughter to self.h5_fname/id_name for the cal
+pulses.</p>
+<p>In rare cases, cal pulses are missing entirely and must be
+poached from another data group in the same hdf5 file or a
+data group in a different hdf5 file.</p>
+<p>Setting <cite>use_cals</cite> overrides the default group name.</p>
+<p>Setting <cite>use_file</cite> overrides the default self.f_name.</p>
+</li>
+<li><p>The normerp way is to use the <em>ABSOLUTE VALUE</em> of the cal
+step regardless of polarity to adjust the amplitude of the
++/- A/D recordings … leaving the sign unchanged.</p></li>
+<li><p>The polarity flag -1 is used <em>ONLY</em> to switch the sign of
+the EEG and has nothing to do with the A/D scaling factor</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.create_mkdata">
+<code class="sig-name descname">create_mkdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h5_path</span></em>, <em class="sig-param"><span class="n">eeg_f</span></em>, <em class="sig-param"><span class="n">log_f</span></em>, <em class="sig-param"><span class="n">yhdr_f</span></em>, <em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="n">with_log_events</span><span class="o">=</span><span class="default_value">'aligned'</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.create_mkdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.create_mkdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>Convert Kutas lab ERPSS <cite>.crw</cite> and <cite>.log</cite> to the
+<cite>mkh5</cite> hdf5 format.</p>
+<p>This merges dig <cite>.crw</cite>, <cite>.log</cite>, and user-specified <cite>.yml</cite> data into a tidy
+HDF5 dataset of continuous EEG recording + jsonic header.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>Log events are automatically truncated if log event codes
+occur after the end of the EEG data. This is rare but can
+happen when dig crashes or drops the last event code.</p>
+</div>
+<dl class="field-list">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul>
+<li><p><strong>h5_path</strong> (<em>str</em>) – The full slashpath location in the <cite>.h5</cite> file where the
+new data blocks will be stored in the hdf5 file. Must be
+the full slashpath from the root without the leading
+slash.</p></li>
+<li><p><strong>eeg_f</strong> (<em>str</em>) – file path to the <cite>.crw</cite> file.</p></li>
+<li><p><strong>log_f</strong> (<em>str or None</em>) – file path to corresponding <cite>.log</cite> file, if any.</p></li>
+<li><p><strong>yhdr_f</strong> (<em>str</em>) – file path to the YAML header file.</p></li>
+<li><p><strong>with_log_events</strong> (<em>{“aligned”, “from_eeg”, “none”, “as_is”}, optional</em>) – how to handle log file event codes (<cite>log_evcodes</cite>)
+relative to the eeg event codes (<cite>raw_evcodes</cite>) from the
+eeg recording.</p>
+<dl class="simple">
+<dt><cite>aligned</cite> (default)</dt><dd><p>ensures eeg and log event code
+timestamps are 1-1 but allows discrepant, e.g., logpoked,
+event codes with a warning. Requires a log file. This
+default is the mkpy.mkh5 &lt;= 0.2.2 behavior.</p>
+</dd>
+<dt><cite>from_eeg</cite></dt><dd><p>propagates the eeg event codes (dig mark track) to the <cite>log_evcodes</cite>
+column. Requires <cite>log_f</cite> is <cite>None</cite>.</p>
+</dd>
+<dt><cite>none</cite></dt><dd><p>sets <cite>log_evcodes</cite>, <cite>log_ccode</cite>, <cite>log_flags</cite> all to 0. Requires <cite>log_f</cite> is <cite>None</cite>.</p>
+</dd>
+<dt><cite>as_is</cite></dt><dd><p>loads whatever codes are in the log file without
+checking against the eeg data. Requires a log
+file. Silently allows eeg and log event code
+misalignment. Exceedingly dangerous but useful for
+disaster recovery.</p>
+</dd>
+</dl>
+</li>
+<li><p><strong>*args</strong> (<em>strings, optional</em>) – passed in to <cite>h5py.create_dataset()</cite></p></li>
+<li><p><strong>*kwargs</strong> (<em>key=values, optional</em>) – passed in to <cite>h5py.create_dataset()</cite>, e.g.,
+<cite>compression=”gzip”</cite>.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The EEG and event code data streams are snipped apart into
+uninterrupted “datablocks” at pause marks. Each data block has
+its own header containing information from the <cite>.crw</cite> file
+merged with the additional information from the YAML header
+file <cite>yhdr_f</cite>.</p>
+<p>Uncompressed ERPSS <cite>.raw</cite> files are also legal but there is no
+good reason to have them around. If the raw won’t compress
+because it is defective it won’t convert to <cite>mkh5</cite> either.
+There are no known useful <cite>**kwargs</cite>. HDF5 chunking fails when the
+size of datablock is smaller than the chunk and
+compression makes files a little smaller and a lot slower
+to read/write.</p>
+<p>Nathaniel Smith did all the hard work of low level ERPSS file
+IO.</p>
+<p>Examples</p>
+<div class="admonition-todo admonition" id="id1">
+<p class="admonition-title">Todo</p>
+<p>Give examples or link to snippets or examples</p>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.data_blocks">
+<em class="property">property </em><code class="sig-name descname">data_blocks</code><a class="headerlink" href="#mkpy.mkh5.mkh5.data_blocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>deprecated use mkh5.dblock_paths for a list of HDF5 paths to all the data blocks</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.data_groups">
+<em class="property">property </em><code class="sig-name descname">data_groups</code><a class="headerlink" href="#mkpy.mkh5.mkh5.data_groups" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.dblock_paths">
+<em class="property">property </em><code class="sig-name descname">dblock_paths</code><a class="headerlink" href="#mkpy.mkh5.mkh5.dblock_paths" title="Permalink to this definition">¶</a></dt>
+<dd><p>an iterable list of HDF5 paths to all the data blocks in the mkh5 file</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.delete_mkdata">
+<code class="sig-name descname">delete_mkdata</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">sub_id</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.delete_mkdata"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.delete_mkdata" title="Permalink to this definition">¶</a></dt>
+<dd><p>delete a top-level group from the mkh5 h5 file without warning, see Notes about wasted space.</p>
+<p>Parameters</p>
+<p>sub_id (string) path to h5 group in the instance’s h5file</p>
+<p>Notes:</p>
+<p>Use sparingly or not at all. hdf5 has no garbage collection,
+deleting groups leaves holes in the file unless the entire
+file tree is copied to a fresh file</p>
+<p>FIX ME: hdf5 notes hack around no garbage collection is to
+rewrite the gappy file to a new file … this could be built
+in here.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.epochs_names">
+<em class="property">property </em><code class="sig-name descname">epochs_names</code><a class="headerlink" href="#mkpy.mkh5.mkh5.epochs_names" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.export_epochs">
+<code class="sig-name descname">export_epochs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epochs_name</span></em>, <em class="sig-param"><span class="n">epochs_f</span></em>, <em class="sig-param"><span class="n">file_format</span><span class="o">=</span><span class="default_value">'h5'</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.export_epochs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.export_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>write previously set epochs to data in the specified file format</p>
+<p>Recommended epoch export formats for cross-platform data interchange</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs_name</strong> (<em>string</em>) – must name one of the datasets in this h5[‘epochs’]</p></li>
+<li><p><strong>epochs_f</strong> (<em>string</em>) – file path and name of the data file</p></li>
+<li><p><strong>file_format</strong> (<em>string, {‘h5’, ‘pdh5’, ‘feather’, ‘txt’}</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>File formats other than h5 overwrite any file with the same
+name without warning.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ul class="simple">
+<li><p>h5 format:</p>
+<ul>
+<li><p>the epochs are saved in the HDF5 file root as a dataset
+named <cite>epochs_name</cite>. Fails if such a dataset already
+exists.</p></li>
+<li><p>2-D rows x columns epochs data are stored as a single 1-D
+column vector (rows) of an HDF5 compound data type
+(columns). This HDF5 dataset is easily read and unpacked
+with any HDF5 reader that supports HDF5 compound data
+types.</p></li>
+</ul>
+</li>
+<li><p>pdh5 format: 2-D rows x columns epochs data are written to
+disk with <cite>pandas.to_hdf</cite> writer (via pytables). These
+epochs data are easily read into a <cite>pandas.DataFrame</cite> with
+<cite>pandas.read_hdf(epochs_f, key=epochs_name)</cite> and are also
+readable, less easily, by other HDF5 readers.</p></li>
+<li><p>feather, txt formats: 2-D rows x columns epochs data are
+written to disk with <cite>pandas.to_feather</cite> (via pyarrow) and
+as tab-separated text with <cite>pandas.to_csv(…, sep=’  ‘)</cite>.</p></li>
+</ul>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.export_event_table">
+<code class="sig-name descname">export_event_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">event_table</span></em>, <em class="sig-param"><span class="n">event_table_f</span></em>, <em class="sig-param"><span class="n">format</span><span class="o">=</span><span class="default_value">'feather'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.export_event_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.export_event_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>fetch the specified event table and save it in the specified format</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.garv_data_group">
+<code class="sig-name descname">garv_data_group</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h5_data_group_path</span></em>, <em class="sig-param"><span class="n">skip_ccodes</span><span class="o">=</span><span class="default_value">[0]</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.garv_data_group"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.garv_data_group" title="Permalink to this definition">¶</a></dt>
+<dd><p>Run <cite>pygarv</cite> on all the dblocks under the <cite>h5_data_group_path</cite>.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h5_data_group_path</strong> (<em>str</em>) – name of the h5 datagroup containing the dblocks to screen</p></li>
+<li><p><strong>skip_ccodes</strong> (<em>list of uint, None ([0])</em>) – dblocks with log_ccodes in the list are not scanned. Default
+is [0] to skip calibration blocks. Setting to None disables
+the skipper and scans all dblocks in the data group</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.get_dblock">
+<code class="sig-name descname">get_dblock</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">h5_path</span></em>, <em class="sig-param"><span class="n">header</span><span class="o">=</span><span class="default_value">True</span></em>, <em class="sig-param"><span class="n">dblock</span><span class="o">=</span><span class="default_value">True</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.get_dblock"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.get_dblock" title="Permalink to this definition">¶</a></dt>
+<dd><p>return a copy of header dict and numpy ndarray from the mkh5
+datablock at h5_path</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>h5_path</strong> (<em>string</em>) – full HDF5 slashpath to a datablock in this mkh5 instance</p></li>
+<li><p><strong>header</strong> (<em>bool {True}, optional</em>) – return the header</p></li>
+<li><p><strong>dblock</strong> (<em>bool {True}, optional</em>) – return the dblock dataset</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>hdr, data</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>ValueError if header and dblock are both False</strong> – </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.get_epochs">
+<code class="sig-name descname">get_epochs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epochs_name</span></em>, <em class="sig-param"><span class="n">format</span><span class="o">=</span><span class="default_value">'numpy'</span></em>, <em class="sig-param"><span class="n">columns</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.get_epochs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.get_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>fetch single trial epochs in tabluar form</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs_name</strong> (<em>str</em>) – name of previously set epochs table</p></li>
+<li><p><strong>format</strong> (<em>str {‘numpy’, ‘pandas’}</em>)</p></li>
+<li><p><strong>columns</strong> (<em>list of str or None {‘None’}</em>) – the subset of column names to extract</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><ul>
+<li><p><strong>epochs</strong> (<em>numpy.ndarray or pandas.DataFrame</em>) –  epochs.shape == (i x m, n + 2) where</p>
+<blockquote>
+<div><p>i = the number of epochs, indexed uniquely by epoch_table[‘epoch_id’]
+m = epoch length in samples
+n = the number of columns in the <cite>epochs_name</cite> epochs table</p>
+</div></blockquote>
+<p>See <cite>_h5_get_epochs()</cite> for details.</p>
+</li>
+<li><p><strong>attrs</strong> (<em>dict</em>) – stub</p></li>
+</ul>
+</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.get_epochs_table">
+<code class="sig-name descname">get_epochs_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epochs_name</span></em>, <em class="sig-param"><span class="n">format</span><span class="o">=</span><span class="default_value">'pandas'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.get_epochs_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.get_epochs_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>look up a previously set epochs table by name</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs_name</strong> (<em>str</em>) – name of a previously defined epochs table as set with an
+mkh5.set_epochs(event_table)</p></li>
+<li><p><strong>format</strong> (<em>str  {‘pandas’, ‘numpy’}</em>) – pandas.Dataframe or numpy.ndarray</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>epochs_table</strong></p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.Dataframe or numpy.ndarray</p>
+</dd>
+</dl>
+<p>Bytestrings from the hdf5 are converted to unicode epochs_table
+table returned</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.get_epochs_table_names">
+<code class="sig-name descname">get_epochs_table_names</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.get_epochs_table_names"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.get_epochs_table_names" title="Permalink to this definition">¶</a></dt>
+<dd><p>returns a list, possibly empty of previously named epochs tables</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.get_event_table">
+<code class="sig-name descname">get_event_table</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">code_map_f</span></em>, <em class="sig-param"><span class="n">header_map_f</span><span class="o">=</span><span class="default_value">None</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.get_event_table"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.get_event_table" title="Permalink to this definition">¶</a></dt>
+<dd><p>Reads the code tag and header extractor and returns an event lookup table</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>code_map_f</strong> (<em>str</em>) – Excel, YAML, or tab-separated text, see mkh5 docs for
+format details.</p></li>
+<li><p><strong>header_map_f</strong> (<em>str</em>) – YAML header extractor file, keys match header keys, values specify
+name of the event table column to put the header data</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>event_table</strong> – See Note.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<ol class="arabic">
+<li><p>This sweeps the code tag map across the data to generate a lookup
+table for specific event (sequence patterns) where the rows specify:</p>
+<ul class="simple">
+<li><p>slashpath to the mkh5 dblock data set and sample index
+for pattern-matching events.</p></li>
+<li><p>all the additional information for that pattern given in
+the code tag map</p></li>
+</ul>
+<p>The event table generated from mkh5 data and the code_map
+specification is in lieu of .blf (for EEG epoching and
+time-locking), .rts (for event-to-event timing), and .hdr
+(for experimental design specification).</p>
+</li>
+</ol>
+</div>
+<ol class="arabic simple" start="2">
+<li><p><code class="docutils literal notranslate"><span class="pre">ccode</span></code> Special column. If the code tag map has a column
+named <code class="docutils literal notranslate"><span class="pre">ccode</span></code> the code finder finds events that match the
+code sequence given by the regex pattern <strong>AND</strong> the
+log_ccode == ccode. This emulates Kutas Lab <cite>cdbl</cite> event
+lookup and to support, e.g., the condition code == 0 for
+cals convention and blocked designs where the <cite>ccode</cite>
+varies block to block. If the code map does not specify
+a <code class="docutils literal notranslate"><span class="pre">ccode</span></code>, column the <cite>log_ccode</cite> column is ignored for
+pattern matching.</p></li>
+</ol>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.gethead">
+<code class="sig-name descname">gethead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.gethead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.gethead" title="Permalink to this definition">¶</a></dt>
+<dd><p>get header values as a list of (slashpath, value) 2-ples suitable for passing to edhead</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.headinfo">
+<code class="sig-name descname">headinfo</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">pattern</span><span class="o">=</span><span class="default_value">'.+'</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.headinfo"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.headinfo" title="Permalink to this definition">¶</a></dt>
+<dd><p>print header information matching the pattern regular expression to STDOUT</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>pattern</strong> (<em>regexp</em>) – regular expression to look for in the slashpaths to
+datablocks and header information in this mkh5 format
+file. Default ‘.+’ matches all header info.</p>
+</dd>
+</dl>
+<p>Assume we have previously constructed an mkh5 file <cite>expts.h5</cite>
+containing data for two experiments and multiple subjects in
+each and decorated with yaml header information about
+electrode locations.</p>
+<p>We may want to query and display more or less header
+information. Usually less since there is lots.</p>
+<p>Select the relevant information with regular expression
+pattern matching:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="o">&gt;</span> <span class="n">expts</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="s1">&#39;expts.h5&#39;</span><span class="p">)</span> <span class="c1"># initialize the mkh5 object</span>
+<span class="o">&gt;</span> <span class="n">expts</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s1">&#39;Expt1/S001&#39;</span><span class="p">)</span> <span class="c1"># fetch all header info for Expt1/S001, all datablocks</span>
+<span class="o">&gt;</span> <span class="n">expts</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s1">&#39;Expt1/.*MiPa&#39;</span><span class="p">)</span> <span class="c1"># returns everything in any Expt1 header involving MiPa</span>
+<span class="o">&gt;</span> <span class="n">expts</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s1">&#39;Expt1/S001/apparatus/space/origin&#39;</span><span class="p">)</span> <span class="c1"># origin of sensor space Expt1/S003</span>
+<span class="o">&gt;</span> <span class="n">expts</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s1">&#39;Expt1/S001/apparatus/sensors/MiPa/x&#39;</span><span class="p">)</span> <span class="c1"># x-coordinate of electrode MiPa</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.info">
+<code class="sig-name descname">info</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.info"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.info" title="Permalink to this definition">¶</a></dt>
+<dd><p>return h5dump-ish overview of h5_path’s groups/datasets/attributes and data
+Parameter:</p>
+<p>h5_path (string) h5 path to a group or dataset</p>
+<p>Returns info (string)</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.plotcals">
+<code class="sig-name descname">plotcals</code><span class="sig-paren">(</span><em class="sig-param"><span class="o">*</span><span class="n">args</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.plotcals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.plotcals" title="Permalink to this definition">¶</a></dt>
+<dd><p>visualize cal pulses and scaling factors used to convert to
+microvolts</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.reset_all">
+<code class="sig-name descname">reset_all</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.reset_all"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.reset_all" title="Permalink to this definition">¶</a></dt>
+<dd><p>completely wipe out the mkh5 file and reset to empty without mercy</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.set_epochs">
+<code class="sig-name descname">set_epochs</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">epochs_table_name</span></em>, <em class="sig-param"><span class="n">event_table</span></em>, <em class="sig-param"><span class="n">tmin_ms</span></em>, <em class="sig-param"><span class="n">tmax_ms</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.set_epochs"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.set_epochs" title="Permalink to this definition">¶</a></dt>
+<dd><p>construct and store a named EEG epochs lookup-table in self[‘epcochs’]</p>
+<dl class="simple">
+<dt>For storing in hdf5 the columns must be one of these:</dt><dd><p>string-like (unicode, bytes)
+int-like (int, np.int, np.uint32, np.uint64)
+float-like (float, np.float32, np.float64)</p>
+</dd>
+</dl>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>epochs_table_name</strong> (<em>string</em>) – name of the epochs table to store</p></li>
+<li><p><strong>event_table</strong> (<em>pandas.DataFrame</em>) – as returned by mkh5.get_event_table()</p></li>
+<li><p><strong>tmin_ms</strong> (<em>float</em>) – epoch start in millseconds relative to the event, e.g, -500</p></li>
+<li><p><strong>tmax_ms</strong> (<em>float</em>) – epoch end in millseconds relative to the event, e..g,
+1500, strictly greater than tmin_ms</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>updates h5_f/EPOCH_TABLES_PATH/ with the named epoch table h5py.Dataset</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>None</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>The epochs table is a lightweight lookup table specific to
+each mkh5 instance’s hdf5 file,</p>
+<blockquote>
+<div><p>h5[‘epochs’][epochs_table_name] = epochs_table</p>
+</div></blockquote>
+<p>The epochs table is row-for-row the same as the time-locking event table
+and just adds the time interval information for use when extracting the
+time series EEG data segments.</p>
+<p>For reproducibility, by design the epochs tables in an mkh5
+file are write-protected. New tables may be added, but
+existing tables cannot be overwritten or deleted. If you need
+to the revise the epochs, rebuild the mkh5 file from crws/logs
+with the ones you want.</p>
+</dd></dl>
+
+<dl class="py method">
+<dt id="mkpy.mkh5.mkh5.sethead">
+<code class="sig-name descname">sethead</code><span class="sig-paren">(</span><em class="sig-param"><span class="n">slash_vals</span></em>, <em class="sig-param"><span class="o">**</span><span class="n">kwargs</span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkh5.html#mkh5.sethead"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mkpy.mkh5.mkh5.sethead" title="Permalink to this definition">¶</a></dt>
+<dd><p>update mkh5 dblock header information via <code class="docutils literal notranslate"><span class="pre">dpath.utils</span></code> style
+slash path, value notation.</p>
+<p>The recommended method for adding information to mkh5 headers
+is via the YAML header file loaded when converting .crw/.log
+to mkh5</p>
+<p>myh5file.create_mkdata(‘my.crw’, ‘my.log’, ‘my.yhdr’)</p>
+<p>Use sethead() at your own risk. mucking with headers by hand
+is dangerous without a clear understanding of the mkh5 dataset
+and header attribute format and dpath.util behavior.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><p><strong>slash_vals</strong> (<em>(str, value) 2-ple or list of them</em>) – str is a slash path to an mkh5 dblock and on into the header
+value is JSON-ifiable scalar, dict, or sequence</p>
+</dd>
+</dl>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">mydat</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="s1">&#39;myfile.h5&#39;</span><span class="p">)</span>
+<span class="n">mydat</span><span class="o">.</span><span class="n">sethead</span><span class="p">((</span><span class="s1">&#39;S01/dblock_0/long_subid&#39;</span><span class="p">,</span> <span class="s1">&#39;S0001_A&#39;</span><span class="p">)</span>
+
+<span class="c1"># probably a bad idea to set this only for first datablock</span>
+<span class="n">mydat</span><span class="o">.</span><span class="n">sethead</span><span class="p">((</span><span class="s1">&#39;S01/dblock_0/npsych/mood_score&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
+
+<span class="c1"># use a list to set for all dblocks</span>
+<span class="n">spvs</span> <span class="o">=</span> <span class="p">[(</span><span class="s1">&#39;S01/dblock_0/npsych/mood_score&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;S01/dblock_1/npsych/mood_score&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;S01/dblock_2/npsych/mood_score&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;S01/dblock_3/npsych/mood_score&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+        <span class="p">(</span><span class="s1">&#39;S01/dblock_4/npsych/mood_score&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span>
+         <span class="p">(</span><span class="s1">&#39;S01/dblock_5/npsych/mood_score&#39;</span><span class="p">,</span> <span class="mi">4</span><span class="p">),</span> <span class="p">]</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="mkpy.codetagger.html" class="btn btn-neutral float-right" title="mkpy.codetagger module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="mkpy_api.html" class="btn btn-neutral float-left" title="mkh5, event tags, epochs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

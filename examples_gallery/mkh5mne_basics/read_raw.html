@@ -1,0 +1,462 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>Read h5 to mne.Raw &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Background reading" href="../../Learning.html" />
+    <link rel="prev" title="MNE I/O basics" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../mkh5_basics/index.html">mkh5 basics</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">MNE I/O basics</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Read h5 to mne.Raw</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#set-up">Set up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mne-raw-without-epochs">mne.Raw without epochs</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mne-raw-with-events-and-epochs">mne.Raw with events and epochs</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../../ExamplesGallery.html">Examples Gallery</a> &raquo;</li>
+        
+          <li><a href="index.html">MNE I/O basics</a> &raquo;</li>
+        
+      <li>Read h5 to mne.Raw</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+            
+            <a href="../../_sources/examples_gallery/mkh5mne_basics/read_raw.rst.txt" rel="nofollow"> View page source</a>
+          
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-gallery-mkh5mne-basics-read-raw-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="read-h5-to-mne-raw">
+<span id="sphx-glr-examples-gallery-mkh5mne-basics-read-raw-py"></span><h1>Read h5 to mne.Raw<a class="headerlink" href="#read-h5-to-mne-raw" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="set-up">
+<h2>Set up<a class="headerlink" href="#set-up" title="Permalink to this headline">¶</a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mkpy</span> <span class="kn">import</span> <span class="n">mkh5</span>
+<span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+
+<span class="c1"># to be clear ...</span>
+<span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mkh5</span><span class="p">,</span> <span class="n">mne</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>mkpy.mkh5 0.2.5.dev5
+mne 0.22.0
+</pre></div>
+</div>
+</div>
+<div class="section" id="mne-raw-without-epochs">
+<h2>mne.Raw without epochs<a class="headerlink" href="#mne-raw-without-epochs" title="Permalink to this headline">¶</a></h2>
+<p>Resting EEG with no mkpy codemapped events or epochs tables. It
+includes data before and after scaling to <span class="math notranslate nohighlight">\(\mu\)</span> V for
+demonstration, the user warnings are expected.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">eeg_h5_f</span> <span class="o">=</span> <span class="s2">&quot;../mkh5_data/sub000eeg.h5&quot;</span>
+<span class="n">eeg_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">read_raw_mkh5</span><span class="p">(</span><span class="n">eeg_h5_f</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="nb">type</span><span class="p">(</span><span class="n">eeg_raw</span><span class="p">))</span>
+
+<span class="n">eeg_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">scalings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eeg&quot;</span><span class="p">:</span> <span class="mf">5e-5</span><span class="p">,</span> <span class="s2">&quot;eog&quot;</span><span class="p">:</span> <span class="mf">1e-4</span><span class="p">},</span>  <span class="c1"># scale eog and eeg channels separately</span>
+    <span class="n">start</span><span class="o">=</span><span class="mf">282.0</span><span class="p">,</span>  <span class="c1"># seconds into the recording</span>
+    <span class="n">n_channels</span><span class="o">=</span><span class="mi">39</span><span class="p">,</span>  <span class="c1"># EEG + event channels</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<img alt="read raw" class="sphx-glr-single-img" src="../../_images/sphx_glr_read_raw_001.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000eeg.h5
+looking up data block paths, larger files take longer ...
+ok
+checking info, montage cals_AD_before/dblock_0
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 lle is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 lhz is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 MiPf is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LLPf is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RLPf is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LMPf is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RMPf is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LDFr is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RDFr is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LLFr is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RLFr is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LMFr is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RMFr is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LMCe is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RMCe is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 MiCe is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 MiPa is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LDCe is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RDCe is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LDPa is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RDPa is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LMOc is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RMOc is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LLTe is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RLTe is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 LLOc is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 RLOc is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 MiOc is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 A2 is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 HEOG is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 rle is not calibrated, scale is unknown
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1111: UserWarning: mkh5 data /cals_AD_before/dblock_0 rhz is not calibrated, scale is unknown
+  warnings.warn(msg)
+checking info, montage closed/dblock_0
+checking info, montage open/dblock_0
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+Creating RawArray with float64 data, n_channels=39, n_times=45568
+    Range : 0 ... 45567 =      0.000 ...   182.268 secs
+Ready.
+Creating RawArray with float64 data, n_channels=39, n_times=45568
+    Range : 0 ... 45567 =      0.000 ...   182.268 secs
+Ready.
+EEG data marked as already having the desired reference.
+&lt;class &#39;mkpy.io.mkh5mne.RawMkh5&#39;&gt;
+
+&lt;MNEBrowseFigure size 640x480 with 4 Axes&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="mne-raw-with-events-and-epochs">
+<h2>mne.Raw with events and epochs<a class="headerlink" href="#mne-raw-with-events-and-epochs" title="Permalink to this headline">¶</a></h2>
+<p>The events in this oddball paradigm were tagged with a codemap and used
+to set epochs of different lengths.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p3_h5_f</span> <span class="o">=</span> <span class="s2">&quot;../mkh5_data/sub000p3.h5&quot;</span>
+
+<span class="c1"># reusable plot parameters</span>
+<span class="n">p3_raw_kws</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span><span class="n">scalings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eeg&quot;</span><span class="p">:</span> <span class="mf">5e-5</span><span class="p">,</span> <span class="s2">&quot;eog&quot;</span><span class="p">:</span> <span class="mf">1e-4</span><span class="p">},</span> <span class="n">start</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
+
+<span class="n">p3_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">read_raw_mkh5</span><span class="p">(</span><span class="n">p3_h5_f</span><span class="p">)</span>
+<span class="n">p3_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="o">**</span><span class="n">p3_raw_kws</span><span class="p">)</span>
+</pre></div>
+</div>
+<img alt="read raw" class="sphx-glr-single-img" src="../../_images/sphx_glr_read_raw_002.png" />
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000p3.h5
+looking up data block paths, larger files take longer ...
+ok
+checking info, montage sub000/dblock_1
+checking info, montage sub000/dblock_2
+checking info, montage sub000/dblock_3
+checking info, montage sub000/dblock_4
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=31744
+    Range : 0 ... 31743 =      0.000 ...   126.972 secs
+Ready.
+sub000/dblock_2 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=32512
+    Range : 0 ... 32511 =      0.000 ...   130.044 secs
+Ready.
+sub000/dblock_3 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+sub000/dblock_4 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms3000 events and metadata
+EEG data marked as already having the desired reference.
+
+&lt;MNEBrowseFigure size 640x480 with 4 Axes&gt;
+</pre></div>
+</div>
+<p>This mkh5mne helper method converts garv log_flags artifact events to “BAD_garv” mne.Annotations
+for use with native MNE data screening.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">garv_bads</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">get_garv_bads</span><span class="p">(</span><span class="n">p3_raw</span><span class="p">,</span> <span class="s2">&quot;ms1500&quot;</span><span class="p">,</span> <span class="n">garv_interval</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">750</span><span class="p">,</span> <span class="mi">750</span><span class="p">,</span> <span class="s2">&quot;ms&quot;</span><span class="p">])</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="n">garv_bads</span><span class="p">,</span> <span class="n">garv_bads</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Annotations | 58 segments: BAD_garv_32 (33), BAD_garv_48 (25)&gt; [&#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39;]
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  28.221 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-gallery-mkh5mne-basics-read-raw-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/9e662d5b1b7e461b7009792218f02207/read_raw.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">read_raw.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/d03bd212c9e0d397235a63d6bd0ae9b4/read_raw.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">read_raw.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+           
+          </div>
+          <footer>
+  
+    <div class="rst-footer-buttons" role="navigation" aria-label="footer navigation">
+      
+        <a href="../../Learning.html" class="btn btn-neutral float-right" title="Background reading" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right"></span></a>
+      
+      
+        <a href="index.html" class="btn btn-neutral float-left" title="MNE I/O basics" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left"></span> Previous</a>
+      
+    </div>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>

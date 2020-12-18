@@ -1,0 +1,677 @@
+
+
+<!DOCTYPE html>
+<!--[if IE 8]><html class="no-js lt-ie9" lang="en" > <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js" lang="en" > <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <title>mkpy.mkio &mdash; mkpy 0.2.5.dev5 documentation</title>
+  
+
+  
+  
+  
+  
+
+  
+  <script type="text/javascript" src="../../_static/js/modernizr.min.js"></script>
+  
+    
+      <script type="text/javascript" id="documentation_options" data-url_root="../../" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/doctools.js"></script>
+        <script src="../../_static/language_data.js"></script>
+        <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    
+    <script type="text/javascript" src="../../_static/js/theme.js"></script>
+
+    
+
+  
+  <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-binder.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-dataframe.css" type="text/css" />
+  <link rel="stylesheet" href="../../_static/gallery-rendered-html.css" type="text/css" />
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav">
+
+   
+  <div class="wy-grid-for-nav">
+    
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+          
+
+          
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          
+
+          
+          </a>
+
+          
+            
+            
+              <div class="version">
+                0.2
+              </div>
+            
+          
+
+          
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+
+          
+        </div>
+
+        <div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="main navigation">
+          
+            
+            
+              
+            
+            
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction (0.2.5.dev5)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Quick%20Start.html">Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s online how-to</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+            
+          
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap">
+
+      
+      <nav class="wy-nav-top" aria-label="top navigation">
+        
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+        
+      </nav>
+
+
+      <div class="wy-nav-content">
+        
+        <div class="rst-content">
+        
+          
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<div role="navigation" aria-label="breadcrumbs navigation">
+
+  <ul class="wy-breadcrumbs">
+    
+      <li><a href="../../index.html">Docs</a> &raquo;</li>
+        
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+        
+          <li><a href="../mkpy.html">mkpy</a> &raquo;</li>
+        
+      <li>mkpy.mkio</li>
+    
+    
+      <li class="wy-breadcrumbs-aside">
+        
+      </li>
+    
+  </ul>
+
+  
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+            
+  <h1>Source code for mkpy.mkio</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;Module mkio.py minor tweak of NJS dig format reader and (avg) writer</span>
+
+<span class="sd">Code has four main sections/functions</span>
+
+<span class="sd">  1. Setup</span>
+<span class="sd">  2. Helper functions</span>
+<span class="sd">  3. Readers</span>
+<span class="sd">  4. Writers</span>
+
+<span class="sd">&quot;&quot;&quot;</span>
+
+<span class="c1"># --------</span>
+<span class="c1"># 1. Setup</span>
+<span class="c1"># --------</span>
+<span class="kn">import</span> <span class="nn">struct</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">gzip</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">mkpy._mkh5</span> <span class="kn">import</span> <span class="n">_decompress_crw_chunk</span>
+<span class="kn">from</span> <span class="nn">mkpy</span> <span class="kn">import</span> <span class="n">get_ver</span>
+
+<span class="c1"># ----------</span>
+<span class="c1"># 2. Helpers</span>
+<span class="c1"># ----------</span>
+
+<span class="c1"># Derived from erp/include/header.h:</span>
+<span class="c1"># &#39;&lt;&#39; denotes little-endianness</span>
+<span class="n">_header_dtype</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">dtype</span><span class="p">(</span>
+    <span class="p">[</span>
+        <span class="p">(</span><span class="s2">&quot;magic&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;u2&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;epoch_len&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># epoch length in msec</span>
+        <span class="p">(</span><span class="s2">&quot;nchans&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># number of channels</span>
+        <span class="p">(</span><span class="s2">&quot;sums&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># 0 = ERP, 1 = single trial</span>
+        <span class="c1"># ^^ 8 bytes</span>
+        <span class="p">(</span><span class="s2">&quot;tpfuncs&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># number of processing funcs</span>
+        <span class="p">(</span><span class="s2">&quot;pp10uv&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># points / 10 uV</span>
+        <span class="p">(</span><span class="s2">&quot;verpos&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># positive point positive voltage, -1 =&gt; opposite</span>
+        <span class="p">(</span><span class="s2">&quot;odelay&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># ms from trigger to stim (8 video, 4 audio)</span>
+        <span class="c1"># ^^ 16 bytes</span>
+        <span class="p">(</span><span class="s2">&quot;totevnt&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># &quot;total log events&quot;</span>
+        <span class="p">(</span><span class="s2">&quot;10usec_per_tick&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;time&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i4&quot;</span><span class="p">),</span>  <span class="c1"># &quot;time in sample clock ticks&quot;</span>
+        <span class="c1"># ^^ 24 bytes</span>
+        <span class="p">(</span><span class="s2">&quot;cond_code&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;presam&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># pre-event time in epoch in msec</span>
+        <span class="p">(</span><span class="s2">&quot;trfuncs&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># number of rejection functions</span>
+        <span class="p">(</span><span class="s2">&quot;totrr&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># total raw records including rejects</span>
+        <span class="c1"># ^^ 32 bytes</span>
+        <span class="p">(</span><span class="s2">&quot;totrej&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># total raw rejects</span>
+        <span class="p">(</span><span class="s2">&quot;sbcode&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># &quot;subcondition number (bin number)&quot;</span>
+        <span class="p">(</span><span class="s2">&quot;cprecis&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># channel precision in # of 256 points blocks</span>
+        <span class="p">(</span><span class="s2">&quot;dummy1&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># placeholder for ovf_errors (see header)</span>
+        <span class="c1"># ^^ 40 bytes</span>
+        <span class="p">(</span><span class="s2">&quot;decfact&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># decimation factor used in processing</span>
+        <span class="p">(</span><span class="s2">&quot;dh_flag&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">),</span>  <span class="c1"># sets time resolution (see header defines)</span>
+        <span class="p">(</span><span class="s2">&quot;dh_item&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i4&quot;</span><span class="p">),</span>  <span class="c1"># sequential item #</span>
+        <span class="c1"># ^^ 48 bytes</span>
+        <span class="p">(</span><span class="s2">&quot;rfcnts&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;i2&quot;</span><span class="p">,</span> <span class="p">(</span><span class="mi">8</span><span class="p">,)),</span>  <span class="c1"># ndividual rejection counts 8 poss. rfs</span>
+        <span class="p">(</span><span class="s2">&quot;rftypes&quot;</span><span class="p">,</span> <span class="s2">&quot;S64&quot;</span><span class="p">),</span>  <span class="c1"># 8 char. descs for 8 poss. rfs</span>
+        <span class="p">(</span><span class="s2">&quot;chndes&quot;</span><span class="p">,</span> <span class="s2">&quot;S128&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;subdes&quot;</span><span class="p">,</span> <span class="s2">&quot;S40&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;sbcdes&quot;</span><span class="p">,</span> <span class="s2">&quot;S40&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;condes&quot;</span><span class="p">,</span> <span class="s2">&quot;S40&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;expdes&quot;</span><span class="p">,</span> <span class="s2">&quot;S40&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;pftypes&quot;</span><span class="p">,</span> <span class="s2">&quot;S24&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;chndes2&quot;</span><span class="p">,</span> <span class="s2">&quot;S40&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;flags&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;u2&quot;</span><span class="p">),</span>  <span class="c1"># see flag values in header</span>
+        <span class="p">(</span><span class="s2">&quot;nrawrecs&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;u2&quot;</span><span class="p">),</span>  <span class="c1"># raw records if this is a raw file header</span>
+        <span class="p">(</span><span class="s2">&quot;idxofflow&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;u2&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;idxoffhi&quot;</span><span class="p">,</span> <span class="s2">&quot;&lt;u2&quot;</span><span class="p">),</span>
+        <span class="p">(</span><span class="s2">&quot;chndes3&quot;</span><span class="p">,</span> <span class="s2">&quot;S24&quot;</span><span class="p">),</span>  <span class="c1"># channel description size</span>
+    <span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># If, say, chndes has trailing null bytes, then rec[&quot;chndes&quot;] will give us a</span>
+<span class="c1"># less-than-128-byte string back. But this function always gives us the full</span>
+<span class="c1"># 128 byte string, trailing nuls and all.</span>
+<span class="k">def</span> <span class="nf">_get_full_string</span><span class="p">(</span><span class="n">record</span><span class="p">,</span> <span class="n">key</span><span class="p">):</span>
+    <span class="n">val</span> <span class="o">=</span> <span class="n">record</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+    <span class="n">desired_len</span> <span class="o">=</span> <span class="n">record</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">fields</span><span class="p">[</span><span class="n">key</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">itemsize</span>
+    <span class="k">return</span> <span class="n">val</span> <span class="o">+</span> <span class="p">(</span><span class="n">desired_len</span> <span class="o">-</span> <span class="nb">len</span><span class="p">(</span><span class="n">val</span><span class="p">))</span> <span class="o">*</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x00</span><span class="s2">&quot;</span>  <span class="c1"># TPU forced to byte</span>
+
+
+<span class="k">def</span> <span class="nf">_gzipped</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return True if stream is a gzip file.&quot;&quot;&quot;</span>
+
+    <span class="n">initial_pos</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">tell</span><span class="p">()</span>
+    <span class="n">gzip_magic</span> <span class="o">=</span> <span class="sa">b</span><span class="s2">&quot;</span><span class="se">\x1f\x8b</span><span class="s2">&quot;</span>
+    <span class="n">file_magic</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">stream</span><span class="o">.</span><span class="n">seek</span><span class="p">(</span><span class="n">initial_pos</span><span class="p">)</span>  <span class="c1"># rewind back 2 bytes</span>
+
+    <span class="k">return</span> <span class="n">file_magic</span> <span class="o">==</span> <span class="n">gzip_magic</span>
+
+
+<span class="k">def</span> <span class="nf">_get_reader_for_magic</span><span class="p">(</span><span class="n">magic</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return appropriate reader function based on the magic.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">magic</span> <span class="o">==</span> <span class="mh">0x17A5</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_read_raw_chunk</span>
+    <span class="k">elif</span> <span class="n">magic</span> <span class="o">==</span> <span class="mh">0x97A5</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">_read_compressed_chunk</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+
+
+<span class="k">def</span> <span class="nf">_is_valid_samplerate</span><span class="p">(</span><span class="n">hz</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Return True if sample rate is close to an integer, False otherwise.&quot;&quot;&quot;</span>
+
+    <span class="n">closest_integer</span> <span class="o">=</span> <span class="nb">round</span><span class="p">(</span><span class="n">hz</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">math</span><span class="o">.</span><span class="n">isclose</span><span class="p">(</span><span class="n">hz</span><span class="p">,</span> <span class="n">closest_integer</span><span class="p">,</span> <span class="n">abs_tol</span><span class="o">=</span><span class="mf">1e-6</span><span class="p">):</span>
+        <span class="k">return</span> <span class="kc">False</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">True</span>
+
+
+<span class="k">def</span> <span class="nf">_get_channel_names</span><span class="p">(</span><span class="n">header</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Extract list of channel names from header.&quot;&quot;&quot;</span>
+
+    <span class="k">if</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">16</span><span class="p">:</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;S8&quot;</span>
+    <span class="k">elif</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">32</span><span class="p">:</span>
+        <span class="n">dtype</span> <span class="o">=</span> <span class="s2">&quot;S4&quot;</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">NotImplementedError</span><span class="p">(</span>
+            <span class="s2">&quot;Channel name extraction for large &quot;</span> <span class="s2">&quot;montages not yet supported&quot;</span>
+        <span class="p">)</span>
+
+    <span class="c1"># return np.fromstring(_get_full_string(header, &#39;chndes&#39;), dtype=dtype)</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">_get_full_string</span><span class="p">(</span><span class="n">header</span><span class="p">,</span> <span class="s2">&quot;chndes&quot;</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">)</span>
+
+
+<span class="c1"># -------</span>
+<span class="c1"># Readers</span>
+<span class="c1"># -------</span>
+<span class="k">def</span> <span class="nf">_read_header</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Read header (the first 512 bytes) from file, return a subset of it.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    stream : filestream</span>
+<span class="sd">        .raw or .crw filestream</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    (reader, header[&quot;nchans&quot;], hz, channel_names, info) : tuple</span>
+
+<span class="sd">    where</span>
+<span class="sd">        reader : function</span>
+<span class="sd">            _read_raw_chunk or _read_compressed_chunk</span>
+<span class="sd">        header[&quot;nchans&quot;] : int</span>
+<span class="sd">            number of data channels</span>
+<span class="sd">        hz : float</span>
+<span class="sd">            sampling frequency in samples per second</span>
+<span class="sd">        channel_names : NumPy array of binary strings</span>
+<span class="sd">            channel name codes, e.g. MiPf, LLPf, etc.</span>
+<span class="sd">        info : dict</span>
+<span class="sd">            dictionary with keys:</span>
+<span class="sd">                name, magic, subdesc, expdesc,</span>
+<span class="sd">                odelay, samplerate, recordduration,</span>
+<span class="sd">                recordsize, nrawrecs, nchans</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="c1"># read header from file and build NumPy data structure</span>
+    <span class="n">header_str</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">512</span><span class="p">)</span>
+
+    <span class="c1"># fromstring deprecated b.c. strange behavior on unicode</span>
+    <span class="c1"># header = np.fromstring(header_str, dtype=_header_dtype)[0]</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">header_str</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">_header_dtype</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+
+    <span class="c1"># determine appropriate reader function</span>
+    <span class="n">reader</span> <span class="o">=</span> <span class="n">_get_reader_for_magic</span><span class="p">(</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;magic&quot;</span><span class="p">])</span>
+    <span class="k">if</span> <span class="n">reader</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s1">&#39;Bad magic number: </span><span class="si">{</span><span class="nb">hex</span><span class="p">(</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;magic&quot;</span><span class="p">])</span><span class="si">}</span><span class="s1">.&#39;</span><span class="p">)</span>
+
+    <span class="c1"># calculate and validate sample rate</span>
+    <span class="n">hz</span> <span class="o">=</span> <span class="mi">1</span> <span class="o">/</span> <span class="p">(</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;10usec_per_tick&quot;</span><span class="p">]</span> <span class="o">/</span> <span class="mi">100_000</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">_is_valid_samplerate</span><span class="p">(</span><span class="n">hz</span><span class="p">):</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;File claims weird non integer sample rate: </span><span class="si">{</span><span class="n">hz</span><span class="si">}</span><span class="s2">.&quot;</span><span class="p">)</span>
+
+    <span class="c1"># extract channel name codes from header</span>
+    <span class="n">channel_names</span> <span class="o">=</span> <span class="n">_get_channel_names</span><span class="p">(</span><span class="n">header</span><span class="p">)</span>
+
+    <span class="c1"># TPU all 16 or 32 4-byte names come back, including trailing &quot;&quot; names</span>
+    <span class="c1"># when nchan != 16 or 32. Drop the empty names so length of channel_names</span>
+    <span class="c1"># agrees with header nchans</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">chn</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">chn</span> <span class="ow">in</span> <span class="n">channel_names</span><span class="p">[:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">]]])</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">chn</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span> <span class="k">for</span> <span class="n">chn</span> <span class="ow">in</span> <span class="n">channel_names</span><span class="p">[</span><span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">]</span> <span class="p">:]])</span>
+    <span class="n">channel_names</span> <span class="o">=</span> <span class="n">channel_names</span><span class="p">[:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">]]</span>
+
+    <span class="c1"># capture complete and jsonifiable. new in 0.2.4</span>
+    <span class="n">raw_dig_header</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">()</span>
+    <span class="k">for</span> <span class="n">key</span> <span class="ow">in</span> <span class="n">header</span><span class="o">.</span><span class="n">dtype</span><span class="o">.</span><span class="n">names</span><span class="p">:</span>
+        <span class="n">val</span> <span class="o">=</span> <span class="n">header</span><span class="p">[</span><span class="n">key</span><span class="p">]</span>
+        <span class="k">if</span> <span class="n">np</span><span class="o">.</span><span class="n">isscalar</span><span class="p">(</span><span class="n">val</span><span class="p">):</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">item</span><span class="p">()</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf-8&quot;</span><span class="p">)</span> <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">val</span><span class="p">,</span> <span class="nb">bytes</span><span class="p">)</span> <span class="k">else</span> <span class="n">val</span><span class="o">.</span><span class="n">item</span><span class="p">()</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">val</span> <span class="o">=</span> <span class="n">val</span><span class="o">.</span><span class="n">tolist</span><span class="p">()</span>
+        <span class="n">raw_dig_header</span><span class="p">[</span><span class="n">key</span><span class="p">]</span> <span class="o">=</span> <span class="n">val</span>
+
+    <span class="n">info</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;name&quot;</span><span class="p">:</span> <span class="s2">&quot;dig&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;magic&quot;</span><span class="p">:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;magic&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;subdesc&quot;</span><span class="p">:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;subdes&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;expdesc&quot;</span><span class="p">:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;expdes&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;odelay&quot;</span><span class="p">:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;odelay&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;samplerate&quot;</span><span class="p">:</span> <span class="n">hz</span><span class="p">,</span>
+            <span class="s2">&quot;recordduration&quot;</span><span class="p">:</span> <span class="mi">256</span> <span class="o">/</span> <span class="n">hz</span><span class="p">,</span>
+            <span class="s2">&quot;recordsize&quot;</span><span class="p">:</span> <span class="mi">256</span><span class="p">,</span>
+            <span class="s2">&quot;nrawrecs&quot;</span><span class="p">:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nrawrecs&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;nchans&quot;</span><span class="p">:</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">],</span>
+            <span class="s2">&quot;mkh5_version&quot;</span><span class="p">:</span> <span class="n">get_ver</span><span class="p">(),</span>  <span class="c1"># new in 0.2.4</span>
+            <span class="s2">&quot;raw_dig_header&quot;</span><span class="p">:</span> <span class="n">raw_dig_header</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">reader</span><span class="p">,</span> <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">],</span> <span class="n">channel_names</span><span class="p">,</span> <span class="n">info</span>
+
+
+<div class="viewcode-block" id="read_raw"><a class="viewcode-back" href="../../api_source/mkpy.mkio.html#mkpy.mkio.read_raw">[docs]</a><span class="k">def</span> <span class="nf">read_raw</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">dtype</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;parses bytestream of from kutaslab eeg file into usable data</span>
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">      (channel_names, np.array(all_codes, dtype=np.int16),</span>
+<span class="sd">                        np.array(record_counts, dtype=np.int16),</span>
+<span class="sd">                        final_data, info)</span>
+
+<span class="sd">    all_codes -- a vector of event codes and record indices from the mark track</span>
+<span class="sd">    final_data -- a np.array: samples (rows) x eeg channels (columns)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">if</span> <span class="n">_gzipped</span><span class="p">(</span><span class="n">stream</span><span class="p">):</span>
+        <span class="n">stream</span> <span class="o">=</span> <span class="n">gzip</span><span class="o">.</span><span class="n">GzipFile</span><span class="p">(</span><span class="n">mode</span><span class="o">=</span><span class="s2">&quot;r&quot;</span><span class="p">,</span> <span class="n">fileobj</span><span class="o">=</span><span class="n">stream</span><span class="p">)</span>
+
+    <span class="n">reader</span><span class="p">,</span> <span class="n">nchans</span><span class="p">,</span> <span class="n">channel_names</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">_read_header</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="c1"># NJS. Data is stored in a series of &quot;chunks&quot; -- each chunk</span>
+    <span class="c1"># contains 256 s16 samples from each channel (the 32/64/whatever</span>
+    <span class="c1"># analog channels, plus 1 channel for codes -- that channel being</span>
+    <span class="c1"># first.).  The code channel contains a &quot;record number&quot; as its</span>
+    <span class="c1"># first entry in each chunk, which simply increments by 1 each</span>
+    <span class="c1"># time.</span>
+    <span class="n">all_codes</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">data_chunks</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="n">chunk_bytes</span> <span class="o">=</span> <span class="p">(</span><span class="n">nchans</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">512</span>
+    <span class="n">chunkno</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">record_counts</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">read</span> <span class="o">=</span> <span class="n">reader</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">nchans</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">read</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="k">break</span>
+        <span class="p">(</span><span class="n">codes_chunk</span><span class="p">,</span> <span class="n">data_chunk</span><span class="p">)</span> <span class="o">=</span> <span class="n">read</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">codes_chunk</span><span class="p">)</span> <span class="o">==</span> <span class="mi">256</span>
+        <span class="k">assert</span> <span class="n">data_chunk</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="mi">256</span> <span class="o">*</span> <span class="n">nchans</span><span class="p">,)</span>
+        <span class="k">assert</span> <span class="n">codes_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="n">chunkno</span>
+
+        <span class="c1"># codes_chunk[0] = 65535 ## NJS overwrote record counter</span>
+        <span class="n">record_counts</span><span class="o">.</span><span class="n">append</span><span class="p">(</span>
+            <span class="n">codes_chunk</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="p">)</span>  <span class="c1"># track for sanity checks and later processing</span>
+        <span class="n">codes_chunk</span><span class="p">[</span>
+            <span class="mi">0</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># clear the record count so marktrack has all and only event codes TPU</span>
+        <span class="n">all_codes</span> <span class="o">+=</span> <span class="n">codes_chunk</span>
+        <span class="n">data_chunk</span><span class="o">.</span><span class="n">resize</span><span class="p">((</span><span class="mi">256</span><span class="p">,</span> <span class="n">nchans</span><span class="p">))</span>
+        <span class="n">data_chunks</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">data_chunk</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">dtype</span><span class="p">))</span>
+        <span class="n">chunkno</span> <span class="o">+=</span> <span class="mi">1</span>
+
+    <span class="n">final_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">vstack</span><span class="p">(</span><span class="n">data_chunks</span><span class="p">)</span>
+
+    <span class="c1"># TPU ... changed all_codes, dtype=np.uint16 -&gt; np.int16</span>
+    <span class="n">all_codes</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">all_codes</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int16</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">channel_names</span><span class="p">,</span> <span class="n">all_codes</span><span class="p">,</span> <span class="n">record_counts</span><span class="p">,</span> <span class="n">final_data</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+<span class="k">def</span> <span class="nf">_read_raw_chunk</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">nchans</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;reads a kutaslab .raw eeg data record bytestream, returns </span>
+<span class="sd">    (mark track event codes, vector of eeg data)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">chunk_bytes</span> <span class="o">=</span> <span class="p">(</span><span class="n">nchans</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span> <span class="o">*</span> <span class="mi">512</span>
+    <span class="n">buf</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">chunk_bytes</span><span class="p">)</span>
+    <span class="c1"># Check for EOF:</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">buf</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="n">codes_list</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;256H&quot;</span><span class="p">,</span> <span class="n">buf</span><span class="p">[:</span><span class="mi">512</span><span class="p">]))</span>
+    <span class="c1"># data_chunk = np.fromstring(buf[512:], dtype=&quot;&lt;i2&quot;)</span>
+    <span class="n">data_chunk</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">frombuffer</span><span class="p">(</span><span class="n">buf</span><span class="p">[</span><span class="mi">512</span><span class="p">:],</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;&lt;i2&quot;</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">codes_list</span><span class="p">,</span> <span class="n">data_chunk</span><span class="p">)</span>
+
+
+<span class="k">def</span> <span class="nf">_read_compressed_chunk</span><span class="p">(</span><span class="n">stream</span><span class="p">,</span> <span class="n">nchans</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;decompresses record of kutaslab .crw eeg data bytestream&quot;&quot;&quot;</span>
+    <span class="c1"># Check for EOF:</span>
+    <span class="n">ncode_records_minus_one_buf</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="k">if</span> <span class="ow">not</span> <span class="n">ncode_records_minus_one_buf</span><span class="p">:</span>
+        <span class="k">return</span> <span class="kc">None</span>
+    <span class="c1"># Code track (run length encoded):</span>
+    <span class="p">(</span><span class="n">ncode_records_minus_one</span><span class="p">,)</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;B&quot;</span><span class="p">,</span> <span class="n">ncode_records_minus_one_buf</span><span class="p">)</span>
+    <span class="n">ncode_records</span> <span class="o">=</span> <span class="n">ncode_records_minus_one</span> <span class="o">+</span> <span class="mi">1</span>
+    <span class="n">code_records</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">ncode_records</span><span class="p">):</span>
+        <span class="n">code_records</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;BH&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">3</span><span class="p">)))</span>
+    <span class="n">codes_list</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">repeat_minus_one</span><span class="p">,</span> <span class="n">code</span><span class="p">)</span> <span class="ow">in</span> <span class="n">code_records</span><span class="p">:</span>
+        <span class="n">codes_list</span> <span class="o">+=</span> <span class="p">[</span><span class="n">code</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="n">repeat_minus_one</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">codes_list</span><span class="p">)</span> <span class="o">==</span> <span class="mi">256</span>
+    <span class="c1"># Data bytes (delta encoded and packed into variable-length integers):</span>
+    <span class="p">(</span><span class="n">ncompressed_words</span><span class="p">,)</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;H&quot;</span><span class="p">,</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+    <span class="n">compressed_data</span> <span class="o">=</span> <span class="n">stream</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="n">ncompressed_words</span> <span class="o">*</span> <span class="mi">2</span><span class="p">)</span>
+    <span class="n">data_chunk</span> <span class="o">=</span> <span class="n">_decompress_crw_chunk</span><span class="p">(</span><span class="n">compressed_data</span><span class="p">,</span> <span class="n">ncompressed_words</span><span class="p">,</span> <span class="n">nchans</span><span class="p">)</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">codes_list</span><span class="p">,</span> <span class="n">data_chunk</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="read_log"><a class="viewcode-back" href="../../api_source/mkpy.mkio.html#mkpy.mkio.read_log">[docs]</a><span class="k">def</span> <span class="nf">read_log</span><span class="p">(</span><span class="n">fo</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;generator reads kutaslab binary log, returns (code, tick, condition, flag)</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    fo : file object</span>
+
+<span class="sd">    flags values</span>
+<span class="sd">        # avg -x sets 0 = OK, 20 = artifact, 40 = polinv, 60 = polinv + artifact</span>
+<span class="sd">        # cdbl -op also sets flags according to the bdf</span>
+<span class="sd">        # 100 = data error (rare)</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">while</span> <span class="kc">True</span><span class="p">:</span>
+        <span class="n">event</span> <span class="o">=</span> <span class="n">fo</span><span class="o">.</span><span class="n">read</span><span class="p">(</span><span class="mi">8</span><span class="p">)</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="n">event</span><span class="p">:</span>
+            <span class="k">return</span>
+        <span class="c1"># NJS</span>
+        <span class="c1"># (code, tick_hi, tick_lo, condition, flag) \</span>
+        <span class="c1">#     = struct.unpack(&quot;&lt;HHHBB&quot;, event)</span>
+
+        <span class="c1"># TPU ... 2-byte event codes can be negative, i.e. short</span>
+        <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">tick_hi</span><span class="p">,</span> <span class="n">tick_lo</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span> <span class="o">=</span> <span class="n">struct</span><span class="o">.</span><span class="n">unpack</span><span class="p">(</span><span class="s2">&quot;&lt;hHHBB&quot;</span><span class="p">,</span> <span class="n">event</span><span class="p">)</span>
+
+        <span class="k">yield</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="p">(</span><span class="n">tick_hi</span> <span class="o">&lt;&lt;</span> <span class="mi">16</span> <span class="o">|</span> <span class="n">tick_lo</span><span class="p">),</span> <span class="n">condition</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span>  <span class="c1"># NJS</span></div>
+
+
+<div class="viewcode-block" id="load"><a class="viewcode-back" href="../../api_source/mkpy.mkio.html#mkpy.mkio.load">[docs]</a><span class="k">def</span> <span class="nf">load</span><span class="p">(</span><span class="n">f_raw</span><span class="p">,</span> <span class="n">f_log</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">,</span> <span class="n">delete_channels</span><span class="o">=</span><span class="p">[],</span> <span class="n">calibrate</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+
+    <span class="c1"># read the raw and sanity check the records ...</span>
+    <span class="n">channel_names</span><span class="p">,</span> <span class="n">raw_codes</span><span class="p">,</span> <span class="n">record_counts</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">info</span> <span class="o">=</span> <span class="n">read_raw</span><span class="p">(</span><span class="n">f_raw</span><span class="p">,</span> <span class="n">dtype</span><span class="p">)</span>
+    <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span><span class="n">record_counts</span> <span class="o">==</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">record_counts</span><span class="p">)))</span>
+
+    <span class="c1"># read the log</span>
+    <span class="n">codes_from_log</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">raw_codes</span><span class="o">.</span><span class="n">shape</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">raw_codes</span><span class="o">.</span><span class="n">dtype</span><span class="p">)</span>
+    <span class="k">for</span> <span class="p">(</span><span class="n">code</span><span class="p">,</span> <span class="n">tick</span><span class="p">,</span> <span class="n">condition</span><span class="p">,</span> <span class="n">flag</span><span class="p">)</span> <span class="ow">in</span> <span class="n">read_log</span><span class="p">(</span><span class="n">f_log</span><span class="p">):</span>
+        <span class="n">codes_from_log</span><span class="p">[</span><span class="n">tick</span><span class="p">]</span> <span class="o">=</span> <span class="n">code</span>
+    <span class="n">discrepancies</span> <span class="o">=</span> <span class="n">codes_from_log</span> <span class="o">!=</span> <span class="n">raw_codes</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">codes_from_log</span><span class="p">[</span><span class="n">discrepancies</span><span class="p">]</span> <span class="o">==</span> <span class="mi">0</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">assert</span> <span class="p">(</span><span class="n">raw_codes</span><span class="p">[</span><span class="n">discrepancies</span><span class="p">]</span> <span class="o">==</span> <span class="mi">65535</span><span class="p">)</span><span class="o">.</span><span class="n">all</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">delete_channels</span><span class="p">:</span>  <span class="c1"># fast-path: no need to do a copy if nothing to delete</span>
+        <span class="n">keep_channels</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">channel_names</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">channel_names</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">delete_channels</span><span class="p">:</span>
+                <span class="n">keep_channels</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">keep_channels</span><span class="p">)</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">delete_channels</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">channel_names</span><span class="p">)</span>
+        <span class="n">data</span> <span class="o">=</span> <span class="n">data</span><span class="p">[:,</span> <span class="n">keep_channels</span><span class="p">]</span>
+        <span class="n">channel_names</span> <span class="o">=</span> <span class="n">channel_names</span><span class="p">[</span><span class="n">keep_channels</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">calibrate</span><span class="p">:</span>
+        <span class="n">calibrate_in_place</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">raw_codes</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">channel_names</span><span class="p">,</span> <span class="n">raw_codes</span><span class="p">,</span> <span class="n">data</span><span class="p">,</span> <span class="n">info</span></div>
+
+
+<span class="c1"># -------</span>
+<span class="c1"># Writers</span>
+<span class="c1"># -------</span>
+
+<span class="c1"># To write multiple &quot;bins&quot; to the same file, just call this function</span>
+<span class="c1"># repeatedly on the same stream.</span>
+
+<span class="c1"># NJS</span>
+<div class="viewcode-block" id="write_erp_as_avg"><a class="viewcode-back" href="../../api_source/mkpy.mkio.html#mkpy.mkio.write_erp_as_avg">[docs]</a><span class="k">def</span> <span class="nf">write_erp_as_avg</span><span class="p">(</span><span class="n">erp</span><span class="p">,</span> <span class="n">stream</span><span class="p">):</span>
+    <span class="n">magic</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="se">\xa5\x17</span><span class="s2">&quot;</span>
+    <span class="n">header</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">_header_dtype</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;magic&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mh">0x17A5</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;verpos&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="c1"># One avg record is always exactly 256 * cprecis samples long, with</span>
+    <span class="c1"># cprecis = 1, 2, 3 (limitation of the data format).  So we pick the</span>
+    <span class="c1"># smallest cprecis that is &lt;= our actual number of samples (maximum 3),</span>
+    <span class="c1"># and then we resample to have that many samples exactly.  (I.e., we try</span>
+    <span class="c1"># to resample up when possible.)  The kutaslab tools only do</span>
+    <span class="c1"># integer-factor downsampling (decimation), and they write the decimation</span>
+    <span class="c1"># factor to the file.  I don&#39;t see how it matters for the .avg file to</span>
+    <span class="c1"># retain the decimation information, and the file won&#39;t let us write down</span>
+    <span class="c1"># upsampling (especially non-integer upsampling!), so we just set our</span>
+    <span class="c1"># decimation factor to 1 and be done with it.</span>
+    <span class="k">if</span> <span class="n">erp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">1</span> <span class="o">*</span> <span class="mi">256</span><span class="p">:</span>
+        <span class="n">cprecis</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="k">elif</span> <span class="n">erp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">2</span> <span class="o">*</span> <span class="mi">256</span><span class="p">:</span>
+        <span class="n">cprecis</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="k">elif</span> <span class="n">erp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">&lt;=</span> <span class="mi">3</span> <span class="o">*</span> <span class="mi">256</span><span class="p">:</span>
+        <span class="n">cprecis</span> <span class="o">=</span> <span class="mi">3</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s2">&quot;cprecis &gt; 3&quot;</span><span class="p">)</span>  <span class="c1">## TPU</span>
+
+    <span class="n">samples</span> <span class="o">=</span> <span class="n">cprecis</span> <span class="o">*</span> <span class="mi">256</span>
+    <span class="k">if</span> <span class="n">erp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">!=</span> <span class="n">samples</span><span class="p">:</span>
+        <span class="kn">import</span> <span class="nn">scipy.signal</span>
+
+        <span class="n">resampled_data</span> <span class="o">=</span> <span class="n">scipy</span><span class="o">.</span><span class="n">signal</span><span class="o">.</span><span class="n">resample</span><span class="p">(</span><span class="n">erp</span><span class="o">.</span><span class="n">data</span><span class="p">,</span> <span class="n">samples</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">resampled_data</span> <span class="o">=</span> <span class="n">erp</span><span class="o">.</span><span class="n">data</span>
+    <span class="k">assert</span> <span class="n">resampled_data</span><span class="o">.</span><span class="n">shape</span> <span class="o">==</span> <span class="p">(</span><span class="n">samples</span><span class="p">,</span> <span class="n">erp</span><span class="o">.</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+    <span class="n">resampled_sp_10us</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span>
+        <span class="nb">round</span><span class="p">((</span><span class="n">erp</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">max</span><span class="p">()</span> <span class="o">-</span> <span class="n">erp</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">min</span><span class="p">())</span> <span class="o">*</span> <span class="mf">100.0</span> <span class="o">/</span> <span class="n">samples</span><span class="p">)</span>
+    <span class="p">)</span>
+    <span class="n">epoch_len_ms</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">round</span><span class="p">(</span><span class="n">samples</span> <span class="o">*</span> <span class="n">resampled_sp_10us</span> <span class="o">/</span> <span class="mf">100.0</span><span class="p">))</span>
+
+    <span class="c1"># Need to convert to s16&#39;s. To preserve as much resolution as possible,</span>
+    <span class="c1"># we use the full s16 range, minus a bit to make sure we don&#39;t run into</span>
+    <span class="c1"># any overflow issues.</span>
+    <span class="n">s16_max</span> <span class="o">=</span> <span class="mi">2</span> <span class="o">**</span> <span class="mi">15</span> <span class="o">-</span> <span class="mi">10</span>
+    <span class="c1"># Same as np.abs(data).max(), but without copying the whole array:</span>
+    <span class="n">data_max</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">resampled_data</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">resampled_data</span><span class="o">.</span><span class="n">min</span><span class="p">()))</span>
+    <span class="c1"># We have to write the conversion factor as an integer, so we round it</span>
+    <span class="c1"># down here, and then use the *rounded* version to actually convert the</span>
+    <span class="c1"># data.</span>
+    <span class="n">s16_per_10uV</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">s16_max</span> <span class="o">/</span> <span class="p">(</span><span class="n">data_max</span> <span class="o">/</span> <span class="mi">10</span><span class="p">))</span>
+    <span class="c1"># Except that if our conversion factor itself overflows, then we have to</span>
+    <span class="c1"># truncate it back down (and lose a bit of resolution in the process, oh</span>
+    <span class="c1"># well):</span>
+    <span class="k">if</span> <span class="n">s16_per_10uV</span> <span class="o">&gt;</span> <span class="n">s16_max</span><span class="p">:</span>
+        <span class="n">s16_per_10uV</span> <span class="o">=</span> <span class="n">s16_max</span>
+    <span class="n">integer_data</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">round</span><span class="p">(</span><span class="n">s16_per_10uV</span> <span class="o">*</span> <span class="n">resampled_data</span> <span class="o">/</span> <span class="mf">10.0</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;&lt;i2&quot;</span><span class="p">)</span>
+
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;epoch_len&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">epoch_len_ms</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;nchans&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">integer_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;sums&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>  <span class="c1"># ERP</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;tpfuncs&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># processing function of &quot;averaging&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;pftypes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="s2">&quot;average&quot;</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;pp10uv&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">s16_per_10uV</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;10usec_per_tick&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">resampled_sp_10us</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;presam&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span> <span class="o">-</span> <span class="n">erp</span><span class="o">.</span><span class="n">times</span><span class="o">.</span><span class="n">min</span><span class="p">()</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;cprecis&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">cprecis</span>
+    <span class="n">header</span><span class="p">[</span><span class="s2">&quot;decfact&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">1</span>
+
+    <span class="k">if</span> <span class="s2">&quot;num_combined_trials&quot;</span> <span class="ow">in</span> <span class="n">erp</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">[</span><span class="s2">&quot;totrr&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">erp</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;num_combined_trials&quot;</span><span class="p">]</span>
+
+    <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">erp</span><span class="o">.</span><span class="n">channel_names</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">16</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">[</span><span class="s2">&quot;chndes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">erp</span><span class="o">.</span><span class="n">channel_names</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S8&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tostring</span><span class="p">()</span>
+    <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">erp</span><span class="o">.</span><span class="n">channel_names</span><span class="p">)</span> <span class="o">&lt;=</span> <span class="mi">32</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">[</span><span class="s2">&quot;chndes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">erp</span><span class="o">.</span><span class="n">channel_names</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s2">&quot;S4&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">tostring</span><span class="p">()</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="k">assert</span> <span class="kc">False</span><span class="p">,</span> <span class="s2">&quot;Channel name writing for large montages not yet supported&quot;</span>
+    <span class="k">if</span> <span class="s2">&quot;experiment&quot;</span> <span class="ow">in</span> <span class="n">erp</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">[</span><span class="s2">&quot;expdes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">erp</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;experiment&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="s2">&quot;subject&quot;</span> <span class="ow">in</span> <span class="n">erp</span><span class="o">.</span><span class="n">metadata</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">[</span><span class="s2">&quot;subdes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">erp</span><span class="o">.</span><span class="n">metadata</span><span class="p">[</span><span class="s2">&quot;subject&quot;</span><span class="p">]</span>
+    <span class="k">if</span> <span class="n">erp</span><span class="o">.</span><span class="n">name</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">header</span><span class="p">[</span><span class="s2">&quot;condes&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">erp</span><span class="o">.</span><span class="n">name</span>
+
+    <span class="n">header</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span>
+    <span class="c1"># avg files omit the mark track.  And, all the data for a single channel</span>
+    <span class="c1"># goes together in a single chunk, rather than interleaving all channels.</span>
+    <span class="c1"># THIS IS DIFFERENT FROM RAW FILES!</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">integer_data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">]):</span>
+        <span class="n">integer_data</span><span class="p">[:,</span> <span class="n">i</span><span class="p">]</span><span class="o">.</span><span class="n">tofile</span><span class="p">(</span><span class="n">stream</span><span class="p">)</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c1"># stub</span>
+    <span class="k">pass</span>
+</pre></div>
+
+           </div>
+           
+          </div>
+          <footer>
+  
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>
+        &copy; Copyright 2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith
+
+    </p>
+  </div>
+  Built with <a href="http://sphinx-doc.org/">Sphinx</a> using a <a href="https://github.com/rtfd/sphinx_rtd_theme">theme</a> provided by <a href="https://readthedocs.org">Read the Docs</a>. 
+
+</footer>
+
+        </div>
+      </div>
+
+    </section>
+
+  </div>
+  
+
+
+  <script type="text/javascript">
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script>
+
+  
+  
+    
+   
+
+</body>
+</html>
