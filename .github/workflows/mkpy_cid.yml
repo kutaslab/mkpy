@@ -148,7 +148,8 @@ jobs:
           # python setup.py build_ext  # so sphinx-gallery has mkpy/_mkh5 in the source dir
           conda install -q pandoc -c conda-forge
           make -C mkpy/docs html
-          touch mkpy/docs/_build/html/.nojekyll
+          touch $GITHUB_WORKSPACE/mkpy/docs/_build/html/.nojekyll
+          ls -l $GITHUB_WORKSPACE/mkpy/docs/_build/html
 
       # skip ... mkpy is packaged for conda only 
       # - name: build python package sdist
@@ -229,7 +230,7 @@ jobs:
       - name: deploy sphinx docs to gh-pages
         # if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
         run: |
-          cd $HOME/mkpy/docs/_build/html  # wherever sphinx writes the html, repo specific
+          cd $GITHUB_WORKSPACE/mkpy/docs/_build/html  # wherever sphinx writes the html, repo specific
           ls -l
           git init 
           user_name="docs_${GITHUB_EVENT_NAME}_bot"
