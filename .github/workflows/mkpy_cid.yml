@@ -112,9 +112,9 @@ jobs:
         id: conda-bld
         run: |
           conda build --python=$PY_VER -c defaults -c conda-forge conda
+          tarball=$(conda build --python=$PY_VER conda --output | tail -1)
           # not converting b.c. of Cythonization
           # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
-          tarball=$(conda build --python=$PY_VER conda --output | tail -1)
           # not converting other platforms b.c. of Cythonization
           # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
           echo "conda build tarball: " $tarball
@@ -143,9 +143,9 @@ jobs:
         if: ${{ matrix.py_ver == env.DEPLOY_PY_VER }}
         run: |
           conda activate env_$PY_VER  # required to run doc demos
-          python setup.py build_ext  # so sphinx-gallery has mkpy/_mkh5 in the source dir
           # conda install -q sphinx sphinx_rtd_theme jupyter nbsphinx "nbconvert!=5.4" -c defaults -c conda-forge
           conda install -q sphinx sphinx_rtd_theme jupyter sphinx-gallery -c defaults -c conda-forge
+          python setup.py build_ext  # so sphinx-gallery has mkpy/_mkh5 in the source dir
           conda install -q pandoc -c conda-forge
           make -C mkpy/docs html
           touch mkpy/docs/_build/html/.nojekyll
