@@ -63,7 +63,7 @@ on:
 env:
   PACKAGE_NAME: mkpy
   DEPLOY_PY_VER: 3.8  # only this job deploys codecov, docs, sdist
-  GH_PAGES_BRANCH: gh-pages-dev  # gh-pages for github.io, gh-pages-dev for testing
+  GH_PAGES_BRANCH: gh-pages  # gh-pages for github.io, gh-pages-dev for testing
 
 defaults:
   run:
@@ -229,7 +229,7 @@ jobs:
         run: conda install -q codecov && codecov
 
       - name: deploy sphinx docs to gh-pages
-        # if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
+        if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
         run: |
           cd $GITHUB_WORKSPACE/mkpy/docs/_build/html  # wherever sphinx writes the html, repo specific
           ls -l
