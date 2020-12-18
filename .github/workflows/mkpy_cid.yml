@@ -142,13 +142,9 @@ jobs:
         if: ${{ matrix.py_ver == env.DEPLOY_PY_VER }}
         run: |
           conda activate env_$PY_VER  # required to run doc demos
-<<<<<<< Updated upstream
+          python setup.py build_ext  # so sphinx-gallery has mkpy/_mkh5 in the source dir
           # conda install -q sphinx sphinx_rtd_theme jupyter nbsphinx "nbconvert!=5.4" -c defaults -c conda-forge
           conda install -q sphinx sphinx_rtd_theme jupyter sphinx-gallery -c defaults -c conda-forge
-=======
-          python setup.py build_ext  # so sphinx-gallery has mkpy/_mkh5 in the source dir
-          conda install -q sphinx sphinx_rtd_theme jupyter nbsphinx "nbconvert!=5.4" -c defaults -c conda-forge
->>>>>>> Stashed changes
           conda install -q pandoc -c conda-forge
           make -C mkpy/docs html
           touch mkpy/docs/_build/html/.nojekyll
