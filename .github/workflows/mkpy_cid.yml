@@ -227,7 +227,7 @@ jobs:
         run: conda install -q codecov && codecov
 
       - name: deploy sphinx docs to gh-pages
-        if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
+        # if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
         run: |
           cd mkpy/docs/_build/html  # wherever sphinx writes the html, repo specific
           git init 
@@ -235,10 +235,10 @@ jobs:
           git config user.email "${user_name}@the.cloud.org"
           git config user.name "$user_name"
           git remote add origin "https://${user_name}:${{ secrets.github_token }}@github.com/${GITHUB_REPOSITORY}"
-          git checkout --orphan gh-pages
+          git checkout --orphan gh-pages-dev
           git add -A
           git commit -a -m "deploy type $DEPLOY_TYPE python $DEPLOY_PY_VER"
-          git push -u origin gh-pages --force
+          git push -u origin gh-pages-dev --force
 
       # mkpy doesn't deploy to pypi
       # - name: deploy python package M.N.P.devX to test.pypi.org
