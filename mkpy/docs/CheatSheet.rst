@@ -3,7 +3,7 @@ Cheat Sheet
 
 
 Open mkpy.mkh5 .h5 file for read/write
-----------------------------
+--------------------------------------
 
   :meth:`~mkpy.mkh5.mkh5` 
     establish a read/write connection to the ``.h5`` database file for

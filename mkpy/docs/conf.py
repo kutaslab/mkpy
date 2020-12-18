@@ -61,13 +61,11 @@ napoleon_use_ivar = True
 
 # TPU added sphinx gallery
 sphinx_gallery_conf = {
-    "examples_dirs": ["../examples"],
-    "gallery_dirs": ["examples_gallery"],
+    "examples_dirs": ["../examples/mkh5_basics", "../examples/mkh5mne_basics"],
+    "gallery_dirs": ["examples_gallery/mkh5_basics", "examples_gallery/mkh5mne_basics"],
     "filename_pattern": "/[a-zA-Z]+",
 }
 
-
-# mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

@@ -63,6 +63,7 @@ on:
 env:
   PACKAGE_NAME: mkpy
   DEPLOY_PY_VER: 3.8  # only this job deploys codecov, docs, sdist
+  GH_PAGES_BRANCH: gh-pages-dev  # gh-pages for github.io, gh-pages-dev for testing
 
 defaults:
   run:
@@ -237,10 +238,10 @@ jobs:
           git config user.email "${user_name}@the.cloud.org"
           git config user.name "$user_name"
           git remote add origin "https://${user_name}:${{ secrets.github_token }}@github.com/${GITHUB_REPOSITORY}"
-          git checkout --orphan gh-pages-dev
+          git checkout --orphan $GH_PAGES_BRANCH
           git add -A
           git commit -a -m "deploy type $DEPLOY_TYPE python $DEPLOY_PY_VER"
-          git push -u origin gh-pages-dev --force
+          git push -u origin $GH_PAGES_BRANCH --force
 
       # mkpy doesn't deploy to pypi
       # - name: deploy python package M.N.P.devX to test.pypi.org

@@ -1368,13 +1368,12 @@ def read_raw_mkh5(
     verbose="info",
 ):
 
-    """Read an mkh5 data file into MNE raw format""
+    """Read an mkh5 data file into MNE raw format
 
     The mkh5 EEG data, events are converted to mne.BaseRaw for use
     with native MNE methods. The mkh5 timelock events and tags in the
     epochs tables are added to the raw data and mne.Info for use as
-    MNE events and metadata with mne.Epochs(raw, events, metadata,
-    ...).
+    MNE events and metadata with mne.Epochs.
 
 
     Parameters
@@ -1391,8 +1390,8 @@ def read_raw_mkh5(
 
         If present, all events on the ``log_evcodes`` data channel are
         bracketed with an MNE annotation in the time interval between
-        `pre` to `post` seconds relative to the event with description
-        `BAD_garv_N` where N is the integer log_flag code.
+        pre to post seconds relative to the event with description
+        BAD_garv_N where N is the integer log_flag code.
 
     fail_on_info : bool {False}, optional
         If True, this enforces strict mne.Info identity across the
@@ -1409,6 +1408,7 @@ def read_raw_mkh5(
 
     verbose : NotImplemented
 
+
     Returns
     -------
     RawMkh5
@@ -1416,33 +1416,36 @@ def read_raw_mkh5(
 
     Raises
     ------
-    Exceptions if data block paths or apparatus map information is
-    misspecified or the info and montage test flags are set and fail.
+    Exceptions
+        if data block paths or apparatus map information is
+        misspecified or the info and montage test flags are set and fail.
 
 
     Notes
     -----
-
-    EEG and events. The mkh5 data block columns are converted to mne
-    channels and concatenated into a single mne Raw in the order given
-    by `dblock_paths,` the default is to convert the entire mkh5 file
-    in `mkh5.dblock_paths` order.
+    
+    EEG and events. The mkh5 data block columns are converted to
+        mne channels and concatenated into a single mne Raw in the
+        order given by `dblock_paths`. The default is to convert the
+        entire mkh5 file in `mkh5.dblock_paths` order.
 
     Epochs. The mkh5 epochs table timelocking events are indexed to
-    the mne.Raw data samples and the epoch tables stored as a JSON string
-    in mne.Info["description"]. The complete epochs table is recovered
-    by JSON loading the ``mne.Info["description"] and converting the
-    `epochs_name` dictionary to a pandas.DataFrame. This yields a
-    well-formed mne.Epochs.metadata for the events on the
-    `epochs_name` stim channel.
+        the mne.Raw data samples and the epoch tables stored as a JSON
+        string in mne.Info["description"]. The complete epochs table
+        is recovered by JSON loading the ``mne.Info["description"]`` and
+        converting the `epochs_name` dictionary to a
+        pandas.DataFrame. This yields a well-formed
+        mne.Epochs.metadata for the events on the `epochs_name` stim
+        channel.
 
     TODO: The mkh5 epochs data, i.e., time-lock events, discrete time
-    intervals, and mixed data-type tags would do better as an
-    attribute of mne.BaseRaw, e.g., mne.Raw._ditidata. Discrete time
-    intervals indexed for (onset, hop, duration) with mixed-type tags
-    subsume the spaghetti of MNE events, epochs, and epochs metadata,
-    annotations and the discrete time model avoids cumulative rounding
-    error issues of floating-point times.
+        intervals, and mixed data-type tags would do better as an
+        attribute of mne.BaseRaw, e.g., mne.Raw._ditidata. Discrete
+        time intervals indexed for (onset, hop, duration) with
+        mixed-type tags subsume the spaghetti of MNE events, epochs,
+        and epochs metadata, annotations and the discrete time model
+        avoids cumulative rounding error issues of floating-point
+        times.
 
     """
     return RawMkh5(

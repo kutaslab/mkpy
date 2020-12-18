@@ -11,63 +11,19 @@ mkpy
 
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 2
 	      
    Introduction
-
-.. toctree::
-   :maxdepth: 5
-	      
    Installation
-
-.. toctree::
-   :maxdepth: 5
-	      
    Quick Start
-
-.. toctree::
-   :maxdepth: 5
-
+   AS_howto
    CheatSheet
-
-
-.. toctree::
-   :maxdepth: 2
-	 
    UserGuide
-
-
-.. toctree::
-   :maxdepth: 2
-
-   examples_gallery/index.rst
-
-
-.. toctree::
-   :maxdepth: 5
-
+   ExamplesGallery
    Learning.rst
-
-
-.. toctree::
-   :maxdepth: 5
-
    Glossary.rst
-
-
-.. toctree::
-   :maxdepth: 5
-
    Reference.rst
-
-.. toctree::
-   :maxdepth: 5
-
    ReleaseNotes.rst
-
-.. toctree::
-   :maxdepth: 5
-
    RolesCredits
 
 
