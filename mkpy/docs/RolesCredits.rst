@@ -4,6 +4,7 @@ Roles and credits
 | Thomas P. Urbach [cre, aut, prg]  
 | Andrey Portnoy [prg, aut]  
 | Nathaniel J. Smith [cre, prg, aut, cph]
+| Anna Stoermann [ctb, edt]  
 |
 | Marta Kutas [ctb]  
 |
@@ -12,7 +13,6 @@ Roles and credits
 | Seana Coulson [ctb]  
 | Lauren Liao [ctb,prg]  
 | Reina Mizrahi [ctb]  
-| Anna Stoermann [ctb, edt]  
 | Melissa Troyer [ctb]  
 |
 | Regents of the University of California [cph]

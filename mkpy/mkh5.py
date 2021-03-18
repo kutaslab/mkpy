@@ -1363,22 +1363,23 @@ class mkh5:
         None
             updates h5_f/EPOCH_TABLES_PATH/ with the named epoch table h5py.Dataset
 
+        
+        Notes
+        -----
+
         The epochs table is a lightweight lookup table specific to
-        this mkh5 instance's hdf5 file,
+        each mkh5 instance's hdf5 file,
 
           h5['epochs'][epochs_table_name] = epochs_table
 
-        Event tables by default are "epochs" 1 sample long with 0
-        prestimulus.
+        The epochs table is row-for-row the same as the time-locking event table
+        and just adds the time interval information for use when extracting the
+        time series EEG data segments.
 
-        This simply updates the prestimulus interval and length
-        accordingly, adds the peri-event time interval information for
-        slicing mkh5 datablocks and massages the event table
-        (pandas.DataFrame) into a numpy ndarray for hdf5 storage.
-
-        For reproducibility, by design epochs tables can be added to
-        an mkh5 file but not overwritten or deleted. If you need to
-        the revise the epochs, rebuild the mkh5 file from crws/logs
+        For reproducibility, by design the epochs tables in an mkh5
+        file are write-protected. New tables may be added, but
+        existing tables cannot be overwritten or deleted. If you need
+        to the revise the epochs, rebuild the mkh5 file from crws/logs
         with the ones you want.
 
         """

@@ -15,7 +15,7 @@ import re
 
 # from . import dpath
 
-__version__ = "0.2.5.dev4"
+__version__ = "0.2.5.dev5"
 
 
 def get_ver():

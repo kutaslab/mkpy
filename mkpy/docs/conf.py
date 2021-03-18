@@ -17,12 +17,16 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-import os
-import sys
 
-sys.path.insert(0, os.path.abspath("."))
-sys.path.insert(0, os.path.abspath("../.."))
+# import os
+# import sys
 
+# sys.path.insert(0, os.path.abspath("."))
+# sys.path.insert(0, os.path.abspath("../.."))
+
+# sys.path updating is not needed when mkpy has been conda installed,
+# e.g., by the CI job runner or pip installed in development mode: pip
+# install . -e
 from mkpy import get_ver
 
 # hide for TravisCI gh-pages build
@@ -47,6 +51,7 @@ extensions = [
     "sphinx.ext.githubpages",
     "sphinx.ext.napoleon",
     #    'numpydoc',
+    "sphinx_gallery.gen_gallery",
 ]
 
 # TPU added sphinx.ext.napoleon extension and set these
@@ -54,7 +59,13 @@ napoleon_google_docstring = False
 napoleon_use_param = False
 napoleon_use_ivar = True
 
-mathjax_path = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.2/MathJax.js"
+# TPU added sphinx gallery
+sphinx_gallery_conf = {
+    "examples_dirs": ["../examples/mkh5_basics", "../examples/mkh5mne_basics"],
+    "gallery_dirs": ["examples_gallery/mkh5_basics", "examples_gallery/mkh5mne_basics"],
+    "filename_pattern": "/[a-zA-Z]+",
+}
+
 
 # Add any paths that contain templates here, relative to this directory.
 templates_path = ["_templates"]

@@ -228,6 +228,6 @@ many types of analysis across scientific computing platforms.
    print(epochs.head())
    print(epochs.tail())
    
-.. literalinclude:: _static/epochs_head.txt
+.. literalinclude:: ../_static/epochs_head.txt
 
 

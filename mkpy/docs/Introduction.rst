@@ -1,4 +1,4 @@
-Introduction: mkpy |release|
+Introduction (|release|)
 ============================
 
 .. figure:: _images/viewer_all_views.png

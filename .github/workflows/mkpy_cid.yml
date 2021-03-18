@@ -63,6 +63,7 @@ on:
 env:
   PACKAGE_NAME: mkpy
   DEPLOY_PY_VER: 3.8  # only this job deploys codecov, docs, sdist
+  GH_PAGES_BRANCH: gh-pages  # gh-pages for github.io, gh-pages-dev for testing
 
 defaults:
   run:
@@ -115,6 +116,9 @@ jobs:
           tarball=$(conda build --python=$PY_VER conda --output | tail -1)
           # not converting b.c. of Cythonization
           # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
+          # not converting other platforms b.c. of Cythonization
+          # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
+          echo "conda build tarball: " $tarball
           echo "::set-output name=conda-tarball::$tarball"
           echo "conda build tarball: " $tarball
 
@@ -140,10 +144,13 @@ jobs:
         if: ${{ matrix.py_ver == env.DEPLOY_PY_VER }}
         run: |
           conda activate env_$PY_VER  # required to run doc demos
-          conda install -q sphinx sphinx_rtd_theme jupyter nbsphinx "nbconvert!=5.4" -c defaults -c conda-forge
+          # conda install -q sphinx sphinx_rtd_theme jupyter nbsphinx "nbconvert!=5.4" -c defaults -c conda-forge
+          conda install -q sphinx sphinx_rtd_theme jupyter sphinx-gallery -c defaults -c conda-forge
+          # python setup.py build_ext  # so sphinx-gallery has mkpy/_mkh5 in the source dir
           conda install -q pandoc -c conda-forge
           make -C mkpy/docs html
-          touch mkpy/docs/_build/html/.nojekyll
+          touch $GITHUB_WORKSPACE/mkpy/docs/_build/html/.nojekyll
+          ls -l $GITHUB_WORKSPACE/mkpy/docs/_build/html
 
       # skip ... mkpy is packaged for conda only 
       # - name: build python package sdist
@@ -224,16 +231,17 @@ jobs:
       - name: deploy sphinx docs to gh-pages
         if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
         run: |
-          cd mkpy/docs/_build/html  # wherever sphinx writes the html, repo specific
+          cd $GITHUB_WORKSPACE/mkpy/docs/_build/html  # wherever sphinx writes the html, repo specific
+          ls -l
           git init 
           user_name="docs_${GITHUB_EVENT_NAME}_bot"
           git config user.email "${user_name}@the.cloud.org"
           git config user.name "$user_name"
           git remote add origin "https://${user_name}:${{ secrets.github_token }}@github.com/${GITHUB_REPOSITORY}"
-          git checkout --orphan gh-pages
-          git add -A
+          git checkout --orphan $GH_PAGES_BRANCH
+          git add -A .
           git commit -a -m "deploy type $DEPLOY_TYPE python $DEPLOY_PY_VER"
-          git push -u origin gh-pages --force
+          git push -u origin $GH_PAGES_BRANCH --force
 
       # mkpy doesn't deploy to pypi
       # - name: deploy python package M.N.P.devX to test.pypi.org
