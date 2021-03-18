@@ -147,7 +147,7 @@ for grp=1:size(info.Groups);
         idx_dpaths = strfind(dpaths,dint);
         idx_dpaths = find(cellfun(@isempty,idx_dpaths)==0);
         
-        hdr_json = info.Groups(grp).Datasets(1).Attributes.Value{1};
+        hdr_json = info.Groups(grp).Datasets(1).Attributes.Value;
         hdr = loadjson(hdr_json);
         
         % checking channel columns from hdr
