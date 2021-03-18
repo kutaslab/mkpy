@@ -62,7 +62,7 @@ function h52set(h5file,varargin)
 %
 
 % addpath(genpath('/mnt/cube/home/wec017/mkh52set_remote/functions'))
-addpath(genpath('../mkh52set_remote/functions'))
+addpath(genpath('functions'))
 
 global VERBLEVEL
 global grpJECT
