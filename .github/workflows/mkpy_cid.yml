@@ -229,23 +229,6 @@ jobs:
         run: conda install -q codecov && codecov
 
       - name: deploy sphinx docs to gh-pages
-        if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && env.DEPLOY_TYPE == 'main' }}
-        run: |
-          cd $GITHUB_WORKSPACE/mkpy/docs/_build/html  # wherever sphinx writes the html, repo specific
-          ls -l
-          git init 
-          user_name="docs_${GITHUB_EVENT_NAME}_bot"
-          git config user.email "${user_name}@the.cloud.org"
-          git config user.name "$user_name"
-          git remote add origin "https://${user_name}:${{ secrets.github_token }}@github.com/${GITHUB_REPOSITORY}"
-          git checkout --orphan $GH_PAGES_BRANCH
-          git add -A .
-          git commit -a -m "deploy type $DEPLOY_TYPE python $DEPLOY_PY_VER"
-          git push -u origin $GH_PAGES_BRANCH --force
-
-
-
-      - name: deploy sphinx docs to gh-pages
         # switch docs deployment repo/branch on deploy type
         # if: ${{ matrix.py_ver == env.DEPLOY_PY_VER && (env.DEPLOY_TYPE == 'main' || env.DEPLOY_TYPE == 'pre-release') }}
         if: ${{ matrix.py_ver == env.DEPLOY_PY_VER }}  # testing only
@@ -259,7 +242,7 @@ jobs:
           GH_PAGES_BRANCH: gh-pages
 
           # actions on dev branch send docs to this separate repo
-          GH_PAGES_DEV_REPOSITORY: kutaslab/spudtr-dev-docs
+          GH_PAGES_DEV_REPOSITORY: kutaslab/mkpy-dev-docs
           GH_PAGES_DEV_BRANCH: gh-pages-dev
 
         run: |
@@ -269,10 +252,10 @@ jobs:
             DOCS_BRANCH="$GH_PAGES_BRANCH"; \
           fi
 
-          # if [[ env.DEPLOY_TYPE == pre-release ]]; then \
-          DOCS_REPO="$GH_PAGES_DEV_REPOSITORY"; \
-          DOCS_BRANCH="$GH_PAGES_DEV_BRANCH"; \
-          # fi
+          if [[ env.DEPLOY_TYPE == pre-release ]]; then \
+            DOCS_REPO="$GH_PAGES_DEV_REPOSITORY"; \
+            DOCS_BRANCH="$GH_PAGES_DEV_BRANCH"; \
+          fi
 
           # wherever sphinx wrote the html, repo specific
           cd $GITHUB_WORKSPACE/mkpy/docs/_build/html
