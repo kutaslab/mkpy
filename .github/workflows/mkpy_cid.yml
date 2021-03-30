@@ -247,25 +247,28 @@ jobs:
 
         run: |
           # set docs version repo/branch
-          if [[ env.DEPLOY_TYPE == main ]]; then \
-            DOCS_REPO="$GITHUB_REPOSITORY"; \
-            DOCS_BRANCH="$GH_PAGES_BRANCH"; \
+          if [[ ${{ env.DEPLOY_TYPE }} == main ]]; then \
+            DOCS_REPO=$GITHUB_REPOSITORY; \
+            DOCS_BRANCH=$GH_PAGES_BRANCH; \
           fi
 
-          if [[ env.DEPLOY_TYPE == pre-release ]]; then \
-            DOCS_REPO="$GH_PAGES_DEV_REPOSITORY"; \
-            DOCS_BRANCH="$GH_PAGES_DEV_BRANCH"; \
+          if [[ ${{ env.DEPLOY_TYPE }} == pre-release ]]; then \
+            DOCS_REPO=$GH_PAGES_DEV_REPOSITORY; \
+            DOCS_BRANCH=$GH_PAGES_DEV_BRANCH; \
           fi
+
+          echo "deploy type ${{ env.DEPLOY_TYPE }}: sphinx docs on $DOCS_REPO/$DOCS_BRANCH"
+
+          git config --global user.name $GH_USER_NAME
+          git config --global user.email $GH_USER_EMAIL
+          git config --global init.defaultBranch main
 
           # wherever sphinx wrote the html, repo specific
           cd $GITHUB_WORKSPACE/mkpy/docs/_build/html
           git init
 
-          git config user.name "$GH_USER_NAME"
-          git config user.email "$GH_USER_EMAIL"
           git remote add origin "https://$GH_PAGES_TOKEN@github.com/${DOCS_REPO}"
-
-          git checkout --orphan "$DOCS_BRANCH"
+          git checkout --orphan $DOCS_BRANCH
           git add -A
           git commit -a -m "deploy type $DEPLOY_TYPE python $DEPLOY_PY_VER"
-          git push -u origin "$DOCS_BRANCH" --force
+          git push -u origin $DOCS_BRANCH --force
