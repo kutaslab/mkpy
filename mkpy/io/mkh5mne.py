@@ -144,7 +144,7 @@ class EpochsMkh5EpochsNameError(ValueError):
 
 
 class EpochsMkh5ExcludedDataBlockError(ValueError):
-    """tried to access a non-existent epochs table"""
+    """tried to access a non-existent mkh5 data block"""
 
     def __init__(self, mkh5_f, epochs_name, missing_dblocks):
         msg = (
@@ -180,6 +180,7 @@ class EpochsMkh5NonZeroTimestamps(ValueError):
             f"match_time events with non-zero time-stamps, prune the rows with non-zero timesamps "
             f"in {col}, and set the epochs with the new event table mkh5.mkh5.set_epochs(event_table)."
         )
+
         self.args = (msg,)
 
 
@@ -588,6 +589,76 @@ def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=[], **kwargs):
                 warnings.warn(msg)
 
 
+def _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table):
+    """check mkh5 event_table event code data agrees with mne.Raw channel data"""
+
+    error_msg = None
+    if epochs_name not in mne_raw.info.ch_names:
+        error_msg = (
+            "mne.Raw event channel {epochs_name} not found, make sure"
+            " it is an epochs table name in the mkh5 file"
+        )
+
+    if epochs_name not in [
+            mne_raw.info.ch_names[i] for i in mne.pick_types(mne_raw.info, stim=True)
+    ]:
+        error_msg = (
+            "{epochs_name} is not an mne stim channel type, make sure this"
+            " sure this mne.Raw was converted from mkh5 with mkh5mne.read_raw()"
+        )
+
+    # mkpy epochs allow one-many event tags, MNE metadata
+    # must be 1-1 with mne.Raw["event_channel} events: [sample, 0, event]
+    duplicates = epochs_table[epochs_table.duplicated("mne_raw_ticks")]
+    if len(duplicates):
+        error_msg = (
+            f"mkh5 epochs {epochs_name} cannot be used as"
+            f" mne.Epoch.metadata, duplicate mne_raw_ticks: {duplicates}"
+        )
+
+    if error_msg:
+        raise ValueError(error_msg)
+
+
+    # check channel data at mne tick agrees with epoch table
+    check_cols = set(mne_raw.info.ch_names).intersection(set(epochs_table.columns))
+    for col in check_cols:
+        mne_col = mne_raw.get_data(col).squeeze()[epochs_table["mne_raw_ticks"]]
+        errors = epochs_table.where(epochs_table[col] != mne_col).dropna()
+        if len(errors):
+            error_msg = (
+                f"mkh5 epochs table {epochs_name}['{col}'] does not match"
+                " mne.Raw data at these mne_raw_ticks:\n"
+            )
+            error_msg += "\n".join([
+                (
+                    f"epochs_table[{col}]: {error[col]}"
+                    f" mne.Raw[{col, int(error['mne_raw_ticks'])}]: "
+                    f"{mne_raw.get_data(col).squeeze()[int(error['mne_raw_ticks'])]}"
+                )
+                for _, error in errors.iterrows()
+            ])
+            raise ValueError(error_msg)
+
+    # non-zero events on the named "event" channel must be 1-1
+    # with tagged events from mkh5 in the same-named epochs table
+    mne_raw_epoch_events = mne_raw[epochs_name][0].squeeze()[
+        np.where(mne_raw[epochs_name][0].squeeze() != 0)
+    ]
+
+    mkh5_epoch_events = epochs_table["log_evcodes"]
+    n_raw_events = len(mne_raw_epoch_events)
+    n_epoch_table_events = len(mkh5_epoch_events)
+    if not all(mne_raw_epoch_events == mkh5_epoch_events):
+        error_msg = (
+            f"The sequence of non-zero log_evcodes on channel"
+            f" mne.Raw[{epochs_name}] (n={n_raw_events})"
+            f" must match the sequence of log_evcodes in the"
+            f" mkpy epochs table {epochs_name} (n={n_epoch_table_events})."
+        )
+        raise ValueError(error_msg)
+
+
 class RawMkh5(mne.io.BaseRaw):
     """Raw MNE compatible object from mkpy.mkh5 HDF5 data file
 
@@ -669,15 +740,18 @@ class RawMkh5(mne.io.BaseRaw):
                     mne_ditis[key] = mne_ditis[key].append(diti)
             raw_samp_n += len(raw_dblock)
 
-        # assemble
+        # assemble RawArrays
         mne_raw = mne.io.concatenate_raws(raw_dblocks, preload=True)
         info = deepcopy(mne_raw.info)
 
         # convert epochs table dataframes to dicts for JSONification
         for epochs_name, epochs_table in mne_ditis.items():
+
+            _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table)
             mne_ditis[epochs_name] = epochs_table.to_dict()
 
-        # really belongs attached to the raw, e.g., raw._ditis map of ditis
+        # this really belongs attached to the raw, e.g., raw._ditis map of ditis
+        # but mne.Raw doesn't allow
         info["description"] = json.dumps({"mkh5_epoch_tables": mne_ditis})
 
         # event and eeg datastreams numpy array
@@ -831,14 +905,24 @@ def _validate_hdr_for_mne(hdr):
             raise Mkh5HeaderKeyError(msg, dblock_path)
 
     # ------------------------------------------------------------
-    space = {"coordinates": "cartesian", "distance_unit": "cm", "orientation": "ras"}
+    space = {
+        "coordinates": "cartesian",
+        "orientation": "ras",
+        "distance_unit": ["m", "cm", "mm"],
+    }
     hdr_space = dpath.util.values(hdr, "apparatus/space")[0]
     for key in space.keys():
         if key not in hdr_space.keys():
             msg = f"apparatus space map must include {key}: {space[key]}"
             raise Mkh5HeaderKeyError(msg, dblock_path)
 
-        if not hdr_space[key] == space[key]:
+        # check units for scaling to MNE meters:
+        if key == "distance_unit":
+            if hdr_space[key] not in space[key]:
+                msg = f"apparatus space map {key} must be one of these: {space[key]}"
+                raise Mkh5HeaderValueError(msg, dblock_path, hdr_space)
+
+        elif not hdr_space[key] == space[key]:
             msg = f"apparatus space map must include {key}: {space[key]}"
             raise Mkh5HeaderValueError(msg, dblock_path, hdr_space)
 
@@ -917,11 +1001,14 @@ def _validate_hdr_for_mne(hdr):
 
 
 def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
-    """return header info formatted for MNE dig montage and info
+    """convert mkh5 header info for use in MNE dig montage and info
 
     The user-specified hdr["apparatus"]["streams]["mne_type"] values from the
     the YAML .yhdr are used, all the rest of the data block columns are
-    assigned MNE type "misc"
+    assigned MNE type "misc".
+
+    All 3D cartesian soordinates are scaled to MNE-native meters based
+    on header units: m, cm, mm.
 
     Parameters:
     -----------
@@ -951,9 +1038,6 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
 
     """
 
-    # cm distance units are guarded in _validate_hdr_for_mne
-    YHDR_RAS_UNIT = 0.01
-
     # ------------------------------------------------------------
     # apparatus streams are user YAML w/ mne_type, typically
     # a subset of the hdr["streams"] which includes clock ticks,
@@ -979,7 +1063,7 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
         hdr["apparatus"]["sensors"], orient="index"
     ).rename_axis(index="pos")
 
-    # sinnce eeg data streams don't have a "location" use
+    # since eeg data streams don't have a "location" use
     # coordinates from the positive pinout electrode
     apparatus_streams = apparatus_streams.join(apparatus_sensors, how="left", on="pos")
 
@@ -987,6 +1071,21 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
     apparatus_fiducials = pd.DataFrame.from_dict(
         hdr["apparatus"]["fiducials"], orient="index"
     ).rename_axis(index="fiducial")
+
+    # collect the coordinate space
+    space = {"space": hdr["apparatus"]["space"].copy()}
+
+    # m, cm, mm units are guarded in _validate_hdr_for_mne
+    yhdr_units_scaled_by = None
+    unit = hdr["apparatus"]["space"]["distance_unit"]
+    if unit == "m":
+        yhdr_units_scaled_by = 1.0
+    if unit == "cm":
+        yhdr_units_scaled_by = 0.01
+    if unit == "mm":
+        yhdr_units_scaled_by = 0.001
+    assert yhdr_units_scaled_by is not None, "illegal distance unit in apparatus space map"
+    space["space"]["yhdr_units_scaled_by"] = yhdr_units_scaled_by
 
     # ------------------------------------------------------------
     # collect the mkpy.mkh5 built-in data block hdr["streams"],
@@ -1005,21 +1104,24 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
     hdr_streams.loc[["raw_evcodes", "log_evcodes", "log_ccodes"], "mne_type"] = "stim"
     hdr_streams.loc[pd.isna(hdr_streams["mne_type"]), "mne_type"] = "misc"
 
-    # 3D sensor coordinate cm  dicts -> in MNE key: [R, A, S, ... ] m format
-    # fiducial landmarks in MNE label: [x, y, z] format
+    # 3D sensor coordinate dicts -> in MNE key: [R, A, S, ... ] in MNE-native meters
+    # fiducial landmarks in MNE label: [x, y, z] in MNE-native meters
     fiducials = apparatus_fiducials.apply(
-        lambda row: row.to_numpy(dtype=float) * YHDR_RAS_UNIT, axis=1
+        lambda row: row.to_numpy(dtype=float) * yhdr_units_scaled_by, axis=1
     ).to_dict()
 
     # for mne.channels.make_dig_montage
     dig_ch_pos = apparatus_streams.apply(
-        lambda row: row[["x", "y", "z"]].to_numpy(dtype=float) * YHDR_RAS_UNIT, axis=1
+        lambda row: row[["x", "y", "z"]].to_numpy(dtype=float) * yhdr_units_scaled_by, axis=1
     ).to_dict()
+
 
     # for info["chs"][i]["loc"] = array, shape(12,)
     # first 3 are positive sensor, next 3 are reference (negative)
     # but MNE DigMontage chokes on mixed common ref (A1) and biploar
-    # so skip the reference location
+    # so skip the reference location.
+
+    # 3D coordinates are MNE-native meters
     info_ch_locs = {}
     for ch, row in apparatus_streams.iterrows():
         # e.g., A1 for common reference, lhz for bipolar HEOG.
@@ -1031,7 +1133,7 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
                 # [pos_locs, ref_locs, np.zeros((6, ))] # the truth
                 [pos_locs, np.zeros((9,))]  # what works w/ MNE
             )
-            * YHDR_RAS_UNIT
+            * yhdr_units_scaled_by
         )
 
     result = dict(
@@ -1043,6 +1145,7 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
         dig_ch_pos=dig_ch_pos,
         info_ch_locs=info_ch_locs,
     )
+
     result.update(fiducials)
     return result
 
@@ -1318,6 +1421,7 @@ def _hdr_dblock_to_info_montage(hdr, dblock, apparatus_yaml=None):
 
 
 def _check_mne_raw_mkh5_epochs(raw_mkh5, epochs_name):
+    """this checks epochs in the mkh5"""
 
     hint = (
         " Check that raw_mkh5 = read_raw_mkh5(your_file.h5, ...) and your mkh5 file "
@@ -1423,7 +1527,7 @@ def read_raw_mkh5(
 
     Notes
     -----
-    
+
     EEG and events. The mkh5 data block columns are converted to
         mne channels and concatenated into a single mne Raw in the
         order given by `dblock_paths`. The default is to convert the
@@ -1568,17 +1672,20 @@ def get_epochs_metadata(mne_raw, epochs_name):
         the time-locking event at time=0.
 
     """
+
+    # lots can go wrong, fail if anything does
     try:
         descr = json.loads(mne_raw.info["description"])
         mkh5_epochs = descr["mkh5_epoch_tables"]
         metadata = mkh5_epochs[epochs_name]
     except Exception as fail:
-        msg = (
+        error_msg = (
             f"{str(fail)} ... could load {epochs_name} from mne.Info['description'], "
             f"check it is in mkh5.get_epochs_table_names() before converting mkh5 "
             "to MNE raw format."
         )
-        raise ValueError(msg)
+        raise ValueError(error_msg)
+
     return pd.DataFrame(metadata)
 
 
@@ -1611,6 +1718,7 @@ def get_epochs(mne_raw, epochs_name, metadata_columns=[], **kwargs):
     """
     events = mne.find_events(mne_raw, epochs_name)
     metadata = get_epochs_metadata(mne_raw, epochs_name)
+    _check_mkh5_mne_epochs_table(mne_raw, epochs_name, metadata)
 
     # epoch interval start, stop in seconds, relative to
     # timelocking event at mne_raw_ticks

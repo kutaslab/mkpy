@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
 from copy import deepcopy
 import pytest
 import numpy as np
+import pandas as pd
 import requests  # URL IO
 from mkpy import dpath  # local fork of dpath
 
@@ -318,6 +320,23 @@ def test_read_raw_mkh5(dbps):
 
 def test_read_raw_mkh5_apparatus_yaml():
     mkh5mne.read_raw_mkh5(TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML)
+
+
+def test_read_raw_mkh5_duplicate_mne_raw_ticks():
+    # mkpy epochs allow one-many event tags, MNE metadata
+    # must be 1-1 with mne.Raw["event_channel} events: [sample, 0, event]
+
+    # dont trash the test file ...
+    dupe_f = Path(DATA_DIR / "_dupe.h5")
+    dupe_f.write_bytes(Path(TEST_EPOCHS_MKH5_FILE).read_bytes())
+
+    h5 = mkh5.mkh5(dupe_f)
+    event_table = h5.get_event_table("data/sub000p3_bindesc.txt")
+    event_table_2 = pd.concat([event_table.iloc[:3, :], event_table])
+    h5.set_epochs("dup_events", event_table_2, tmin_ms=-10, tmax_ms=10)
+
+    with pytest.raises(ValueError):
+        mne_raw = mkh5mne.read_raw_mkh5(dupe_f)
 
 
 @pytest.mark.parametrize("garv_interval", [[-500, 1500, "ms"], None])
