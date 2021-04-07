@@ -104,7 +104,7 @@ idx_epaths = find(cellfun(@isempty,idx_epaths)==0);
 if ~isempty(idx_epaths),
     for ept = 1:length(idx_epaths),
         t2read = sdpaths{idx_epaths(ept)};
-        ept_name = regexprep(t2read,'/epochs/','');
+        ept_name = regexprep(t2read,'/_epoch_tables/','');
         this_eptab = h5read(h5file, t2read);
         [A AI] = sort(this_eptab.data_group(:,:)',1);
         % for EventTable
