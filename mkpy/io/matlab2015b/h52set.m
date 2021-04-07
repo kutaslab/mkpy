@@ -99,7 +99,7 @@ dpaths = get_h5_dpaths(info, {}, '','');
 ep_fields=[];
 % find epoch table and sort details by subj
 sdpaths = sort(dpaths);
-idx_epaths = strfind(sdpaths,'/epochs/');
+idx_epaths = strfind(sdpaths,'/_epoch_tables/');
 idx_epaths = find(cellfun(@isempty,idx_epaths)==0);
 if ~isempty(idx_epaths),
     for ept = 1:length(idx_epaths),
