@@ -139,8 +139,7 @@ for grp=1:size(info.Groups);
     if isempty(info.Groups(1).Datasets)
         error('Datasets cannot be found or Datasets cannot be found directly under the associated Group. Please check your crw2h5 pipeline')
     end
-    % get epoch table info
-    if cell2mat(strfind({info.Groups(grp).Datasets(1).Attributes.Name},'json_header'))~=1
+    if cell2mat(strfind({info.Groups(grp).Datasets(1).Attributes.Name},'json_header'))
         % Get experiment info and recording parameters
         VerbReport('Getting header information', 3, VERBLEVEL);
         dint = [sprintf(info.Groups(grp).Name),'/'];
