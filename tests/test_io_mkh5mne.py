@@ -330,12 +330,14 @@ def test_read_raw_mkh5_duplicate_mne_raw_tick():
     dupe_f.write_bytes(Path(TEST_EPOCHS_MKH5_FILE).read_bytes())
 
     h5 = mkh5.mkh5(dupe_f)
-    event_table = h5.get_event_table("data/sub000p3_bindesc.txt")
+    event_table = h5.get_event_table(DATA_DIR / "sub000p3_bindesc.txt")
     event_table_2 = pd.concat([event_table.iloc[:3, :], event_table])
     h5.set_epochs("dup_events", event_table_2, tmin_ms=-10, tmax_ms=10)
 
     with pytest.raises(ValueError):
-        mne_raw = mkh5mne.read_raw_mkh5(dupe_f)
+        mkh5mne.read_raw_mkh5(dupe_f)
+
+    dupe_f.unlink()
 
 
 @pytest.mark.parametrize("garv_interval", [[-500, 1500, "ms"], None])
