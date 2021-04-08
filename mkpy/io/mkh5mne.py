@@ -6,12 +6,12 @@ import logging
 from datetime import datetime, timezone
 from copy import deepcopy
 import re
-import yaml
 import json
+import yaml
 import numpy as np
 import pandas as pd
 import mkpy.mkh5 as mkh5
-from mkpy import dpath  # local fork
+from mkpy import dpath  # local fork of dpath
 from mkpy import __version__ as mkpy_version
 
 import mne
@@ -55,6 +55,8 @@ KWARGS = {
 # these info keys can vary by mkh5 dblock, exclude from identity tests
 IGNORE_INFO_KEYS = ["file_id", "meas_id", "proj_name", "subject_info"]
 
+# for apparatus header
+FIDUCIAL_KEYS = ["lpa", "rpa", "nasion"]
 
 # EPOCHS_KWARGS = {
 #     "epochs_name": None,  # mandatory
@@ -88,7 +90,9 @@ class Mkh5HeaderError(Exception):
             "" if dblock_path is None else f"in data block: {dblock_path} header, "
         )
         bad_str = "" if bad is None else yaml.safe_dump(bad, default_flow_style=False)
-        self.args = (dbp_str + self.args[0] + ", check the .yhdr YAML\n" + bad_str,)
+        self.args = (
+            message + dbp_str + self.args[0] + ", check the .yhdr YAML\n" + bad_str,
+        )
 
 
 class Mkh5HeaderKeyError(Mkh5HeaderError):
@@ -106,6 +110,8 @@ class Mkh5HeaderTypeError(Mkh5HeaderError):
 # ------------------------------------------------------------
 # miscellaneous exceptions
 class Mkh5FileAccessError(Exception):
+    """file error"""
+
     def __init__(self, msg):
         self.args = (msg,)
 
@@ -154,7 +160,7 @@ class EpochsMkh5ExcludedDataBlockError(ValueError):
                 f"dblock_paths=[...] or set dblock_paths=None to select all: "
             )
             + "["
-            + ", ".join([dbp for dbp in missing_dblocks])
+            + ", ".join(dbp for dbp in missing_dblocks)
             + "]"
         )
         self.args = (msg,)
@@ -164,25 +170,28 @@ class EpochsMkh5ColumnNameError(ValueError):
     """non-existent epochs_id or time column in the epochs table"""
 
     def __init__(self, mkh5_f, epochs_name, col):
-        msg = f"{mkh5_f} epochs table {epochs_name} column error {col}, check {epochs_name}.columns"
+        msg = (
+            f"{mkh5_f} epochs table {epochs_name} column error {col}, check"
+            f" {epochs_name}.columns"
+        )
         self.args = (msg,)
 
 
 class EpochsMkh5NonZeroTimestamps(ValueError):
-    """raised if values in the the specified mkh5 timestamp column vary or differ from the timelock=value"""
+    """values in mkh5 timestamp column vary or differ from the timelock=value"""
 
     def __init__(self, mkh5_f, epochs_name, col):
         msg = (
-            f"{mkh5_f} epochs table {epochs_name} time column {col} has non-zero timestamps. "
-            f"MNE epochs, (tmin, tmax) are defined relative to the timelock event at time=0."
-            f"Inspect the epochs table in {mkh5_f} with mkh5.mkh5.get_epochs_table({epochs_name}) "
-            f"to locate the discrepant timestamps. If the mkh5 event table is overgenerating "
-            f"match_time events with non-zero time-stamps, prune the rows with non-zero timesamps "
-            f"in {col}, and set the epochs with the new event table mkh5.mkh5.set_epochs(event_table)."
+            f"{mkh5_f} epochs table {epochs_name} time column {col} has"
+            "non-zero timestamps. MNE epochs, (tmin, tmax) are defined relative"
+            "to the timelock event at time=0. Inspect the epochs table in"
+            f" {mkh5_f} with mkh5.mkh5.get_epochs_table({epochs_name})"
+            " to locate the discrepant timestamps. If the mkh5 event table"
+            " is overgenerating match_time events with non-zero time-stamps,"
+            f" prune the rows with non-zero timesamps in {col}, and set"
+            "the epochs with the new event table mkh5.mkh5.set_epochs(event_table)."
         )
-
         self.args = (msg,)
-
 
 # ------------------------------------------------------------
 # Apparatus YAML file
@@ -241,8 +250,6 @@ def _check_package_versions():
 def _check_api_params(_class, mkh5_f, **kwargs):
     """screen mkh5_f, dblock paths and epoch names prior to processing
 
-    _obj_clas == Raw, Epochs
-
     Parameters
     ----------
     _class : RawMkh5
@@ -279,6 +286,9 @@ def _check_api_params(_class, mkh5_f, **kwargs):
 
     # ------------------------------------------------------------
     # now have a full set of module kwargs with input values or defaults
+    if not isinstance(mkh5_f, (str, Path)):
+        msg = "mkh5 must be a path to an mkpy.mkh5 HDF5 file"
+        raise ValueError(msg)
 
     # arg: mkh5 file check
     if not Path(mkh5_f).exists():
@@ -347,7 +357,7 @@ def _check_api_params(_class, mkh5_f, **kwargs):
         except Exception as fail:
             raise ApparatusYamlFileError(str(fail))
 
-    if kwargs["ignore_keys"] is not []:
+    if kwargs["ignore_keys"]:
         ignore_keys = kwargs["ignore_keys"]
         try:
             for key in ignore_keys:
@@ -395,7 +405,7 @@ def _check_api_params(_class, mkh5_f, **kwargs):
     return kwargs
 
 
-def _is_equal_mne_info(info_a, info_b, exclude=[], verbose=False):
+def _is_equal_mne_info(info_a, info_b, exclude=None, verbose=False):
     """compare two mne.Info key, value instances for same content
 
     Parameters
@@ -417,6 +427,8 @@ def _is_equal_mne_info(info_a, info_b, exclude=[], verbose=False):
     -----
     verbose=True reports the key, values that differ.
     """
+    if exclude is None:
+        exclude = []
 
     test_keys_a = [key for key in info_a.keys() if key not in exclude]
     test_keys_b = [key for key in info_b.keys() if key not in exclude]
@@ -462,13 +474,13 @@ def _is_equal_mne_info(info_a, info_b, exclude=[], verbose=False):
     # print(f"good_keys {good_keys} excluded {exclude}")
     if sorted(good_keys) == sorted(test_keys_a) == sorted(test_keys_b):
         return True
-    else:
-        if verbose:
-            for key in bad_keys:
-                print(f"info_a['{key}']: {info_a[key]}")
-                print(f"info_b['{key}']: {info_b[key]}")
-                print()
-        return False
+
+    if verbose:
+        for key in bad_keys:
+            print(f"info_a['{key}']: {info_a[key]}")
+            print(f"info_b['{key}']: {info_b[key]}")
+            print()
+    return False
 
 
 def _is_equal_mne_montage(montage_a, montage_b, verbose="info"):
@@ -494,7 +506,7 @@ def _is_equal_mne_montage(montage_a, montage_b, verbose="info"):
     return True
 
 
-def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=[], **kwargs):
+def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=None, **kwargs):
     """check hdr, dblocks in mkh5_f return the same MNE info and montage
 
     The default behavior for info mismatches is to issue a warning
@@ -517,9 +529,9 @@ def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=[], **kwargs):
     ----------
     mkh5_f: str
         file path to mkpy.mkh5 file
-    ignore_keys : list of str {[]}
+    ignore_keys : list of str or None (default)
         differences between the values of these info keys are ignored even
-        when fail_on_info=True, see IGNORE_INFO_KEYS.
+        when fail_on_info=True, see IGNORE_INFO_KEYS. Default None
     dblock_paths: {list of str, None}, optional
         as returned by mkh5.mkh5(mkh5_f).dblock_paths
         do not check the keys in the list, the default values
@@ -538,6 +550,9 @@ def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=[], **kwargs):
 
     """
 
+    if ignore_keys is None:
+        ignore_keys = []
+
     # clunky but clear ...
     dblock_paths = kwargs["dblock_paths"]
     apparatus_yaml = kwargs["apparatus_yaml"]
@@ -548,25 +563,25 @@ def _check_info_montage_across_dblocks(mkh5_f, ignore_keys=[], **kwargs):
     if fail_on_info:
         verbose = "info"  # fail informatively
 
-    h5 = mkh5.mkh5(mkh5_f)
+    h5data = mkh5.mkh5(mkh5_f)
 
     # enforce explicit dblock_paths kwarg
     assert dblock_paths is not None, "set dblock_paths kwarg, else too slow"
 
     # check pairwise against first
     dbp_i = dblock_paths[0]
-    hdr_i, dblock_i = h5.get_dblock(dbp_i)
+    hdr_i, _ = h5data.get_dblock(dbp_i)
     info_i, montage_i = _hdr_dblock_to_info_montage(
-        hdr_i, dblock_i, apparatus_yaml=apparatus_yaml
+        hdr_i, apparatus_yaml=apparatus_yaml
     )
 
     for dbp_j in dblock_paths[1:]:
 
         print(f"checking info, montage {dbp_j}")
 
-        hdr_j, dblock_j = h5.get_dblock(dbp_j)
+        hdr_j, _ = h5data.get_dblock(dbp_j)
         info_j, montage_j = _hdr_dblock_to_info_montage(
-            hdr_j, dblock_j, apparatus_yaml=apparatus_yaml
+            hdr_j, apparatus_yaml=apparatus_yaml
         )
         # info
         if not _is_equal_mne_info(info_i, info_j, exclude=ignore_keys):
@@ -618,7 +633,6 @@ def _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table):
 
     if error_msg:
         raise ValueError(error_msg)
-
 
     # check channel data at mne tick agrees with epoch table
     check_cols = set(mne_raw.info.ch_names).intersection(set(epochs_table.columns))
@@ -673,7 +687,7 @@ class RawMkh5(mne.io.BaseRaw):
     bookeeping for knitting RawArrays together. Not future
     proof but perhaps more future resistant.
 
-"""
+    """
 
     def __init__(
         self,
@@ -684,8 +698,11 @@ class RawMkh5(mne.io.BaseRaw):
         fail_on_montage=True,
         apparatus_yaml=None,
         verbose="info",
-        ignore_keys=IGNORE_INFO_KEYS,
+        ignore_keys=None,
     ):
+
+        if ignore_keys is None:
+            ignore_keys = IGNORE_INFO_KEYS
 
         if dblock_paths is None:
             print(mkh5_f)
@@ -772,6 +789,13 @@ class RawMkh5(mne.io.BaseRaw):
             ref_channels=[], projection=False, ch_type="eeg"  # "average"
         )
 
+    def _read_segment_file(self):
+        msg = (
+            "_read_segment_file() ... save RawMkh5 as a .fif and "
+            "  mne.io.Raw()"
+        )
+        raise NotImplementedError(msg)
+
 
 # ------------------------------------------------------------
 # file loader for optional apparatus yaml
@@ -802,9 +826,9 @@ def _load_apparatus_yaml(apparatus_yaml_f):
 
         msg = None
         if len(apparatus_hdrs) == 0:
-            msg = f"no apparatus document"
+            msg = "no apparatus document"
         if len(apparatus_hdrs) > 1:
-            msg = f"multiple apparatus documents"
+            msg = "multiple apparatus documents"
 
         if msg:
             msg += (
@@ -840,10 +864,17 @@ def _validate_hdr_for_mne(hdr):
 
     Required Keys
 
-      FIXME
        The header must have
-         h5_dataset: <str> samplerate: <int|float> and and apparatus: <map>
-       The apparatus must have these maps: common_ref: <str>, space: <map>, fiducials: <map>, streams, sensors
+         h5_dataset: <str>
+         samplerate: <int|float>
+         and apparatus: <map>
+
+       The apparatus must have these maps:
+          common_ref: str
+          space: map
+          fiducials: map
+          streams: map
+          sensors: map
        The apparatus streams must have mne_type: <str> pos: <str> neg: <str>
        The apparatus sensors must have x: <float> y: <float> z: <float>
 
@@ -861,7 +892,7 @@ def _validate_hdr_for_mne(hdr):
     # ------------------------------------------------------------
     # these key: vals are built in by mkh5, check anyway
     if "h5_dataset" not in hdr.keys():
-        msg = f"header is missing required key: h5_dataset"
+        msg = "header is missing required key: h5_dataset"
         raise Mkh5HeaderKeyError(msg)
 
     dblock_path_re = re.compile(r"^/(\w+/)+(dblock_\d+){1}$")
@@ -878,23 +909,22 @@ def _validate_hdr_for_mne(hdr):
     # ------------------------------------------------------------
     # header must have a samplerate
     if "samplerate" not in hdr.keys():
-        msg = f"header has no samplerate key"
+        msg = "header has no samplerate key"
         raise Mkh5HeaderKeyError(msg, dblock_path)
 
     if not isinstance(hdr["samplerate"], (int, float)):
-        msg = f"header samplerate must be numeric (integer or float)"
-        # sub_hdr = {"samplerate": hdr["samplerate"]}
+        msg = "header samplerate must be numeric (integer or float)"
         sub_hdr = dpath.search("hdr", "samplerate")
         raise Mkh5HeaderValueError(msg, dblock_path, sub_hdr)
 
-    sfreq = hdr["samplerate"]
+    # sfreq = hdr["samplerate"]
 
     # ------------------------------------------------------------
     # these key: vals are user specified YAML, anything can happen.
 
     # there must be an apparatus map
     if "apparatus" not in hdr.keys():
-        msg = f"apparatus map not found"
+        msg = "apparatus map not found"
         raise Mkh5HeaderKeyError(msg, dblock_path)
 
     # ------------------------------------------------------------
@@ -941,7 +971,7 @@ def _validate_hdr_for_mne(hdr):
 
     # ------------------------------------------------------------
     # check string values
-    HDR_MNE_STREAM_KEY_VALS = {
+    hdr_mne_stream_key_vals = {
         "mne_type": MNE_STREAM_TYPES,  # eeg, eog, stim, misc, ...
         "pos": hdr_sensors,  # these provide the 3D coordinates
         "neg": hdr_sensors,  # these provide the 3D coordinates
@@ -952,13 +982,13 @@ def _validate_hdr_for_mne(hdr):
         sub_hdr = dpath.util.search(hdr, f"apparatus/streams/{stream}")
 
         # check the mne_type, pos, neg keys
-        for key in HDR_MNE_STREAM_KEY_VALS.keys():
+        for key in hdr_mne_stream_key_vals.keys():
             if key not in val.keys():
                 msg = f"apparatus stream {key} not found"
                 raise Mkh5HeaderKeyError(msg, dblock_path, sub_hdr)
 
         # check the values
-        for key, vals in HDR_MNE_STREAM_KEY_VALS.items():
+        for key, vals in hdr_mne_stream_key_vals.items():
             if not val[key] in vals:
                 msg = (
                     f"apparatus stream {stream} {key} value must"
@@ -968,13 +998,12 @@ def _validate_hdr_for_mne(hdr):
 
     # ------------------------------------------------------------
     # fiducial keys are lpa, rpa, nasion
-    FID_KEYS = ["lpa", "rpa", "nasion"]
-    for fid_key in FID_KEYS:
+    for fid_key in FIDUCIAL_KEYS:
         if fid_key not in hdr["apparatus"]["fiducials"].keys():
             sub_hdr = dpath.util.search(hdr, "apparatus/fiducials")
             msg = (
-                f"apparatus fiducials (lpa, rpa, nasion) location "
-                "{fid_key} not found"
+                "apparatus fiducials (lpa, rpa, nasion) location "
+                f"{fid_key} not found"
             )
             raise Mkh5HeaderKeyError(msg, dblock_path, sub_hdr)
 
@@ -1000,7 +1029,7 @@ def _validate_hdr_for_mne(hdr):
                     raise Mkh5HeaderValueError(msg, dblock_path, sub_hdr)
 
 
-def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
+def _parse_hdr_for_mne(hdr, apparatus_yaml=None):
     """convert mkh5 header info for use in MNE dig montage and info
 
     The user-specified hdr["apparatus"]["streams]["mne_type"] values from the
@@ -1084,7 +1113,7 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
         yhdr_units_scaled_by = 0.01
     if unit == "mm":
         yhdr_units_scaled_by = 0.001
-    assert yhdr_units_scaled_by is not None, "illegal distance unit in apparatus space map"
+    assert yhdr_units_scaled_by is not None, "bad distance unit in apparatus space map"
     space["space"]["yhdr_units_scaled_by"] = yhdr_units_scaled_by
 
     # ------------------------------------------------------------
@@ -1112,9 +1141,10 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
 
     # for mne.channels.make_dig_montage
     dig_ch_pos = apparatus_streams.apply(
-        lambda row: row[["x", "y", "z"]].to_numpy(dtype=float) * yhdr_units_scaled_by, axis=1
+        lambda row:
+        row[["x", "y", "z"]].to_numpy(dtype=float) * yhdr_units_scaled_by,
+        axis=1
     ).to_dict()
-
 
     # for info["chs"][i]["loc"] = array, shape(12,)
     # first 3 are positive sensor, next 3 are reference (negative)
@@ -1123,12 +1153,12 @@ def _parse_hdr_for_mne(hdr, dblock, apparatus_yaml=None):
 
     # 3D coordinates are MNE-native meters
     info_ch_locs = {}
-    for ch, row in apparatus_streams.iterrows():
+    for chan, _ in apparatus_streams.iterrows():
         # e.g., A1 for common reference, lhz for bipolar HEOG.
-        pos = apparatus_streams.loc[ch, "pos"]
+        pos = apparatus_streams.loc[chan, "pos"]
         # neg = apparatus_streams.loc[ch, "neg"]   # not used
         pos_locs = apparatus_sensors.loc[pos, :]
-        info_ch_locs[ch] = (
+        info_ch_locs[chan] = (
             np.hstack(
                 # [pos_locs, ref_locs, np.zeros((6, ))] # the truth
                 [pos_locs, np.zeros((9,))]  # what works w/ MNE
@@ -1187,7 +1217,7 @@ def _patch_dblock_info(info, hdr, hdr_mne):
     info["file_id"] = info["meas_id"]
 
     # CRITICAL: set scaling factor for microvolt data
-    for idx, ch_info in enumerate(info["chs"]):
+    for ch_info in info["chs"]:
         ch_name = ch_info["ch_name"]
         is_eeg = ch_info["kind"] == FIFF.FIFFV_EEG_CH
         is_eog = ch_info["kind"] == FIFF.FIFFV_EOG_CH
@@ -1279,7 +1309,7 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
        interval in milliseconds relative to a log_evcode event at time==0
     apparatus_yaml: str, optional
        filepath to YAML apparatus file with stream and sensor space info
-       to override native mkh5 hdr["apparatus"] if any. 
+       to override native mkh5 hdr["apparatus"] if any.
 
     Returns
     -------
@@ -1295,21 +1325,21 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
     info and just stack the datablocks. epochs metadata is
     collected and returned per block so the complete record
     can be tucked into the (one) info object when the dblocks
-    are stacked. 
+    are stacked.
 
     The  raw.set_eeg_reference(ref_channels=[]) at the end to block
     subsequent mne's default automatic average rereferencing later in
     the pipeline (sheesh).
 
     """
-    h5 = mkh5.mkh5(mkh5_f)
+    h5data = mkh5.mkh5(mkh5_f)
     try:
-        hdr, dblock = h5.get_dblock(dblock_path)
+        hdr, dblock = h5data.get_dblock(dblock_path)
     except Exception as fail:
         raise Mkh5DblockPathError(str(fail), mkh5_f, dblock_path)
 
     info, montage = _hdr_dblock_to_info_montage(
-        hdr, dblock, apparatus_yaml=apparatus_yaml
+        hdr, apparatus_yaml=apparatus_yaml
     )
 
     # mne wants homogenous n_chans x nsamps, so stim, misc ints coerced
@@ -1340,7 +1370,7 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
 
             # fetch the epochs_table and slice for this mkh5 data block
             print(f"{dblock_path} setting mkh5 epochs table {etn} events and metadata")
-            epochs_table = h5.get_epochs_table(etn)
+            epochs_table = h5data.get_epochs_table(etn)
             etn_dblock = (
                 epochs_table.query("dblock_path == @dblock_path and match_time==0")
             ).copy()
@@ -1401,10 +1431,10 @@ def _dblock_to_raw(mkh5_f, dblock_path, garv_interval=None, apparatus_yaml=None)
     return raw_dblock, epochs_table_descr
 
 
-def _hdr_dblock_to_info_montage(hdr, dblock, apparatus_yaml=None):
+def _hdr_dblock_to_info_montage(hdr, apparatus_yaml=None):
     """populate MNE structures with mkh5 data"""
 
-    hdr_mne = _parse_hdr_for_mne(hdr, dblock, apparatus_yaml)
+    hdr_mne = _parse_hdr_for_mne(hdr, apparatus_yaml)
 
     info = mne.create_info(hdr_mne["ch_labels"], hdr_mne["sfreq"], hdr_mne["ch_types"])
 
@@ -1459,11 +1489,51 @@ def _check_mne_raw_mkh5_epochs(raw_mkh5, epochs_name):
     return json_epochs_tables
 
 
+def _find_events(mne_raw, epochs_name):
+    """build MNE events array without mne.find_events entanglements"""
+
+    event_stream = mne_raw[epochs_name][0][0]  # stim channel from mkh5 epoch conversion
+    idxs = np.where(event_stream != 0)[0]
+    codes = event_stream[idxs]
+
+    # 3 column MNE event array[idx, :] = [sample, 0, code]
+    return np.array([idxs, np.zeros(len(idxs)), codes], dtype=int).T
+
+
 # ------------------------------------------------------------
 # API
 # ------------------------------------------------------------
 def read_raw_mkh5(
     mkh5_file,
+    garv_interval=None,
+    dblock_paths=None,
+    apparatus_yaml=None,
+    fail_on_info=False,
+    fail_on_montage=True,
+    verbose="info",
+):
+    """Read an mkh5 data file into MNE raw format
+
+    See from_mkh5()
+    """
+    warnings.warn(
+        "read_raw_mkh5() is deprecated and will be removed in a future release,"
+        " use from_mkh5() instead"
+    )
+
+    return from_mkh5(
+        mkh5_file,
+        garv_interval=garv_interval,
+        dblock_paths=dblock_paths,
+        fail_on_info=fail_on_info,
+        fail_on_montage=fail_on_montage,
+        apparatus_yaml=apparatus_yaml,
+        verbose=verbose,
+     )
+
+
+def from_mkh5(
+    mkh5_f,
     garv_interval=None,
     dblock_paths=None,
     apparatus_yaml=None,
@@ -1482,7 +1552,7 @@ def read_raw_mkh5(
 
     Parameters
     ----------
-    mkh5_file: str
+    mkh5_f: str
         File path to a mkpy.mkh5 HDF5 file
 
     dblock_paths : {None, list of str}, optional
@@ -1533,7 +1603,7 @@ def read_raw_mkh5(
         order given by `dblock_paths`. The default is to convert the
         entire mkh5 file in `mkh5.dblock_paths` order.
 
-    Epochs. The mkh5 epochs table timelocking events are indexed to
+    Epochs. The mkh5 epochs table time locking events are indexed to
         the mne.Raw data samples and the epoch tables stored as a JSON
         string in mne.Info["description"]. The complete epochs table
         is recovered by JSON loading the ``mne.Info["description"]`` and
@@ -1542,18 +1612,10 @@ def read_raw_mkh5(
         mne.Epochs.metadata for the events on the `epochs_name` stim
         channel.
 
-    TODO: The mkh5 epochs data, i.e., time-lock events, discrete time
-        intervals, and mixed data-type tags would do better as an
-        attribute of mne.BaseRaw, e.g., mne.Raw._ditidata. Discrete
-        time intervals indexed for (onset, hop, duration) with
-        mixed-type tags subsume the spaghetti of MNE events, epochs,
-        and epochs metadata, annotations and the discrete time model
-        avoids cumulative rounding error issues of floating-point
-        times.
 
     """
     return RawMkh5(
-        mkh5_file,
+        mkh5_f,
         garv_interval=garv_interval,
         dblock_paths=dblock_paths,
         fail_on_info=fail_on_info,
@@ -1566,7 +1628,7 @@ def read_raw_mkh5(
 def get_garv_bads(mne_raw, event_channel, garv_interval, garv_channel="log_flags"):
     """bracket events with mne BAD_garv annotations
 
-    This timelocks the annotation to all events on event channel that
+    This time locks the annotation to all events on event channel that
     have a non-zero codes on the log_flags column, e.g., as given by
     as given by running avg -x -a subNN.arf to set log_flags in
     subNN.log.
@@ -1598,14 +1660,14 @@ def get_garv_bads(mne_raw, event_channel, garv_interval, garv_channel="log_flags
     try:
         garv_start, garv_stop, garv_unit = garv_interval
         if not garv_start < garv_stop:
-            raise ValueError("bad interval")
+            raise ValueError("bad interval, ")
         if garv_unit == "s":
             pass
         elif garv_unit == "ms":
             garv_start /= 1000.0
             garv_stop /= 1000.0
         else:
-            raise ValueError("bad units")
+            raise ValueError("bad units, ")
     except Exception as fail:
         msg = str(fail)
     if msg:
@@ -1623,8 +1685,8 @@ def get_garv_bads(mne_raw, event_channel, garv_interval, garv_channel="log_flags
     # artifact channel column
     garv_ch = mne_raw.get_data(garv_channel)[0].astype(int)
 
-    # lookup where in the recording the event is > 0 and log_flag > 0
-    bad_garv_ticks = np.where((event_ch > 0) & (garv_ch > 0))[0]
+    # lookup where in the recording the event artifact flag != 0 and log_flag != 0
+    bad_garv_ticks = np.where((event_ch != 0) & (garv_ch != 0))[0]
 
     # lower bound of annotation is time=0, upper bound is max time
     min_t = 0
@@ -1680,16 +1742,16 @@ def get_epochs_metadata(mne_raw, epochs_name):
         metadata = mkh5_epochs[epochs_name]
     except Exception as fail:
         error_msg = (
-            f"{str(fail)} ... could load {epochs_name} from mne.Info['description'], "
-            f"check it is in mkh5.get_epochs_table_names() before converting mkh5 "
-            "to MNE raw format."
+            f"{str(fail)} ... could not load {epochs_name} from "
+            " mne.Info['description'], check it is in mkh5.get_epochs_table_names()"
+            " before converting mkh5 to MNE."
         )
         raise ValueError(error_msg)
 
     return pd.DataFrame(metadata)
 
 
-def get_epochs(mne_raw, epochs_name, metadata_columns=[], **kwargs):
+def get_epochs(mne_raw, epochs_name, metadata_columns="all", **kwargs):
     """retrieve mkh5 epochs table dataframe from mne.Raw.info["description"]
 
     The mne.Epoch interval [tmin, tmax] matches the tmin_ms, tmax_ms
@@ -1704,7 +1766,7 @@ def get_epochs(mne_raw, epochs_name, metadata_columns=[], **kwargs):
     epochs_name : str
        Name of the epochs_table to get.
 
-    metadata_columns: list of str, optional
+    metadata_columns: "all" or list of str, optional
        Specify which metadata columns to include with the epochs,
        default is all.
 
@@ -1716,9 +1778,19 @@ def get_epochs(mne_raw, epochs_name, metadata_columns=[], **kwargs):
         mne.Epochs
 
     """
-    events = mne.find_events(mne_raw, epochs_name)
+
     metadata = get_epochs_metadata(mne_raw, epochs_name)
     _check_mkh5_mne_epochs_table(mne_raw, epochs_name, metadata)
+
+    error_msg = None
+    if metadata_columns != "all":
+        if not isinstance(metadata_columns, list):
+            error_msg = "metadata_columns must be a list of metadata column names"
+        for col in metadata_columns:
+            if not (isinstance(col, str) and col in metadata.columns):
+                error_msg = f"{col} is not a metadata data column"
+    if error_msg:
+        raise ValueError(error_msg)
 
     # epoch interval start, stop in seconds, relative to
     # timelocking event at mne_raw_ticks
@@ -1733,9 +1805,11 @@ def get_epochs(mne_raw, epochs_name, metadata_columns=[], **kwargs):
     tmin = tmins[0]
     tmax = tmaxs[0]
 
-    if len(metadata_columns) > 0:
+    if metadata_columns != "all":
         metadata = metadata[metadata_columns]
 
+    # native MNE event lookup
+    events = _find_events(mne_raw, epochs_name)
     return mne.Epochs(
         mne_raw, events, tmin=tmin, tmax=tmax, metadata=metadata, **kwargs
     )

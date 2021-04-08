@@ -243,8 +243,8 @@ def test__validate_hdr_for_mne():
 def test__parse_hdr_for_mne():
     h5 = mkh5.mkh5(TEST_RAW_MKH5_FILE)
     for dblock_path in h5.dblock_paths:
-        hdr, dblock = h5.get_dblock(dblock_path)
-        mkh5mne._parse_hdr_for_mne(hdr, dblock)
+        hdr, _ = h5.get_dblock(dblock_path)
+        mkh5mne._parse_hdr_for_mne(hdr)
 
 
 @pytest.mark.parametrize(
@@ -269,8 +269,8 @@ def test__is_equal_mne_info():
     hdr_a, dblock_a = h5.get_dblock(dblock_paths[0])
     hdr_b, dblock_b = h5.get_dblock(dblock_paths[1])
 
-    info_a, montage_a = mkh5mne._hdr_dblock_to_info_montage(hdr_a, dblock_a)
-    info_b, montage_b = mkh5mne._hdr_dblock_to_info_montage(hdr_b, dblock_b)
+    info_a, montage_a = mkh5mne._hdr_dblock_to_info_montage(hdr_a)
+    info_b, montage_b = mkh5mne._hdr_dblock_to_info_montage(hdr_b)
 
     # a and b are different crws, same YAML apparatus
 
