@@ -42,6 +42,10 @@ MNE_MIN_VER = (0, 20)  # major, minor
 # requires header info introduced in mkh5 0.2.4
 MKH5_MIN_VER = (0, 2, 4)  # major, minor, patch
 
+MKH5_STIM_CHANNELS = [
+    "raw_evcodes", "log_evcodes", "log_ccodes", "log_flags", "pygarv"
+]
+
 KWARGS = {
     "dblock_paths": None,  # optional, selects listed dblock_paths
     "garv_interval": None,  # optional
@@ -619,16 +623,16 @@ def _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table):
     ]:
         error_msg = (
             "{epochs_name} is not an mne stim channel type, make sure this"
-            " sure this mne.Raw was converted from mkh5 with mkh5mne.read_raw()"
+            " mne.Raw was converted from mkh5 with mkh5mne.read_raw()"
         )
 
     # mkpy epochs allow one-many event tags, MNE metadata
     # must be 1-1 with mne.Raw["event_channel} events: [sample, 0, event]
-    duplicates = epochs_table[epochs_table.duplicated("mne_raw_ticks")]
+    duplicates = epochs_table[epochs_table.duplicated("mne_raw_tick")]
     if len(duplicates):
         error_msg = (
             f"mkh5 epochs {epochs_name} cannot be used as"
-            f" mne.Epoch.metadata, duplicate mne_raw_ticks: {duplicates}"
+            f" mne.Epoch.metadata, duplicate mne_raw_tick: {duplicates}"
         )
 
     if error_msg:
@@ -637,18 +641,18 @@ def _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table):
     # check channel data at mne tick agrees with epoch table
     check_cols = set(mne_raw.info.ch_names).intersection(set(epochs_table.columns))
     for col in check_cols:
-        mne_col = mne_raw.get_data(col).squeeze()[epochs_table["mne_raw_ticks"]]
+        mne_col = mne_raw.get_data(col).squeeze()[epochs_table["mne_raw_tick"]]
         errors = epochs_table.where(epochs_table[col] != mne_col).dropna()
         if len(errors):
             error_msg = (
                 f"mkh5 epochs table {epochs_name}['{col}'] does not match"
-                " mne.Raw data at these mne_raw_ticks:\n"
+                " mne.Raw data at these mne_raw_tick:\n"
             )
             error_msg += "\n".join([
                 (
                     f"epochs_table[{col}]: {error[col]}"
-                    f" mne.Raw[{col, int(error['mne_raw_ticks'])}]: "
-                    f"{mne_raw.get_data(col).squeeze()[int(error['mne_raw_ticks'])]}"
+                    f" mne.Raw[{col, int(error['mne_raw_tick'])}]: "
+                    f"{mne_raw.get_data(col).squeeze()[int(error['mne_raw_tick'])]}"
                 )
                 for _, error in errors.iterrows()
             ])
@@ -747,7 +751,7 @@ class RawMkh5(mne.io.BaseRaw):
 
                 # compute sample index into the mne.Raw data stream from the
                 # the length thus far + dblock_tick offset (0-base)
-                diti["mne_raw_ticks"] = raw_samp_n + diti["dblock_ticks"]
+                diti["mne_raw_tick"] = raw_samp_n + diti["dblock_ticks"]
                 if key not in mne_ditis.keys():
                     # start a new table w/ mne raw ticks counting from 0
                     mne_ditis[key] = diti
@@ -790,9 +794,10 @@ class RawMkh5(mne.io.BaseRaw):
         )
 
     def _read_segment_file(self):
+        """we know how to save as fif, hand off reading to MNE"""
         msg = (
             "_read_segment_file() ... save RawMkh5 as a .fif and "
-            "  mne.io.Raw()"
+            "  read with mne.io.Raw()"
         )
         raise NotImplementedError(msg)
 
@@ -1129,8 +1134,8 @@ def _parse_hdr_for_mne(hdr, apparatus_yaml=None):
     # merge in the apparatus stream data
     hdr_streams = hdr_streams.join(apparatus_streams, how="left", on="stream")
 
-    # update known dblock streams to mne_types
-    hdr_streams.loc[["raw_evcodes", "log_evcodes", "log_ccodes"], "mne_type"] = "stim"
+    # update known mkh5 dblock streams to mne_types
+    hdr_streams.loc[MKH5_STIM_CHANNELS, "mne_type"] = "stim"
     hdr_streams.loc[pd.isna(hdr_streams["mne_type"]), "mne_type"] = "misc"
 
     # 3D sensor coordinate dicts -> in MNE key: [R, A, S, ... ] in MNE-native meters
@@ -1489,20 +1494,54 @@ def _check_mne_raw_mkh5_epochs(raw_mkh5, epochs_name):
     return json_epochs_tables
 
 
-def _find_events(mne_raw, epochs_name):
-    """build MNE events array without mne.find_events entanglements"""
-
-    event_stream = mne_raw[epochs_name][0][0]  # stim channel from mkh5 epoch conversion
-    idxs = np.where(event_stream != 0)[0]
-    codes = event_stream[idxs]
-
-    # 3 column MNE event array[idx, :] = [sample, 0, code]
-    return np.array([idxs, np.zeros(len(idxs)), codes], dtype=int).T
-
-
 # ------------------------------------------------------------
 # API
 # ------------------------------------------------------------
+def find_mkh5_events(mne_raw, channel_name):
+    """Replacement for mne.find_events for mkh5 integer event code channels
+
+    Finds single-sample positive and negative integer event codes and returns
+    them without modification unlike `mne.find_events()` which switches
+    the sign of negative event codes.
+
+    Parameters
+    ----------
+    mne_raw : RawMkh5 or mne.io.Raw object
+        data with the stim channel to search
+
+    channel_name : str
+       name of the channel to search for non-zero codes
+
+    Returns
+    -------
+    event_array : np.array
+       Three column MNE format where event_array[idx, :] = [sample, 0, code]
+
+    Raises
+    ------
+    ValueError
+       If `channel_name` does not exist.
+    TypeError
+        If `channel_name` is not an MNE 'stim' type channel.
+
+    """
+
+    if channel_name not in np.array(mne_raw.info["ch_names"]):
+        raise ValueError(f"channel {channel_name} not found")
+
+    stim_chan_idxs = mne.pick_types(mne_raw.info, stim=True)
+    if channel_name not in np.array(mne_raw.info["ch_names"])[stim_chan_idxs]:
+        msg = f"{channel_name} is not a stim or misc channel according to mne.Info"
+        raise TypeError(msg)
+
+    # _name is MNE stim channel added by from_mkh5()
+    event_stream = mne_raw[channel_name][0].squeeze().astype(int)
+    idxs = np.where(event_stream != 0)[0]
+    codes = event_stream[idxs]
+
+    return np.array([idxs, np.zeros(len(idxs)), codes], dtype=int).T
+
+
 def read_raw_mkh5(
     mkh5_file,
     garv_interval=None,
@@ -1793,7 +1832,7 @@ def get_epochs(mne_raw, epochs_name, metadata_columns="all", **kwargs):
         raise ValueError(error_msg)
 
     # epoch interval start, stop in seconds, relative to
-    # timelocking event at mne_raw_ticks
+    # timelocking event at mne_raw_tick
     tmins = metadata["diti_hop"] / mne_raw.info["sfreq"]
     tmaxs = (metadata["diti_len"] / mne_raw.info["sfreq"]) + tmins
 
@@ -1809,7 +1848,7 @@ def get_epochs(mne_raw, epochs_name, metadata_columns="all", **kwargs):
         metadata = metadata[metadata_columns]
 
     # native MNE event lookup
-    events = _find_events(mne_raw, epochs_name)
+    events = find_mkh5_events(mne_raw, epochs_name)
     return mne.Epochs(
         mne_raw, events, tmin=tmin, tmax=tmax, metadata=metadata, **kwargs
     )

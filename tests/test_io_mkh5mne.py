@@ -296,7 +296,6 @@ def test__is_equal_mne_info():
 # ------------------------------------------------------------
 # User API tests
 
-
 def test_read_raw_epochs_mkh5():
     mkh5mne.read_raw_mkh5(TEST_EPOCHS_MKH5_FILE)
 
@@ -322,7 +321,7 @@ def test_read_raw_mkh5_apparatus_yaml():
     mkh5mne.read_raw_mkh5(TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML)
 
 
-def test_read_raw_mkh5_duplicate_mne_raw_ticks():
+def test_read_raw_mkh5_duplicate_mne_raw_tick():
     # mkpy epochs allow one-many event tags, MNE metadata
     # must be 1-1 with mne.Raw["event_channel} events: [sample, 0, event]
 
@@ -403,7 +402,7 @@ def test_get_epochs():
         "dblock_path",
         "dblock_ticks",
         "mne_dblock_path_idx",
-        "mne_raw_ticks",
+        "mne_raw_tick",
         "match_tick",
         "anchor_tick",
         "diti_t_0",
@@ -425,3 +424,34 @@ def test_get_epochs():
     ]
     epochs_coi = mkh5mne.get_epochs(raw_mkh5, epochs_name="ms100", metadata_columns=coi)
     assert all(epochs_coi.metadata.columns == coi)
+
+
+def test_find_mkh5_events():
+    """test mkh5 event channels from dig, mkpy, and mkpy epochs"""
+
+    # precomputed from TEST_EPOCHS_MKH5_FILE
+    checksums = {
+        "raw_evcodes":  ((706, 3), [61501701, 0, 28597]),
+        "log_evcodes": ((706, 3), [61501701, 0, 28597]),
+        "log_ccodes": ((496, 3), [31533000, 0, 496]),
+        "log_flags": ((103, 3), [6383620, 0, 4144]),
+        "pygarv": ((0, 3), [0, 0, 0]),
+        "ms1500": ((600, 3),  [54650754, 0, 6515]),
+    }
+
+    mne_raw = mkh5mne.read_raw_mkh5(TEST_EPOCHS_MKH5_FILE)
+
+    for key, val in checksums.items():
+        events_array = mkh5mne.find_mkh5_events(mne_raw, key)
+        assert val[0] == events_array.shape
+        assert all(val[1] == events_array.sum(axis=0))
+        
+    # not found channels are ValueError
+    with pytest.raises(ValueError):
+        mkh5mne.find_mkh5_events(mne_raw, "NoSuchChannel")
+
+    # not MNE stime channels are TypeErrors
+    with pytest.raises(TypeError):
+        mkh5mne.find_mkh5_events(mne_raw, "MiPa")
+
+
