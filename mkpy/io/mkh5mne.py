@@ -1664,13 +1664,18 @@ def from_mkh5(
     )
 
 
-def get_garv_bads(mne_raw, event_channel, garv_interval, garv_channel="log_flags"):
-    """bracket events with mne BAD_garv annotations
+def get_garv_bads(
+        mne_raw, event_channel=None, garv_interval=None, garv_channel="log_flags"
+):
+    """bracket events on a stim channel with mne BAD_garv annotations
 
     This time locks the annotation to all events on event channel that
     have a non-zero codes on the log_flags column, e.g., as given by
     as given by running avg -x -a subNN.arf to set log_flags in
     subNN.log.
+
+    The annotations may be attached to an mne.Raw for triggering artifact
+    exclusion during epoching.
 
     Parameters
     ----------
@@ -1689,8 +1694,7 @@ def get_garv_bads(mne_raw, event_channel, garv_interval, garv_channel="log_flags
     Returns
     -------
     mne.Annotations
-        formatted as ``BAD_garv_int`` for triggering mne's drop by
-        annotation mechanism.
+        formatted as ``BAD_garv_int``
 
     """
 

@@ -26,7 +26,7 @@ clean:
 	rm -rf $(BUILDDIR)/*
 	rm -rf examples_gallery/
 
-html-noplot:
+html-noexec:
 	$(SPHINXBUILD) -D plot_gallery=0 -b html $(ALLSPHINXOPTS) $(SOURCEDIR) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."
