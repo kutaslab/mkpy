@@ -23,7 +23,7 @@ from mne.utils.numerics import object_hash  # for comparing MNE objects
 logger = logging.getLogger("mneio_mkh5")  # all for one, one for all
 logger.propoagate = False  # in case of multiple imports
 
-__version__ = mkpy_version
+__MKH5MNE_VERSION__ = mkpy_version
 
 # ------------------------------------------------------------
 # globals
@@ -45,6 +45,8 @@ MKH5_MIN_VER = (0, 2, 4)  # major, minor, patch
 MKH5_STIM_CHANNELS = [
     "raw_evcodes", "log_evcodes", "log_ccodes", "log_flags", "pygarv"
 ]
+
+GARV_ANNOTATION_KEYS = ["event_channel", "tmin", "tmax", "units"]
 
 KWARGS = {
     "dblock_paths": None,  # optional, selects listed dblock_paths
@@ -390,13 +392,14 @@ def _check_api_params(_class, mkh5_f, **kwargs):
     # ------------------------------------------------------------
     # garv annotations
     if kwargs["garv_annotations"]:
-        if not isinstance(kwargs["garv_annotations"], dict):
-            msg = (
-                'garv_annotations must be a dictionary, e.g.,'
-                'garv_annotations={"event_channel": "p3", start: -500, stop: 1500, units: "ms"}'
-            )
-            raise TypeError(msg)
         garv_anns = kwargs["garv_annotations"]
+
+        if not isinstance(garv_anns, dict):
+            raise TypeError("garv_annotations must be a dictionary")
+
+        if not set(garv_anns.keys()) == set(GARV_ANNOTATION_KEYS):
+            raise KeyError(f"garv_annotations keys must be {GARV_ANNOTATION_KEYS}") 
+
         if garv_anns["units"] not in ["ms", "s"]:
             msg = f"garv annotation units must be 'ms' or 's"
             raise ValueError(msg)
@@ -404,8 +407,8 @@ def _check_api_params(_class, mkh5_f, **kwargs):
         t_scale = 1000.0 if garv_anns["units"] == "ms" else 1.0
 
         # let python raise TypeError for non-numerical values
-        garv_start = garv_anns["start"]  / t_scale
-        garv_stop = garv_anns["stop"] / t_scale
+        garv_start = garv_anns["tmin"]  / t_scale
+        garv_stop = garv_anns["tmax"] / t_scale
 
         if not garv_start < garv_stop:
             msg = f"garv interval must have the start < stop"
@@ -842,16 +845,34 @@ class RawMkh5(mne.io.BaseRaw):
             _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table)
             mne_ditis[epochs_name] = epochs_table.to_dict()
 
-        # this really belongs attached to the raw, e.g., raw._ditis map of ditis
-        # but mne.Raw doesn't allow
-        info["description"] = json.dumps({"mkh5_epoch_tables": mne_ditis})
+        # look up mkh5 file format version
+        mkh5_f_version = []
+        for dbp in dblock_paths:
+            hdr = mkh5.mkh5(mkh5_f).get_dblock(dbp, dblock=False)
+            mkh5_f_version.append(hdr["mkh5_version"])
+
+        # should be OK unless tampered with
+        assert len(set(mkh5_f_version)) == 1, "mkh5 file versions cannot vary across dblocks"
+                                      
+        # epochs_table tagged event info really belongs attached to
+        # the raw, e.g., raw._ditis map of ditis but mne.Raw doesn't
+        # allow it.
+
+        # info["description"] = json.dumps({"mkh5_epoch_tables": mne_ditis})
+        info["description"] = json.dumps(
+            {
+                "mkh5_epoch_tables": mne_ditis,
+                "mkh5_file_version": mkh5_f_version[0],
+                "mkh5mne_version": __MKH5MNE_VERSION__,
+            }
+        )
 
         # event and eeg datastreams numpy array
         data = mne_raw.get_data()
         super().__init__(
             info=info,
             preload=data,
-            filenames=[mkh5_f],
+            filenames=[str(mkh5_f)],
             # orig_format='single',
         )
 
@@ -1687,7 +1708,7 @@ def from_mkh5(
 
     garv_annotations: None | dict, optional
         event_channel: (str)  # channel name with events to annotate
-        start, stop: (float)  # relative to time lock event
+        tmin, tmax: (float)  # relative to time lock event
         units: "ms" or "s". Defaults to None.
 
     dblock_paths : None | list of mkh5 datablock paths, optional
@@ -1755,7 +1776,7 @@ def from_mkh5(
     >>> mne_raw = mkh5mne.from_mkh5(
             "sub01.h5",
             garv_annotations=dict(
-                event_channel="log_evcodes", start=-500, stop=500, units="ms"
+                event_channel="log_evcodes", tmin=-500, tmax=500, units="ms"
             )
        ) 
 
@@ -1778,7 +1799,7 @@ def from_mkh5(
 
 
 def get_garv_bads(
-        mne_raw, event_channel=None, start=None, stop=None, units=None, garv_channel="log_flags"
+        mne_raw, event_channel=None, tmin=None, tmax=None, units=None, garv_channel="log_flags"
 ):
     """create mne BAD_garv annotations spanning events on a stim event channel
 
@@ -1796,7 +1817,7 @@ def get_garv_bads(
         mne.Raw data object converted from mkh5
     event_channel : str
         name of the mne channel with events to annotate with BAD_garv
-    start, stop: float
+    tmin, tmax: float
         interval to annotate, relative to time lock event, e.g., -500, 1000
     unit: {"ms", "s"}
         for the interval units as milliseconds or seconds
@@ -1815,8 +1836,8 @@ def get_garv_bads(
     >>>  mkh5mn3.get_garv_bads(
              mne_raw,
              event_channel="p3_events",
-             start=-500,
-             stop=1000,
+             tmin=-500,
+             tmax=1000,
              units="ms"
          )
 
@@ -1825,23 +1846,23 @@ def get_garv_bads(
     msg = None
     try:
         _check_mkh5_event_channel(mne_raw, event_channel)
-        if not start < stop:
+        if not tmin < tmax:
             raise ValueError("bad garv interval, ")
         if units == "s":
             pass
         elif units == "ms":
-            start /= 1000.0
-            stop /= 1000.0
+            tmin /= 1000.0
+            tmax /= 1000.0
         else:
             raise ValueError("bad units, ")
     except Exception as fail:
         msg = (
             "garv bads event_channel must be be a stim channel in the raw,"
-            " garv interval must be start < stop with units 'ms' or 's'"
+            " garv interval must be tmin < tmax with units 'ms' or 's'"
         )
         raise ValueError(msg) from fail
 
-    garv_duration = stop - start
+    garv_duration = tmax - tmin
 
     # epoch event channel column
     event_ch = mne_raw.get_data(event_channel)[0].astype(int)
@@ -1858,7 +1879,7 @@ def get_garv_bads(
 
     # trim onset underruns and duration overruns, else
     onsets = [
-        max(min_t, t) for t in (bad_garv_ticks / mne_raw.info["sfreq"]) + start
+        max(min_t, t) for t in (bad_garv_ticks / mne_raw.info["sfreq"]) + tmin
     ]
 
     durations = [

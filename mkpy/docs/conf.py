@@ -61,8 +61,8 @@ napoleon_use_ivar = True
 
 # TPU added sphinx gallery
 sphinx_gallery_conf = {
-    "examples_dirs": ["../examples/mkh5_basics", "../examples/mkh5mne_basics"],
-    "gallery_dirs": ["examples_gallery/mkh5_basics", "examples_gallery/mkh5mne_basics"],
+    "examples_dirs": ["examples/mkh5", "examples/mkh5mne"],
+    "gallery_dirs": ["examples_gallery/mkh5", "examples_gallery/mkh5mne"],
     "filename_pattern": "/[a-zA-Z]+",
 }
 
@@ -81,7 +81,7 @@ master_doc = "index"
 
 # General information about the project.
 project = "mkpy"
-copyright = "2017-2020 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith"
+copyright = "2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith"
 author = "Thomas P. Urbach, Andrey Portnoy, extending code from Nathaniel Smith"
 
 # The version info for the project you're documenting, acts as replacement for
