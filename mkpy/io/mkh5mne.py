@@ -353,11 +353,6 @@ def _check_api_params(_class, mkh5_f, **kwargs):
         msg = "mkh5 must be a path to an mkpy.mkh5 HDF5 file"
         raise ValueError(msg)
 
-    # arg: mkh5 file check
-    if not Path(mkh5_f).exists():
-        msg = f"cannot open {mkh5_f} check file name, path, and permissions"
-        raise Mkh5FileAccessError(msg)
-
     # ------------------------------------------------------------
     # verbose
     verbose = kwargs["verbose"]
@@ -366,16 +361,31 @@ def _check_api_params(_class, mkh5_f, **kwargs):
         raise ValueError(msg)
 
     # ------------------------------------------------------------
+    # arg: mkh5 file and dblock check
+    if not Path(mkh5_f).exists():
+        msg = f"{mkh5_f} not found, check file path and name"
+        raise Mkh5FileAccessError(msg)
+
+    # this must work
+    h5_data = mkh5.mkh5(mkh5_f)
+
     # e.g., dblock_paths=["group/dblock_0", "group/dblock_1", ...]  or all
     assert kwargs["dblock_paths"] is not None, "set dblock_paths=[...], else very slow"
-    dblock_paths = kwargs["dblock_paths"]
+    kw_dblock_paths = kwargs["dblock_paths"]
 
     if not (
-        isinstance(dblock_paths, list)
-        and all([isinstance(dbp, str) for dbp in dblock_paths])
+        isinstance(kw_dblock_paths, list)
+        and all([isinstance(dbp, str) for dbp in kw_dblock_paths])
     ):
-        msg = f"dblock_paths={dblock_paths} must be a list of strings"
+        msg = f"dblock_paths={kw_dblock_paths} must be a list of strings"
         raise TypeError(msg)
+
+    h5_dblock_paths = h5_data.dblock_paths
+    for kw_dbp in kw_dblock_paths:
+        if kw_dbp[0] == r"/":
+            raise ValueError(f"There is no root / in mkh5 datablock paths, try {kw_dbp[1:]}")
+        if kw_dbp not in h5_dblock_paths:
+            raise IOError(f"{kw_dbp} not found in {mkh5_f}")
 
     # ------------------------------------------------------------
     # garv annotations
@@ -1407,9 +1417,7 @@ def _dblock_to_raw(
     """
     h5data = mkh5.mkh5(mkh5_f)
     try:
-        # check strings to guard against leading HDF5 root /
-        if dblock_path not in h5data.dblock_paths:
-            raise ValueError(f"{dblock_path} not found in dblock_paths")
+        assert dblock_path in h5data.dblock_paths, "please report this bug"
         hdr, dblock = h5data.get_dblock(dblock_path)
     except Exception as fail:
         raise Mkh5DblockPathError(str(fail), mkh5_f, dblock_path)
