@@ -75,7 +75,7 @@ def test__check_api_params_raw():
         with pytest.raises(fail):
             mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=param)
 
-    # garv interval
+    ### FIXME garv annotation interval
     for kwval in [[-500, 1500, "ms"], [-0.50, 1.5, "s"]]:
         mkh5mne._check_api_params(
             RawMkh5,

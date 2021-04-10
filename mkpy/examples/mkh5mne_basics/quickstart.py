@@ -1,32 +1,78 @@
 """
-Quickstart: mkh5 to mne.Raw and mne.Epochs
-##########################################
+Quickstart: mkh5 to MNE
+#######################
 """
 
-# %% TL; DR use mkpy HDF5 to mne.Raw: :py:meth:`.read_raw_mkh5` to
-# convert mkpy.mkh5 format HDF5 data files to mne.Raw with or without
-# garv artifacts marked as "BAD_garv" annotations. To use mkpy codemap
-# event tags with mne.Epochs, extract them from the converted mne.Raw
-# with the mkh5mne utility :py:meth:`.get_epochs_metadata` and feed
-# them as metadata when creating ``mne.Epochs(..., metadata=...)``.
+# %%
+#
+# This example illustrates a single subject mkh5 data file.
 
 # %%
-# Set up
-# ======
+# Show environment and versions.
 import os
 import mne
-from mkpy import mkh5
+import mkpy
 from mkpy.io import mkh5mne
 
-# FYI
-conda_env = os.environ['CONDA_DEFAULT_ENV']
-print("conda env", conda_env)
-for pkg in [mkh5, mne]:
+print("conda env", os.environ['CONDA_DEFAULT_ENV'])
+for pkg in [mkpy, mne]:
     print(pkg.__name__, pkg.__version__)
 
 # %%
-# Convert mkh5 to mne.Raw: :py:meth:`.from_mkh5`
-# ==============================================
+#
+# Convert mkh5 to mne.Raw
+# =======================
+#
+# * MNE requires electrode locations. Include them in yhdr YAML file
+#   or here as shown. The apparatus map format is the same.
+#
+# * Adding garv annotations is optional but enables the MNE automatic
+#   rejection option for mne.Epochs.
+mne_raw = mkh5mne.from_mkh5(
+    "../mkh5_data/sub000p3.h5",  # file to convert
+    apparatus_yaml="mne_32chan_xyz_spherical.yml",  # electrode locations
+    garv_annotations={
+        "event_channel": "ms1500",
+        "start": -750,
+        "stop": 750,
+        "units": "ms"
+    }
+)
+
+# %%
+# Now you can use native mne.Raw methods like plotting and saving as .fif
+p3_events = mkh5mne.find_mkh5_events(mne_raw, "ms1500")
+_ = mne_raw.plot(
+    p3_events,
+    start=53.0,
+    duration=3.0,
+)
+_ = mne.viz.plot_sensors(mne_raw.info)
+
+
+# %%
+# mne.Epochs with codemap event tags
+# ==================================
+#
+# Use `:py:func:`mkh5mne.get_epochs` to get mne.Epochs objects with mkh5 codemap
+# tags for metadata.  Pass in the same arguments and key word arguments
+# as you would for :py:meth:`mne.Epochs.
+
+# These options exclude the garv artifact events annotated BAD_* and center each
+# epoch and channel on the baseline 200 - 0 ms prestimulus interval.
+mne_epochs = mkh5mne.get_epochs(
+    mne_raw,
+    "ms1500",
+    preload=True,  # populate the Epochs with data and apply projections
+    reject_by_annotation=True,  # drop the BAD_* annotations or set False to keep them
+    baseline=(-0.2, 0.0)  # center on this interval
+)
+mne_epochs
+
+
+# %%
+# How it works
+# ============
 #
 # The sample mkh5 file is for a single subject in an auditory oddball paradigm with
 # some epochs tables previously marked.
@@ -72,39 +118,62 @@ _ = mne_raw.plot(
 _ = mne.viz.plot_sensors(mne_raw.info)
 
 # %%
-# Marking garv artifacts in the mne.Raw
-# =====================================
+# Annotate garv artifacts (optional)
+# ----------------------------------
 #
-# If the mkh5 file was created after running ``avg -x`` to track garv artifacts in the .log file,
-# you can paint `BAD_garv` mne.Annotations around events that garv would reject. Specify the
-# event channel to select which events to annotate. The `log_evcodes` channel annotates  all events 
-# in the data. A named epochs table event channel like `ms1500` annotates only the time lock events 
-# for those epochs.
-garv_bads = mkh5mne.get_garv_bads(
-    mne_raw,
-    "ms1500",  # create BAD_garv annotation for the events in this epochs table
-    garv_interval=[-750, 750, "ms"]
-)
-print(garv_bads, garv_bads.description)
+# The mkh5 log_flags that indicate garv artifact events after ``avg
+# -x`` can be converted to `BAD_garv` mne.Annotations for events on
+# any of the event channels.
 
-# %%
-# Update the mne.Raw annotations with the new garv bad intervals so they
-# can be excluded (or not) when slicing the raw into epochs.
+# Select the event channel to annotate ("log_evcodes" for all), then
+# then add the annotations to the mne.Raw 
+garv_bads = mkh5mne.get_garv_bads(
+    mne_raw, event_channel="ms1500", start=-750, stop=750, units="ms"
+)
 mne_raw.set_annotations(mne_raw.annotations + garv_bads)
 mne_raw.annotations
 
-# %%
-p3_events = mkh5mne.find_mkh5_events(mne_raw, "ms1500")
-_ = mne_raw.plot(
-    p3_events,
-    start=53.0,
-    duration=3.0,
-)
-
 #%%
-# mne.Epochs with mkpy codemap event tags
-# =======================================
+# mne.Epochs codemap metadata
+# ---------------------------
 #
-# To get mne.Epochs with the mkpy codemap tags use the :py:meth:.`get_epochs_metadata`method
+# Use :py:meth:.`get_epochs_metadata` to extract mne.Epochs with
+# the codemap metatdata 
 # as MNE format metata when constructing mne.Epochs.
+mne_epochs = mkh5mne.get_epochs(
+    mne_raw,
+    "ms1500",
+    preload=True,  # populate the Epochs with data and apply projections
+    reject_by_annotation=True,  # drop the BAD_* annotations or set False to keep them
+    baseline=(-0.2, 0.0)  # center on this interval
+)
+mne_epochs
+
+# %%
 #
+# The mkh5 codemap tags are attached as native mne.Epochs.metadata
+mne_epochs.metadata
+
+# %%
+# :py:mod:`.mkh5mne` raw data utilities
+# =====================================
+#
+# These utility functions access mkh5 information embedded in the RawMkH5 object.
+# 
+# :py:meth:`.find_mkh5_events`
+# ----------------------------
+#
+# This is a replacement for :py:meth:`mne.find_events` that creates
+# the 3 column array of [sample, 0, event] used for native mne.Raw epoching and
+# plotting without doing wrong things like converting negative event
+# codes to positive.
+print(garv_bads, garv_bads.description)
+p3_events = mkh5mne.find_mkh5_events(mne_raw, "ms1500")
+p3_events
+
+# :py:meth:`.get_find_mkh5_events`
+# ----------------------------
+#
+# This extracts the embedded epochs table from the RawMkh5.
+metadata = mkh5mne.get_epochs_metadata(mne_raw, "ms1500")
+metadata
