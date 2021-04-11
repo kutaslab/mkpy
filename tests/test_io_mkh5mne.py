@@ -39,6 +39,21 @@ TEST_EPOCHS_MKH5_FILE = DATA_DIR / ZENODO_EPOCHS_F
 assert TEST_RAW_MKH5_FILE.exists()
 assert TEST_EPOCHS_MKH5_FILE.exists()
 
+
+# legal garv annotation intervals for TEST_EPOCHS_MKH5_FILE
+GARV_ANNOTATIONS_MS = dict(
+    event_channel="log_evcodes", tmin=-500, tmax=500, units="ms"
+)
+
+GARV_ANNOTATIONS_S = dict(
+    event_channel="log_evcodes", tmin=-0.5, tmax=0.5, units="s"
+)
+
+# bad interval
+GARV_ANNOTATIONS_BAD = dict(
+    event_channel="log_evcodes", tmin=500, tmax=-500, units="ms"
+)
+
 # ------------------------------------------------------------
 # Backend and QC checks
 
@@ -75,27 +90,41 @@ def test__check_api_params_raw():
         with pytest.raises(fail):
             mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=param)
 
-    ### FIXME garv annotation interval
-    for kwval in [[-500, 1500, "ms"], [-0.50, 1.5, "s"]]:
+    # these should pass
+    for garv_anns in [GARV_ANNOTATIONS_MS, GARV_ANNOTATIONS_S]:
         mkh5mne._check_api_params(
             RawMkh5,
             TEST_EPOCHS_MKH5_FILE,
-            dblock_paths=["open/dblock_0"],
-            garv_interval=kwval,
+            dblock_paths=["sub000/dblock_0"],
+            garv_annotations=garv_anns
         )
-    for exception, kwval in [
-        (ValueError, [1, 2]),
-        (ValueError, [1, 2, "not_ms_or_s"]),
-        (TypeError, ["a", 2, "ms"]),
-        (ValueError, [500, 500, "ms"]),
-        (ValueError, [500, -500, "ms"]),
+
+    # these should fail
+    for exc, kws in [
+            (TypeError, None),
+            (KeyError, "missing_key"),
+            (KeyError, {"extra_key": "val"}),
+            (ValueError, {"units": "seconds"}),
+            (ValueError, {"tmin": 4, "tmax": 4}),
+            (ValueError, {"tmin": 4, "tmax": 3}),
     ]:
-        with pytest.raises(exception):
+        with pytest.raises(exc):
+            if kws is None:
+                garv_anns = ["not", "a", "dict"]  # wrong type
+            else:
+                # pollute a legal garv annotation
+                garv_anns = GARV_ANNOTATIONS_MS.copy()
+
+                if kws == "missing_key":
+                    del(garv_anns["event_channel"])
+                else:
+                    garv_anns.update(kws)
+
             mkh5mne._check_api_params(
                 RawMkh5,
                 TEST_EPOCHS_MKH5_FILE,
-                dblock_paths=["open/dblock_0"],
-                garv_interval=kwval,
+                dblock_paths=["sub000/dblock_0"],
+                garv_annotations=garv_anns
             )
 
     # smoke test RawMkh5, EpochsMkh5 w/  yaml file  go, no-go
@@ -248,18 +277,18 @@ def test__parse_hdr_for_mne():
 
 
 @pytest.mark.parametrize(
-    "garv_interval",
+    "garv_anns",
     [
         None,
-        [-500, 1500, "ms"],
-        pytest.param([1500, 500, "ms"], marks=pytest.mark.xfail(strict=True)),
+        GARV_ANNOTATIONS_MS,
+        pytest.param(GARV_ANNOTATIONS_BAD, marks=pytest.mark.xfail(strict=True)),
     ],
 )
 @pytest.mark.parametrize("mkh5_f", [TEST_RAW_MKH5_FILE, TEST_EPOCHS_MKH5_FILE])
-def test__dblock_to_raw(mkh5_f, garv_interval):
+def test__dblock_to_raw(mkh5_f, garv_anns):
     h5 = mkh5.mkh5(mkh5_f)
     for dblock_path in h5.dblock_paths:
-        mkh5mne._dblock_to_raw(mkh5_f, dblock_path, garv_interval=garv_interval)
+        mkh5mne._dblock_to_raw(mkh5_f, dblock_path, garv_annotations=garv_anns)
 
 
 def test__is_equal_mne_info():
@@ -340,13 +369,14 @@ def test_read_raw_mkh5_duplicate_mne_raw_tick():
     dupe_f.unlink()
 
 
-@pytest.mark.parametrize("garv_interval", [[-500, 1500, "ms"], None])
-def test_read_write_raw(garv_interval):
+@pytest.mark.parametrize("garv_anns", [GARV_ANNOTATIONS_MS, None])
+def test_read_write_raw(garv_anns):
 
-    infix = "_".join([str(p) for p in garv_interval]) if garv_interval else "_None"
-    raw_fif = f"test_read_write_garv{infix}-raw.fif"
+    infix = "_".join(str(val) for val in garv_anns.values()) if garv_anns else "None"
+    raw_fif = Path(DATA_DIR / f"_test_read_write_garv_{infix}-raw.fif")
     print("read/write test writing:", raw_fif)
-    raw_w = mkh5mne.read_raw_mkh5(TEST_EPOCHS_MKH5_FILE, garv_interval=garv_interval)
+    raw_w = mkh5mne.read_raw_mkh5(
+        TEST_EPOCHS_MKH5_FILE, garv_annotations=garv_anns)
     raw_w.save(raw_fif, overwrite=True)
     raw_r = mne.io.read_raw_fif(raw_fif, preload=True)
 
@@ -373,9 +403,11 @@ def test_get_garv_bads():
     descriptions = ["BAD_garv_48"] * 3 + ["BAD_garv_32"] + ["BAD_garv_48"] * 3
     dbps = mkh5.mkh5(TEST_EPOCHS_MKH5_FILE).dblock_paths
     raw_mkh5 = mkh5mne.read_raw_mkh5(
-        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[0:1],  # one block to shorten test time
+        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[:1],  # one block to shorten test time
     )
-    bad_garvs = mkh5mne.get_garv_bads(raw_mkh5, "ms100", garv_interval=[-12, 12, "ms"])
+    bad_garvs = mkh5mne.get_garv_bads(
+        raw_mkh5, event_channel="ms100", tmin=-12, tmax=12, units="ms",
+    )
     assert all(bad_garvs.onset == onsets)
     assert all(bad_garvs.duration == durations)
     assert all(bad_garvs.description == descriptions)
