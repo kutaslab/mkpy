@@ -41,10 +41,9 @@ MNE_MIN_VER = (0, 20)  # major, minor
 
 # requires header info introduced in mkh5 0.2.4
 MKH5_MIN_VER = (0, 2, 4)  # major, minor, patch
+MKH5_EEG_UNIT = 1e-6  # mkh5 is calibrated to microvolts
 
-MKH5_STIM_CHANNELS = [
-    "raw_evcodes", "log_evcodes", "log_ccodes", "log_flags", "pygarv"
-]
+MKH5_STIM_CHANNELS = ["raw_evcodes", "log_evcodes", "log_ccodes", "log_flags", "pygarv"]
 
 GARV_ANNOTATION_KEYS = ["event_channel", "tmin", "tmax", "units"]
 
@@ -228,6 +227,7 @@ class EpochsMkh5NonZeroTimestamps(ValueError):
         )
         self.args = (msg,)
 
+
 # ------------------------------------------------------------
 # Apparatus YAML file
 class ApparatusYamlFileError(Exception):
@@ -302,8 +302,7 @@ def _check_mkh5_event_channel(mne_raw, channel):
             )
 
         if not all(
-            mne_raw[channel][0].squeeze()
-            == mne_raw[channel][0].squeeze().astype(int)
+            mne_raw[channel][0].squeeze() == mne_raw[channel][0].squeeze().astype(int)
         ):
             error_msg = f"{channel} data does look like integer event codes"
         if error_msg:
@@ -385,7 +384,9 @@ def _check_api_params(_class, mkh5_f, **kwargs):
     h5_dblock_paths = h5_data.dblock_paths
     for kw_dbp in kw_dblock_paths:
         if kw_dbp[0] == r"/":
-            raise ValueError(f"There is no root / in mkh5 datablock paths, try {kw_dbp[1:]}")
+            raise ValueError(
+                f"There is no root / in mkh5 datablock paths, try {kw_dbp[1:]}"
+            )
         if kw_dbp not in h5_dblock_paths:
             raise IOError(f"{kw_dbp} not found in {mkh5_f}")
 
@@ -398,7 +399,7 @@ def _check_api_params(_class, mkh5_f, **kwargs):
             raise TypeError("garv_annotations must be a dictionary")
 
         if not set(garv_anns.keys()) == set(GARV_ANNOTATION_KEYS):
-            raise KeyError(f"garv_annotations keys must be {GARV_ANNOTATION_KEYS}") 
+            raise KeyError(f"garv_annotations keys must be {GARV_ANNOTATION_KEYS}")
 
         if garv_anns["units"] not in ["ms", "s"]:
             msg = f"garv annotation units must be 'ms' or 's"
@@ -407,7 +408,7 @@ def _check_api_params(_class, mkh5_f, **kwargs):
         t_scale = 1000.0 if garv_anns["units"] == "ms" else 1.0
 
         # let python raise TypeError for non-numerical values
-        garv_start = garv_anns["tmin"]  / t_scale
+        garv_start = garv_anns["tmin"] / t_scale
         garv_stop = garv_anns["tmax"] / t_scale
 
         if not garv_start < garv_stop:
@@ -696,7 +697,7 @@ def _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table):
         )
 
     if epochs_name not in [
-            mne_raw.info.ch_names[i] for i in mne.pick_types(mne_raw.info, stim=True)
+        mne_raw.info.ch_names[i] for i in mne.pick_types(mne_raw.info, stim=True)
     ]:
         error_msg = (
             "{epochs_name} is not an mne stim channel type, make sure this"
@@ -725,14 +726,16 @@ def _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table):
                 f"mkh5 epochs table {epochs_name}['{col}'] does not match"
                 " mne.Raw data at these mne_raw_tick:\n"
             )
-            error_msg += "\n".join([
-                (
-                    f"epochs_table[{col}]: {error[col]}"
-                    f" mne.Raw[{col, int(error['mne_raw_tick'])}]: "
-                    f"{mne_raw.get_data(col).squeeze()[int(error['mne_raw_tick'])]}"
-                )
-                for _, error in errors.iterrows()
-            ])
+            error_msg += "\n".join(
+                [
+                    (
+                        f"epochs_table[{col}]: {error[col]}"
+                        f" mne.Raw[{col, int(error['mne_raw_tick'])}]: "
+                        f"{mne_raw.get_data(col).squeeze()[int(error['mne_raw_tick'])]}"
+                    )
+                    for _, error in errors.iterrows()
+                ]
+            )
             raise ValueError(error_msg)
 
     # non-zero events on the named "event" channel must be 1-1
@@ -810,7 +813,10 @@ class RawMkh5(mne.io.BaseRaw):
             # epoch_names and vals = the mkh5 epochs table dataframe row sliced
             # for this data block path.
             raw_dblock, db_epts = _dblock_to_raw(
-                mkh5_f, dbp, garv_annotations=garv_annotations, apparatus_yaml=apparatus_yaml
+                mkh5_f,
+                dbp,
+                garv_annotations=garv_annotations,
+                apparatus_yaml=apparatus_yaml,
             )
             # the data
             raw_dblocks.append(raw_dblock)
@@ -852,8 +858,10 @@ class RawMkh5(mne.io.BaseRaw):
             mkh5_f_version.append(hdr["mkh5_version"])
 
         # should be OK unless tampered with
-        assert len(set(mkh5_f_version)) == 1, "mkh5 file versions cannot vary across dblocks"
-                                      
+        assert (
+            len(set(mkh5_f_version)) == 1
+        ), "mkh5 file versions cannot vary across dblocks"
+
         # epochs_table tagged event info really belongs attached to
         # the raw, e.g., raw._ditis map of ditis but mne.Raw doesn't
         # allow it.
@@ -1238,9 +1246,8 @@ def _parse_hdr_for_mne(hdr, apparatus_yaml=None):
 
     # for mne.channels.make_dig_montage
     dig_ch_pos = apparatus_streams.apply(
-        lambda row:
-        row[["x", "y", "z"]].to_numpy(dtype=float) * yhdr_units_scaled_by,
-        axis=1
+        lambda row: row[["x", "y", "z"]].to_numpy(dtype=float) * yhdr_units_scaled_by,
+        axis=1,
     ).to_dict()
 
     # for info["chs"][i]["loc"] = array, shape(12,)
@@ -1283,9 +1290,9 @@ def _patch_dblock_info(info, hdr, hdr_mne):
     Most MNE internal values are already set to correct
     values by create_info and ch_types.
 
-    ch_info["cal"] is the critical the scaling factor, so that RawArray
-    data * ch_info["cal"] is on the FIFF.FIFF_UNIT_V scale, i.e., 1e-6
-    for the calibrated mkpy.mkh5 to microvolts
+    global MKH5_EEG_UNIT is the critical EEG scaling factor, so that RawArray
+    data * MKH5_EEG_UNIT set in dblock conversion from native mkh5 uV to the
+    FIFF.FIFF_UNIT_V channel scale set here in the MNE channel info
     """
 
     # info["proj_name"] = hdr["expdesc"]
@@ -1323,11 +1330,8 @@ def _patch_dblock_info(info, hdr, hdr_mne):
             # update ch locs from parsed hdr["apparatus"]["sensor"]
             ch_info["loc"] = hdr_mne["info_ch_locs"][ch_name]
 
-            # from create_info
+            # CRITICAL, must be true when MKH5_EEG_UNITS = 1e-6
             assert ch_info["unit"] == FIFF.FIFF_UNIT_V
-
-            # CRITICAL this scales mkh5 calibrated uV to MNE V
-            ch_info["cal"] = 1e-6
 
             # mkh5 data blocks may or may not be calibrated
             if not (
@@ -1335,10 +1339,14 @@ def _patch_dblock_info(info, hdr, hdr_mne):
                 and hdr["streams"][ch_name]["calibrated"]
             ):
                 msg = (
-                    f"mkh5 data {hdr['h5_dataset']} {ch_name} "
-                    "is not calibrated, scale is unknown"
+                    f"mkh5 data {hdr['h5_dataset']} {ch_name} is not calibrate"
+                    f"setting default mne.info[{ch_name}]['cal'] = 1.0"
                 )
                 warnings.warn(msg)
+                ch_info["cal"] = 1.0
+            else:
+                # log A/D cal factor the MNE way
+                ch_info["cal"] = 1.0 / hdr["streams"][ch_name]["cals"]["scale_by"]
 
     return info
 
@@ -1392,10 +1400,7 @@ def _patch_dblock_info(info, hdr, hdr_mne):
 # ------------------------------------------------------------
 # general data wrangling
 def _dblock_to_raw(
-        mkh5_f,
-        dblock_path,
-        garv_annotations=None,
-        apparatus_yaml=None,
+    mkh5_f, dblock_path, garv_annotations=None, apparatus_yaml=None,
 ):
     """convert one mkh5 datablock+header into one mne.RawArray
 
@@ -1443,18 +1448,23 @@ def _dblock_to_raw(
     except Exception as fail:
         raise Mkh5DblockPathError(str(fail), mkh5_f, dblock_path)
 
-    info, montage = _hdr_dblock_to_info_montage(
-        hdr, apparatus_yaml=apparatus_yaml
-    )
+    info, montage = _hdr_dblock_to_info_montage(hdr, apparatus_yaml=apparatus_yaml)
 
     # mne wants homogenous n_chans x nsamps, so stim, misc ints coerced
     # to float ... sigh.
     mne_data = np.ndarray(shape=(len(dblock.dtype.names), len(dblock)), dtype="f8")
 
-    # slice out and scale mkh5 recorded data to mne standards
+    # slice out and scale mkh5 native uV to mne FIFFV_UNIT_V
     for jdx, stream in enumerate(dblock.dtype.names):
+        # true by construction unless tampered with
         assert info["ch_names"][jdx] == stream
-        mne_data[jdx] = dblock[stream] * info["chs"][jdx]["cal"]
+        assert hdr["streams"][stream]["jdx"] == jdx
+
+        # CRITICAL ... mkh5 EEG are native uV, MNE are V
+        if "dig_chan" in hdr["streams"][stream]["source"]:
+            mne_data[jdx] = dblock[stream] * MKH5_EEG_UNIT
+        else:
+            mne_data[jdx] = dblock[stream] * 1.0
 
     # create the raw object
     raw_dblock = mne.io.RawArray(mne_data, info, copy="both")
@@ -1498,7 +1508,7 @@ def _dblock_to_raw(
             # CRITICAL: copy over log_evcodes at just the epoch event ticks
             etn_evcodes[0, etn_dblock.dblock_ticks] = etn_dblock.log_evcodes
 
-            # true by construction of mkh5 epochs. However ...
+            # true by construction of mkh5 except MNE is dtype float
             assert all(
                 log_evcodes[0, etn_dblock.dblock_ticks]
                 == etn_evcodes[0, etn_dblock.dblock_ticks]
@@ -1531,9 +1541,7 @@ def _dblock_to_raw(
 
     # add log_evocdes garv annotations, if any. validated in _check_api_params
     if garv_annotations:
-        print(
-            f"annotating garv artifacts {garv_annotations}"
-        )
+        print(f"annotating garv artifacts {garv_annotations}")
         bad_garvs = get_garv_bads(raw_dblock, **garv_annotations)
         raw_dblock.set_annotations(raw_dblock.annotations + bad_garvs)
 
@@ -1680,7 +1688,7 @@ def read_raw_mkh5(
         fail_on_montage=fail_on_montage,
         apparatus_yaml=apparatus_yaml,
         verbose=verbose,
-     )
+    )
 
 
 def from_mkh5(
@@ -1799,7 +1807,12 @@ def from_mkh5(
 
 
 def get_garv_bads(
-        mne_raw, event_channel=None, tmin=None, tmax=None, units=None, garv_channel="log_flags"
+    mne_raw,
+    event_channel=None,
+    tmin=None,
+    tmax=None,
+    units=None,
+    garv_channel="log_flags",
 ):
     """create mne BAD_garv annotations spanning events on a stim event channel
 
@@ -1878,9 +1891,7 @@ def get_garv_bads(
     max_t = np.floor(len(event_ch) / mne_raw.info["sfreq"])
 
     # trim onset underruns and duration overruns, else
-    onsets = [
-        max(min_t, t) for t in (bad_garv_ticks / mne_raw.info["sfreq"]) + tmin
-    ]
+    onsets = [max(min_t, t) for t in (bad_garv_ticks / mne_raw.info["sfreq"]) + tmin]
 
     durations = [
         garv_duration - min(0, x) for x in max_t - (np.array(onsets) + garv_duration)

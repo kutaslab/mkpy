@@ -16,17 +16,18 @@ help:
 
 # Catch-all target: route all unknown targets to Sphinx using the new
 # "make mode" option.  $(O) is meant as a shortcut for $(SPHINXOPTS).
-%: Makefile
+%: Makefile api-docs
 	@$(SPHINXBUILD) -M $@ "$(SOURCEDIR)" "$(BUILDDIR)" $(SPHINXOPTS) $(O)
 
-# api-docs:
-# 	sphinx-apidoc -e -o source .. ../dpath/
+api-docs:
+	sphinx-apidoc -e -f -o api_source .. ../dpath/
 
 clean:
 	rm -rf $(BUILDDIR)/*
+	rm -rf api_source/*
 	rm -rf examples_gallery/
 
-html-noexec:
+html-noexec: api-docs
 	$(SPHINXBUILD) -D plot_gallery=0 -b html $(ALLSPHINXOPTS) $(SOURCEDIR) $(BUILDDIR)/html
 	@echo
 	@echo "Build finished. The HTML pages are in $(BUILDDIR)/html."

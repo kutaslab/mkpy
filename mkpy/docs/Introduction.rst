@@ -1,5 +1,6 @@
-Introduction (|release|)
-============================
+Introduction
+============
+
 
 .. figure:: _images/viewer_all_views.png
    :scale: 75%

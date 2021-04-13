@@ -19,10 +19,14 @@ from mkpy.io import mkh5mne
 def mkh5raw_to_set(mkh5raw, fname, epochs_name=None):
     """Export mkh5raw EEG, channel, and event data to an EEGLAB .set file.
 
-    The EEGLAB .set file is populated with EEG and event data
-    channels, channel names and locations, event codes and tags and
-    all the annotations in `mkh5raw` including garv annotations if
-    previously set.
+    This writes a mkh5mne.RawMkh5 instance in memory to an EEGLAB .set
+    file populated with EEG and event data channels, channel names and
+    locations. The original mkh5 log event codes are stored in
+    EEG.events and EEG.urevents. If `epochs_name` is provided, the 
+    mkh5 codemap event tags for events in the named epochs table are added
+    to the eeglab events. All mne.Annotations in the raw file are
+    added to the EEGLAB events including mkh5 datablock path labels,
+    datablock boundaries, and garv annotations if any.
 
     Parameters
     ==========
@@ -124,9 +128,12 @@ def mkh5raw_to_set(mkh5raw, fname, epochs_name=None):
         # tag columns
 
         # tagged event codes must agree with log_evcodes
-        assert all(log_evcodes_df["log_evcodes"][
-            log_evcodes_df["mne_raw_tick"].isin(tags_df["mne_raw_tick"]).to_numpy()
-        ] == tags_df["log_evcodes"].to_numpy()), "tagged events don't match log_evcodes"
+        assert all(
+            log_evcodes_df["log_evcodes"][
+                log_evcodes_df["mne_raw_tick"].isin(tags_df["mne_raw_tick"]).to_numpy()
+            ]
+            == tags_df["log_evcodes"].to_numpy()
+        ), "tagged events don't match log_evcodes"
 
         # check before and after merge
         n_log_evcodes = len(log_evcodes_df)
@@ -138,7 +145,7 @@ def mkh5raw_to_set(mkh5raw, fname, epochs_name=None):
 
         # update eeglab event field description w/ epoch table name
         log_evcodes_df.loc[
-            ~ pd.isna(log_evcodes_df["mne_raw_tick"]), "description"
+            ~pd.isna(log_evcodes_df["mne_raw_tick"]), "description"
         ] = epochs_name
 
     # combine annotations, event codes, and tags
@@ -185,23 +192,27 @@ def mkh5_to_set(
 
     """Convert an mkh5 data file into MNE raw format
 
-    The mkh5 EEG data event channels in EEG.data. The
-    channel info is in EEG.chanlocs.
+    The mkh5 EEG data event channels in EEG.data.
+
+    The channel info is in EEG.chanlocs and the mkh5 Right Anterior
+    Superior (RAS) coordinates are converted to EEGLAB defaults
+    automatically.
 
     The EEG.events and EEG.urevents fields contain:
 
-    * mkh5 dblock paths, EEGLAB event type is the path
-    * mkh5 dblock boundaries, EEGLAB event type is "boundary", duration 0
-    * log event codes, EEGLAB event type is the code value, duration 0
-    * tagged log event codes and tags
-    * garv artifact intervals from garv_annotations, EEGLAB event type "boundary"
+    * type field values:
+      * log event codes (string representation)
+      * "boundary" for datablock boundaries and garv annotations
+      * mkh5 dblock path labels 
+    * latency values:
+      * 1-base data sample index of the event in the EEG.data array
+    * duration values:
+      * log events ar duration 0
+      * dblock boundary events are duration 0
+      * garv annotation boundary events are garv_annotation tmax - tmin in samples
 
-    are in EE
-    paths and boundaries are written to EEGLAB .set events. If
-    garv_annotations
-    tagstagsevents, and channel info are converted to
-    mne.BaseRaw and written to EEGLAB .set format along with the event
-    tags in epochs_name and garv_annotations, if any.
+    Additional event fields are `description` and codemap tags from
+    the epochs table, if any.
 
     Parameters
     ----------

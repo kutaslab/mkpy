@@ -1,5 +1,5 @@
-.. _mkh5_with_mne:
+.. _mkh5_and_mne:
 
 
-MNE with mkh5
-=============
+mkh5 and MNE Python (experimental)
+==================================

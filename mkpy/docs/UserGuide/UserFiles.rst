@@ -72,6 +72,9 @@ Slightly Less Silly Example::
 
 
 
+.. _sample_yhdr:
+
+
 Sample ``.yhdr`` (|release|)
 ------------------------------------
 
