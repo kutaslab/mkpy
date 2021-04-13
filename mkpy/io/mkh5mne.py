@@ -1944,7 +1944,7 @@ def get_epochs_metadata(mne_raw, epochs_name):
         )
         raise ValueError(error_msg)
 
-    return pd.DataFrame(metadata)
+    return pd.DataFrame(metadata).sort_values("mne_raw_tick")
 
 
 def get_epochs(mne_raw, epochs_name, metadata_columns="all", **kwargs):
