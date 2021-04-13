@@ -1,12 +1,12 @@
-Reference
-=========
+API Reference
+=============
 
 Module Index
 -------------
 .. toctree::
    :maxdepth: 5
 
-   ./api_source/mkpy.rst
+   mkpy_api.rst
 
 
 

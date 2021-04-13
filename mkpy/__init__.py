@@ -12,9 +12,10 @@ import sys
 import traceback
 from pprint import pformat
 import re
-from . import dpath
 
-__version__ = "0.2.5.dev2"
+# from . import dpath
+
+__version__ = "0.2.5.dev6"
 
 
 def get_ver():
