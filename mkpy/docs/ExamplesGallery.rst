@@ -2,12 +2,17 @@ Examples Gallery
 ================
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 3
 
-   examples_gallery/mkh5_basics/index
+   examples_gallery/mkh5/index
 
 
 .. toctree::
-   :maxdepth: 5
+   :maxdepth: 3
 
-   examples_gallery/mkh5mne_basics/index
+   examples_gallery/mkh5mne/index
+
+.. toctree::
+   :maxdepth: 3
+
+   examples_gallery/mkh5eeglab/index

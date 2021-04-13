@@ -23,13 +23,13 @@ sensible environment name.
 
   .. code-block:: bash
 
-      create conda -n some_env -c kutaslab -c defaults -c conda-forge mkpy
+      conda create --name some_env mkpy -c kutaslab -c defaults -c conda-forge
 
 * Install for a specific version of Python, say 3.7:
 
   .. code-block:: bash
 
-      create conda -n some_env -c kutaslab -c defaults -c conda-forge python=3.7 mkpy
+      conda create --name some_env python=3.7 mkpy -c kutaslab -c defaults -c conda-forge
 
 
 * Install into an existing conda environment:
@@ -37,7 +37,7 @@ sensible environment name.
   .. code-block:: bash
   
       conda activate some_env
-      conda install  -c kutaslab -c defaults -c conda-forge mkpy
+      conda install -c kutaslab -c defaults -c conda-forge mkpy
 
 
 Conda install a pre-release development version
@@ -52,11 +52,11 @@ Conda install a pre-release development version
 
   .. code-block:: bash
 
-      create conda -n dev_env -c kutaslab/label/pre-release -c defaults -c conda-forge mkpy
+      conda create --name dev_env -c kutaslab/label/pre-release -c defaults -c conda-forge mkpy
 
 
-Install from source (discouraged)
----------------------------------
+Install from source (not recommended for general use)
+-----------------------------------------------------
 
 Clone the github repository into the current directory and pip install
 the to the local source into the current environment's `site-packages`

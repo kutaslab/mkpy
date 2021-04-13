@@ -1,7 +1,9 @@
 import os
+from pathlib import Path
 from copy import deepcopy
 import pytest
 import numpy as np
+import pandas as pd
 import requests  # URL IO
 from mkpy import dpath  # local fork of dpath
 
@@ -10,7 +12,7 @@ from .config import TEST_DIR
 
 import mkpy.mkh5 as mkh5
 from mkpy.io import mkh5mne
-from mkpy.io.mkh5mne import RawMkh5
+from mkpy.io.mkh5mne import Mkh5Raw
 
 DATA_DIR = TEST_DIR("data")  # Path(".")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -37,31 +39,48 @@ TEST_EPOCHS_MKH5_FILE = DATA_DIR / ZENODO_EPOCHS_F
 assert TEST_RAW_MKH5_FILE.exists()
 assert TEST_EPOCHS_MKH5_FILE.exists()
 
+# TEST_RAW groups
+# cals_10uV_after          Group   # calibrated
+# cals_AD_before           Group   # not calibrated
+# closed                   Group   # calibrated
+# open                     Group   # calibrated
+
+
+# legal garv annotation intervals for TEST_EPOCHS_MKH5_FILE
+GARV_ANNOTATIONS_MS = dict(event_channel="log_evcodes", tmin=-500, tmax=500, units="ms")
+
+GARV_ANNOTATIONS_S = dict(event_channel="log_evcodes", tmin=-0.5, tmax=0.5, units="s")
+
+# bad interval
+GARV_ANNOTATIONS_BAD = dict(
+    event_channel="log_evcodes", tmin=500, tmax=-500, units="ms"
+)
+
 # ------------------------------------------------------------
 # Backend and QC checks
 
 
 def test__check_api_params_raw():
-    """RawMkh5 keyword parameters"""
+    """Mkh5Raw keyword parameters"""
 
     # mkh5 file arg
     with pytest.raises(TypeError):
         mkh5mne._check_api_params()
 
     with pytest.raises(TypeError):
-        mkh5mne._check_api_params(RawMkh5)
+        mkh5mne._check_api_params(Mkh5Raw)
 
     with pytest.raises(mkh5mne.Mkh5FileAccessError):
-        mkh5mne._check_api_params(RawMkh5, "no_such.h5")
+        mkh5mne._check_api_params(Mkh5Raw, "no_such.h5")
 
     # ------------------------------------------------------------
     # fail on unknown kwarg
     with pytest.raises(ValueError):
-        mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, not_a_kw="arg")
+        mkh5mne._check_api_params(Mkh5Raw, TEST_RAW_MKH5_FILE, not_a_kw="arg")
 
     # dblock paths
     mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"]
+        Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"]
     )
 
     for fail, param in [
@@ -71,41 +90,55 @@ def test__check_api_params_raw():
         # (mkh5mne.Mkh5DblockPathError, ["no_such_dblock_path"]),
     ]:
         with pytest.raises(fail):
-            mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=param)
+            mkh5mne._check_api_params(Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=param)
 
-    # garv interval
-    for kwval in [[-500, 1500, "ms"], [-0.50, 1.5, "s"]]:
+    # these should pass
+    for garv_anns in [GARV_ANNOTATIONS_MS, GARV_ANNOTATIONS_S]:
         mkh5mne._check_api_params(
-            RawMkh5,
+            Mkh5Raw,
             TEST_EPOCHS_MKH5_FILE,
-            dblock_paths=["open/dblock_0"],
-            garv_interval=kwval,
+            dblock_paths=["sub000/dblock_0"],
+            garv_annotations=garv_anns,
         )
-    for exception, kwval in [
-        (ValueError, [1, 2]),
-        (ValueError, [1, 2, "not_ms_or_s"]),
-        (TypeError, ["a", 2, "ms"]),
-        (ValueError, [500, 500, "ms"]),
-        (ValueError, [500, -500, "ms"]),
+
+    # these should fail
+    for exc, kws in [
+        (TypeError, None),
+        (KeyError, "missing_key"),
+        (KeyError, {"extra_key": "val"}),
+        (ValueError, {"units": "seconds"}),
+        (ValueError, {"tmin": 4, "tmax": 4}),
+        (ValueError, {"tmin": 4, "tmax": 3}),
     ]:
-        with pytest.raises(exception):
+        with pytest.raises(exc):
+            if kws is None:
+                garv_anns = ["not", "a", "dict"]  # wrong type
+            else:
+                # pollute a legal garv annotation
+                garv_anns = GARV_ANNOTATIONS_MS.copy()
+
+                if kws == "missing_key":
+                    del garv_anns["event_channel"]
+                else:
+                    garv_anns.update(kws)
+
             mkh5mne._check_api_params(
-                RawMkh5,
+                Mkh5Raw,
                 TEST_EPOCHS_MKH5_FILE,
-                dblock_paths=["open/dblock_0"],
-                garv_interval=kwval,
+                dblock_paths=["sub000/dblock_0"],
+                garv_annotations=garv_anns,
             )
 
-    # smoke test RawMkh5, EpochsMkh5 w/  yaml file  go, no-go
+    # smoke test Mkh5Raw, EpochsMkh5 w/  yaml file  go, no-go
     mkh5mne._check_api_params(
-        RawMkh5,
+        Mkh5Raw,
         TEST_RAW_MKH5_FILE,
         dblock_paths=["open/dblock_0"],
         apparatus_yaml=TEST_APPARATUS_YAML,
     )
     with pytest.raises(mkh5mne.ApparatusYamlFileError):
         mkh5mne._check_api_params(
-            RawMkh5,
+            Mkh5Raw,
             TEST_RAW_MKH5_FILE,
             dblock_paths=["open/dblock_0"],
             apparatus_yaml=TEST_APPARATUS_YAML + "X",
@@ -113,7 +146,7 @@ def test__check_api_params_raw():
 
     # ignore_keys param go, no-go
     mkh5mne._check_api_params(
-        RawMkh5,
+        Mkh5Raw,
         TEST_RAW_MKH5_FILE,
         dblock_paths=["open/dblock_0"],
         ignore_keys=["subject_info", "meas_id"],
@@ -121,7 +154,7 @@ def test__check_api_params_raw():
     for bad_ignore_keys in [(1, 2), ["meas_id", 3.5]]:
         with pytest.raises(ValueError):
             mkh5mne._check_api_params(
-                RawMkh5,
+                Mkh5Raw,
                 TEST_RAW_MKH5_FILE,
                 dblock_paths=["open/dblock_0"],
                 ignore_keys=bad_ignore_keys,
@@ -132,15 +165,15 @@ def test__check_api_params_raw():
 @pytest.mark.parametrize("val", [True, False])
 def test__check_api_params_fail_on_info_montage(key, val):
 
-    # smoke test RawMkh5, EpochsMkh5 w/  yaml file
+    # smoke test Mkh5Raw, EpochsMkh5 w/  yaml file
     mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
+        Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
     )
 
     val = "X"
     with pytest.raises(TypeError):
         mkh5mne._check_api_params(
-            RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
+            Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
         )
 
 
@@ -159,7 +192,7 @@ def test__check_api_params_fail_on_info_montage(key, val):
 @pytest.mark.parametrize(
     "_class, _test_file, _class_kwargs",
     [
-        (RawMkh5, TEST_RAW_MKH5_FILE, None),
+        (Mkh5Raw, TEST_RAW_MKH5_FILE, None),
         # (EpochsMkh5, TEST_EPOCHS_MKH5_FILE, {"epochs_name": "ms100"})
     ],
 )
@@ -211,7 +244,7 @@ def test__validate_hdr_for_mne():
         ("apparatus/fiducials/nasion/x", "X"),
     ]
 
-    # mkh5 = mkh5mne.RawMkh5(TEST_RAW_MKH5_FILE).mkh5
+    # mkh5 = mkh5mne.Mkh5Raw(TEST_RAW_MKH5_FILE).mkh5
     h5 = mkh5.mkh5(TEST_RAW_MKH5_FILE)
     for dblock_path in [h5.dblock_paths[0]]:
         hdr, _ = h5.get_dblock(dblock_path)
@@ -241,43 +274,45 @@ def test__validate_hdr_for_mne():
 def test__parse_hdr_for_mne():
     h5 = mkh5.mkh5(TEST_RAW_MKH5_FILE)
     for dblock_path in h5.dblock_paths:
-        hdr, dblock = h5.get_dblock(dblock_path)
-        mkh5mne._parse_hdr_for_mne(hdr, dblock)
+        hdr, _ = h5.get_dblock(dblock_path)
+        mkh5mne._parse_hdr_for_mne(hdr)
 
 
 @pytest.mark.parametrize(
-    "garv_interval",
+    "garv_anns",
     [
         None,
-        [-500, 1500, "ms"],
-        pytest.param([1500, 500, "ms"], marks=pytest.mark.xfail(strict=True)),
+        GARV_ANNOTATIONS_MS,
+        pytest.param(GARV_ANNOTATIONS_BAD, marks=pytest.mark.xfail(strict=True)),
     ],
 )
 @pytest.mark.parametrize("mkh5_f", [TEST_RAW_MKH5_FILE, TEST_EPOCHS_MKH5_FILE])
-def test__dblock_to_raw(mkh5_f, garv_interval):
+def test__dblock_to_raw(mkh5_f, garv_anns):
     h5 = mkh5.mkh5(mkh5_f)
     for dblock_path in h5.dblock_paths:
-        mkh5mne._dblock_to_raw(mkh5_f, dblock_path, garv_interval=garv_interval)
+        mkh5mne._dblock_to_raw(mkh5_f, dblock_path, garv_annotations=garv_anns)
 
 
 def test__is_equal_mne_info():
     h5 = mkh5.mkh5(TEST_RAW_MKH5_FILE)
     dblock_paths = h5.dblock_paths
 
-    hdr_a, dblock_a = h5.get_dblock(dblock_paths[0])
-    hdr_b, dblock_b = h5.get_dblock(dblock_paths[1])
+    hdr_a, dblock_a = h5.get_dblock(dblock_paths[0])  # calibrated
+    hdr_b, dblock_b = h5.get_dblock(dblock_paths[1])  # not calibrated
+    hdr_c, dblock_c = h5.get_dblock(dblock_paths[2])  # calibrated
 
-    info_a, montage_a = mkh5mne._hdr_dblock_to_info_montage(hdr_a, dblock_a)
-    info_b, montage_b = mkh5mne._hdr_dblock_to_info_montage(hdr_b, dblock_b)
+    info_a, montage_a = mkh5mne._hdr_dblock_to_info_montage(hdr_a)
+    info_b, montage_b = mkh5mne._hdr_dblock_to_info_montage(hdr_b)
+    info_c, montage_c = mkh5mne._hdr_dblock_to_info_montage(hdr_c)
 
     # a and b are different crws, same YAML apparatus
 
     # same, different info
     assert mkh5mne._is_equal_mne_info(info_a, info_a)
     assert not mkh5mne._is_equal_mne_info(info_a, info_b)
-    assert mkh5mne._is_equal_mne_info(info_a, info_b, exclude=["subject_info"])
+    assert mkh5mne._is_equal_mne_info(info_a, info_c, exclude=mkh5mne.IGNORE_INFO_KEYS)
 
-    # same, different montage
+    # same v. different montage
     assert mkh5mne._is_equal_mne_montage(montage_a, montage_a)
     assert mkh5mne._is_equal_mne_montage(montage_a, montage_b)
 
@@ -295,15 +330,21 @@ def test__is_equal_mne_info():
 # User API tests
 
 
-def test_read_raw_epochs_mkh5():
-    mkh5mne.read_raw_mkh5(TEST_EPOCHS_MKH5_FILE)
+def test_from_mkh5_epochs():
+    mkh5mne.from_mkh5(TEST_EPOCHS_MKH5_FILE)
 
 
 @pytest.mark.parametrize(
     "dbps",
     [
-        None,
         ["open/dblock_0"],
+        ["open/dblock_0", "closed/dblock_0"],  # calibrated, calibrated
+        pytest.param(
+            [None],
+            marks=pytest.mark.xfail(
+                strict=True
+            ),  # MNE RawArray concat fails on different cals
+        ),
         pytest.param(
             ["open/dblock_X"],
             marks=pytest.mark.xfail(strict=True, reason=mkh5mne.Mkh5DblockPathError),
@@ -312,21 +353,40 @@ def test_read_raw_epochs_mkh5():
         pytest.param([1, 2, 3], marks=pytest.mark.xfail(strict=True, reason=TypeError)),
     ],
 )
-def test_read_raw_mkh5(dbps):
-    mkh5mne.read_raw_mkh5(TEST_RAW_MKH5_FILE, dblock_paths=dbps)
+def test_from_mkh5_no_epochs(dbps):
+    mkh5mne.from_mkh5(TEST_RAW_MKH5_FILE, dblock_paths=dbps)
 
 
-def test_read_raw_mkh5_apparatus_yaml():
-    mkh5mne.read_raw_mkh5(TEST_RAW_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML)
+def test_from_mkh5_apparatus_yaml():
+    mkh5mne.from_mkh5(TEST_EPOCHS_MKH5_FILE, apparatus_yaml=TEST_APPARATUS_YAML)
 
 
-@pytest.mark.parametrize("garv_interval", [[-500, 1500, "ms"], None])
-def test_read_write_raw(garv_interval):
+def test_from_mkh5_duplicate_mne_raw_tick():
+    # mkpy epochs allow one-many event tags, MNE metadata
+    # must be 1-1 with mne.Raw["event_channel} events: [sample, 0, event]
 
-    infix = "_".join([str(p) for p in garv_interval]) if garv_interval else "_None"
-    raw_fif = f"test_read_write_garv{infix}-raw.fif"
+    # dont trash the test file ...
+    dupe_f = Path(DATA_DIR / "_dupe.h5")
+    dupe_f.write_bytes(Path(TEST_EPOCHS_MKH5_FILE).read_bytes())
+
+    h5 = mkh5.mkh5(dupe_f)
+    event_table = h5.get_event_table(DATA_DIR / "sub000p3_bindesc.txt")
+    event_table_2 = pd.concat([event_table.iloc[:3, :], event_table])
+    h5.set_epochs("dup_events", event_table_2, tmin_ms=-10, tmax_ms=10)
+
+    with pytest.raises(ValueError):
+        mkh5mne.from_mkh5(dupe_f)
+
+    dupe_f.unlink()
+
+
+@pytest.mark.parametrize("garv_anns", [GARV_ANNOTATIONS_MS, None])
+def test_read_write_raw(garv_anns):
+
+    infix = "_".join(str(val) for val in garv_anns.values()) if garv_anns else "None"
+    raw_fif = Path(DATA_DIR / f"_test_read_write_garv_{infix}-raw.fif")
     print("read/write test writing:", raw_fif)
-    raw_w = mkh5mne.read_raw_mkh5(TEST_EPOCHS_MKH5_FILE, garv_interval=garv_interval)
+    raw_w = mkh5mne.from_mkh5(TEST_EPOCHS_MKH5_FILE, garv_annotations=garv_anns)
     raw_w.save(raw_fif, overwrite=True)
     raw_r = mne.io.read_raw_fif(raw_fif, preload=True)
 
@@ -352,10 +412,12 @@ def test_get_garv_bads():
     durations = [0.024, 0.024, 0.024, 0.024, 0.024, 0.024, 0.024]
     descriptions = ["BAD_garv_48"] * 3 + ["BAD_garv_32"] + ["BAD_garv_48"] * 3
     dbps = mkh5.mkh5(TEST_EPOCHS_MKH5_FILE).dblock_paths
-    raw_mkh5 = mkh5mne.read_raw_mkh5(
-        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[0:1],  # one block to shorten test time
+    raw_mkh5 = mkh5mne.from_mkh5(
+        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[:1],  # one block to shorten test time
     )
-    bad_garvs = mkh5mne.get_garv_bads(raw_mkh5, "ms100", garv_interval=[-12, 12, "ms"])
+    bad_garvs = mkh5mne.get_garv_bads(
+        raw_mkh5, event_channel="ms100", tmin=-12, tmax=12, units="ms",
+    )
     assert all(bad_garvs.onset == onsets)
     assert all(bad_garvs.duration == durations)
     assert all(bad_garvs.description == descriptions)
@@ -365,7 +427,7 @@ def test_get_epochs():
     """smoke test get_mkh5_epochs which also traverses get_epochs_metadata"""
 
     dbps = mkh5.mkh5(TEST_EPOCHS_MKH5_FILE).dblock_paths
-    raw_mkh5 = mkh5mne.read_raw_mkh5(
+    raw_mkh5 = mkh5mne.from_mkh5(
         TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[0:1],  # one block to shorten test time
     )
 
@@ -384,7 +446,7 @@ def test_get_epochs():
         "dblock_path",
         "dblock_ticks",
         "mne_dblock_path_idx",
-        "mne_raw_ticks",
+        "mne_raw_tick",
         "match_tick",
         "anchor_tick",
         "diti_t_0",
@@ -406,3 +468,32 @@ def test_get_epochs():
     ]
     epochs_coi = mkh5mne.get_epochs(raw_mkh5, epochs_name="ms100", metadata_columns=coi)
     assert all(epochs_coi.metadata.columns == coi)
+
+
+def test_find_mkh5_events():
+    """test mkh5 event channels from dig, mkpy, and mkpy epochs"""
+
+    # precomputed from TEST_EPOCHS_MKH5_FILE
+    checksums = {
+        "raw_evcodes": ((706, 3), [61501701, 0, 28597]),
+        "log_evcodes": ((706, 3), [61501701, 0, 28597]),
+        "log_ccodes": ((496, 3), [31533000, 0, 496]),
+        "log_flags": ((103, 3), [6383620, 0, 4144]),
+        "pygarv": ((0, 3), [0, 0, 0]),
+        "ms1500": ((600, 3), [54650754, 0, 6515]),
+    }
+
+    mne_raw = mkh5mne.from_mkh5(TEST_EPOCHS_MKH5_FILE)
+
+    for key, val in checksums.items():
+        events_array = mkh5mne.find_mkh5_events(mne_raw, key)
+        assert val[0] == events_array.shape
+        assert all(val[1] == events_array.sum(axis=0))
+
+    # not found channels are ValueError
+    with pytest.raises(ValueError):
+        mkh5mne.find_mkh5_events(mne_raw, "NoSuchChannel")
+
+    # not MNE stim channels are TypeErrors
+    with pytest.raises(TypeError):
+        mkh5mne.find_mkh5_events(mne_raw, "MiPa")

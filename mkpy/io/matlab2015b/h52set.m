@@ -62,7 +62,7 @@ function h52set(h5file,varargin)
 %
 
 % addpath(genpath('/mnt/cube/home/wec017/mkh52set_remote/functions'))
-addpath(genpath('../mkh52set_remote/functions'))
+addpath(genpath('functions'))
 
 global VERBLEVEL
 global grpJECT
@@ -99,12 +99,12 @@ dpaths = get_h5_dpaths(info, {}, '','');
 ep_fields=[];
 % find epoch table and sort details by subj
 sdpaths = sort(dpaths);
-idx_epaths = strfind(sdpaths,'/epochs/');
+idx_epaths = strfind(sdpaths,'/_epoch_tables/');
 idx_epaths = find(cellfun(@isempty,idx_epaths)==0);
 if ~isempty(idx_epaths),
     for ept = 1:length(idx_epaths),
         t2read = sdpaths{idx_epaths(ept)};
-        ept_name = regexprep(t2read,'/epochs/','');
+        ept_name = regexprep(t2read,'/_epoch_tables/','');
         this_eptab = h5read(h5file, t2read);
         [A AI] = sort(this_eptab.data_group(:,:)',1);
         % for EventTable
@@ -139,15 +139,14 @@ for grp=1:size(info.Groups);
     if isempty(info.Groups(1).Datasets)
         error('Datasets cannot be found or Datasets cannot be found directly under the associated Group. Please check your crw2h5 pipeline')
     end
-    % get epoch table info
-    if length(size(info.Groups(grp).Datasets(1).Attributes.Value))~=1
+    if cell2mat(strfind({info.Groups(grp).Datasets(1).Attributes.Name},'json_header'))
         % Get experiment info and recording parameters
         VerbReport('Getting header information', 3, VERBLEVEL);
         dint = [sprintf(info.Groups(grp).Name),'/'];
         idx_dpaths = strfind(dpaths,dint);
         idx_dpaths = find(cellfun(@isempty,idx_dpaths)==0);
         
-        hdr_json = info.Groups(grp).Datasets(1).Attributes.Value{1};
+        hdr_json = info.Groups(grp).Datasets(1).Attributes.Value;
         hdr = loadjson(hdr_json);
         
         % checking channel columns from hdr
