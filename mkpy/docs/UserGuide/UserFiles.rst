@@ -75,7 +75,7 @@ Slightly Less Silly Example::
 .. _sample_yhdr:
 
 
-Sample ``.yhdr`` (|release|)
+Sample ``.yhdr`` (|version|)
 ------------------------------------
 
 .. literalinclude:: ../../../tests/data/sample_32ch.yhdr

@@ -316,7 +316,7 @@ def _check_api_params(_class, mkh5_f, **kwargs):
 
     Parameters
     ----------
-    _class : RawMkh5
+    _class : Mkh5Raw
 
     mkh5_f : str
         path to mkh5 file
@@ -330,10 +330,10 @@ def _check_api_params(_class, mkh5_f, **kwargs):
 
     # API feeds parameters to the classes, user actions cannot
     # make the assertions fail
-    # assert _class in [RawMkh5, EpochsMkh5], \
-    assert _class is RawMkh5, "_check_api_params _class must be RawMkh5"
+    # assert _class in [Mkh5Raw, EpochsMkh5], \
+    assert _class is Mkh5Raw, "_check_api_params _class must be Mkh5Raw"
 
-    # set the module kwargs for the input class RawMkh5 # or EpochsMkh5
+    # set the module kwargs for the input class Mkh5Raw # or EpochsMkh5
     module_kwargs = KWARGS
     # if _class == EpochsMkh5:
     #     module_kwargs.update(**EPOCHS_KWARGS)
@@ -483,7 +483,7 @@ def _check_api_params(_class, mkh5_f, **kwargs):
     #     if not all(epochs_table[kwargs["time"]] == 0):
     #         raise EpochsMkh5NonZeroTimestamps(mkh5, epochs_name)
 
-    # full set of checked kwargs for _class RawMkh5 or EpochsMkh5
+    # full set of checked kwargs for _class Mkh5Raw or EpochsMkh5
     return kwargs
 
 
@@ -757,7 +757,7 @@ def _check_mkh5_mne_epochs_table(mne_raw, epochs_name, epochs_table):
         raise ValueError(error_msg)
 
 
-class RawMkh5(mne.io.BaseRaw):
+class Mkh5Raw(mne.io.BaseRaw):
     """Raw MNE compatible object from mkpy.mkh5 HDF5 data file
 
     This class is not meant to be instantiated directly, use
@@ -788,7 +788,7 @@ class RawMkh5(mne.io.BaseRaw):
         print("ok")
 
         _kwargs = _check_api_params(
-            RawMkh5,
+            Mkh5Raw,
             mkh5_f,
             dblock_paths=dblock_paths,
             garv_annotations=garv_annotations,
@@ -896,7 +896,7 @@ class RawMkh5(mne.io.BaseRaw):
     def _read_segment_file(self):
         """we know how to save as fif, hand off reading to MNE"""
         msg = (
-            "_read_segment_file() ... save RawMkh5 as a .fif and "
+            "_read_segment_file() ... save Mkh5Raw as a .fif and "
             "  read with mne.io.Raw()"
         )
         raise NotImplementedError(msg)
@@ -946,7 +946,7 @@ def _load_apparatus_yaml(apparatus_yaml_f):
 
 
 # ------------------------------------------------------------
-# .yhdr header functions used by RawMkh5 and EpochsMkh5
+# .yhdr header functions used by Mkh5Raw and EpochsMkh5
 def _validate_hdr_for_mne(hdr):
     """check the mkh5 header key: vals for _parse_header_for_mne
 
@@ -1618,7 +1618,7 @@ def find_mkh5_events(mne_raw, channel_name):
 
     Parameters
     ----------
-    mne_raw : RawMkh5 or mne.io.Raw object
+    mne_raw : Mkh5Raw or mne.io.Raw object
         data with the stim channel to search
 
     channel_name : str
@@ -1748,7 +1748,7 @@ def from_mkh5(
 
     Returns
     -------
-    RawMkh5
+    Mkh5Raw
         subclassed from mne.BaseRaw for use as native MNE.
 
     Raises
@@ -1786,7 +1786,7 @@ def from_mkh5(
             garv_annotations=dict(
                 event_channel="log_evcodes", tmin=-500, tmax=500, units="ms"
             )
-       ) 
+       )
 
     >>> mne_raw = mkh5mne(
             "sub01.h5",
@@ -1795,7 +1795,7 @@ def from_mkh5(
 
     """
 
-    return RawMkh5(
+    return Mkh5Raw(
         mkh5_f,
         garv_annotations=garv_annotations,
         dblock_paths=dblock_paths,

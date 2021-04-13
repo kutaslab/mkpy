@@ -12,7 +12,7 @@ from .config import TEST_DIR
 
 import mkpy.mkh5 as mkh5
 from mkpy.io import mkh5mne
-from mkpy.io.mkh5mne import RawMkh5
+from mkpy.io.mkh5mne import Mkh5Raw
 
 DATA_DIR = TEST_DIR("data")  # Path(".")
 DATA_DIR.mkdir(parents=True, exist_ok=True)
@@ -61,26 +61,26 @@ GARV_ANNOTATIONS_BAD = dict(
 
 
 def test__check_api_params_raw():
-    """RawMkh5 keyword parameters"""
+    """Mkh5Raw keyword parameters"""
 
     # mkh5 file arg
     with pytest.raises(TypeError):
         mkh5mne._check_api_params()
 
     with pytest.raises(TypeError):
-        mkh5mne._check_api_params(RawMkh5)
+        mkh5mne._check_api_params(Mkh5Raw)
 
     with pytest.raises(mkh5mne.Mkh5FileAccessError):
-        mkh5mne._check_api_params(RawMkh5, "no_such.h5")
+        mkh5mne._check_api_params(Mkh5Raw, "no_such.h5")
 
     # ------------------------------------------------------------
     # fail on unknown kwarg
     with pytest.raises(ValueError):
-        mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, not_a_kw="arg")
+        mkh5mne._check_api_params(Mkh5Raw, TEST_RAW_MKH5_FILE, not_a_kw="arg")
 
     # dblock paths
     mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"]
+        Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"]
     )
 
     for fail, param in [
@@ -90,12 +90,12 @@ def test__check_api_params_raw():
         # (mkh5mne.Mkh5DblockPathError, ["no_such_dblock_path"]),
     ]:
         with pytest.raises(fail):
-            mkh5mne._check_api_params(RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=param)
+            mkh5mne._check_api_params(Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=param)
 
     # these should pass
     for garv_anns in [GARV_ANNOTATIONS_MS, GARV_ANNOTATIONS_S]:
         mkh5mne._check_api_params(
-            RawMkh5,
+            Mkh5Raw,
             TEST_EPOCHS_MKH5_FILE,
             dblock_paths=["sub000/dblock_0"],
             garv_annotations=garv_anns,
@@ -123,22 +123,22 @@ def test__check_api_params_raw():
                     garv_anns.update(kws)
 
             mkh5mne._check_api_params(
-                RawMkh5,
+                Mkh5Raw,
                 TEST_EPOCHS_MKH5_FILE,
                 dblock_paths=["sub000/dblock_0"],
                 garv_annotations=garv_anns,
             )
 
-    # smoke test RawMkh5, EpochsMkh5 w/  yaml file  go, no-go
+    # smoke test Mkh5Raw, EpochsMkh5 w/  yaml file  go, no-go
     mkh5mne._check_api_params(
-        RawMkh5,
+        Mkh5Raw,
         TEST_RAW_MKH5_FILE,
         dblock_paths=["open/dblock_0"],
         apparatus_yaml=TEST_APPARATUS_YAML,
     )
     with pytest.raises(mkh5mne.ApparatusYamlFileError):
         mkh5mne._check_api_params(
-            RawMkh5,
+            Mkh5Raw,
             TEST_RAW_MKH5_FILE,
             dblock_paths=["open/dblock_0"],
             apparatus_yaml=TEST_APPARATUS_YAML + "X",
@@ -146,7 +146,7 @@ def test__check_api_params_raw():
 
     # ignore_keys param go, no-go
     mkh5mne._check_api_params(
-        RawMkh5,
+        Mkh5Raw,
         TEST_RAW_MKH5_FILE,
         dblock_paths=["open/dblock_0"],
         ignore_keys=["subject_info", "meas_id"],
@@ -154,7 +154,7 @@ def test__check_api_params_raw():
     for bad_ignore_keys in [(1, 2), ["meas_id", 3.5]]:
         with pytest.raises(ValueError):
             mkh5mne._check_api_params(
-                RawMkh5,
+                Mkh5Raw,
                 TEST_RAW_MKH5_FILE,
                 dblock_paths=["open/dblock_0"],
                 ignore_keys=bad_ignore_keys,
@@ -165,15 +165,15 @@ def test__check_api_params_raw():
 @pytest.mark.parametrize("val", [True, False])
 def test__check_api_params_fail_on_info_montage(key, val):
 
-    # smoke test RawMkh5, EpochsMkh5 w/  yaml file
+    # smoke test Mkh5Raw, EpochsMkh5 w/  yaml file
     mkh5mne._check_api_params(
-        RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
+        Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
     )
 
     val = "X"
     with pytest.raises(TypeError):
         mkh5mne._check_api_params(
-            RawMkh5, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
+            Mkh5Raw, TEST_RAW_MKH5_FILE, dblock_paths=["open/dblock_0"], **{key: val}
         )
 
 
@@ -192,7 +192,7 @@ def test__check_api_params_fail_on_info_montage(key, val):
 @pytest.mark.parametrize(
     "_class, _test_file, _class_kwargs",
     [
-        (RawMkh5, TEST_RAW_MKH5_FILE, None),
+        (Mkh5Raw, TEST_RAW_MKH5_FILE, None),
         # (EpochsMkh5, TEST_EPOCHS_MKH5_FILE, {"epochs_name": "ms100"})
     ],
 )
@@ -244,7 +244,7 @@ def test__validate_hdr_for_mne():
         ("apparatus/fiducials/nasion/x", "X"),
     ]
 
-    # mkh5 = mkh5mne.RawMkh5(TEST_RAW_MKH5_FILE).mkh5
+    # mkh5 = mkh5mne.Mkh5Raw(TEST_RAW_MKH5_FILE).mkh5
     h5 = mkh5.mkh5(TEST_RAW_MKH5_FILE)
     for dblock_path in [h5.dblock_paths[0]]:
         hdr, _ = h5.get_dblock(dblock_path)

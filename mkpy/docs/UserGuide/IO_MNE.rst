@@ -1,16 +1,18 @@
-MNE Python IO
-#############
+mkh5 data in MNE Python (experimental)
+######################################
 
 .. note::
 
   Requires mkpy >= 0.2.5 and MNE Python >=0.20 (installed by default
   when mkpy is installed with ``conda``)
 
-The ``mkpy.io.mkh5mne`` module has utility functions for converting
-mkh5 format HDF5 files into MNE Python ``mne.Raw`` continuous EEG
-recordings and fixed-length ``mne.Epochs`` time-stamped relative to
-events of interest. Codemapped event tags are converted to native
-:py:obj:`mne.Epochs.metadata`.
+An mkh5 data file can be imported into MNE Python and used with the
+native MNE :py:class:`mne.Raw` continous EEG methods and
+:py:class:`mne.Epochs`
+
+Import options support automatically converting mkh5 codemapped event
+tags to :py:obj:`mne.Epochs.metadata` and mkh5 garv artifacts (log_flags > 0) to
+mne.Annotations for MNE native epoch artifact screening.
 
 EEG channel and electrode location information in 3D cartesian RAS
 coordinate space measured in metric units is required and provided via

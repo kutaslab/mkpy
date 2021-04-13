@@ -2,7 +2,7 @@
 #
 # License: BSD (3-clause)
 #
-# _write_set based on https://github.com/cbrnr/mnelab/blob/main/mnelab/io/writers.py
+# to_set based on https://github.com/cbrnr/mnelab/blob/main/mnelab/io/writers.py
 # Authors: Clemens Brunner <clemens.brunner@gmail.com>
 # License: BSD (3-clause)
 
@@ -13,24 +13,24 @@ import numpy as np
 # from numpy.core.records import fromarrays
 import pandas as pd
 from scipy.io import savemat
+from mne import pick_types
+from mne.io.constants import FIFF
 from mkpy.io import mkh5mne
 
 
-def mkh5raw_to_set(mkh5raw, fname, epochs_name=None):
+def mkh5raw_to_set(mkh5raw, fname, epochs_name=None, return_eeglab_events=False):
     """Export mkh5raw EEG, channel, and event data to an EEGLAB .set file.
 
-    This writes a mkh5mne.RawMkh5 instance in memory to an EEGLAB .set
-    file populated with EEG and event data channels, channel names and
-    locations. The original mkh5 log event codes are stored in
-    EEG.events and EEG.urevents. If `epochs_name` is provided, the 
-    mkh5 codemap event tags for events in the named epochs table are added
-    to the eeglab events. All mne.Annotations in the raw file are
-    added to the EEGLAB events including mkh5 datablock path labels,
-    datablock boundaries, and garv annotations if any.
+    Export an mkh5mne.Mkh5Raw instance in memory to an EEGLAB .set
+    file. The log events are stored in EEG.events and EEG.urevents and
+    any mne.Annotations including garv artifacts are stored there as
+    boundary events.  . If `epochs_name` is provided, the mkh5 codemap
+    tags for those events are exported as well. Channel locations are
+    converted to EEGLAB defaults.
 
     Parameters
-    ==========
-    mkh5raw : mkh5mne.RawMkh5 instance
+    ----------
+    mkh5raw : mkh5mne.Mkh5Raw instance
        As returned by mkh5mne.from_mkh5(), see
        :py:func:`.mkh5mne.from_mkhg` docs for usage.
 
@@ -38,10 +38,49 @@ def mkh5raw_to_set(mkh5raw, fname, epochs_name=None):
        Path to the EEGLAB set file to create.
 
     epochs_name : str, optional
-       Also export the codemap event tags in the named epochs table. Defaults to None.
+       Include event tags from the named mkh5 epochs table in EEGLAB
+       .set events. Defaults to None.
+
+    return_eeglab_events : bool
+       If true, also returns the event information injected into the EEGLAB .set file.
+       Useful for diagnosis, validataion. Default is False.
+
+
+    Returns
+    -------
+    eeglab_events_df : pandas.DataFrame
+       Dataframe with the event information exported in the .set
+
+
+    Examples
+    --------
+
+    Minimal: Export EEG data, datablock boundaries, and log events
+
+    >>> from mkpy.io import mkh5mne, mkh5eeglab
+    >>>
+    >>> mne_raw = mkh5mne.from_mkh5("sub000.h5)
+    >>> mkh5eeglab.mkh5raw_to_set(mne_raw, "sub000.set")
+
+
+    Also export the codemap event tags from mkpy epochs table 'p3'
+
+    >>> mne_raw = mkh5mne.from_mkh5("sub000.h5")
+    >>> mkh5eeglab.mkh5raw_to_set(mne_raw, "sub000.set", event_channel="p3")
 
     """
-    data = mkh5raw.get_data()  # already converted * 1e6  # convert to microvolts
+    data = mkh5raw.get_data()
+
+    # convert eeg, eog to microvolts
+    chan_idxs = pick_types(mkh5raw.info, eeg=True, eog=True)
+    for chan_idx in chan_idxs:
+        chan = mkh5raw.info["chs"][chan_idx]
+
+        # true by mkh5mne construction or die
+        assert chan["unit"] == FIFF.FIFF_UNIT_V, f"{chan}"
+        assert chan["unit_mul"] == FIFF.FIFF_UNITM_NONE, f"{chan}"
+        data[chan_idx, :] *= 1e6
+
     fs = mkh5raw.info["sfreq"]
     times = mkh5raw.times
 
@@ -175,7 +214,8 @@ def mkh5raw_to_set(mkh5raw, fname, epochs_name=None):
         ),
         appendmat=False,
     )
-    return eeglab_events_df
+    if return_eeglab_events:
+        return eeglab_events_df
 
 
 def mkh5_to_set(
@@ -265,11 +305,15 @@ def mkh5_to_set(
 
     Examples
     -------
+
+    Minimal
+
     >>>  mkh5eeglab.mkh5_to_set(("sub01.h5", "sub01.set")
 
     >>> mkh5eeglab.to_set(
             "sub01.h5",
             "sub01.set",
+            "apparatus_yaml"="ras_32_chan_xyz_spherical.yaml",
             epochs_name="p3",
             garv_annotations=dict(
                 event_channel="p3", tmin=-500, tmax=1500, units="ms"

@@ -7,4 +7,5 @@ User Guides
    UserGuide/UserFiles
    UserGuide/OutputFiles
    UserGuide/IO_MNE
+   UserGuide/IO_EEGLAB
    UserGuide/Pygarv
