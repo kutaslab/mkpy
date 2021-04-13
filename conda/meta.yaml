@@ -40,7 +40,7 @@ requirements:
     - pytest  !=5.3.4 # so users can run tests, bad release fights with nose
     - nose  # for legacy dpath tests
     - requests  # TravisCI pytests download test data files too large for github
-    - mne >=0.20 # could be an optional dependency but ...
+    - mne >=0.20.0=py3*  # mne noarch is a brutally slow dependency solve
 
 test:
   imports:
