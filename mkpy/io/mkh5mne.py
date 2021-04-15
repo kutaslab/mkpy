@@ -383,12 +383,10 @@ def _check_api_params(_class, mkh5_f, **kwargs):
 
     h5_dblock_paths = h5_data.dblock_paths
     for kw_dbp in kw_dblock_paths:
-        if kw_dbp[0] == r"/":
-            raise ValueError(
-                f"There is no root / in mkh5 datablock paths, try {kw_dbp[1:]}"
-            )
         if kw_dbp not in h5_dblock_paths:
-            raise IOError(f"{kw_dbp} not found in {mkh5_f}")
+            raise IOError(
+                f"{kw_dbp} not found in {mkh5_f} ... check for typos and initial /"
+            )
 
     # ------------------------------------------------------------
     # garv annotations
@@ -984,7 +982,7 @@ def _validate_hdr_for_mne(hdr):
        The apparatus sensors must have x: <float> y: <float> z: <float>
 
      Required Values
-       The h5_dataset string must be a conforming /*/dblock_N mkh5 data block HDF5 path.
+       The h5_dataset string must be a conforming dblock_N mkh5 data block HDF5 path.
        The sample rate must be an inter or float.
        The apparatus streams mne_type must be a legal MNE channel
       type: eeg, eog, stim, misc, ...
@@ -1000,11 +998,11 @@ def _validate_hdr_for_mne(hdr):
         msg = "header is missing required key: h5_dataset"
         raise Mkh5HeaderKeyError(msg)
 
-    dblock_path_re = re.compile(r"^/(\w+/)+(dblock_\d+){1}$")
+    dblock_path_re = re.compile(r"^\S+/(dblock_\d+){1}$")
     if dblock_path_re.match(hdr["h5_dataset"]) is None:
         msg = (
-            "header h5_dataset is not a mkpy.mkh5 data block path "
-            f"/*/dblock: {hdr['h5_dataset']}"
+            "header['h5_dataset'] does not look like a dblock path: "
+            f"{hdr['h5_dataset']}"
         )
         raise Mkh5HeaderValueError(msg)
 
