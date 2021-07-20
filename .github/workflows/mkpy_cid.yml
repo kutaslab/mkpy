@@ -110,7 +110,7 @@ jobs:
 
           # revised mamba channel priority semantics, strict in 0.14 is flexible in 0.15
           conda config --set channel_priority flexible  # should be default but enforce
-          conda install -n base -q conda-build conda-verify anaconda-client twine mamba boa
+          conda install -n base -q conda-build cython conda-verify anaconda-client twine mamba boa
           echo "# ------------------------------------------------------------"
           conda info -a
           echo "# ------------------------------------------------------------"
