@@ -5,15 +5,15 @@
 # Based on spudtr/.github/workflows/spudtr_cid.yml
 # 
 # - canonical package semantic version strings are M.N.P and M.N.P.devX
-# - job matrix runs on linux-64 for Python 3.6, 3.7, 3.8
+# - job matrix runs on linux-64 for Python 3.7, 3.8, 3.9
 # - each py3X job builds, installs, pytests, and deploys its own conda py3X packages
 # - one py3X job deploys codecov, python package sdist, and docs
 # - cron runs daily to conda build, install, pytest the latest commit on default branch
 #
 # CI:
 #
-#   - conda build, install, and pytest the conda packages linux-64 py3[678]
-#   - conda convert py3[678] x [osx-64, win-64] (untested)
+#   - conda build, install, and pytest the conda packages linux-64 py3[789]
+#   - conda convert py3[789] x [osx-64, win-64] (untested)
 #   - build sphinx docs
 #   # NA - build python package sdist
 #
@@ -76,7 +76,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        py_ver: [3.6, 3.7, 3.8]
+        py_ver: [3.7, 3.8, 3.9]
 
     env:
       PY_VER: ${{ matrix.py_ver }}
@@ -104,19 +104,29 @@ jobs:
           hash -r
           conda config --set always_yes yes --set changeps1 no
           conda config --set bld_path $CONDA_BLD_PATH
-          conda install -q conda-build conda-verify anaconda twine
+
+          # switch to mamba/boa and conda-forge
+          conda config --add channels conda-forge
+
+          # revised mamba channel priority semantics, strict in 0.14 is flexible in 0.15
+          conda config --set channel_priority flexible  # should be default but enforce
+          conda install -n base -q conda-build conda-verify anaconda-client twine mamba boa
+          echo "# ------------------------------------------------------------"
           conda info -a
+          echo "# ------------------------------------------------------------"
+          mamba info -a
+
 
       # ------------------------------------------------------------
       # 2. CI
-      - name: conda build --python=${{ env.PY_VER }} conda
+      - name: conda mambabuild --python=${{ env.PY_VER }} conda
         id: conda-bld
         run: |
-          conda build --python=$PY_VER -c defaults -c conda-forge conda
+          conda mambabuild --python=$PY_VER conda
           tarball=$(conda build --python=$PY_VER conda --output | tail -1)
           # not converting b.c. of Cythonization
           # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
-          # not converting other platforms b.c. of Cythonization
+          # not converting other platforms b.c. of Cythnization
           # conda convert -p osx-64 -p win-64 -o $CONDA_BLD_PATH $tarball
           echo "conda build tarball: " $tarball
           echo "::set-output name=conda-tarball::$tarball"
@@ -128,10 +138,9 @@ jobs:
           env_${{ env.PY_VER }}
           python=${{ env.PY_VER }}
           ${{ env.PACKAGE_NAME}}
-          -c local -c defaults -c conda-forge
 
         run: |
-          conda create -n env_$PY_VER python=$PY_VER $PACKAGE_NAME -c local -c defaults -c conda-forge
+          conda create -n env_$PY_VER python=$PY_VER $PACKAGE_NAME -c $CONDA_BLD_PATH
           conda activate env_$PY_VER
           conda install -q black pytest pytest-cov
           conda list
@@ -140,14 +149,15 @@ jobs:
           black --check --verbose .
           pytest --cov=$PACKAGE_NAME # test as installed by conda
 
+
       - name: build sphinx docs
         if: ${{ matrix.py_ver == env.DEPLOY_PY_VER }}
         run: |
           conda activate env_$PY_VER  # required to run doc demos
           # conda install -q sphinx sphinx_rtd_theme jupyter nbsphinx "nbconvert!=5.4" -c defaults -c conda-forge
-          conda install -q sphinx sphinx_rtd_theme jupyter sphinx-gallery -c defaults -c conda-forge
+          conda install -q sphinx sphinx_rtd_theme jupyter sphinx-gallery
           # python setup.py build_ext  # so sphinx-gallery has mkpy/_mkh5 in the source dir
-          conda install -q pandoc -c conda-forge
+          conda install -q pandoc
           make -C mkpy/docs html
           touch $GITHUB_WORKSPACE/mkpy/docs/_build/html/.nojekyll
           ls -l $GITHUB_WORKSPACE/mkpy/docs/_build/html
