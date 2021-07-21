@@ -254,11 +254,11 @@ def test_non_unique_event_table_index(sheet):
 
         # spot check the word_lag rows
         if len(row_slice) == 1:
-            assert row_slice["word_lag"].all() in events[sheet]["word_lags_1"]
+            assert row_slice["word_lag"].unique() in events[sheet]["word_lags_1"]
         elif len(row_slice) in [2, 3]:
             # duplicate indices, multiple rows match, make sure the
-            # the right number comes back
-            assert row_slice["word_lag"].all() in events[sheet]["word_lags_2_3"]
+            # the right values come back
+            assert row_slice["word_lag"].unique() in events[sheet]["word_lags_2_3"]
         elif len(row_slice) == 209:
             assert row_slice["word_lag"].unique()[0] == "cal"
         else:
