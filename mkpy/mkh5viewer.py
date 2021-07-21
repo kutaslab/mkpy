@@ -121,7 +121,7 @@ def set_styles():
     # PyGarv Treeview --------------------------------------------------
     # Scarlet Red	ef2929	cc0000	a40000
     style.configure(
-        "pygarv_style.TLabelframe", bgc=generic_frame_bgc, font=(fnt_family, fnt_size),
+        "pygarv_style.TLabelframe", bgc=generic_frame_bgc, font=(fnt_family, fnt_size)
     )
 
     style.configure(
@@ -1593,7 +1593,7 @@ class TraceView(ttk.Frame):
 
             # epoch info in dblock and vp index units
             self._data = {
-                "anchor": {"dblock_idx": None, "vp_offset": None, "event_data": None,},
+                "anchor": {"dblock_idx": None, "vp_offset": None, "event_data": None},
                 "prestim": {"dblock_idx": None, "vp_offset": None},
                 "poststim": {"dblock_idx": None, "vp_offset": None},
             }
@@ -2777,7 +2777,7 @@ class TraceView(ttk.Frame):
 
             # configure trace attributes
             self.canvas.itemconfig(
-                t.canvas_id, tag=t.label, fill=t.fill, width=t.width, activewidth=2,
+                t.canvas_id, tag=t.label, fill=t.fill, width=t.width, activewidth=2
             )
 
             label_nudge = 10  # pts

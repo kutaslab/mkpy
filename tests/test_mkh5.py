@@ -27,7 +27,6 @@ from .config import (
 
 from mkpy import mkh5, h5tools
 
-
 # CRUD tests
 # ------------------------------------------------------------
 # mkh5 initialization tests
@@ -951,7 +950,7 @@ wle_runerr = pytest.mark.xfail(strict=True, raises=RuntimeError)
 )
 def test_with_log_events(log_f, wle):
     def read_log_txt(log_f_txt):
-        log_data = pd.read_csv(log_f_txt, sep="\s+")[
+        log_data = pd.read_csv(log_f_txt, sep=r"\s+")[
             ["evtcode", "clock_ticks", "ccode", "flags"]
         ]
         return log_data
@@ -1030,3 +1029,110 @@ def test_irb_load_bad_log(wle, log_f):
     else:
         sarc01.create_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)
         sarc01.append_mkdata(pfx, crw_f, log_f, yhdr_f, with_log_events=wle)
+
+
+@irb_data
+def test_irb_load_31_chan_crw():
+    """seana's 31 chan emet files
+
+    [turbach@mkgpu1 mkpy]$ headinfo ~scoulson/Emets/2020/Young/emet01.avg
+    subdesc: emet01-1 Brian Deane-Wallace 09/12/01 
+    expdesc: emet01 right hand
+    channels: 31
+    chndesc: 0:rle   1:HE    2:MiPf  3:LLPf  4:RLPf  5:LMPf  6:RMPf  7:LDFr 
+        8:RDFr  9:LLFr 10:RLFr 11:LMFr 12:RMFr 13:LMCe 14:RMCe 15:MiCe 
+        16:MiPa 17:LDCe 18:RDCe 19:LDPa 20:RDPa 21:LMOc 22:RMOc 23:LLTe 
+        24:RLTe 25:LLOc 26:RLOc 27:MiOc 28:A2   29:lle  30:lhrz 
+    data type: average
+    epoch length: 1024 ms
+    data resolution (points per 10 uV): 1000
+    presampling: 100 ms
+    sampling rate: 250.00 Hz
+    channel precision: 1
+"""
+    # from headinfo above
+    header_chans = [
+        "rle",
+        "HE",
+        "MiPf",
+        "LLPf",
+        "RLPf",
+        "LMPf",
+        "RMPf",
+        "LDFr",
+        "RDFr",
+        "LLFr",
+        "RLFr",
+        "LMFr",
+        "RMFr",
+        "LMCe",
+        "RMCe",
+        "MiCe",
+        "MiPa",
+        "LDCe",
+        "RDCe",
+        "LDPa",
+        "RDPa",
+        "LMOc",
+        "RMOc",
+        "LLTe",
+        "RLTe",
+        "LLOc",
+        "RLOc",
+        "MiOc",
+        "A2",
+        "lle",
+        "lhrz",
+    ]
+
+    mkdig_path = IRB_DIR / "mkdig"
+    h5f = IRB_DIR / "mkh5" / "test_load_31_chan.h5"
+    emet01 = mkh5.mkh5(h5f)
+    emet01.reset_all()
+
+    # load the crw, log, and YAML header
+    emet01.create_mkdata(
+        "emet01",
+        mkdig_path / "emet01-1.crw",
+        mkdig_path / "emet01-1.log",
+        mkdig_path / "emet01.yhdr",
+    )
+
+    # append next part of file that includes calibration pulses
+    emet01.append_mkdata(
+        "emet01",
+        mkdig_path / "emet01-2.crw",
+        mkdig_path / "emet01-2.log",
+        mkdig_path / "emet01.yhdr",
+    )
+
+    for dbpath in emet01.dblock_paths:
+        hdr, dblock = emet01.get_dblock(dbpath)
+        assert header_chans == [
+            stream_name
+            for stream_name, vals in hdr["streams"].items()
+            if "dig_chan" in vals["source"]
+        ]
+
+
+# preview the cals
+# pts, pulse, lo, hi, ccode = 3, 10, -50, 50, 0
+# f,ax = s001p3.plotcals(
+#    's001p3.h5', 's001',
+#    n_points = pts,  # pts to average, either side of cursor
+#    cal_size = pulse,    # uV
+#    lo_cursor = lo,  # lo_cursor ms
+#    hi_cursor = hi,  # hi_cursor ms
+#    cal_ccode= ccode)
+# plt.show(f)
+
+# rescale the EEG A/D to microvolts
+# pts, pulse, lo, hi, ccode = 3, 10, -50, 50, 0
+# emet01.calibrate_mkdata(
+#     'emet01',
+#     n_points = pts,  # pts to average, either side of cursor
+#     cal_size = pulse,    # uV
+#     lo_cursor = lo,  # lo_cursor ms
+#     hi_cursor = hi,  # hi_cursor ms
+#     cal_ccode= ccode,
+#     use_cals=None)

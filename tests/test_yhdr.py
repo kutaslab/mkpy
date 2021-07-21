@@ -1,20 +1,12 @@
+"""smoke test top-level apparatus yaml header maps"""
 import yaml
-import json
-import pdb
-import pprint
 import pandas as pd
-import io
 import glob
 import os.path
-import json
-
-# import dpath.path
-# import dpath.util
 from mkpy import dpath
 
 
 def test_load():
-    runsheet = dict()
     test_files = glob.glob(os.path.join("data/", "SNN.yhdr"))
     test_files = [f for f in test_files if "bad" not in f]
     for yhdr_f in test_files:
@@ -43,12 +35,12 @@ def test_load():
                     dpath.path.paths_only([k for k in p])
                     for p in dpath.path.paths(hdr, leaves=False)
                 ]
-                slash_keys_only = ["/".join([str(s) for s in sp]) for sp in keys_only]
+                ["/".join([str(s) for s in sp]) for sp in keys_only]
                 keys_vals = [
                     dpath.path.paths_only([k for k in p])
                     for p in dpath.path.paths(hdr, leaves=True)
                 ]  # , path=[mykeys])]
-                slash_keys_vals = ["/".join([str(s) for s in sp]) for sp in keys_vals]
+                ["/".join([str(s) for s in sp]) for sp in keys_vals]
 
         except Exception as fail:
             msg = "uh oh ... trouble with " + yhdr_f

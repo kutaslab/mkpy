@@ -1,56 +1,22 @@
 .. _quick_start:
 
-Quick start
-===========
+Quick start with ``jupyter notebook``
+=====================================
 
+#. Conda  install ``mkpy`` and ``jupyter`` and activate the environment.
 
-Install ``mkpy``
-----------------
+#. In a terminal window navigate to the directory where you want
+   to work and run::
 
-``conda env (recommended)`` If you work on a 64-bit linux or fairly recent MacOS and
-are already using conda environments, install the latest versions
-X.Y.Z. from Anaconda Cloud like so
+     $ jupyter notebook
 
-* Minimal::
- 
-    conda create --name mkpy_env install mkpy=X.Y.Z -c kutaslab -c defaults -c conda-forge
-    
-* A scientific computing stack including ``mkpy``::
-    
-    conda create --name mkconda_X.Y.Z install mkpy -c kutaslab -c defaults -c conda-forge
+#. Open a notebook with a Python 3 kernel, and in the first code cell enter::
 
-
-``github`` Install from source::
-
-    git clone https://github.com/kutaslab/mkpy mkpy
-    cd mkpy
-    pip install .
-
-
-
-Launch ``mkpy``
--------------------
-
-#. Log into your server.
-
-#. Open a terminal window and navigate to the directory where you want
-   to work.
-
-#. Activate the conda environment to work in, e.g., ``mkconda-0.0.7_expt_4``
-
-#. At the shell prompt launch ``jupyter notebook``::
-
-     [turbach@mkgpu1 ~]$ jupyter notebook
-
-#. Find the jupyter window in your web browser and start a new notebook 
-   or open an existing one running the ``Python 3`` kernel.
-
-   In the first code cell enter::
-
-     from mkpy import mkh5
+     import mkpy.mkh5 as mkh5
      myh5 = mkh5.mkh5("some_file.h5")
 
-#. Have at it.
+#. The ``myh5`` instance is ready to go, the data will be stored
+   ``some_file.h5``, have at it.
 
 
 Single subject, single session workflow
@@ -143,11 +109,61 @@ or looped in a batch.
 
 
 
+Electrode locations and fiducial landmarks (optional)
+-----------------------------------------------------
+
+Electrode locations, fiducial landmarks (nasion, left and right
+preauricular points), and head shape data points can be baked into the
+mkpy .h5 data header by including a ``name: apparatus`` YAML document
+in the ``.yhdr`` so that the location information travels with the EEG
+
+The mkh5 standard apparatus specifies a 3D <x, y, z> cartesian
+coordinate space, <right, anterior, superior> (RAS) orientation, with
+measurement units of centimeters.
+
+A minimal apparatus map has the following keys, additional keys may be
+added ad lib.
+
+.. code-block:: yaml
+
+  ---
+  # mandatory keys and values
+  name: apparatus
+  space:
+    coordinates: cartesian
+    distance_unit: cm
+    orientation: ras
+
+  # mandatory keys. RAS x, y, z values may vary
+  fiducials:
+    lpa:
+      x: <float>
+      y: <float>
+      z: <float>
+    nasion:
+      x: <float>
+      y: <float>
+      z: <float>
+    rpa:
+      x: <float>
+      y: <float>
+      z: <float>
+
+  # Number of sensors, labels, and x, y, z  values may vary
+  sensors:
+    label:
+      x: <float>
+      y: <float>
+      z: <float>
+
+
+
 `mkh5` continuous data
 ----------------------------------------
 
 The continuous raw EEG data in HDF5 format are now available for
 inspection, analysis, and sharing across computer platforms.
+
 
 .. code-block:: bash
 
@@ -189,101 +205,64 @@ into signal processing and statistical analysis pipelines.
 
 
 
+MNE Python Reader (experimental)
+--------------------------------
 
-`mkh5` command cheat sheet
---------------------------
+The mkpy .h5 data EEG, codemap tags, and 3D location information can be
+converted to ``mne.Raw`` and ``mne.Epochs`` for use with the MNE
+Python analysis and visualization toolbox (https://mne.tools/stable/index.html).
 
-Connect
-~~~~~~~
-  :meth:`~mkpy.mkh5.mkh5` 
-    establish a read/write connection to the ``.h5`` database file for
-    subsequent operations
-
-    
-EEG data import
-~~~~~~~~~~~~~~~
-  :meth:`~mkpy.mkh5.mkh5.create_mkdata` 
-    import a new ``.crw``, ``.log`` and additional user-specified
-    header information into the database
-
-  :meth:`~mkpy.mkh5.mkh5.append_mkdata`
-    append extra data from a different ``.crw``, ``.log`` at that
-    same location
+First, convert the .crw/.log/.yhdr to mkpy .h5 format, tag events with
+a codemap, and set the corresponding fixed-interval epochs as
+usual. Though not strictly required, it is generally advisable to
+ensure the 3D electrode and fiducial location data travels with the
+EEG by including an apparatus map in the .yhdr file.
 
 
-Data inspection and visualization
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  :meth:`~mkpy.pygarv`
-    :ref:`EEG data and artifact dashboard<pygarv_all_views>`
+Continous EEG
+~~~~~~~~~~~~~
 
-  .. figure:: _images/viewer_all_views.png
-     :figwidth: 80%
-     :width: 75%
-     :alt: pygarv_all_views
+Read the s01.h5 mkpy format data as an mne.Raw like so:
 
-     pygarv dashboard
+.. code-block:: python
+
+  from mkpy.io import mkh5mne
+  s01_raw = mkh5mne.read_raw_mkh5("s01.h5")
 
 
+Epochs
+~~~~~~
 
-  :meth:`~mkpy.mkh5.mkh5.plotcals`
-    butterfly plot the single trial cal pulses that will be used to scale
-    ``.crw`` A/D values to microvolts given the parameters
+The epochs and codemap event tags in s01.h5 are converted to
+mne.Epochs with the ``mkh5mn3.get_epochs`` helper method:
 
-  .. figure:: _images/cals.png
-     :figwidth: 80%
-     :width: 75%
-     :alt: plot_cals
+.. code-block:: python
 
-     plot_cals
-
-
-  :meth:`~mkpy.mkh5.mkh5.headinfo`
-    report contents of datablock headers in the ``.h5`` database,
-    optionally filtered by regular expression pattern match
-
-  :meth:`~mkpy.mkh5.mkh5.info`
-    report contents of datablock headers and snippets of data for all
-    of the datablocks, c.f., HDF5 utility `h5ls -rds`
-
-  :meth:`~mkpy.mkh5.mkh5.calibrate_mkdata`
-    scale ``.crw`` A/D digtized EEG to microvolts
+  from mkpy.io import mkh5mne
+  s01_raw = mkh5mne.read_raw_mkh5("s01.h5")
+  s01_epochs = mkpy.io.mkh5mne.get_epochs(s01_raw, "tagged_epochs") 
 
 
-Merging experimental data with EEG
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-
-  :ref:`yhdr`
-    Extend the data block headers with arbitrary experimental information when the
-    ``mkh5`` EEG data are imported.
-
-  :ref:`codemap`
-    specifies what numeric event codes in the data get tagged with
-    what experimental information
-
-  :ref:`yhdx` extract `key:value` from the HDF5 dblock headers as `column:values` in the event data table
-
-  :meth:`~mkpy.mkh5.mkh5.get_event_table`
-    look up and tag single-trial event codes and event code sequences
-    with imported experimental variables in a data table format.
-
-  :meth:`~mkpy.mkh5.mkh5.set_epochs`
-    write the single-trial tagged EEG epoch lookup table to the ``mkh5`` file
+The MNE native method ``mne.Epochs(s01_raw, ...)`` also extracts
+mne.Epochs from s01_raw but does not convert the original codemap tags
+to mne.Epochs.metadata.
 
 
-Exporting EEG and event data for analysis
-~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+Garv EEG screening
+~~~~~~~~~~~~~~~~~~
 
-  :meth:`~mkpy.mkh5.mkh5.export_event_table`
-    write out tabular event data in tab-separated text (``.txt``) or
-    feather binary data interchange format (``.fthr``).
+To use event-based quality control tests like ``garv`` to screen
+epochs in MNE, convert them to "BAD_garv" mne.Annotations with
+:meth:`mkh5mne.get_garv_bads()<mkpy.io.mkh5mne.get_garv_bads>`, then
+use native MNE methods to drop "BAD" epochs.
 
-  :meth:`~mkpy.mkh5.mkh5.export_epochs_table`
-    write out tabular epochs data in tab-separated text (``.txt``) or
-    feather binary data interchange format (``.fthr``).
+.. code-block:: python
 
-  :meth:`~mkpy.mkh5.mkh5.export_epochs` write out single trial EEG
-    data epochs defined by the epochs data table as 1-D vectors of
-    compound data types in HDF5 (``.h5``) or with ``pandas.DataFrame``
-    writers to HDF5 (``.pdh5``), feather (``.fthr``) binary data
-    interchange formats or as tab-separated text (``.txt``)
-
+  from mkpy.io import mkh5mne
+  s01_raw = mkh5mne.read_raw_mkh5("s01.h5")
+  garv_bads = mkh5mne.get_garv_bads(
+      s01_raw,
+      event_channel="log_evcodes",
+      garv_interval=[-500, 1500, "ms"]
+  )
+  

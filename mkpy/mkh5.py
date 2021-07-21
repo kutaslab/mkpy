@@ -223,14 +223,14 @@ class mkh5:
             # set during when mkh5._read_raw_log() reads .crw, .log
             "eeg_file": str,  # .crw file name as passed to _read_raw_log
             "eeg_file_md5": str,
-            "eeg_file_stat": dict,  # os.stat() info same as pathlib.Path().stat()
             "log_file": str,  # .log file name as passed to _read_raw_log
             "log_file_md5": str,
             # ('uuid_file', str),     # not implemented
             "streams": dict,  #  items are 1-1 (unordered) for dblock columns
             "h5_dataset": str,  # set upon construction to the dblock h5py.Dataset.name
-            "mkh5_version": str,  # mkh5.__version__  added mkh5 0.2.4
-            "raw_dig_header": dict,  # complete dig header dump for reference added mkh5 0.2.4
+            "mkh5_version": str,  # ==mkh5.__version__  new in 0.2.4
+            "raw_dig_header": dict,  # dig header bytes new in 0.2.4
+            "eeg_file_stat": dict,  # os.stat() new in 0.2.4
         }
 
         # minimal stream item upon loading into .crw/.log info into a mkh5.dblock_N
@@ -437,7 +437,10 @@ class mkh5:
                 sheet_name = 0
 
             slicer = pd.read_excel(
-                xl_f, sheet_name=sheet_name, header=0  # , index_col="Index"
+                xl_f,
+                sheet_name=sheet_name,
+                header=0,
+                engine="openpyxl",  # , index_col="Index"
             )
 
             if slicer is not None:
@@ -748,8 +751,23 @@ class mkh5:
         def _check_header(self):
             """enforce mandatory minimum mkh5 header data structure"""
 
-            # check for mandatory keys and values of the right type
+            # version check new in 0.2.5
             header_keys = self._header.keys()
+            msg = None
+            if "mkh5_version" not in header_keys:
+                file_ver = "< 0.2.4"
+            else:
+                file_ver = self._header["mkh5_version"]
+
+            if not __version__ == file_ver:
+                msg = (
+                    f"You are using mkpy version {__version__}, the mkh5 file "
+                    f"version is {file_ver} the data processing is undefined and "
+                    "unpredictable. Rebuild the mkh5 file with this version "
+                    "or use the version of mkpy that created the mkh5 file."
+                )
+
+            # check for mandatory keys and values of the right type
             for h_key, dtype in self._mkh5_header_types.items():
                 if h_key not in header_keys:
                     msg = (
@@ -1124,11 +1142,11 @@ class mkh5:
                                         ("data_group", dgp),
                                         ("dblock_path", dbp),
                                         ("dblock_tick_idx", tick_idx[0]),
-                                        ("dblock_ticks", dblock_ticks[tick_idx][0],),
+                                        ("dblock_ticks", dblock_ticks[tick_idx][0]),
                                         ("crw_ticks", crw_ticks[tick_idx][0]),
-                                        ("raw_evcodes", raw_evcodes[tick_idx][0],),
-                                        ("log_evcodes", log_evcodes[tick_idx][0],),
-                                        ("log_ccodes", log_ccodes[tick_idx][0],),
+                                        ("raw_evcodes", raw_evcodes[tick_idx][0]),
+                                        ("log_evcodes", log_evcodes[tick_idx][0]),
+                                        ("log_ccodes", log_ccodes[tick_idx][0]),
                                         ("log_flags", log_flags[tick_idx][0]),
                                         (
                                             "epoch_match_tick_delta",
@@ -1345,22 +1363,23 @@ class mkh5:
         None
             updates h5_f/EPOCH_TABLES_PATH/ with the named epoch table h5py.Dataset
 
+        
+        Notes
+        -----
+
         The epochs table is a lightweight lookup table specific to
-        this mkh5 instance's hdf5 file,
+        each mkh5 instance's hdf5 file,
 
           h5['epochs'][epochs_table_name] = epochs_table
 
-        Event tables by default are "epochs" 1 sample long with 0
-        prestimulus.
+        The epochs table is row-for-row the same as the time-locking event table
+        and just adds the time interval information for use when extracting the
+        time series EEG data segments.
 
-        This simply updates the prestimulus interval and length
-        accordingly, adds the peri-event time interval information for
-        slicing mkh5 datablocks and massages the event table
-        (pandas.DataFrame) into a numpy ndarray for hdf5 storage.
-
-        For reproducibility, by design epochs tables can be added to
-        an mkh5 file but not overwritten or deleted. If you need to
-        the revise the epochs, rebuild the mkh5 file from crws/logs
+        For reproducibility, by design the epochs tables in an mkh5
+        file are write-protected. New tables may be added, but
+        existing tables cannot be overwritten or deleted. If you need
+        to the revise the epochs, rebuild the mkh5 file from crws/logs
         with the ones you want.
 
         """
@@ -2247,7 +2266,7 @@ class mkh5:
 
     # create a new data set in specified group
     def create_mkdata(
-        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs,
+        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs
     ):
         """Convert Kutas lab ERPSS `.crw` and `.log` to the 
         `mkh5` hdf5 format.
@@ -2368,7 +2387,7 @@ class mkh5:
     # add eeg data to a group under the same header
     # ------------------------------------------------------------
     def append_mkdata(
-        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs,
+        self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs
     ):
         """Append .crw, .log, .yhdr to an existing h5_path
 
@@ -2688,7 +2707,7 @@ class mkh5:
                         m = re.search(pattern, full_path)
                         if m:
                             matches.append(
-                                (full_path, dpath.path.get(hio.header, hdr_path),)
+                                (full_path, dpath.path.get(hio.header, hdr_path))
                             )
                     del hio
         if len(matches) == 0:
@@ -3718,7 +3737,7 @@ class mkh5:
                     # returns an nd.array, access by data column name
                     # return subarray: duration samples x epochs
                     # (cal_slicer, fails) = self._get_dblock_slicer_from_eventstream(g['raw_evcodes'], presamp, duration)
-                    (cal_slicer, fails,) = self._get_dblock_slicer_from_eventstream(
+                    (cal_slicer, fails) = self._get_dblock_slicer_from_eventstream(
                         g["log_evcodes"], presamp, duration
                     )
                     if len(fails) > 0:

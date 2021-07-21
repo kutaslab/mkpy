@@ -1,15 +1,17 @@
-Reference
-=========
-
-:ref:`Alphabetical Index <genindex>`
--------------------------------------
-
-.. :ref:`Module Index <modindex>`
+API Reference
+=============
 
 Module Index
 -------------
 .. toctree::
    :maxdepth: 5
 
-   ./source/modules.rst
+   mkpy_api.rst
+
+
+
+:ref:`Alphabetical Index <genindex>`
+-------------------------------------
+
+.. :ref:`Module Index <modindex>`
 

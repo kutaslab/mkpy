@@ -1,3 +1,5 @@
+""":meta private:"""
+
 import re
 import yaml
 import h5py
@@ -9,7 +11,9 @@ from . import h5tools, mkh5
 def read_excel_codemap(file, sheet_name=0):
     """Read Excel .xlsx file, return codemap pandas DataFrame."""
 
-    codemap = pd.read_excel(file, sheet_name=sheet_name, index_col="Index")
+    codemap = pd.read_excel(
+        file, sheet_name=sheet_name, engine="openpyxl", index_col="Index"
+    )
     if "regexp" not in codemap.columns:
         raise ValueError('"regexp" column must be present.')
 

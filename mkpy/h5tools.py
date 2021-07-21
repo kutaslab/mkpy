@@ -1,3 +1,5 @@
+""":meta private:"""
+
 import h5py
 
 

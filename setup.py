@@ -31,4 +31,5 @@ setup(
     scripts=["bin/pygarv"],
     cmdclass={"build_ext": build_ext},
     ext_modules=cythonize(extensions),
+    package_data={"mkpy": ["io/matlab2015b/*.*", "io/matlab2015b/jsonlab-1.5/*.*"]},
 )
