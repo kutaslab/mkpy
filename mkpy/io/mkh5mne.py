@@ -527,13 +527,16 @@ def _is_equal_mne_info(info_a, info_b, exclude=None, verbose=False):
             good_keys.append(key)
 
         # dig and chan need special handling
-        elif key in "dig":
+        # and now custom_ref_applied as of MNE 0.23 which is a mne named type
+        # when created in the mne.Raw.info but comes back as type int
+        # with mne.read_raw_fif so == is OK but object_hash fails
+        elif key in ["dig", "custom_ref_applied"]:
             try:
                 assert val_a == val_b
                 good_keys.append(key)
             except Exception:
                 bad_keys.append(key)
-        elif key in ["chs"]:
+        elif key == "chs":
             # assert all vals are equal or close,
             try:
                 for chdx, ch_a in enumerate(val_a):
@@ -1307,16 +1310,17 @@ def _patch_dblock_info(info, hdr, hdr_mne):
     # }
 
     # from mkh5 os.stat_result
+
     dtime = hdr["eeg_file_stat"]["st_ctime"]
+    info["meas_date"] = datetime.fromtimestamp(dtime, timezone.utc)
 
     # seed MNE info fields w/ default and update w/ mkh5 datetimes
     file_id = mne.io.write.get_new_file_id()
     file_id["secs"] = int(dtime)
     file_id["usecs"] = round((dtime % 1) * 10e6)
 
-    info["meas_date"] = datetime.fromtimestamp(dtime, timezone.utc)
-    info["meas_id"] = file_id
-    info["file_id"] = info["meas_id"]
+    info["file_id"] = file_id.copy()
+    info["meas_id"] = file_id.copy()
 
     # CRITICAL: set scaling factor for microvolt data
     for ch_info in info["chs"]:
