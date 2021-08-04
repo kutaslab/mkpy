@@ -172,13 +172,14 @@ def test_inspectors():
         hdr, _ = mydat.get_dblock(dblock_path)
         assert hdr["mkh5_version"] == mkh5.__version__
 
-    assert len(re.findall(r"(S01)", mydat.info())) == 1032  # 1016
+    n_S01 = 1423  # was # 1032  # 1016
+    assert len(re.findall(r"(S01)", mydat.info())) == n_S01
 
     # capture headinfo
     f = io.StringIO()
     with contextlib.redirect_stdout(f):
         mydat.headinfo()
-    assert len(re.findall(r"S01", f.getvalue())) == 1031  # 1015
+    assert len(re.findall(r"S01", f.getvalue())) == n_S01 - 1
     f.close()
 
     # ------------------------------------------------------------
