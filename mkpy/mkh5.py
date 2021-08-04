@@ -3935,7 +3935,9 @@ class mkh5:
             # lpc = a.plot(cal_samps, cal_stack[ch], ".-", color=calcolors[c % 2])
             a.plot(cal_samps, cal_stack[ch][:, good_idxs], ".-", color=calcolors[c % 2])
             if len(trimmed_idxs) > 0:
-                a.plot(cal_samps, cal_stack[ch][:, trimmed_idxs], ".-", color="red", lw=0.5)
+                a.plot(
+                    cal_samps, cal_stack[ch][:, trimmed_idxs], ".-", color="red", lw=0.5
+                )
             a.plot(
                 cal_samps, cal_stack[ch][:, good_idxs].mean(axis=1), color="cyan", lw=2
             )
