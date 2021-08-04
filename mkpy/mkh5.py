@@ -34,10 +34,6 @@ class BadChannelsError(Exception):  # from NJS, deprecated
     pass
 
 
-class BadCalibrateCallError(Exception):
-    pass
-
-
 class DuplicateLocationLabelError(Exception):
     pass
 
@@ -3401,7 +3397,7 @@ class mkh5:
             if len(mismatch_events) > 0:
                 mismatch_msg = (
                     "These log event codes differ from the EEG codes, "
-                    "make sure you know why\n{mismatch_events}"
+                    f"make sure you know why\n{mismatch_events}"
                 )
                 warnings.warn(mismatch_msg, LogRawEventCodeMismatch)
 
@@ -3809,6 +3805,10 @@ class mkh5:
                 delta_min = median - (1.5 * iqr)
                 delta_max = median + (1.5 * iqr)
                 good = deltas[(delta_min < deltas) & (deltas < delta_max)]
+                trimmed_idxs = np.where((deltas <= delta_min) | (deltas >= delta_max))[
+                    0
+                ]
+                assert len(deltas) == len(good) + len(trimmed_idxs)
 
                 if len(good) == 0:
                     msg = (
@@ -3846,7 +3846,8 @@ class mkh5:
                             "median": float(median),
                             "iqr": float(iqr),
                             "n_cals": int(len(good)),
-                            "n_trimmed": len(deltas) - len(good),
+                            "n_trimmed": len(trimmed_idxs),
+                            "trimmed_idxs": [int(idx) for idx in trimmed_idxs],
                         }
                     }
                 )
@@ -3863,9 +3864,9 @@ class mkh5:
         microvolts
         """
 
-        calinfo = cal_stack = None
+        calinfo, cal_stack, = None, None
         print("Plotting cals")
-        (calinfo, cal_stack) = self._h5_get_calinfo(*args, **kwargs)
+        calinfo, cal_stack = self._h5_get_calinfo(*args, **kwargs)
         if calinfo is None or len(calinfo.keys()) == 0:
             raise Mkh5CalError(
                 "no cals found in " + " ".join([str(arg) for arg in args])
@@ -3895,10 +3896,17 @@ class mkh5:
 
         # for c in range(nchans):
         for c, ch in enumerate(ch_names):
+            n_cals = cal_stack[ch].shape[1]  # should be the same across channels
             cinf = calinfo[ch]
             cal_args = cinf["cal_args"]
-            srate = cinf["cal_srate"]
-            n_points = cal_args["n_points"]
+            # srate = cinf["cal_srate"]
+            scale_by = cinf["scale_by"]
+            n_points = cal_args["n_points"]  # because of odd normerp variable names
+            trimmed_idxs = cinf["trimmed_idxs"]
+
+            good_idxs = list(set(range(n_cals)).difference(trimmed_idxs))
+            assert n_cals == len(good_idxs) + len(trimmed_idxs)
+
             lo_cursor = n_points
             hi_cursor = len(cal_stack[ch]) - (n_points + 1)
             lo_span = range(lo_cursor - n_points, lo_cursor + n_points + 1)
@@ -3909,8 +3917,12 @@ class mkh5:
                 lo_cursor - n_points, lo_cursor - n_points + len(cal_stack[ch])
             )
             a = ax[int(c / n_col), c % n_col]
-            # a.set_axis_bgcolor('k')
             a.set_facecolor("k")
+            a.set_title(
+                f"scale={scale_by:0.2f}, trimmed {len(trimmed_idxs)}",
+                fontsize="small",
+                color="lightgray",
+            )
             a.set_ylabel(ch, color="lightgray", rotation=0, horizontalalignment="left")
 
             # box the points averaged
@@ -3919,16 +3931,23 @@ class mkh5:
             # mark the cursors
             a.axvline(lo_cursor, color="r")
             a.axvline(hi_cursor, color="r")
-            lpc = a.plot(cal_samps, cal_stack[ch], ".-", color=calcolors[c % 2])
+
+            # lpc = a.plot(cal_samps, cal_stack[ch], ".-", color=calcolors[c % 2])
+            a.plot(cal_samps, cal_stack[ch][:, good_idxs], ".-", color=calcolors[c % 2])
+            a.plot(cal_samps, cal_stack[ch][:, trimmed_idxs], ".-", color="red", lw=0.5)
+            a.plot(
+                cal_samps, cal_stack[ch][:, good_idxs].mean(axis=1), color="cyan", lw=2
+            )
 
         f.set_facecolor("black")
         st = (
-            f"calibration pulses from: "
+            f"calibration pulses (recorded N={n_cals}) from: "
             f"{' '.join([str(arg) for arg in args])}\n"
             f"{' '.join([k + '=' + str(v) for k, v in kwargs.items()])}"
         )
         f.suptitle(st, color="lightgray")
-        # plt.show()
+        f.subplots_adjust(hspace=0.75)
+        # plt.show()  # uncomment to preview for debugging
         return (f, ax)
 
 
