@@ -134,12 +134,12 @@ jobs:
 
       # create the env
       - name: >-
-          conda create -n
+          mamba create -n
           env_${{ env.PY_VER }}
           python=${{ env.PY_VER }}
           ${{ env.PACKAGE_NAME}}
         run: |
-          conda create -n env_$PY_VER python=$PY_VER $PACKAGE_NAME -c $CONDA_BLD_PATH
+          mamba create -n env_$PY_VER python=$PY_VER $PACKAGE_NAME -c $CONDA_BLD_PATH
 
       - name: run black and pytests
         run: |
