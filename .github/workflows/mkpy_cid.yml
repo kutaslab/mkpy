@@ -147,7 +147,7 @@ jobs:
           lscpu
           python -c 'import numpy; numpy.show_config()'
           black --check --verbose .
-          pytest --cov=$PACKAGE_NAME # test as installed by conda
+          python -m pytest --cov=$PACKAGE_NAME # test as installed by conda
 
 
       - name: build sphinx docs
