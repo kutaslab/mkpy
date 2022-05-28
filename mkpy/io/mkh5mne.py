@@ -1295,7 +1295,7 @@ def _patch_dblock_info(info, hdr, hdr_mne):
     data * MKH5_EEG_UNIT set in dblock conversion from native mkh5 uV to the
     FIFF.FIFF_UNIT_V channel scale set here in the MNE channel info
     """
-
+    
     # info["proj_name"] = hdr["expdesc"]
     info["subject_info"] = {"his_id": hdr["uuid"]}
     info["device_info"] = {"type": hdr["name"]}
@@ -1349,6 +1349,7 @@ def _patch_dblock_info(info, hdr, hdr_mne):
             else:
                 # log A/D cal factor the MNE way
                 ch_info["cal"] = 1.0 / hdr["streams"][ch_name]["cals"]["scale_by"]
+
 
     return info
 
@@ -1565,7 +1566,9 @@ def _hdr_dblock_to_info_montage(hdr, apparatus_yaml=None):
         coord_frame="head",
     )
 
-    info = _patch_dblock_info(info, hdr, hdr_mne)
+    # MNE began locking Info attrs sometime between 0.23 and 1.0
+    with info._unlock():
+        info = _patch_dblock_info(info, hdr, hdr_mne)
     return info, montage
 
 
