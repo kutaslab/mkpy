@@ -8,7 +8,7 @@ Quickstart: mkh5 to MNE
 # The sample data is a single subject mkh5 data file for an auditory oddball paradigm.
 
 # %%
-# FYI ... environment and versions.
+# FYI ... environment and versions. The MNE browser backend is set for generating these docs.
 import os
 import mne
 import mkpy

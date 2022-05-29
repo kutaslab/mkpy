@@ -27,7 +27,7 @@ import os
 import mne
 import mkpy
 from mkpy.io import mkh5mne
-mne.viz.set_browser_backend("matplotlib")
+mne.viz.set_browser_backend("matplotlib")  # for docs generation
 
 print("conda env", os.environ["CONDA_DEFAULT_ENV"])
 for pkg in [mkpy, mne]:

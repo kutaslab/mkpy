@@ -6,7 +6,7 @@ import mne
 from mkpy.io import mkh5mne
 
 print(mne.__version__)
-mne.viz.set_browser_backend("matplotlib")
+mne.viz.set_browser_backend("matplotlib")  # for docs generation
 
 # %%
 #
