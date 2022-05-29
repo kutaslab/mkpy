@@ -58,7 +58,8 @@ on:
 
   schedule:
     # min hour day month year. digit = when, / = step by, * = all
-    - cron: '0 0 */1 * *'
+    # midnight Sunday
+    - cron: '0 0 * * 0'
 
 env:
   PACKAGE_NAME: mkpy
