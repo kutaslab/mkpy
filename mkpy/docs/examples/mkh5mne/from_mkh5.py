@@ -10,6 +10,7 @@ import os
 import mne
 from mkpy import mkh5
 from mkpy.io import mkh5mne
+mne.viz.set_browser_backend("matplotlib")
 
 # FYI
 conda_env = os.environ["CONDA_DEFAULT_ENV"]

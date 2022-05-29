@@ -14,6 +14,8 @@ import mne
 import mkpy
 from mkpy.io import mkh5mne
 
+mne.viz.set_browser_backend("matplotlib")
+
 print("conda env", os.environ["CONDA_DEFAULT_ENV"])
 for pkg in [mkpy, mne]:
     print(pkg.__name__, pkg.__version__)
