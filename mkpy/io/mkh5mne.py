@@ -265,7 +265,7 @@ class Mkh5DblockMontageMismatch(Exception):
 # ------------------------------------------------------------
 # private-ish helpers
 def _check_package_versions():
-    """ guard the MNE and mkh5 version for compatible header -> info, montage"""
+    """guard the MNE and mkh5 version for compatible header -> info, montage"""
 
     ver_re = re.compile(r"^(?P<M>\d+)\.(?P<N>\d+)\.(?P<P>){0,1}.*$")
 
@@ -567,7 +567,7 @@ def _is_equal_mne_info(info_a, info_b, exclude=None, verbose=False):
 
 
 def _is_equal_mne_montage(montage_a, montage_b, verbose="info"):
-    """ compare two mne montages for identity"""
+    """compare two mne montages for identity"""
 
     # fall through for msgs when verbose=True
     attrs_a = sorted(montage_a.__dict__.keys())
@@ -839,7 +839,9 @@ class Mkh5Raw(mne.io.BaseRaw):
                 else:
                     # continue an existing table
                     assert all(mne_ditis[key].columns == diti.columns)
-                    mne_ditis[key] = mne_ditis[key].append(diti)
+                    # mne_ditis[key] = mne_ditis[key].append(diti)  # append is deprecated
+                    mne_ditis[key] = pd.concat([mne_ditis[key], diti])
+
             raw_samp_n += len(raw_dblock)
 
         # assemble RawArrays
@@ -993,7 +995,7 @@ def _validate_hdr_for_mne(hdr):
       bioamp) must be one of the apparatus sensor keys to provide
       the 3D coordinates.
        The apparatus sensor coordinates must be numeric.
-     """
+    """
 
     # ------------------------------------------------------------
     # these key: vals are built in by mkh5, check anyway
@@ -1295,7 +1297,7 @@ def _patch_dblock_info(info, hdr, hdr_mne):
     data * MKH5_EEG_UNIT set in dblock conversion from native mkh5 uV to the
     FIFF.FIFF_UNIT_V channel scale set here in the MNE channel info
     """
-    
+
     # info["proj_name"] = hdr["expdesc"]
     info["subject_info"] = {"his_id": hdr["uuid"]}
     info["device_info"] = {"type": hdr["name"]}
@@ -1350,7 +1352,6 @@ def _patch_dblock_info(info, hdr, hdr_mne):
                 # log A/D cal factor the MNE way
                 ch_info["cal"] = 1.0 / hdr["streams"][ch_name]["cals"]["scale_by"]
 
-
     return info
 
 
@@ -1403,7 +1404,10 @@ def _patch_dblock_info(info, hdr, hdr_mne):
 # ------------------------------------------------------------
 # general data wrangling
 def _dblock_to_raw(
-    mkh5_f, dblock_path, garv_annotations=None, apparatus_yaml=None,
+    mkh5_f,
+    dblock_path,
+    garv_annotations=None,
+    apparatus_yaml=None,
 ):
     """convert one mkh5 datablock+header into one mne.RawArray
 
@@ -1676,8 +1680,9 @@ def read_raw_mkh5(
 ):
     """Read an mkh5 data file into MNE raw format
 
-    .. deprecated:: 
-    Use :func:`from_mkh5`
+    .. deprecated:: 0.2.6
+       Use :func:`from_mkh5`
+
 
     """
     warnings.warn(
@@ -1725,7 +1730,7 @@ def from_mkh5(
         units: "ms" or "s". Defaults to None.
 
     dblock_paths : None | list of mkh5 datablock paths, optional
-        The listed datablock paths will be concatenated in order into the 
+        The listed datablock paths will be concatenated in order into the
         mne.Raw. Defaults to None, in which case all the data blocks in mkh5 file
         are concatenated in the order returned by :py:meth:`.mkh5.dblock_paths`.
 
@@ -1733,7 +1738,7 @@ def from_mkh5(
         If a path to a well-formed mkh5 apparatus map YAML file, it
         is used instead of the map in the mkh5 dblock header, if any.
         Defaults to None.
-        
+
     fail_on_info : bool, optional
         If True, this enforces strict mne.Info identity across the
         mkh5 data blocks being concatenated. If False (default), some

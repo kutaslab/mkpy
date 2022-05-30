@@ -413,10 +413,15 @@ def test_get_garv_bads():
     descriptions = ["BAD_garv_48"] * 3 + ["BAD_garv_32"] + ["BAD_garv_48"] * 3
     dbps = mkh5.mkh5(TEST_EPOCHS_MKH5_FILE).dblock_paths
     raw_mkh5 = mkh5mne.from_mkh5(
-        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[:1],  # one block to shorten test time
+        TEST_EPOCHS_MKH5_FILE,
+        dblock_paths=dbps[:1],  # one block to shorten test time
     )
     bad_garvs = mkh5mne.get_garv_bads(
-        raw_mkh5, event_channel="ms100", tmin=-12, tmax=12, units="ms",
+        raw_mkh5,
+        event_channel="ms100",
+        tmin=-12,
+        tmax=12,
+        units="ms",
     )
     assert all(bad_garvs.onset == onsets)
     assert all(bad_garvs.duration == durations)
@@ -428,7 +433,8 @@ def test_get_epochs():
 
     dbps = mkh5.mkh5(TEST_EPOCHS_MKH5_FILE).dblock_paths
     raw_mkh5 = mkh5mne.from_mkh5(
-        TEST_EPOCHS_MKH5_FILE, dblock_paths=dbps[0:1],  # one block to shorten test time
+        TEST_EPOCHS_MKH5_FILE,
+        dblock_paths=dbps[0:1],  # one block to shorten test time
     )
 
     metadata = mkh5mne.get_epochs_metadata(raw_mkh5, epochs_name="ms100")

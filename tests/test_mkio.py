@@ -567,7 +567,7 @@ def test_read_header_bad_magic():
 
 
 def test_read_raw_crw():
-    """ NJS's original test for .raw, .raw.gz, .crw files.
+    """NJS's original test for .raw, .raw.gz, .crw files.
     TPU tweaked for read_raw returning the additional record counts
     and dropped test for gzip.
 

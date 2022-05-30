@@ -190,13 +190,13 @@ def set_styles():
 
 # ------------------------------------------------------------
 class PyGarvView(ttk.LabelFrame):
-    """thin wrapper around PyGarvEditor model-view for selecting, editing, deleting pygarv tests 
+    """thin wrapper around PyGarvEditor model-view for selecting, editing, deleting pygarv tests
 
-    Fun facts 
+    Fun facts
 
-    - the mkh5 data file is *not* modified 
+    - the mkh5 data file is *not* modified
 
-    - View.model.pg maintains the local PyGarv() data model that tracks test results 
+    - View.model.pg maintains the local PyGarv() data model that tracks test results
 
     - pygarv tests are tracked and run "what if"
 
@@ -222,10 +222,10 @@ class PyGarvView(ttk.LabelFrame):
         - when input validated for type, self.model.pg attemps to run the test
 
         - success on running updates the self.pg.pg.tr_docs w/ the test and triggers
-          a view._update() cascade 
+          a view._update() cascade
 
         - failure returns the exception for handling by the viewer
-    
+
         - Export button dumps the .yarf YAML (= yarf_docs) for the tr_docs
 
         - mini-console shows activity and messages
@@ -233,7 +233,7 @@ class PyGarvView(ttk.LabelFrame):
     """
 
     def __init__(self, parent, *args, **kwargs):
-        """a label frame wrapping PyGarvTestView ttk.TreeView which does the work """
+        """a label frame wrapping PyGarvTestView ttk.TreeView which does the work"""
 
         self.model = parent.model
         super().__init__(parent, *args, **kwargs)
@@ -293,7 +293,7 @@ class PyGarvEditorView(tk.PanedWindow):
 
 
 class PyGarvEditorDashboard(ttk.Frame):
-    """wrapper for Editor UI controls """
+    """wrapper for Editor UI controls"""
 
     def __init__(self, parent):
         self.parent = parent
@@ -322,7 +322,7 @@ class PyGarvEditorDashboard(ttk.Frame):
 
     def _console_log(self, item, text=""):
         """report stuff back to the user
-        
+
         Parameters
         ----------
         item : object
@@ -390,7 +390,7 @@ class PyGarvEditorDashboard(ttk.Frame):
 
 
 class PyGarvCatalogView(ttk.LabelFrame):
-    """viewer/chooser for available PyGarvTest tests """
+    """viewer/chooser for available PyGarvTest tests"""
 
     def __init__(self, parent, *args, **kwargs):
         """
@@ -439,7 +439,7 @@ class PyGarvCatalogView(ttk.LabelFrame):
         self.catalog_tree.bind("<Return>", self._add_selected_test)
 
     def _add_selected_test(self, e):
-        """ request sibling test editor to pull a test form from the catalog """
+        """request sibling test editor to pull a test form from the catalog"""
 
         # maybe better done with a virtual event
         # print('catalog is requesting new test from catalog')
@@ -448,7 +448,7 @@ class PyGarvCatalogView(ttk.LabelFrame):
         # root.event_generate('<<NewTestFromCatalog>>')
 
     def _describe_selection(self, e):
-        """ Catalog selection tracks docstring from PyGarvTest.run """
+        """Catalog selection tracks docstring from PyGarvTest.run"""
         selections = self.catalog_tree.selection()
         assert len(selections) == 1
         test_iid = selections[0]
@@ -466,7 +466,7 @@ class PyGarvCatalogView(ttk.LabelFrame):
 
 
 class PyGarvTestView(ttk.LabelFrame):
-    """ viewer + parameter value editor for PyGarvTest datablock test params """
+    """viewer + parameter value editor for PyGarvTest datablock test params"""
 
     def __init__(self, parent, *args, **kwargs):
         """
@@ -547,8 +547,8 @@ class PyGarvTestView(ttk.LabelFrame):
         return "break"  # block event propogation
 
     def _tree_to_yarf_doc_test_list(self):
-        """ scrapes the current test tree and returns a
-        yarf_doc['tests'] format list 
+        """scrapes the current test tree and returns a
+        yarf_doc['tests'] format list
         """
 
         # bail out if in process of patching up the form
@@ -595,19 +595,19 @@ class PyGarvTestView(ttk.LabelFrame):
         return test_list
 
     def _on_valid_tree(self, e):
-        """ actions to take when test tree values are valid"""
+        """actions to take when test tree values are valid"""
         # print('on_valid_tree', e)
         self.update_idletasks()  # cleanup windows
         self.nametowidget(".!view")._update()  # update everything
 
     def _update(self):
-        """ for view._update() cascade """
+        """for view._update() cascade"""
         self.config(text="Edit {0}".format(self.model.dblock_path))
         self.model.update_model(self.model.dblock_path)
         self._test_tree_from_tr_doc()
 
     def _test_tree_from_tr_doc(self):
-        """ refresh the pygarv test tree from the current yarf_docs """
+        """refresh the pygarv test tree from the current yarf_docs"""
         # print('test_tree._test_tree_from_tr_doc()')
 
         test_list = self.model.get_pg_test_list()
@@ -634,7 +634,7 @@ class PyGarvTestView(ttk.LabelFrame):
     # Entry widget event handlers: note calls back to _validate()
 
     def _dbl_click(self, e):
-        """ if pointer is double clicked on a parameter value run the value editor """
+        """if pointer is double clicked on a parameter value run the value editor"""
 
         tt_iid = self.test_tree.identify_row(e.y)  # table row has unique iid
         column = self.test_tree.identify_column(e.x)  # param #1 value #2
@@ -645,7 +645,7 @@ class PyGarvTestView(ttk.LabelFrame):
 
     # pop up an Entry widget over the value being edited
     def _edit_tt_iid_value(self, tt_iid):
-        """ pop up a ttk.Entry overlay for parameter value at tt_iid"""
+        """pop up a ttk.Entry overlay for parameter value at tt_iid"""
 
         # allow only one Entry widget at a time
         ewdgts = []
@@ -700,7 +700,7 @@ class PyGarvTestView(ttk.LabelFrame):
         self.update_idletasks()  # force display of the entry
 
     def _enter_data_iid(self, e, tt_iid):
-        """ move contents of the Entry into the test tree, request form validation"""
+        """move contents of the Entry into the test tree, request form validation"""
         new_value = e.widget.get()
         (param, old_value) = self.test_tree.item(tt_iid)["values"]
         self.test_tree.set(tt_iid, column="value", value=new_value)
@@ -712,7 +712,7 @@ class PyGarvTestView(ttk.LabelFrame):
         return "break"  # block event propagation
 
     def _abort_edit(self, e):
-        """ bail of with no change to the test parameters or yarf_doc """
+        """bail of with no change to the test parameters or yarf_doc"""
         e.widget.destroy()
         self.update_idletasks()
         self._test_tree_from_tr_doc()
@@ -720,7 +720,7 @@ class PyGarvTestView(ttk.LabelFrame):
         return "break"
 
     def _entry_widget_position_handler(self, e):
-        """ on test tree window changes look up and relocate entry widgets """
+        """on test tree window changes look up and relocate entry widgets"""
         for n, wdgt in self.children.items():
             if hasattr(wdgt, "x_y_tt_iid"):
                 self.update_idletasks()  # or else the bbox may not yet be known
@@ -731,7 +731,7 @@ class PyGarvTestView(ttk.LabelFrame):
 
     # Backspace/Del delete test handler
     def _tree_delete_test(self, e):
-        """ delete the selected test from the current yarf_doc tests """
+        """delete the selected test from the current yarf_doc tests"""
         iids = e.widget.selection()
 
         # tests are root children so widget.index(iid) == index in current test list
@@ -749,8 +749,8 @@ class PyGarvTestView(ttk.LabelFrame):
 
     # test tree CRUD utils ------------------------------------------------------------
     def _validate(self, test_iid):
-        """check parameter values are of the correct type *AND* dry run test(s) 
-        
+        """check parameter values are of the correct type *AND* dry run test(s)
+
         Parameters
         ----------
         test_iid : str
@@ -895,7 +895,7 @@ class PyGarvTreeView(ttk.Treeview):
         pg : PyGarv class instance
            has current yarf_docs
         columns : list of str
-           column headings, e.g., ['test', 'parameter', 'value'] 
+           column headings, e.g., ['test', 'parameter', 'value']
 
         """
 
@@ -924,11 +924,11 @@ class PyGarvTreeView(ttk.Treeview):
 
 # data I/O class interface to mkh5
 class Model:
-    """data model for the views 
-    
+    """data model for the views
+
     This is the Model in the mkh5viewer Model-View architecture
 
-    `dblock_paths` and `epoch_tables` are set once upon init when the 
+    `dblock_paths` and `epoch_tables` are set once upon init when the
     `mkh5` file is read.
 
     The rest track datablock and index pointers, updated in response
@@ -949,9 +949,9 @@ class Model:
       each string is a slash path '_epoch_tables/\*' to an mkh5 epoch table dataset
 
     dbp_idx : uint
-       index of model's current dblock_path 
+       index of model's current dblock_path
 
-    dblock_path : string 
+    dblock_path : string
        slash path to the active mkpy.mkh5 data set, e.g.,
        `sub01/dblock_0` or `exp1/S07/dblock_7`.
 
@@ -1016,7 +1016,7 @@ class Model:
         assert isinstance(self.dblock, np.ndarray)
 
     def update_model(self, dblock_path):
-        """ refresh index, path, and header, dblock data, and pygarv results
+        """refresh index, path, and header, dblock data, and pygarv results
 
         Parameters
         ----------
@@ -1052,7 +1052,7 @@ class Model:
         self.export_yarf_docs(self.tmp_yarf_f)
 
     def export_yarf_docs(self, filename):
-        """ scrape yarf doc test info from tr_docs and dump to YAML .yarf file"""
+        """scrape yarf doc test info from tr_docs and dump to YAML .yarf file"""
 
         # refresh tmp.yarf
         yarf_docs = self.pg._get_yarf_docs_from_tr_docs()
@@ -1067,13 +1067,13 @@ class Model:
             raise err(status_msg)
 
     def get_pg_test_list(self):
-        """ return this dblock's tr_doc test list, e.g., for populating a UI test tree """
+        """return this dblock's tr_doc test list, e.g., for populating a UI test tree"""
         return self.pg.tr_docs[self.dbp_idx]["tests"]
 
     def next_event(
         self, from_idx, direction, pygarv_type=None, event_col="log_evcodes"
     ):
-        """return index of next or previous event in current 
+        """return index of next or previous event in current
             dblock model w/ pygarv type
 
         Parameters
@@ -1086,7 +1086,7 @@ class Model:
            None (default) ignores pygarv column, 'good' searches for
            pygarv == 0, bad searches pygarv > 0
         event_col : str ('log_evcodes')
-           name dblock column to search for events. usually default, 
+           name dblock column to search for events. usually default,
            perhaps 'crw_evcodes'
 
         Returns
@@ -1130,7 +1130,7 @@ class View(tk.PanedWindow):
     Parameters
     ----------
     parent : tk.object
-    model : mkh5viewer.Model instance  
+    model : mkh5viewer.Model instance
       see Model for details
 
     """
@@ -1158,7 +1158,7 @@ class View(tk.PanedWindow):
         self._update()
 
     def _update(self):
-        """ triggers children to consult Model for possible changes with their own _update().
+        """triggers children to consult Model for possible changes with their own _update().
         This is *not* tk.update()
         """
         # print('View._update()')
@@ -1172,7 +1172,7 @@ class View(tk.PanedWindow):
 
 
 class DataView(tk.PanedWindow):
-    """wrapper around pygarv editor, traces and dblock datatable """
+    """wrapper around pygarv editor, traces and dblock datatable"""
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, **kwargs)
@@ -1181,7 +1181,7 @@ class DataView(tk.PanedWindow):
         self.layout_DV_widgets()
 
     def layout_DV_widgets(self):
-        """ note: dims controlled in appearance spec globals """
+        """note: dims controlled in appearance spec globals"""
 
         # PyGarv Frame on the left
         pygarv_frame = PyGarvView(self, text="Artifact Tests", name="pygarv")
@@ -1211,18 +1211,18 @@ class DataView(tk.PanedWindow):
             v._update()
 
     def _update_pygarv(self):
-        """ refresh pygarv test edit tree """
+        """refresh pygarv test edit tree"""
         self.children["pygarv"]._update()
 
     def _update(self):
-        """ refresh traces and dblock streams """
+        """refresh traces and dblock streams"""
         self._update_pygarv()
         self._update_streams()
 
 
 # class Dashboard(ttk.PanedWindow): # LabelFrame):
 class Dashboard(tk.PanedWindow):  # LabelFrame):
-    """wrapper around HeaderView, H5Nav  """
+    """wrapper around HeaderView, H5Nav"""
 
     def __init__(self, parent, *args, **kwargs):
 
@@ -1233,7 +1233,7 @@ class Dashboard(tk.PanedWindow):  # LabelFrame):
         # self._update()
 
     def layout_dashboard_widgets(self):
-        """ note: dims controlled in appearance spec globals """
+        """note: dims controlled in appearance spec globals"""
 
         # headinfo in left panel
         header_view = HeaderView(self, self.model)  # , height=20)
@@ -1256,7 +1256,7 @@ class Dashboard(tk.PanedWindow):  # LabelFrame):
 
 
 class H5Nav(ttk.Notebook):
-    """ Tab 1 (default) is dblocks, other tabs are epochs """
+    """Tab 1 (default) is dblocks, other tabs are epochs"""
 
     def __init__(self, parent, *args, **kwargs):
         super().__init__(parent, *args, style="h5nav_style.TNotebook", **kwargs)
@@ -1292,7 +1292,7 @@ class H5Nav(ttk.Notebook):
 
 class EventView(ttk.Frame):
 
-    """ lightweight wrapper for regular expression event finding, same
+    """lightweight wrapper for regular expression event finding, same
     search mechanism as mkh5.event_table()
     """
 
@@ -1305,13 +1305,13 @@ class EventView(ttk.Frame):
         pass
 
     def _find(self, dblock_path, column_name, reg_exp):
-        """ wrapper around mkh5._find_evcodes() ... works per dblock"""
+        """wrapper around mkh5._find_evcodes() ... works per dblock"""
         pass
 
 
 class H5View(ttk.Treeview):
-    """ unified tabular viewer for data block (= a long epoch), events
-    (a single sample epoch) and epoch tables """
+    """unified tabular viewer for data block (= a long epoch), events
+    (a single sample epoch) and epoch tables"""
 
     def __init__(self, parent, model, layer=None, *args, **kwargs):
 
@@ -1339,7 +1339,7 @@ class H5View(ttk.Treeview):
         self.pack(expand=1, fill="both")
 
     def _update_tree(self, df):
-        """ wrapper to refresh widget with new data """
+        """wrapper to refresh widget with new data"""
 
         self.h5view_df = df
 
@@ -1356,16 +1356,16 @@ class H5View(ttk.Treeview):
             self.insert("", "end", values=list(row))
 
     def update_model_view(self, e):
-        """ handles clicks on H5view row.
+        """handles clicks on H5view row.
 
         Each row of self.h5view_df has a dblock_path and match_ticks column.
 
         Selecting by mouse click or arrowing
 
-          * update the main model to use the dblock at dblock_path 
+          * update the main model to use the dblock at dblock_path
           * move the viewport to the relevant tick
           * switch the dashboard into event scroll mode and notify
-            of the new event data 
+            of the new event data
         """
 
         # the selected table row
@@ -1454,7 +1454,7 @@ class HeaderView(ttk.LabelFrame):
 
 class DBlockView(ttk.Treeview):
     def __init__(self, parent, model, *args, **kwargs):
-        """ populate with model and info from the trace view"""
+        """populate with model and info from the trace view"""
         self.parent = parent
         self.model = model
         self.traces = self.parent.children["traces"]
@@ -1484,7 +1484,7 @@ class DBlockView(ttk.Treeview):
         self.cursor_id = ""  # track cursor/selection row
 
     def set_vp_cursor(self, e):
-        """vp cursor tracks dblock focus item, i.e., dblock row 
+        """vp cursor tracks dblock focus item, i.e., dblock row
 
         Responds to DblockView cursor selection virtual events, also
         called by TraceView cursor mouse dragging
@@ -1531,7 +1531,7 @@ class DBlockView(ttk.Treeview):
         # return 'break'
 
     def _set_vp_info(self):
-        """ go up a frame and fetch the traces viewport """
+        """go up a frame and fetch the traces viewport"""
         # viewport data from the traceview
         self.parent.children["traces"]._update_vp()
         self.vp_idx = self.parent.children["traces"].vp_idx
@@ -1540,7 +1540,7 @@ class DBlockView(ttk.Treeview):
         self.vp_ys = self.parent.children["traces"].vp_ys
 
     def _update(self):
-        """ refill tree view with dblock columns """
+        """refill tree view with dblock columns"""
         # print('DBlockView._update()')
 
         if self.traces.dashboard.is_event_view:
@@ -1571,12 +1571,12 @@ class TraceView(ttk.Frame):
     """trace view of data drawn on tk.Canvas wrapped in a tk.Label frame"""
 
     class TraceDashboard(tk.Frame):
-        """ Status and UI controls for continuous vs. event/epoch scrolling
+        """Status and UI controls for continuous vs. event/epoch scrolling
 
         Parameters
         ----------
-        parent : 
-        model : 
+        parent :
+        model :
         """
 
         def __init__(self, parent, model, *args, **kwargs):
@@ -1729,7 +1729,7 @@ class TraceView(ttk.Frame):
 
         # radio button group
         def _rb_select(self):
-            """ reset event data and refresh """
+            """reset event data and refresh"""
 
             # FIX ME LOGIC? changing event types may or may not invalidate
             self._clear_anchor_event_data()
@@ -1738,7 +1738,7 @@ class TraceView(ttk.Frame):
             self.parent._update()
 
         def _on_release_scale(self, e):
-            """ update controls, minimodel, and traceview when a scale slider is dropped """
+            """update controls, minimodel, and traceview when a scale slider is dropped"""
             name = e.widget._name
             val = e.widget.get()
 
@@ -1810,7 +1810,7 @@ class TraceView(ttk.Frame):
 
         # backend --------------------------------------------
         def _get_dblock_idx(self, name):
-            """  returns dblock_idx for named epoch param """
+            """returns dblock_idx for named epoch param"""
             return getattr(self, name)["dblock_idx"]
 
         def _dash_scale_to_vp_offset(self, dash_scale):
@@ -1831,7 +1831,7 @@ class TraceView(ttk.Frame):
         # public-ish API
         @property
         def is_event_view(self):
-            """ boolean True if scrolling by one of the event modes"""
+            """boolean True if scrolling by one of the event modes"""
             if self.scroll_by_var.get() == "samples":
                 return False
             else:
@@ -1887,7 +1887,7 @@ class TraceView(ttk.Frame):
             return self.anchor["event_data"]
 
         def set_anchor(self, dblock_idx):
-            """ anchor at dblock index idx, update prestim and poststim from scales """
+            """anchor at dblock index idx, update prestim and poststim from scales"""
             # print('set_anchor({0})'.format(dblock_idx))
             self.anchor["dblock_idx"] = dblock_idx
             self.anchor["vp_offset"] = self.anchor_sc.get()
@@ -1919,7 +1919,7 @@ class TraceView(ttk.Frame):
             ----------
             direction: int
                -1 searches left, 1 searches right
-            
+
             Returns
             -------
             new_vp_idx : uint
@@ -1958,7 +1958,7 @@ class TraceView(ttk.Frame):
 
         # status bar --------------------------------------------------
         def set_dash_status_text(self, units="seconds"):
-            """ refresh the status report text
+            """refresh the status report text
 
             Parameters
             ----------
@@ -1991,7 +1991,7 @@ class TraceView(ttk.Frame):
             self.dash_status_label.config(text=text)
 
         def set_epoch_labels_text(self):
-            """ synch epoch text labels w/ scale settings"""
+            """synch epoch text labels w/ scale settings"""
 
             srate = self.model.header["samplerate"]
             try:
@@ -2018,7 +2018,7 @@ class TraceView(ttk.Frame):
             self.set_epoch_labels_text()
 
     class Trace(object):
-        """ scalable x,y tk.Canvas grobs
+        """scalable x,y tk.Canvas grobs
 
         The x and y are the 1-1 unscaled data, stretched into canvas_pts according
         to parent.x_scale, parent.x_scale
@@ -2031,15 +2031,15 @@ class TraceView(ttk.Frame):
         Attributes
         ----------
            canvas_id : int (None)
-              canvas item index if Trace is currently rendered, else None. 
+              canvas item index if Trace is currently rendered, else None.
 
 
         * Construct:
 
-            my_line = Trace(parent_trace_view) # container only 
+            my_line = Trace(parent_trace_view) # container only
             my_line = Trace(parent_trace_view, x=x_data, y=ydata) # ready to render
             my_rect = Trace(parent_trace_view, x=(x0,x1), y=(y0,y1)) # ready to render
-        
+
         * Update, optionally with new x,y data
 
             my_line.update() # rescale only
@@ -2054,7 +2054,7 @@ class TraceView(ttk.Frame):
 
             canvas.delete(my_trace.canvas_id)
             my_trace.canvas_id = None
-        
+
         """
 
         _allowed_attrs = [
@@ -2102,7 +2102,7 @@ class TraceView(ttk.Frame):
             self.set_x_y(x, y)
 
         def set_x_y(self, x, y):
-            """ store data sample x, y and convert to canvas coords """
+            """store data sample x, y and convert to canvas coords"""
             if x is not None and y is not None:
                 self.x = x
                 self.y = y
@@ -2127,7 +2127,7 @@ class TraceView(ttk.Frame):
                 self.canvas_pts = [pt for pt in zip(canvas_x, canvas_y)]
 
     class TraceHScrollbar(ttk.Scrollbar):
-        """ derived scrollbar to update xview from model on set """
+        """derived scrollbar to update xview from model on set"""
 
         def __init__(self, parent, *args, **kwargs):
             super().__init__(parent, *args, **kwargs)
@@ -2290,7 +2290,7 @@ class TraceView(ttk.Frame):
             self.parent._update_streams()
 
     def _update_vp(self, vp_idx=None, x_scale=None):
-        """sets the TraceView viewport data 
+        """sets the TraceView viewport data
 
         The viewport length in samples is derived from the canvas
         visible fraction of the total scrollable canvas width:
@@ -2382,24 +2382,24 @@ class TraceView(ttk.Frame):
         self.update_idletasks()
 
     def update_x_scale(self, e):
-        """ handle time zoom """
+        """handle time zoom"""
         self._update_vp(vp_idx=self.vp_idx, x_scale=float(e))
         self.parent._update_streams()
 
     def update_y_scale(self, e):
-        """ handle uV zoom """
+        """handle uV zoom"""
         self.y_scale = float(e)
         self.reset_scrollregion()
         self._update()
 
     def update_y_offset(self, e):
-        """ handle trace vertical spacing """
+        """handle trace vertical spacing"""
         self.y_offset = float(e)
         self.reset_scrollregion()
         self._update()
 
     def bind_keys(self):
-        """ bindings"""
+        """bindings"""
         self.canvas.bind("<e>", self.toggle_event_marks)  # on/off
 
         self.canvas.bind("<Left>", self._trace_xview_scroll)
@@ -2490,7 +2490,7 @@ class TraceView(ttk.Frame):
     # move me ------------------------------------------------------------
 
     def bind_mouse(self):
-        """ mouse bindings"""
+        """mouse bindings"""
 
         self.canvas.bind("<Enter>", self.canvas_get_focus)
 
@@ -2568,22 +2568,22 @@ class TraceView(ttk.Frame):
         self.vp_cursor_idx = vp_cursor_idx
 
     def b1_drag(self, e):
-        """ stub """
+        """stub"""
         # print('b1 dragging', e)
         pass
 
     def b2_drag(self, e):
-        """ stub """
+        """stub"""
         # print('b2 dragging', e)
         pass
 
     def b3_drag(self, e):
-        """ stub """
+        """stub"""
         # print('b3 dragging', e)
         pass
 
     def mouse_wheel(self, e):
-        """ handle mouse wheel """
+        """handle mouse wheel"""
         # print('mouse wheeling', e)
         x_start = e.x
         y_start = e.y
@@ -2594,10 +2594,10 @@ class TraceView(ttk.Frame):
         Parameters
         ----------
         vp_idx : int
-           dblock index (samples) of left edge of TraceView viewport 
+           dblock index (samples) of left edge of TraceView viewport
 
-        viewport start index values may come from keyboard/mouse TraceView navigation or 
-        be derived from epoch data lookup during table navigation 
+        viewport start index values may come from keyboard/mouse TraceView navigation or
+        be derived from epoch data lookup during table navigation
 
         The viewport length in samples is derived from the canvas
         scrollregion fraction of the canvas width (== len(dblock) \* x_scale)
@@ -2611,8 +2611,8 @@ class TraceView(ttk.Frame):
         self.vp_ys = self.model.dblock[self.vp_xs]
 
     def reset_scrollregion(self, *args):
-        """ change the canvas scrollregion on zoom params or window changes
-        y scrollregion always needs to include all traces. 
+        """change the canvas scrollregion on zoom params or window changes
+        y scrollregion always needs to include all traces.
         x scrollregion is canvas width ... _update_vp() sets vp_len data points
         """
 
@@ -2650,7 +2650,7 @@ class TraceView(ttk.Frame):
     #
     # ------------------------------------------------------------
     def reset_trace_dashboard(self):
-        """ pull info from the trace dashboard view controls and render
+        """pull info from the trace dashboard view controls and render
 
 
         - anchor marker
@@ -2712,7 +2712,7 @@ class TraceView(ttk.Frame):
         self.render_trace_dashboard()
 
     def render_trace_dashboard(self):
-        """ render or hide the trace dashboard view grobs"""
+        """render or hide the trace dashboard view grobs"""
 
         # clean up previous if any ...
         if (
@@ -2747,7 +2747,10 @@ class TraceView(ttk.Frame):
 
         colors = ["magenta", "yellow"]
 
-        at, n_samples, = self.viewport
+        (
+            at,
+            n_samples,
+        ) = self.viewport
         # print('setting traces', at, n_samples)
         for i, t in enumerate(trace_stream_labels):
             self.traces[i] = self.Trace(
@@ -2762,10 +2765,13 @@ class TraceView(ttk.Frame):
         self.render_traces()
 
     def render_traces(self):
-        """ fetch viewport info from model and render """
+        """fetch viewport info from model and render"""
 
         # clear traces in view port and redraw
-        at, n_samples, = self.viewport
+        (
+            at,
+            n_samples,
+        ) = self.viewport
         self.canvas.delete("all")
         if n_samples == 0:
             return
@@ -2849,7 +2855,7 @@ class TraceView(ttk.Frame):
     # Event grobs
     def reset_event_marks(self):
 
-        """ called when viewport changes """
+        """called when viewport changes"""
         ev_idxs = np.where(self.model.dblock["log_evcodes"] > 0)[
             0
         ]  # event , this dblock
@@ -2876,7 +2882,10 @@ class TraceView(ttk.Frame):
         if not self.event_marks_on:
             return
 
-        at, n_samples, = self.viewport
+        (
+            at,
+            n_samples,
+        ) = self.viewport
         for ev_mark in self.event_marks:
             ev_mark.canvas_id = self.canvas.create_line(ev_mark.canvas_pts)
             self.canvas.itemconfig(
@@ -2893,7 +2902,7 @@ class TraceView(ttk.Frame):
 
     # pygarv artifact grobs
     def reset_pygarv(self):
-        """ called when dblock or PyGarv.tr_docs test changes """
+        """called when dblock or PyGarv.tr_docs test changes"""
 
         # for readability ... a better way?
         # pg = self.nametowidget('.!view.!dataview.pygarv').pg

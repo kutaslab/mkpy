@@ -10,6 +10,7 @@ import os
 import mne
 from mkpy import mkh5
 from mkpy.io import mkh5mne
+
 mne.viz.set_browser_backend("matplotlib")  # for docs generation
 
 # FYI
@@ -124,23 +125,11 @@ mne_raw_b.annotations.description
 # ----------------------------------
 #
 # If you prepared the mkh5 file with the .log file log_flags set to
-# track garv artifacts (``avg -x ``) you can automatically mark the
+# track garv artifacts (``avg -x``) you can automatically mark the
 # garv artifacts in the mne.Raw with BAD_garv mne.Annotations by
-# passing in the ``garv_annotations=``.
+# passing in the ``garv_annotations`` options.
 
-# .. warning::
-#
-#    ``avg -x`` flags **all** event codes that fail a test. If your
-#    events are closely spaced, as in RSVP, the BAD_garv annotation
-#    for events you don't care may overlap the epochs you do care
-#    about in which case ``mne.Epochs(...,
-#    reject_by_annotation=True)`` will exclude the good epoch
-#    (log_flag==0). To avoid this, run ``garv_annotations`` on the MNE
-#    event channel corresponding to your your named mkh5 epochs table
-#    (``<epochstable_name>`` ``mkh5mne.from_mkh5(...,
-#    garv_annotations={"event_channel"=<epochs_table_name>,..})
-
-# Marks *all* the log stim and response events events with lots of overlap
+# Mark *all* the log stim and response events events with lots of overlap
 mne_raw_c = mkh5mne.from_mkh5(
     H5_F,
     garv_annotations={
@@ -150,5 +139,31 @@ mne_raw_c = mkh5mne.from_mkh5(
         "units": "ms",
     },
 )
+
+# %%
+# .. note::
+#
+#    ``avg -x`` flags **all** event codes in the log that fail a test whether or
+#    not these are the timelocking events of interest.
+
+# %% If log events are closely spaced, as in RSVP, the BAD_garv MNE
+# annotation intervals for log events upstream or downstream of the
+# timelock of interest may overlap the epoch interval and
+# ``mne.Epochs(..., reject_by_annotation=True)`` will exclude them for
+# being (partially) polluted. To avoid this, define your mkh5 codemap
+# and named epochs table so that epochs of interest do not overlap and
+# use that same-named MNE event channel to set the garv annoations
+# like so:
+
+mne_raw_c = mkh5mne.from_mkh5(
+    H5_F,
+    garv_annotations={
+        "event_channel": "ms1500",
+        "tmin": -500,
+        "tmax": 1000,
+        "units": "ms",
+    },
+)
+
 
 mne_raw_c.plot(scalings={"eeg": 5e-5, "eog": 1e-4}, start=10.0, n_channels=39)

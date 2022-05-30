@@ -2,7 +2,9 @@ pygarv: EEG viewer
 ==================
 
 ``pygarv`` is a command line utility that integrates EEG data
-visualization with an EEG artifact screening test editor. 
+visualization with an EEG artifact screening test editor. It works
+somewhat OK for visualizing mkh5 files, the artifact screening is work
+in progress.
 
 .. _pygarv_all_views:
 

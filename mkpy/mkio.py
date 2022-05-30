@@ -276,7 +276,7 @@ def read_raw(stream, dtype):
 
 
 def _read_raw_chunk(stream, nchans):
-    """reads a kutaslab .raw eeg data record bytestream, returns 
+    """reads a kutaslab .raw eeg data record bytestream, returns
     (mark track event codes, vector of eeg data)
 
     """
@@ -414,7 +414,7 @@ def write_erp_as_avg(erp, stream):
     # Need to convert to s16's. To preserve as much resolution as possible,
     # we use the full s16 range, minus a bit to make sure we don't run into
     # any overflow issues.
-    s16_max = 2 ** 15 - 10
+    s16_max = 2**15 - 10
     # Same as np.abs(data).max(), but without copying the whole array:
     data_max = max(resampled_data.max(), np.abs(resampled_data.min()))
     # We have to write the conversion factor as an integer, so we round it
