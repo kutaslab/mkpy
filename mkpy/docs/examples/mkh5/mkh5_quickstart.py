@@ -10,7 +10,7 @@ mkh5 Quickstart
 # %%
 #
 # #. In a terminal window use ``mamba`` (recommended) or ``conda`` (if
-#    necessary) to install mkpy along with jupyter or jupyterlab 
+#    necessary) to install mkpy along with jupyter or jupyterlab
 #    into a fresh environment and activate it:
 #
 #    .. code-block:: bash
