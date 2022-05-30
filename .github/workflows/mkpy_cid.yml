@@ -58,7 +58,8 @@ on:
 
   schedule:
     # min hour day month year. digit = when, / = step by, * = all
-    - cron: '0 0 */1 * *'
+    # midnight Sunday
+    - cron: '0 0 * * 0'
 
 env:
   PACKAGE_NAME: mkpy
@@ -76,7 +77,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        py_ver: [3.7, 3.8, 3.9]
+        py_ver: ["3.7", "3.8", "3.9"]
 
     env:
       PY_VER: ${{ matrix.py_ver }}
@@ -132,22 +133,24 @@ jobs:
           echo "::set-output name=conda-tarball::$tarball"
           echo "conda build tarball: " $tarball
 
-      # black and pytest in the py3X conda env
+      # create the env
       - name: >-
-          conda create -n
+          mamba create -n
           env_${{ env.PY_VER }}
           python=${{ env.PY_VER }}
           ${{ env.PACKAGE_NAME}}
-
         run: |
-          conda create -n env_$PY_VER python=$PY_VER $PACKAGE_NAME -c $CONDA_BLD_PATH
+          mamba create -n env_$PY_VER python=$PY_VER $PACKAGE_NAME -c $CONDA_BLD_PATH
+
+      - name: run black and pytests
+        run: |
           conda activate env_$PY_VER
           conda install -q black pytest pytest-cov
           conda list
           lscpu
           python -c 'import numpy; numpy.show_config()'
           black --check --verbose .
-          pytest --cov=$PACKAGE_NAME # test as installed by conda
+          pytest --cov=$PACKAGE_NAME  # test as installed by conda
 
 
       - name: build sphinx docs

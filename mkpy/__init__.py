@@ -15,7 +15,7 @@ import re
 
 # from . import dpath
 
-__version__ = "0.2.6"
+__version__ = "0.2.7.dev0"
 
 
 def get_ver():
@@ -91,7 +91,7 @@ def log_exceptions(indent_level):
     This will turn on exception logging and the traceback in the log file will
     be indented with one tab. To specify deeper levels of indentation, use the
     indent_level parameter:
-    
+
     .. code-block:: python
 
        @log_exceptions(indent_level=2)

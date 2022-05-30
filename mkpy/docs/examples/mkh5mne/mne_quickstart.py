@@ -8,11 +8,13 @@ Quickstart: mkh5 to MNE
 # The sample data is a single subject mkh5 data file for an auditory oddball paradigm.
 
 # %%
-# FYI ... environment and versions.
+# FYI ... environment and versions. The MNE browser backend is set for generating these docs.
 import os
 import mne
 import mkpy
 from mkpy.io import mkh5mne
+
+mne.viz.set_browser_backend("matplotlib")
 
 print("conda env", os.environ["CONDA_DEFAULT_ENV"])
 for pkg in [mkpy, mne]:
@@ -49,7 +51,11 @@ mne_raw = mkh5mne.from_mkh5(
 p3_events = mkh5mne.find_mkh5_events(mne_raw, "ms1500")
 
 # MNE native ploting
-_ = mne_raw.plot(p3_events, start=53.0, duration=3.0,)
+_ = mne_raw.plot(
+    p3_events,
+    start=53.0,
+    duration=3.0,
+)
 _ = mne.viz.plot_sensors(mne_raw.info)
 
 

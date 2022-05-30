@@ -31,7 +31,7 @@ from mkpy.mkh5 import CodeTagger as ct
 
 # code lenght 1-6
 def get_codes(length):
-    return range(10 ** (length - 1), 10 ** length)
+    return range(10 ** (length - 1), 10**length)
 
 
 def codes_to_str(codes, sep):

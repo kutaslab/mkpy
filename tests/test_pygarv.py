@@ -52,7 +52,7 @@ def test_reset_h5():
 
 
 def test_init_no_pg():
-    """ basic calling pattern on un-pygarved h5 """
+    """basic calling pattern on un-pygarved h5"""
     reset_h5()
     no_pg = pygarv.PyGarv(mkh5_f=no_pg_h5)
     return no_pg
@@ -79,16 +79,16 @@ def test_update_mkh5():
 
 
 def test_init_pg():
-    """ basic calling pattern on un-pygarved h5 """
+    """basic calling pattern on un-pygarved h5"""
     reset_h5()
     pg = pygarv.PyGarv(mkh5_f=pg_h5)
     return pg
 
 
 def test_compress_result():
-    """ check full dblock length result vectors are compressed
-        to lists of tuples marking start,stop sample of
-        failed test intervals [ (x0,x1) ... (x0,x1)
+    """check full dblock length result vectors are compressed
+    to lists of tuples marking start,stop sample of
+    failed test intervals [ (x0,x1) ... (x0,x1)
     """
     import itertools
 
@@ -136,7 +136,7 @@ def test_update_tr_docs():
 
 
 def test_specs():
-    """ tests test spec setter/getter round trip """
+    """tests test spec setter/getter round trip"""
 
     # this is a good pg
     pg = test_update_mkh5()

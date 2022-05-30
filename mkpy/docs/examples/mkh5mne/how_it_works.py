@@ -28,6 +28,8 @@ import mne
 import mkpy
 from mkpy.io import mkh5mne
 
+mne.viz.set_browser_backend("matplotlib")  # for docs generation
+
 print("conda env", os.environ["CONDA_DEFAULT_ENV"])
 for pkg in [mkpy, mne]:
     print(pkg.__name__, pkg.__version__)
@@ -54,7 +56,11 @@ mne_raw.info
 # itself to an MNE raw `.fif` file.
 # %%
 p3_events = mkh5mne.find_mkh5_events(mne_raw, "ms1500")
-_ = mne_raw.plot(p3_events, start=53.0, duration=3.0,)
+_ = mne_raw.plot(
+    p3_events,
+    start=53.0,
+    duration=3.0,
+)
 _ = mne.viz.plot_sensors(mne_raw.info)
 
 # %%

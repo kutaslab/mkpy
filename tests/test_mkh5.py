@@ -223,7 +223,7 @@ def test_inspectors():
 
 
 def test_get_set_head():
-    """test public header CRUD via slashpath """
+    """test public header CRUD via slashpath"""
 
     mydat = mkh5.mkh5(TEST_H5)
     mydat.reset_all()
@@ -314,7 +314,7 @@ def test_plotcals():
 
 
 def test_calibrate_mkdata_use_cals_2():
-    """ draw from adlong """
+    """draw from adlong"""
     mkh5_dir = Path(TEST_DIR("data"))
     resting_dir = mkh5_dir
     cals_dir = mkh5_dir
@@ -1037,20 +1037,19 @@ def test_irb_load_31_chan_crw():
     """seana's 31 chan emet files
 
     [turbach@mkgpu1 mkpy]$ headinfo ~scoulson/Emets/2020/Young/emet01.avg
-    subdesc: emet01-1 Brian Deane-Wallace 09/12/01 
+    subdesc: emet01-1 Brian Deane-Wallace 09/12/01
     expdesc: emet01 right hand
     channels: 31
-    chndesc: 0:rle   1:HE    2:MiPf  3:LLPf  4:RLPf  5:LMPf  6:RMPf  7:LDFr 
-        8:RDFr  9:LLFr 10:RLFr 11:LMFr 12:RMFr 13:LMCe 14:RMCe 15:MiCe 
-        16:MiPa 17:LDCe 18:RDCe 19:LDPa 20:RDPa 21:LMOc 22:RMOc 23:LLTe 
-        24:RLTe 25:LLOc 26:RLOc 27:MiOc 28:A2   29:lle  30:lhrz 
+    chndesc: 0:rle   1:HE    2:MiPf  3:LLPf  4:RLPf  5:LMPf  6:RMPf  7:LDFr
+        8:RDFr  9:LLFr 10:RLFr 11:LMFr 12:RMFr 13:LMCe 14:RMCe 15:MiCe
+        16:MiPa 17:LDCe 18:RDCe 19:LDPa 20:RDPa 21:LMOc 22:RMOc 23:LLTe
+        24:RLTe 25:LLOc 26:RLOc 27:MiOc 28:A2   29:lle  30:lhrz
     data type: average
     epoch length: 1024 ms
     data resolution (points per 10 uV): 1000
     presampling: 100 ms
     sampling rate: 250.00 Hz
-    channel precision: 1
-"""
+    channel precision: 1"""
     # from headinfo above
     header_chans = [
         "rle",
