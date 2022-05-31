@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkpy.mkio module &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mkpy.io.mkh5mne module" href="mkpy.io.mkh5mne.html" />
+    <link rel="prev" title="mkpy.pygarv module" href="mkpy.pygarv.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Reference.html#module-index">Module Index</a><ul class="current">
+<li class="toctree-l3 current"><a class="reference internal" href="../mkpy_api.html">mkh5, event tags, epochs</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mkpy.mkh5.html">mkpy.mkh5 module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.codetagger.html">mkpy.codetagger module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.pygarv.html">mkpy.pygarv module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">mkpy.mkio module</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="../mkpy_api.html#eeg-analysis-toolboxes">EEG analysis toolboxes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Reference.html#alphabetical-index"><span class="xref std std-ref">Alphabetical Index</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../Reference.html">API Reference</a> &raquo;</li>
+          <li><a href="../mkpy_api.html">mkh5, event tags, epochs</a> &raquo;</li>
+      <li>mkpy.mkio module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api_source/mkpy.mkio.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-mkpy.mkio">
+<span id="mkpy-mkio-module"></span><h1>mkpy.mkio module<a class="headerlink" href="#module-mkpy.mkio" title="Permalink to this heading"></a></h1>
+<p>Module mkio.py minor tweak of NJS dig format reader and (avg) writer</p>
+<p>Code has four main sections/functions</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>Setup</p></li>
+<li><p>Helper functions</p></li>
+<li><p>Readers</p></li>
+<li><p>Writers</p></li>
+</ol>
+</div></blockquote>
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.mkio.load">
+<span class="sig-prename descclassname"><span class="pre">mkpy.mkio.</span></span><span class="sig-name descname"><span class="pre">load</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">f_raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">f_log</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype=&lt;class</span> <span class="pre">'numpy.float64'&gt;</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">delete_channels=[]</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">calibrate=True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">**kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkio.html#load"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.mkio.load" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.mkio.read_log">
+<span class="sig-prename descclassname"><span class="pre">mkpy.mkio.</span></span><span class="sig-name descname"><span class="pre">read_log</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">fo</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkio.html#read_log"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.mkio.read_log" title="Permalink to this definition"></a></dt>
+<dd><p>generator reads kutaslab binary log, returns (code, tick, condition, flag)</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>fo</strong> (<em>file object</em>)</p></li>
+<li><p><strong>flags values</strong> – # avg -x sets 0 = OK, 20 = artifact, 40 = polinv, 60 = polinv + artifact
+# cdbl -op also sets flags according to the bdf
+# 100 = data error (rare)</p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.mkio.read_raw">
+<span class="sig-prename descclassname"><span class="pre">mkpy.mkio.</span></span><span class="sig-name descname"><span class="pre">read_raw</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">stream</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dtype</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkio.html#read_raw"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.mkio.read_raw" title="Permalink to this definition"></a></dt>
+<dd><p>parses bytestream of from kutaslab eeg file into usable data</p>
+<dl class="field-list simple">
+<dt class="field-odd">Returns</dt>
+<dd class="field-odd"><p>np.array(record_counts, dtype=np.int16),
+final_data, info)</p>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>(channel_names, np.array(all_codes, dtype=np.int16),</p>
+</dd>
+</dl>
+<p>all_codes – a vector of event codes and record indices from the mark track
+final_data – a np.array: samples (rows) x eeg channels (columns)</p>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.mkio.write_erp_as_avg">
+<span class="sig-prename descclassname"><span class="pre">mkpy.mkio.</span></span><span class="sig-name descname"><span class="pre">write_erp_as_avg</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">erp</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">stream</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/mkio.html#write_erp_as_avg"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.mkio.write_erp_as_avg" title="Permalink to this definition"></a></dt>
+<dd></dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mkpy.pygarv.html" class="btn btn-neutral float-left" title="mkpy.pygarv module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mkpy.io.mkh5mne.html" class="btn btn-neutral float-right" title="mkpy.io.mkh5mne module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

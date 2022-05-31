@@ -1,0 +1,18 @@
+
+:orphan:
+
+.. _sphx_glr_examples_gallery_mkh5mne_sg_execution_times:
+
+Computation times
+=================
+**02:18.106** total execution time for **examples_gallery_mkh5mne** files:
+
++------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5mne_from_mkh5.py` (``from_mkh5.py``)           | 01:32.366 | 0.0 MB |
++------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5mne_mne_quickstart.py` (``mne_quickstart.py``) | 00:22.058 | 0.0 MB |
++------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5mne_how_it_works.py` (``how_it_works.py``)     | 00:21.051 | 0.0 MB |
++------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5mne_no_events.py` (``no_events.py``)           | 00:02.632 | 0.0 MB |
++------------------------------------------------------------------------------------+-----------+--------+

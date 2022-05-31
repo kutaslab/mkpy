@@ -1,0 +1,1176 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>.yhdr aand codemap file formats &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mkh5 EEG, events, and epochs" href="OutputFiles.html" />
+    <link rel="prev" title="User Guides" href="../UserGuide.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../UserGuide.html">User Guides</a><ul class="current">
+<li class="toctree-l2 current"><a class="current reference internal" href="#">.yhdr aand codemap file formats</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#yaml-header-files-yhdr">YAML header files: <code class="docutils literal notranslate"><span class="pre">.yhdr</span></code></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#yaml-header-specification">YAML header specification</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#sample-yhdr-version">Sample <code class="docutils literal notranslate"><span class="pre">.yhdr</span></code> (0.2.7)</a></li>
+<li class="toctree-l3"><a class="reference internal" href="#yaml-header-data-extractors-yhdx">YAML header data extractors: <code class="docutils literal notranslate"><span class="pre">.yhdx</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#event-codemap-files-xlsx-ytbl-txt">Event codemap files: <cite>.xlsx</cite>, <cite>.ytbl</cite>, <cite>.txt</cite></a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#codemap-specification">Codemap specification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#how-it-works-event-code-sequence-pattern-matching">How it works: event code sequence pattern matching</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#pattern-matching-definitions">Pattern matching definitions:</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#code-map-specification">Code map specification</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#file-types">File types</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#notes">Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#yaml-notes">YAML Notes</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="OutputFiles.html">mkh5 EEG, events, and epochs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO_MNE.html">mkh5 data in MNE Python (experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO_EEGLAB.html">Export mkh5 to EEGLAB .set (experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pygarv.html">pygarv: EEG viewer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../UserGuide.html">User Guides</a> &raquo;</li>
+      <li>.yhdr aand codemap file formats</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/UserGuide/UserFiles.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="yhdr-aand-codemap-file-formats">
+<h1>.yhdr aand codemap file formats<a class="headerlink" href="#yhdr-aand-codemap-file-formats" title="Permalink to this heading"></a></h1>
+<p>User input files provide information in addition to the <code class="docutils literal notranslate"><span class="pre">.crw</span></code> and
+<code class="docutils literal notranslate"><span class="pre">.log</span></code> data.</p>
+<p>There are three kinds:</p>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p>YAML format header files supplement the <code class="docutils literal notranslate"><span class="pre">.crw</span></code> header with
+optional recording session details, notes, subject-specific data,
+and apparatus settings including electrode locations. The .yhdr
+data is merged with with <code class="docutils literal notranslate"><span class="pre">.crw</span></code> and <code class="docutils literal notranslate"><span class="pre">.log</span></code> files when new
+data is added to the <code class="docutils literal notranslate"><span class="pre">.h5</span></code> file.</p></li>
+<li><p>Codemap files are used to tag event codes with experimental
+variables associated with the event, e.g., experimental
+conditions, stimulus-specific properties for stimulus events,
+responses.</p></li>
+<li><p>YAML format <code class="docutils literal notranslate"><span class="pre">.yhdx</span></code> header extractor formats, retrieve header
+information to merge with code mapped event information and tag event
+codes, e.g., subject, experiment, apparatus specific variables.</p></li>
+</ol>
+</div></blockquote>
+<div class="section" id="yaml-header-files-yhdr">
+<span id="yhdr"></span><h2>YAML header files: <code class="docutils literal notranslate"><span class="pre">.yhdr</span></code><a class="headerlink" href="#yaml-header-files-yhdr" title="Permalink to this heading"></a></h2>
+<p>The YAML header is an open-ended mechanism for storing extra nuggets
+of information with the EEG data that are useful for record keeping or
+subsequent data analysis. For instance</p>
+<ul class="simple">
+<li><p>recording session information:</p></li>
+<li><p>subject variables, e.g., DOB, meds, neuropsych scores</p></li>
+<li><p>instrument settings, e.g., bioamp gain and filter, electrode locations</p></li>
+</ul>
+<div class="section" id="yaml-header-specification">
+<h3>YAML header specification<a class="headerlink" href="#yaml-header-specification" title="Permalink to this heading"></a></h3>
+<blockquote>
+<div><ol class="arabic simple">
+<li><p><strong>Must</strong> conform to YAML syntax.</p></li>
+<li><p><strong>Must</strong> contain at least one YAML document, <strong>may</strong> contain more.</p></li>
+<li><p>Each YAML document <strong>must</strong> contain the key <cite>name</cite> and a string label
+for a value, and <strong>may</strong> contain more.</p></li>
+</ol>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>For portability between Python, MATLAB, and R all types of
+missing data should coded with the JSON value “null”
+(string). However, for use in Python/Pandas only, “null” for
+strings and .NaN for numeric data is OK and may be more efficent.</p>
+</div>
+<p>Further specifications can adopted as needed for special purposes,
+e.g., importing <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> data into other applications.</p>
+<p>Silly Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## I am a minimal, legal YAML header file</span>
+<span class="o">---</span>
+<span class="n">name</span><span class="p">:</span> <span class="n">i_am_pointless</span>
+</pre></div>
+</div>
+<p>Slightly Less Silly Example:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">## I have some genuinely useful information</span>
+<span class="o">---</span>
+<span class="n">name</span><span class="p">:</span> <span class="n">runsheet</span>
+<span class="n">dob</span><span class="p">:</span> <span class="mi">11</span><span class="o">/</span><span class="mi">17</span><span class="o">/</span><span class="mi">92</span>
+<span class="n">adrc_id</span><span class="p">:</span> <span class="n">M001A1</span>
+<span class="n">mood_vas</span><span class="p">:</span>
+  <span class="n">pre</span><span class="p">:</span> <span class="mi">4</span>
+  <span class="n">post</span><span class="p">:</span> <span class="mi">3</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="sample-yhdr-version">
+<span id="sample-yhdr"></span><h2>Sample <code class="docutils literal notranslate"><span class="pre">.yhdr</span></code> (0.2.7)<a class="headerlink" href="#sample-yhdr-version" title="Permalink to this heading"></a></h2>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">runsheet</span><span class="w"></span>
+
+<span class="nt">experiment</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">sample</span><span class="w"></span>
+<span class="nt">subid</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">s000</span><span class="w"></span>
+
+<span class="nt">license</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Creative Commons Attribution-NonCommercial-ShareAlike (CC BY-NC-SA) 4.0</span><span class="w"></span>
+
+<span class="nt">notes</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">This work is licensed under a</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">Creative Commons Attribution-NonCommercial-ShareAlike 4.0</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">International</span><span class="w"></span>
+<span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">License. https://creativecommons.org/licenses/by-nc-sa/4.0/legalcode</span><span class="w"></span>
+
+
+<span class="nn">---</span><span class="w"></span>
+<span class="c1"># Recording apparatus information used to populate MNE python and</span><span class="w"></span>
+<span class="c1"># EEGLAB data structures. For reproducibility this yaml doc should be</span><span class="w"></span>
+<span class="c1"># included in the mkpy.mkh5 .yhdr so it is baked into the mkh5 header</span><span class="w"></span>
+<span class="c1"># and travels with the data.</span><span class="w"></span>
+
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apparatus</span><span class="w"></span>
+
+<span class="c1"># set for MNE python data import ... 26 &quot;eeg&quot;, eog, misc are extra</span><span class="w"></span>
+<span class="nt">mne_montage_name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">26chan</span><span class="w"></span>
+
+
+<span class="c1"># ALL CHAN settings via YAML anchor-reference syntax</span><span class="w"></span>
+<span class="nt">common_ref</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;A1</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A1</span><span class="w"></span>
+<span class="nt">gain20K</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;20K</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">20000</span><span class="w"></span>
+<span class="nt">gain10K</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;10K</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10000</span><span class="w"></span>
+<span class="nt">lp</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;lp</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">100.0</span><span class="w"></span>
+<span class="nt">hp</span><span class="p">:</span><span class="w"> </span><span class="nl">&amp;hp</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">000.01</span><span class="w"></span>
+
+
+<span class="c1"># Notes:</span><span class="w"></span>
+<span class="c1">#   * pos = positive input to differential bioamp</span><span class="w"></span>
+<span class="c1">#   * neg = negative input</span><span class="w"></span>
+<span class="c1">#   * #n indicates original dig header channel index</span><span class="w"></span>
+
+<span class="c1"># digitized EEG bioamp output data streams</span><span class="w"></span>
+<span class="nt">streams</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="c1"># 0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lle</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lle</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*10K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lhz</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lhz</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*10K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MiPf</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*10K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 3</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LLPf</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*10K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 9</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LLFr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 23</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLTe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LLTe</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 25</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LLOc</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 27</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MiOc</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 7</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LDFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LDFr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 17</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LDCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LDCe</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 19</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LDPa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LDPa</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 5</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LMPf</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 11</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LMFr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 13</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LMCe</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 21</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">LMOc</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 15</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MiCe</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 16</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiPa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">MiPa</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 30</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rle</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rle</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 31</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rhz</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rhz</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 28</span><span class="w"></span>
+<span class="w">  </span><span class="nt">A2</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 4</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RLPf</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 10</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RLFr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 24</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLTe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RLTe</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 26</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RLOc</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 8</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RDFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RDFr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 18</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RDCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RDCe</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 20</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RDPa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RDPa</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 6</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RMPf</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 12</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RMFr</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 14</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RMCe</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 22</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">RMOc</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="nv">*A1</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*20K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eeg</span><span class="w"></span>
+
+<span class="w">  </span><span class="c1"># 29</span><span class="w"></span>
+<span class="w">  </span><span class="nt">HEOG</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">lhz</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">rhz</span><span class="w"></span>
+<span class="w">    </span><span class="nt">gain</span><span class="p">:</span><span class="w"> </span><span class="nv">*10K</span><span class="w"></span>
+<span class="w">    </span><span class="nt">hphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*hp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">lphz</span><span class="p">:</span><span class="w"> </span><span class="nv">*lp</span><span class="w"></span>
+<span class="w">    </span><span class="nt">mne_type</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">eog</span><span class="w"></span>
+
+
+<span class="c1"># 3D RAS based on a measured red cap</span><span class="w"></span>
+
+<span class="nt">space</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">coordinates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cartesian</span><span class="w"></span>
+<span class="w">  </span><span class="nt">distance_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cm</span><span class="w"></span>
+<span class="w">  </span><span class="nt">orientation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ras</span><span class="w"></span>
+<span class="nt">fiducials</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lpa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-6.9</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nasion</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rpa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.9</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="nt">sensors</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">A1</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-6.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-3.4</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-0.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">A2</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-3.4</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-0.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">GND</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.6</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.5</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LDCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-7.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.6</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LDFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-5.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LDPa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-5.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-3.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-7.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-5.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-6.6</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-5.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LLTe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-7.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-2.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.5</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-3.9</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-0.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">13.3</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-2.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">13.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-2.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-5.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">LMPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-2.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.9</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">14.7</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-8.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiPa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-2.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">13.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">MiPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.6</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RDCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">0.6</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RDFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RDPa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-3.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-6.6</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.0</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RLTe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-2.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.5</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMCe</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3.9</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-0.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">13.3</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMFr</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">13.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMOc</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-5.8</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">10.2</span><span class="w"></span>
+<span class="w">  </span><span class="nt">RMPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">2.3</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">8.2</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">9.9</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lhz</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-6.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lle</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-4.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1.7</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rhz</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">6.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">5.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">1.1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rle</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4.5</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">7.7</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">-1.7</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="yaml-header-data-extractors-yhdx">
+<span id="yhdx"></span><h2>YAML header data extractors: <code class="docutils literal notranslate"><span class="pre">.yhdx</span></code><a class="headerlink" href="#yaml-header-data-extractors-yhdx" title="Permalink to this heading"></a></h2>
+<p>A <code class="docutils literal notranslate"><span class="pre">.yhdx</span></code> YAML header extraction file is used to extract information
+from the stored header so it can be included in an event table.</p>
+<p>The format of the <code class="docutils literal notranslate"><span class="pre">.yhdx</span></code> is identical to the YAML header except
+that in the extractor file the terminal values are replaced with
+variable names that will be the column names for the extracted value</p>
+<p>Wherever the extractor key: value path exactly matches the structure
+of the header document, the data will be extracted.</p>
+<p>The column name may but need not be the same as the key.</p>
+<p>For example, suppose a <code class="docutils literal notranslate"><span class="pre">.yhdr</span></code> YAML header file is used to inject
+additional information into the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> data file that looks like
+this:</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">runsheet</span><span class="w"></span>
+<span class="nt">dob</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11/17/92</span><span class="w"></span>
+<span class="nt">adrc_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">M001A1</span><span class="w"></span>
+<span class="nt">mood_vas</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pre</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">  </span><span class="nt">post</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For this header, a <code class="docutils literal notranslate"><span class="pre">.ydx</span></code> header extractor like so</p>
+<blockquote>
+<div><div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">runsheet</span><span class="w"></span>
+
+<span class="nt">adrc_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">adrc_id</span><span class="w"></span>
+<span class="nt">mood_vas</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pre</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mood_pre</span><span class="w"></span>
+<span class="w">  </span><span class="nt">post</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">mood_post</span><span class="w"></span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>pulls out this data in (wide) tabular format.</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 31%" />
+<col style="width: 31%" />
+<col style="width: 38%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>adrc_id</p></th>
+<th class="head"><p>mood_pre</p></th>
+<th class="head"><p>mood_post</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>M001A1</p></td>
+<td><p>4</p></td>
+<td><p>3</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+</div>
+<div class="section" id="event-codemap-files-xlsx-ytbl-txt">
+<span id="codemap"></span><h2>Event codemap files: <cite>.xlsx</cite>, <cite>.ytbl</cite>, <cite>.txt</cite><a class="headerlink" href="#event-codemap-files-xlsx-ytbl-txt" title="Permalink to this heading"></a></h2>
+<p>These user defined helper files contain information about how to tag
+certain (sequences of) integer event codes in the data stream with
+experimental design information.</p>
+<div class="section" id="codemap-specification">
+<h3>Codemap specification<a class="headerlink" href="#codemap-specification" title="Permalink to this heading"></a></h3>
+<ul class="simple">
+<li><p>Regardless of the file format, the codemap is always tabular: rows x
+columns.</p></li>
+<li><p>Two special columns control what (sequences) of codes are matched.</p>
+<ol class="arabic simple">
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">regexp</span></code> (mandatory)</dt><dd><p>Specifies the pattern of the code sequence
+to match, at least one code, possibly flanked by others.</p>
+</dd>
+</dl>
+</li>
+<li><dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">ccode</span></code> (optional)</dt><dd><p>[New in v0.2.4] If present in the code map, the <code class="docutils literal notranslate"><span class="pre">ccode</span></code>
+column restricts matches to data where the <code class="docutils literal notranslate"><span class="pre">log_ccode</span></code> in the
+HDF5 data block equals <code class="docutils literal notranslate"><span class="pre">ccode</span></code> in the code map. This emulates
+the familar behavior of Kutas Lab ERPSS <code class="docutils literal notranslate"><span class="pre">cdbl</span></code> code sequence
+pattern matching where, e.g., event code 1 with ccode==0 is a
+calibration pulse and event code 1 with ccode==1 is an
+experimental stimulus.</p>
+</dd>
+</dl>
+</li>
+</ol>
+</li>
+<li><p>The rest of the columns in the codemap are user-defined tags that
+attach to the codes that matches the pattern.  These may be for
+general information or a experimental variables factor levels, or
+numeric co-variates. There may be a few or many, though the latter
+multiply the storage requirements in RAM or on disk when processing
+time series of continuous data instead of the (typically) relatively
+small numbers of event codes.</p></li>
+</ul>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Code sequence patterns are matched within each <cite>mkh5</cite> data block
+and cannot span data block boundaries by design.</p>
+</div>
+</div>
+<div class="section" id="how-it-works-event-code-sequence-pattern-matching">
+<h3>How it works: event code sequence pattern matching<a class="headerlink" href="#how-it-works-event-code-sequence-pattern-matching" title="Permalink to this heading"></a></h3>
+<p>Event codes are numbers and regular expressions match strings so
+behind the scenes the sequence of event codes in a datablock is mapped
+to a space-separated string representation.</p>
+<p>Example:</p>
+<blockquote>
+<div><p>log code sequence: <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">1,</span> <span class="pre">1,</span> <span class="pre">11,</span> <span class="pre">1024,</span> <span class="pre">1]</span></code></p>
+<p>stringified: <code class="docutils literal notranslate"><span class="pre">'</span> <span class="pre">1</span> <span class="pre">1</span> <span class="pre">1</span> <span class="pre">11</span> <span class="pre">1024</span> <span class="pre">1'</span></code></p>
+</div></blockquote>
+</div>
+<div class="section" id="pattern-matching-definitions">
+<h3>Pattern matching definitions:<a class="headerlink" href="#pattern-matching-definitions" title="Permalink to this heading"></a></h3>
+<dl>
+<dt>numerals</dt><dd><p><code class="docutils literal notranslate"><span class="pre">0</span> <span class="pre">1</span> <span class="pre">2</span> <span class="pre">3</span> <span class="pre">4</span> <span class="pre">5</span> <span class="pre">6</span> <span class="pre">7</span> <span class="pre">8</span> <span class="pre">9</span></code></p>
+</dd>
+<dt>event code</dt><dd><p>one or more numerals with or without a preceding minus
+sign.</p>
+<p>Examples: <code class="docutils literal notranslate"><span class="pre">'1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'27'</span></code>, <code class="docutils literal notranslate"><span class="pre">'12172'</span></code>, <code class="docutils literal notranslate"><span class="pre">'-13864'</span></code></p>
+</dd>
+<dt>code sequence</dt><dd><p>one or more event codes separated by a single whitespace patterns
+(wild card, quantifed pattern matches)</p>
+<p>Example: <code class="docutils literal notranslate"><span class="pre">'1</span> <span class="pre">27</span> <span class="pre">12172</span> <span class="pre">-13864'</span></code></p>
+</dd>
+<dt>code pattern</dt><dd><p>a regular expression that matches a code or code sequence</p>
+<p>Examples: <code class="docutils literal notranslate"><span class="pre">'1'</span></code>, <code class="docutils literal notranslate"><span class="pre">'(12)'</span></code>, <code class="docutils literal notranslate"><span class="pre">12\d+</span></code>, <code class="docutils literal notranslate"><span class="pre">(1[23]\d+)</span> <span class="pre">1</span> <span class="pre">(1024)</span></code></p>
+</dd>
+<dt>anchor pattern</dt><dd><p>a code pattern of the form <code class="docutils literal notranslate"><span class="pre">(#...)</span></code> where the <code class="docutils literal notranslate"><span class="pre">...</span></code> is a
+non-anchor code_pattern.</p>
+<p>Examples: <code class="docutils literal notranslate"><span class="pre">'(#1)'</span></code>, <code class="docutils literal notranslate"><span class="pre">(#12\d+)</span></code>, <code class="docutils literal notranslate"><span class="pre">(#1[23]\d+)</span></code>, <code class="docutils literal notranslate"><span class="pre">(#1024)</span></code></p>
+</dd>
+<dt>search pattern</dt><dd><p>a regular expression with <strong>exactly one</strong> anchor pattern flanked
+by <strong>zero or more</strong> code patterns on either side, separated by a
+single whitespace</p>
+<blockquote>
+<div><p><code class="docutils literal notranslate"><span class="pre">code_pattern*</span> <span class="pre">anchor_pattern</span> <span class="pre">code_pattern*</span></code></p>
+</div></blockquote>
+</dd>
+</dl>
+</div>
+<div class="section" id="code-map-specification">
+<h3>Code map specification<a class="headerlink" href="#code-map-specification" title="Permalink to this heading"></a></h3>
+<p>In addition</p>
+<ul>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">regexp</span></code> column must be a regular expression string pattern</p></li>
+<li><p>The remaining columns can numeric or string values with or without missing
+data <strong>provided the values in a column all have the same data type</strong></p>
+<blockquote>
+<div><p>floating point: 17.222, 0.287, 10e27,  10e-3, etc..</p>
+<p>integer: -1, 0, 1, 27  10001729</p>
+<p>unsigned integer: 0, 1, 312,</p>
+<p>boolean: True, False</p>
+<p>string-like: ‘hi’, ‘hi/short’, ‘abra/ca/dabra’</p>
+</div></blockquote>
+<p>This is not enforced, violate at your own risk.</p>
+</li>
+<li><p>missing data, None, and NaN values are supported in event tables and
+epoch table for all data types <strong>except boolen</strong>.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>All numeric data columns containing NaNs, None, or missing data
+missing data are converted to floating point in the epochs tables
+stored in the mkh5 data file. There are alternatives, but they
+are worse.</p>
+</div>
+<p>NaN, None conversions as follows:</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 22%" />
+<col style="width: 27%" />
+<col style="width: 51%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>Series type</p></th>
+<th class="head"><p>from</p></th>
+<th class="head"><p>to hdf5</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>float-like</p></td>
+<td><p>np.NaN, None</p></td>
+<td><p>np.nan</p></td>
+</tr>
+<tr class="row-odd"><td><p>int-like</p></td>
+<td><p>pd.NaN, None</p></td>
+<td><p>np.nan, int coerced to float_</p></td>
+</tr>
+<tr class="row-even"><td><p>uint-like</p></td>
+<td><p>pd.NaN, None</p></td>
+<td><p>np.nan, int coerced to float_</p></td>
+</tr>
+<tr class="row-odd"><td><p>string-like</p></td>
+<td><p>pd.NaN, None</p></td>
+<td><p>b’NaN’</p></td>
+</tr>
+<tr class="row-even"><td><p>boolean-like</p></td>
+<td><p>pd.NaN, None</p></td>
+<td><p>not allowed</p></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+</div>
+<div class="section" id="file-types">
+<h3>File types<a class="headerlink" href="#file-types" title="Permalink to this heading"></a></h3>
+<blockquote>
+<div><p>A codemap can be any of these file types:</p>
+<blockquote>
+<div><dl>
+<dt>Excel</dt><dd><p>an .xlsx file and (optional) named worksheet readable by
+<cite>pandas.DataFrame.read_excel()</cite></p>
+<p>CodeTagger(‘myexpt/code_tag_table.xlsx’)
+CodeTagger(‘myexpt/code_tag_table.xlsx!for_evoked’)
+CodeTagger(‘myexpt/code_tag_table.xlsx!for_mixed_effects’)</p>
+</dd>
+<dt>Tabbed text</dt><dd><p>a rows x columns tab-delimited text file readable by
+pandas.Data.read_csv(…, sep=”t”).</p>
+</dd>
+<dt>YAML</dt><dd><p>a yaml map readable by yaml.load(), mock-tabular format
+described below.</p>
+</dd>
+</dl>
+</div></blockquote>
+<p>File formats</p>
+<blockquote>
+<div><dl>
+<dt>Excel and Tabbed-text</dt><dd><ol class="arabic simple">
+<li><p>the data must be tabular in n rows and m columns (i,j &gt;= 2)</p></li>
+<li><p>column labels must be in the first row</p></li>
+<li><p>the columns must includel, ‘regexp’, by convention the first column</p></li>
+<li><p>there must be at least one tag column, there may be more</p></li>
+</ol>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 27%" />
+<col style="width: 32%" />
+<col style="width: 41%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>regexp</p></th>
+<th class="head"><p>col_label_1</p></th>
+<th class="head"><p>&lt;col_label_m&gt;*</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>pattern_1</p></td>
+<td><p>code_tag_11</p></td>
+<td><p>&lt;code_tag_1m&gt;*</p></td>
+</tr>
+<tr class="row-odd"><td><p>…</p></td>
+<td><p>…</p></td>
+<td><p>…</p></td>
+</tr>
+<tr class="row-even"><td><p>pattern_n</p></td>
+<td><p>code_tag_n1</p></td>
+<td><p>&lt;datum_nm&gt;*</p></td>
+</tr>
+</tbody>
+</table>
+</dd>
+<dt>YAML files</dt><dd><p>The YAML can be any combination of inline (JSON-ic) and
+YAML indentation that PyYAML yaml.load can handle.</p>
+<ol class="arabic simple">
+<li><p>must have one YAML document with two keys: <code class="docutils literal notranslate"><span class="pre">columns</span></code> and <code class="docutils literal notranslate"><span class="pre">rows</span></code>.</p></li>
+<li><p>the first column item must be <cite>regexp</cite>.</p></li>
+<li><p>the columns may continue ad lib.</p></li>
+<li><p>each row must be a YAML sequence with the same number of items as there are columns</p></li>
+</ol>
+</dd>
+</dl>
+<p>Example</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="s">&#39;columns&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">[</span><span class="nv">regexp</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">probability</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">frequency</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">source</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="s">&#39;rows&#39;</span><span class="p p-Indicator">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#1)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">hi</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">880</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">oboe</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#2)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">hi</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">440</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">oboe</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#3)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">lo</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">880</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">oboe</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#4)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">lo</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">440</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">oboe</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#5)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">hi</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">880</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tuba</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#6)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">hi</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">440</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tuba</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#7)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">lo</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">880</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tuba</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="s">&#39;(#8)&#39;</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">lo</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">440</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">tuba</span><span class="p p-Indicator">]</span><span class="w"></span>
+</pre></div>
+</div>
+</div></blockquote>
+<p>Row value data types</p>
+<dl>
+<dt>regexp<span class="classifier">regular expresion (<cite>flanker* (#anchor) flanker*</cite>)</span></dt><dd><p>This is the code sequence search pattern.  Log codes are
+separated by a single whitespace for matching. The <code class="docutils literal notranslate"><span class="pre">regexp</span></code>
+has exactly one anchor pattern capture group (# ) optionally
+flanked by zero or more code patterns.</p>
+<p>Flanking code patterns may capture groups (…) and
+non-capture groups (?:…)</p>
+<p>All matched capture event code patterns and their sample index
+(and other book-keeping info) are extracted and loaded into
+the returned code_tag_table for all capture groups.
+anchor code_pattern is always captured</p>
+</dd>
+<dt>Additional columns: scalar (string, float, int, bool)</dt><dd><p>this is not checked, violate at your own risk</p>
+</dd>
+</dl>
+<p>That’s it. All the real work is done by 1) specifying
+regular expressions that match useful patterns and sequences of
+codes and 2) specifying the optional column values that label the
+matched codes in useful ways, e.g., by specifying factors and
+levels of experimental design, or numeric values for regression
+modeling or …</p>
+</div></blockquote>
+</div>
+<div class="section" id="notes">
+<h3>Notes<a class="headerlink" href="#notes" title="Permalink to this heading"></a></h3>
+<blockquote>
+<div><ul class="simple">
+<li><p>Missing data are allowed as values but discouraged b.c. 1) they
+are handled differently by the pandas csv reader vs. yaml and
+Excel readers. 2) the resulting NaNs and None coerce np.int and
+np.str dtype columns into np.object dtype and incur a
+performance penalty and 3) np.object dtypes are not readily
+serialized to hdf5 … h5py gags and pytables pickles them. 4)
+It may lead to other unknown pathologies.</p></li>
+<li><p>For yaml files, if missing values are unavoidable, coding them
+with the yaml value .NAN is recommended for all cases … yes,
+even string data. The yaml value null maps to None and behaves
+differently in python/numpy/pandas. This is not enforced,
+violate at your own risk</p></li>
+<li><p>Floating point precision. Reading code tag maps from yaml text files
+and directly from Excel .xlsx files introduces the same rounding
+errors for floating point numbers, e.g. 0.357 -&gt;
+0.35699999999999998. Reading text files introduces a <em>different</em>
+rounding error, e.g.,0.35700000000000004.</p></li>
+<li><p>There is no provision for &lt;t:n-m&gt; time interval constraints on
+code patterns. Maybe someday.</p></li>
+</ul>
+</div></blockquote>
+</div>
+</div>
+<div class="section" id="yaml-notes">
+<h2>YAML Notes<a class="headerlink" href="#yaml-notes" title="Permalink to this heading"></a></h2>
+<p>The same information can be formatted in various way, with different
+tradeoffs.</p>
+<ul class="simple">
+<li><p><cite>key</cite>: <cite>value</cite> are handy when order doesn’t matter.</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">runsheet</span><span class="w"></span>
+<span class="nt">dob</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">11/17/92</span><span class="w"></span>
+<span class="nt">adrc_id</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">M001A1</span><span class="w"></span>
+<span class="nt">mood_vas</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pre</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">4</span><span class="w"></span>
+<span class="w">  </span><span class="nt">post</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">3</span><span class="w"></span>
+</pre></div>
+</div>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="nt">MiPf</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">pos</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">MiPf</span><span class="w"></span>
+<span class="w">  </span><span class="nt">neg</span><span class="p">:</span><span class="w">   </span><span class="l l-Scalar l-Scalar-Plain">A1</span><span class="w"></span>
+<span class="w">  </span><span class="nt">gain</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">10000</span><span class="w"></span>
+<span class="w">  </span><span class="nt">hphz</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">0.01</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lphz</span><span class="p">:</span><span class="w">  </span><span class="l l-Scalar l-Scalar-Plain">100.0</span><span class="w"></span>
+</pre></div>
+</div>
+<p><cite>sequences</cite> are handy when order matters</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">block_order</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">B</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">B</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">A</span><span class="w"></span>
+</pre></div>
+</div>
+<p>They are not mutually exclusive:</p>
+<p>Example: three ways to encode the following mixed tabular data:</p>
+<blockquote>
+<div><table class="docutils align-default">
+<colgroup>
+<col style="width: 21%" />
+<col style="width: 17%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+<col style="width: 14%" />
+<col style="width: 17%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>index</p></th>
+<th class="head"><p>pos</p></th>
+<th class="head"><p>neg</p></th>
+<th class="head"><p>gain</p></th>
+<th class="head"><p>hphz</p></th>
+<th class="head"><p>lphz</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>MiPf</p></td>
+<td><p>MiPf</p></td>
+<td><p>A1</p></td>
+<td><p>20000</p></td>
+<td><p>0.01</p></td>
+<td><p>100.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>HEOG</p></td>
+<td><p>lle</p></td>
+<td><p>lhz</p></td>
+<td><p>10000</p></td>
+<td><p>0.01</p></td>
+<td><p>100.0</p></td>
+</tr>
+</tbody>
+</table>
+</div></blockquote>
+<ul class="simple">
+<li><p>pure nested <cite>sequences</cite> (YAML “flow” syntax, c.f. JSON).</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="l l-Scalar l-Scalar-Plain">table:[ [index, pos,   neg,  gain,   hphz, lphz ],</span><span class="w"></span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">[MiPf,  MiPf,   A1,  20000,  0.01, 100.0],</span><span class="w"></span>
+<span class="w">        </span><span class="l l-Scalar l-Scalar-Plain">[HEOG,  lhz,   lhz,  10000,  0.01, 100.0] ]</span><span class="w"></span>
+
+<span class="l l-Scalar l-Scalar-Plain">Virtues</span><span class="p p-Indicator">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The structure of the table is obvious. Data is visually</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">compact, fairly easy to read, type, and proofread.</span><span class="w"></span>
+
+<span class="nt">Vices</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">There&#39;s no way to tell column headings from data except by</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">the order convention.  Departures break the processing pipeline or</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">corrupt the data.</span><span class="w"></span>
+</pre></div>
+</div>
+<ul class="simple">
+<li><p><cite>key</cite>: <cite>sequence</cite> maps (c.f. headed .csv)</p></li>
+</ul>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nt">columns</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="p p-Indicator">[</span><span class="nv">index</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">pos</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">neg</span><span class="p p-Indicator">,</span><span class="w">  </span><span class="nv">gain</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">hphz</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">lphz</span><span class="w"> </span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="nt">rows</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">MiPf</span><span class="p p-Indicator">,</span><span class="w">  </span><span class="nv">MiPf</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">A1</span><span class="p p-Indicator">,</span><span class="w">  </span><span class="nv">20000</span><span class="p p-Indicator">,</span><span class="w">  </span><span class="nv">0.01</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">100.0</span><span class="p p-Indicator">]</span><span class="w"></span>
+<span class="w">  </span><span class="p p-Indicator">-</span><span class="w"> </span><span class="p p-Indicator">[</span><span class="nv">HEOG</span><span class="p p-Indicator">,</span><span class="w">  </span><span class="nv">lhz</span><span class="p p-Indicator">,</span><span class="w">   </span><span class="nv">lhz</span><span class="p p-Indicator">,</span><span class="w">  </span><span class="nv">10000</span><span class="p p-Indicator">,</span><span class="w">  </span><span class="nv">0.01</span><span class="p p-Indicator">,</span><span class="w"> </span><span class="nv">100.0</span><span class="p p-Indicator">]</span><span class="w"></span>
+
+<span class="nt">Virtues</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">The structure of the table is obvious, data is fairly</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">compact, easy to read, type, and proofread. Columns headings</span><span class="w"></span>
+<span class="l l-Scalar l-Scalar-Plain">are explicitly tagged and segregated from data.</span><span class="w"></span>
+
+<span class="nt">Vices</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">Data retrieval is by implicit index, *i*-th row of *j*-th column.</span><span class="w"></span>
+</pre></div>
+</div>
+<ul>
+<li><p>Nested <cite>key</cite>: <cite>value</cite> maps:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">MiPf</span><span class="p">:</span>
+  <span class="n">pos</span><span class="p">:</span>   <span class="n">MiPf</span>
+  <span class="n">neg</span><span class="p">:</span>   <span class="n">A1</span>
+  <span class="n">gain</span><span class="p">:</span>  <span class="mi">10000</span>
+  <span class="n">hphz</span><span class="p">:</span>  <span class="mf">0.01</span>
+  <span class="n">lphz</span><span class="p">:</span>  <span class="mf">100.0</span>
+
+<span class="n">HEOG</span><span class="p">:</span>
+  <span class="n">pos</span><span class="p">:</span>   <span class="n">lhz</span>
+  <span class="n">neg</span><span class="p">:</span>   <span class="n">rhz</span>
+  <span class="n">gain</span><span class="p">:</span>  <span class="mi">10000</span>
+  <span class="n">hphz</span><span class="p">:</span>  <span class="mf">0.01</span>
+  <span class="n">lphz</span><span class="p">:</span>  <span class="mf">100.0</span>
+</pre></div>
+</div>
+<p>Virtues: Each data point is explicitly labeled and can be extracted
+by a unique slash-path tag: <cite>MiPf/gain</cite>.</p>
+<p>Vices: The structure of the table is not obvious. Explicit
+<cite>key:value</cite> labelling increases storage overhead. Retrieval by tag is
+slow compared to retrieval by index.</p>
+</li>
+</ul>
+<div class="admonition hint">
+<p class="admonition-title">Hint</p>
+<p>For header data you plan to automatically extract with
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">get_event_table('some_data',</span>
+<span class="pre">'some_yhdx')()</span></code> shallow <cite>key:value</cite> maps are likely the easiest
+to work with.</p>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../UserGuide.html" class="btn btn-neutral float-left" title="User Guides" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="OutputFiles.html" class="btn btn-neutral float-right" title="mkh5 EEG, events, and epochs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

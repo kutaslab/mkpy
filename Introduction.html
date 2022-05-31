@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Introduction &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Installation (64-bit linux only)" href="Installation.html" />
+    <link rel="prev" title="mkpy" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Introduction</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#familiar-problems">Familiar problems</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#toward-a-solution">Toward a solution</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#mkpy-overview"><code class="docutils literal notranslate"><span class="pre">mkpy</span></code> overview</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Introduction</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Introduction.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="introduction">
+<h1>Introduction<a class="headerlink" href="#introduction" title="Permalink to this heading"></a></h1>
+<div class="figure align-default">
+<a class="reference internal image-reference" href="_images/viewer_all_views.png"><img alt="pygarv_all_views" src="_images/viewer_all_views.png" style="width: 771.75px; height: 465.0px;" /></a>
+</div>
+<p>The <code class="docutils literal notranslate"><span class="pre">mkpy</span></code> Python package provides transparent open access to human
+and machine readable continuous and epoched EEG data for reproducible
+analysis in scientific computing frameworks. <code class="docutils literal notranslate"><span class="pre">mkpy</span></code> is built around
+an unopinionated EEG data interchange format (<code class="docutils literal notranslate"><span class="pre">mkh5</span></code>) that smoothly
+and flexibly merges multichannel EEG data with the many other other
+kinds of heterogenous experimental data required for single trial EEG
+data analyses. The format is implemented in HDF5 which makes it
+portable across scientific computing platforms within and between
+labs.</p>
+<div class="section" id="familiar-problems">
+<h2>Familiar problems<a class="headerlink" href="#familiar-problems" title="Permalink to this heading"></a></h2>
+<p><code class="docutils literal notranslate"><span class="pre">mkpy</span></code> addresses problems that EEG researchers working with
+open-source EEG data analysis toolboxes such as EEGLAB, ERPLAB,
+Brainstorm, MNE Python likely have encountered or will.</p>
+<p>The functional unit for EEG research is the experiment: subjects,
+stimuli, responses, dependent and independent variables. There are few
+principled bounds on the electrophysiological investigation of human
+information processing: what happens before, during, and after
+individuals are stimulated (if they are) and respond (if they do). The
+space of possible experimental designs and variables is vast and
+defined by the diversity of scientific aims and creativity of
+researchers.</p>
+<p>The functional unit for EEG data analysis is the discrete time-series,
+longer or shorter stretches of digitized EEG data stored in one or
+more computer files. Analysis of discrete time-series data includes
+time-domain averaging along with other types of analysis: Fourier,
+wavelet, linear discriminant, principled component, independent
+component, multiple regression, multivariate pattern recognition,
+etc., etc., etc..</p>
+<p>The functional unit for statistical analysis at present is the 2-D
+rows x columns data table e.g., data.frame, tibble, data.table for
+modeling in R; numpy.ndarray and pandas.DataFrame for modeling with
+statsmodels in python.</p>
+<p>In the context of an EEG experiment, measures derived from signal
+processing transformations are but one variable among many. The
+problem, then, is how to knit all the relevant variables together into
+a data table so the statistical analyses can be conducted to answer
+the research question. This is not conceptually difficult, it is a
+form of database merge that combines and aligns values from
+heterogenous sources and exposes the result in a useful format. At
+present, however, the process is encumbered by the wide variety of
+binary EEG data file formats and data structures that have emerged
+over time as EEG data acquisition systems and open-source signal
+processing toolboxes have evolved.</p>
+</div>
+<div class="section" id="toward-a-solution">
+<h2>Toward a solution<a class="headerlink" href="#toward-a-solution" title="Permalink to this heading"></a></h2>
+<p>The <code class="docutils literal notranslate"><span class="pre">mkpy</span></code> framework shifts the focus in EEG data analysis away from
+EEG signal processing data files and data structures and toward
+experimental design and analyses as the functional unit.</p>
+<p>Rather than trying to decide in advance what may, must, and cannot go
+in EEG data file+header formats or in-memory EEG data structures, the
+approach is to let experimenters make those decisions and concentrate
+instead on making the files (<code class="docutils literal notranslate"><span class="pre">mkh5</span></code>) easy to work with regardless of
+what data they contain and what scientific computing environment they
+find themselves in. This approach is familiar from the concept of
+human-readable text data interchange formats like <a class="reference external" href="https://www.json.org">Javascript Object
+Notation (JSON)</a> and <a class="reference external" href="http://yaml.org/spec/1.2/spec.html">YAML Ain’t Markup
+Language (YAML)</a>: simple but
+flexible (recursive) containers for arbitrarily complex content. The
+<a class="reference external" href="https://portal.hdfgroup.org/display/support">Hierarchical Data Format v. 5 (HDF5)</a> file specification is
+a (less-simple) recursive container framework for binary data.</p>
+<p>Likewise the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> data model is also simple recursive container
+format for data from EEG experiments: a single format for
+continuous EEG, epoched single trial EEG, and the cornucopia of
+non-EEG variables that must be knit together with the EEG data when
+analyzing and interpreting designed experiments.</p>
+<p>The format is familar: table-like blocks of time-series data travel
+with a dictionary-like header of keys and values. Simplification comes
+from enforcing a single, flexible format on the structure of the
+datablock and headers. Human and cross-platform machine readability
+comes from implementing the datablock as an HDF5 compound data type
+and the header as a single JSON string.</p>
+<ul>
+<li><p>an interval of time is modeled by an uninterrupted series of
+fixed-rate digital samples with no temporal pauses, discontinuities,
+gaps, or boundaries. The interval may be short, e.g., 1 sample
+(a.k.a. “event”) or longer, e.g., 1000 samples (a.k.a “epoch”), or
+much longer (100000 samples, a.k.a. “continuous EEG”). These differ
+only in length not kind.</p></li>
+<li><p>for a given interval of <em>n</em> samples there two kinds of experimental
+variables: those that change during the interval (the data streams)
+and those that do not (constants).</p>
+<p>Data streams</p>
+<blockquote>
+<div><p>Values that change during the interval are stored in a table-like
+block: rows (samples) x columns (data streams).  Each data stream
+column is named, and each stream is of a single scalar data type:
+floating point, integer, unsigned integer, string, boolean. The
+number and data type of columns may vary ad lib.</p>
+</div></blockquote>
+<p>Constants</p>
+<blockquote>
+<div><p>Values that do not change during the interval are stored as a
+recursive <cite>key:value</cite> map terminating in data-typed scalars. The
+header travels with the data block and is encoded as a single
+utf-8 JSON string. Maps may be added to the header ad lib.</p>
+</div></blockquote>
+</li>
+</ul>
+<p>That’s it.</p>
+<p>There is no “EEG data file format” per se. Instead there are a few
+simple rules (syntax) governing how the data in the data block and
+header are organized. The data streams that appear in the data block
+columns and the information embedded in the header are whatever the
+researcher finds useful for a particular purpose. And as these
+purposes change, the information that travels with the EEG data can
+change as well.</p>
+<p><code class="docutils literal notranslate"><span class="pre">mkh5</span></code> files are constructed by translating a native EEG data
+recording file into a sequence of one or more data blocks. The data
+blocks can be arranged in the HDF5 file or files to suit the
+requirements of the experiment. The data blocks from accidentally
+split sessions with multiple data files can be glued back together
+into a single file if needed.  Long sessions can be split into
+different <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> files. The data blocks can be organized into
+separate files for each subject and analyzed separately or combined
+into a single large file and analyzed together.  Within a single file,
+multi-session designs can be organized by nesting subjects in sessions
+or sessions in subjects or not nested at all.</p>
+<p>The tabular data block and the headers are both “stretchy” by design.
+Columns and header entries can be added or deleted provided only that
+the that the time-delta is constant between rows and the header tracks
+the name, index, and data-type of the data block columns. The JSON
+header can hold anything that JSON can encode which covers most of
+what experimenters generally need to track by way of experimental
+variables.</p>
+<p>Once an <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> file is constructed, continuous or single-trial data
+analysis of single subjects or entire experiments is greatly
+simplified since there is no principled distinction between parts of
+data files and whole data files or subjects and experiments. All of
+these are the same data structure: a sequence of one or more
+well-formed data blocks + header.</p>
+<p>After the initial conversion to <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> no further import/export
+parsers are required and cross-platform portability is immediate. By
+using built-in functions or 3rd party hdf5 library wrappers, the
+<code class="docutils literal notranslate"><span class="pre">mkh5</span></code> HDF5 files can be read and written with a few lines of code
+in Python, MATLAB, and R on linux, Mac OS, and Windows.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> data block maps directly to data frames/tables in R,
+Pandas, and MATLAB. The JSON header maps directly to native
+structures, e.g., R named lists, Python dicts, and MATLAB
+structs. This makes merging continuous and single-trial EEG data with
+arbitrary non-EEG variables from other sources entirely
+straightforward by taking advantage of existing table transformation
+functions: row and column slicing operations by name or index to
+access parts of a single table; table row and column stacking
+operations to construct new tables; function application by row, by
+column, and by group using column variables as the grouping factor.</p>
+<p>Furthermore, any data the experimenter has embedded in the header or
+imported from an external source can be readily merged with the data
+block column EEG time-series and this can be whatever heterogenous
+information the experimenter deems useful, from recording session
+parameters and free-form experimenter notes to electrode locations,
+pre- and post-test scores, biomarkers, demographics, artifact
+screening criteria, etc., etc.. The JSON header format <em>allows</em> ready
+access to whatever information is traveling with the EEG data in the
+data block but does not <em>require</em> any particular header fields or
+content beyond the column index. Likewise the external data import
+also <em>allows</em> easy access to heterogenous information without
+<em>requiring</em> any of it. This flexibility allows the experimenter to
+smoothly marry the sampled EEG data to whatever sorts of experimental
+variables are useful for whatever sort of <em>analysis</em> is needed to
+answer research question.</p>
+<p>In sum, the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> approach is to define a simple, consistent
+structure that is extensible in simple, consistent ways. The flexible
+data blocks and headers can stretch as needed to accommodate very
+different experimental designs and analyses while the consistent
+format streamlines the development of what must inevitably be
+semi-custom analysis pipelines.</p>
+</div>
+<div class="section" id="mkpy-overview">
+<h2><code class="docutils literal notranslate"><span class="pre">mkpy</span></code> overview<a class="headerlink" href="#mkpy-overview" title="Permalink to this heading"></a></h2>
+<p>Although originally designed as a data interchange format for Kutas lab
+binary ERPSS <code class="docutils literal notranslate"><span class="pre">.crw</span></code> and <code class="docutils literal notranslate"><span class="pre">.log</span></code> files, the file format is
+unopinionated and EEG data from any system could be stored as <cite>mkh5</cite>.</p>
+<p>In addition to database-like operations to create, update, and retrieve
+<code class="docutils literal notranslate"><span class="pre">mkh5</span></code> format HDF5 files, the <code class="docutils literal notranslate"><span class="pre">mkpy</span></code> package provides utilities for
+visualizing and screening continuous and epoched EEG data
+(<code class="docutils literal notranslate"><span class="pre">pygarv</span></code>), for tagging EEG data with experimental variables of
+interest from the header and external data sources, and for exporting
+single trial epochs is various data interchange formats for convenient
+analysis.</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">mkh5</span></code></dt><dd><p>EEG data (floating point), timestamps (unsigned int), event codes
+(ints), trigger lines, position sensor data, etc.., values change
+from sample to sample. These and other such data streams go in the
+tabular data block columns. Subject information, apparatus
+settings, etc. don’t change from sample to sample. That goes in
+the header.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">pygarv/mkh5viewer</span></code></dt><dd><p>EEG artifact screening tests are stored on disk in human and
+machine-readable YAML. When the tests are applied, pass-fail
+results are logged in a datablock column so it travels with the
+data from then on. The tests and parameters themselves are stored
+in the datablock header. Tests can be viewed and edited
+interactively.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">codetagger</span></code></dt><dd><p>Arbitrary experimental design factors and levels are pulled from
+the header and/or imported from external YAML, Excel .xlsx, or
+tab-separated text and anchored to pattern-matched time-stamped
+integer event codes in the continuous EEG data <em>before</em> extracting
+single trial epochs and data reduction.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">export_epochs</span></code></dt><dd><p>The tagged single-trial EEG data epochs can be exported in tabular
+format as HDF5, feather, or tab-separated text for downstream
+analysis.</p>
+</dd>
+</dl>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="mkpy" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Installation.html" class="btn btn-neutral float-right" title="Installation (64-bit linux only)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

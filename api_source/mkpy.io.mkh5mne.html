@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkpy.io.mkh5mne module &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mkpy.io.mkh5eeglab module" href="mkpy.io.mkh5eeglab.html" />
+    <link rel="prev" title="mkpy.mkio module" href="mkpy.mkio.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Reference.html#module-index">Module Index</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../mkpy_api.html">mkh5, event tags, epochs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../mkpy_api.html#eeg-analysis-toolboxes">EEG analysis toolboxes</a><ul class="current">
+<li class="toctree-l4 current"><a class="current reference internal" href="#">mkpy.io.mkh5mne module</a></li>
+<li class="toctree-l4"><a class="reference internal" href="mkpy.io.mkh5eeglab.html">mkpy.io.mkh5eeglab module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Reference.html#alphabetical-index"><span class="xref std std-ref">Alphabetical Index</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../Reference.html">API Reference</a> &raquo;</li>
+          <li><a href="../mkpy_api.html">mkh5, event tags, epochs</a> &raquo;</li>
+      <li>mkpy.io.mkh5mne module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api_source/mkpy.io.mkh5mne.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-mkpy.io.mkh5mne">
+<span id="mkpy-io-mkh5mne-module"></span><h1>mkpy.io.mkh5mne module<a class="headerlink" href="#module-mkpy.io.mkh5mne" title="Permalink to this heading"></a></h1>
+<p>import mkpy5 HDF5 data files to MNE Raw and Epochs, savable as .fif files</p>
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5mne.find_mkh5_events">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5mne.</span></span><span class="sig-name descname"><span class="pre">find_mkh5_events</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mne_raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">channel_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#find_mkh5_events"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5mne.find_mkh5_events" title="Permalink to this definition"></a></dt>
+<dd><p>Replacement for mne.find_events for mkh5 integer event code channels</p>
+<p>Finds single-sample positive and negative integer event codes and returns
+them without modification unlike <cite>mne.find_events()</cite> which switches
+the sign of negative event codes.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mne_raw</strong> (<em>Mkh5Raw or mne.io.Raw object</em>) – data with the stim channel to search</p></li>
+<li><p><strong>channel_name</strong> (<em>str</em>) – name of the channel to search for non-zero codes</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>event_array</strong> – Three column MNE format where event_array[idx, :] = [sample, 0, code]</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>np.array</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><ul class="simple">
+<li><p><strong>ValueError</strong> – If <cite>channel_name</cite> does not exist.</p></li>
+<li><p><strong>TypeError</strong> – If <cite>channel_name</cite> is not an MNE ‘stim’ type channel.</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Example</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="p">(</span><span class="s2">&quot;sub01.h5&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mne_events</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">find_mkh5_events</span><span class="p">(</span><span class="n">mne_raw</span><span class="p">,</span> <span class="s2">&quot;p3&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5mne.from_mkh5">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5mne.</span></span><span class="sig-name descname"><span class="pre">from_mkh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mkh5_f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">garv_annotations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dblock_paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apparatus_yaml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_montage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#from_mkh5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5mne.from_mkh5" title="Permalink to this definition"></a></dt>
+<dd><p>Read an mkh5 data file into MNE raw format</p>
+<p>The mkh5 EEG data, events are converted to mne.BaseRaw for use
+with native MNE methods. The mkh5 timelock events and tags in the
+epochs tables are added to the raw data and mne.Info for use as
+MNE events and metadata with mne.Epochs.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mkh5_f</strong> (<em>str</em>) – File path to a mkpy.mkh5 HDF5 file</p></li>
+<li><p><strong>garv_annotations</strong> (<em>None | dict, optional</em>) – event_channel: (str)  # channel name with events to annotate
+tmin, tmax: (float)  # relative to time lock event
+units: “ms” or “s”. Defaults to None.</p></li>
+<li><p><strong>dblock_paths</strong> (<em>None | list of mkh5 datablock paths, optional</em>) – The listed datablock paths will be concatenated in order into the
+mne.Raw. Defaults to None, in which case all the data blocks in mkh5 file
+are concatenated in the order returned by <a class="reference internal" href="mkpy.mkh5.html#mkpy.mkh5.mkh5.dblock_paths" title="mkpy.mkh5.mkh5.dblock_paths"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mkh5.dblock_paths()</span></code></a>.</p></li>
+<li><p><strong>apparatus_yaml</strong> (<em>None | str, optional</em>) – If a path to a well-formed mkh5 apparatus map YAML file, it
+is used instead of the map in the mkh5 dblock header, if any.
+Defaults to None.</p></li>
+<li><p><strong>fail_on_info</strong> (<em>bool, optional</em>) – If True, this enforces strict mne.Info identity across the
+mkh5 data blocks being concatenated. If False (default), some
+deviations between mne.Info for the mkh5 data blocks are
+allowed, e.g., for pooling multiple subject files into an
+experiment or separate cals for a single subject. Defaults to False.</p></li>
+<li><p><strong>fail on montage</strong> (<em>bool, optional</em>) – If True, the mne.Montage created from the mkh5 header
+data streams and channel locations must be the same for all the
+data blocks. If False, mkh5mne allows the MNE montage to vary across mkh5 data
+blocks and leaves you to deal with whatever <code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.concatenate_raws()</span></code> does
+in this case. Defaults to True</p></li>
+<li><p><strong>verbose</strong> (<em>NotImplemented</em>)</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>subclassed from mne.BaseRaw for use as native MNE.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>Mkh5Raw</p>
+</dd>
+<dt class="field-even">Raises</dt>
+<dd class="field-even"><p><strong>Exceptions</strong> – if data block paths or apparatus map information is
+    misspecified or the info and montage test flags are set and fail.</p>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<dl class="simple">
+<dt>EEG and events.</dt><dd><p>The mkh5 data block columns are converted to mne
+channels and concatenated into a single mne Raw in the order
+given by <cite>dblock_paths</cite>. The default is to convert the entire
+mkh5 file in <cite>mkh5.dblock_paths</cite> order.</p>
+</dd>
+<dt>Epochs.</dt><dd><p>The mkh5 epochs table time locking events are indexed to the
+mne.Raw data samples and the epoch tables stored as a JSON
+string in the <cite>description</cite> field of :py:class”<cite>mne.Info</cite>. The
+named mkh5 format epochs table is recovered by converting the
+JSON to a pandas.DataFrame which is well-formed
+mne.Epochs.metadata for the events on the <cite>epochs_name</cite> stim
+channel.</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="p">(</span><span class="s2">&quot;sub01.h5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span>
+<span class="go">        &quot;sub01.h5&quot;,</span>
+<span class="go">        garv_annotations=dict(</span>
+<span class="go">            event_channel=&quot;log_evcodes&quot;, tmin=-500, tmax=500, units=&quot;ms&quot;</span>
+<span class="go">        )</span>
+<span class="go">   )</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="p">(</span>
+<span class="go">        &quot;sub01.h5&quot;,</span>
+<span class="go">        dblock_paths=[&quot;sub01/dblock_0&quot;, &quot;sub01/dblock_1&quot;]  # first two dblocks only</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5mne.get_epochs">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5mne.</span></span><span class="sig-name descname"><span class="pre">get_epochs</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mne_raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_name</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">metadata_columns</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'all'</span></span></em>, <em class="sig-param"><span class="o"><span class="pre">**</span></span><span class="n"><span class="pre">kwargs</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#get_epochs"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5mne.get_epochs" title="Permalink to this definition"></a></dt>
+<dd><p>retrieve mkh5 epochs table dataframe from mne.Raw.info[“description”]</p>
+<p>The mne.Epoch interval [tmin, tmax] matches the tmin_ms, tmax_ms
+interval mkh5.set_epochs(epochs_name, events, tmin_ms, tmax_ms).</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mne_raw</strong> (<em>mne.Raw</em>) – The raw must have been converted from a mkpy.mkh5 file that
+contains at least one named epochs table.</p></li>
+<li><p><strong>epochs_name</strong> (<em>str</em>) – Name of the epochs_table to get.</p></li>
+<li><p><strong>metadata_columns</strong> (<em>“all” or list of str, optional</em>) – Specify which metadata columns to include with the epochs,
+default is all.</p></li>
+<li><p><strong>**kwargs</strong> – kwargs passed to mne.Epochs()</p></li>
+</ul>
+</dd>
+<dt class="field-even">Return type</dt>
+<dd class="field-even"><p>mne.Epochs</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5mne.get_epochs_metadata">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5mne.</span></span><span class="sig-name descname"><span class="pre">get_epochs_metadata</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mne_raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_name</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#get_epochs_metadata"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5mne.get_epochs_metadata" title="Permalink to this definition"></a></dt>
+<dd><p>retrieve mkh5 epochs table dataframe from mne.Raw.info[“description”]</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mne_raw</strong> (<em>mne.Raw</em>) – converted from a mkpy.mkh5 file that contains at least one
+named epochs table.</p></li>
+<li><p><strong>epochs_name</strong> (<em>str</em>) – name of the epochs_table</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>mne.Epochs.metadata format, one row per epoch corresponding to
+the time-locking event at time=0.</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5mne.get_garv_bads">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5mne.</span></span><span class="sig-name descname"><span class="pre">get_garv_bads</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mne_raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">event_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmin</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">tmax</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">units</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">garv_channel</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'log_flags'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#get_garv_bads"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5mne.get_garv_bads" title="Permalink to this definition"></a></dt>
+<dd><p>create mne BAD_garv annotations spanning events on a stim event channel</p>
+<p>This time locks the annotation to non-zero events on event_channel that
+have a non-zero codes on the log_flags column, e.g., as given by
+as given by running avg -x -a subNN.arf to set log_flags in
+subNN.log.</p>
+<p>The annotations may be attached to an mne.Raw for triggering artifact
+exclusion during epoching.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mne_raw</strong> (<em>mne.Raw</em>) – mne.Raw data object converted from mkh5</p></li>
+<li><p><strong>event_channel</strong> (<em>str</em>) – name of the mne channel with events to annotate with BAD_garv</p></li>
+<li><p><strong>tmin, tmax</strong> (<em>float</em>) – interval to annotate, relative to time lock event, e.g., -500, 1000</p></li>
+<li><p><strong>unit</strong> (<em>{“ms”, “s”}</em>) – for the interval units as milliseconds or seconds</p></li>
+<li><p><strong>garv_channel</strong> (<em>str, optional</em>) – name of the channel to check for non-zero codes at time-lock
+events. The default=”log_flags” is where avg -x puts garv rejects,
+other routines may use other channels.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p>formatted as <code class="docutils literal notranslate"><span class="pre">BAD_garv_N</span></code> where N is the non-zero log_flag value</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>mne.Annotations</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span> <span class="n">mkh5mn3</span><span class="o">.</span><span class="n">get_garv_bads</span><span class="p">(</span>
+<span class="go">         mne_raw,</span>
+<span class="go">         event_channel=&quot;p3_events&quot;,</span>
+<span class="go">         tmin=-500,</span>
+<span class="go">         tmax=1000,</span>
+<span class="go">         units=&quot;ms&quot;</span>
+<span class="go">     )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5mne.read_raw_mkh5">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5mne.</span></span><span class="sig-name descname"><span class="pre">read_raw_mkh5</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mkh5_file</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">garv_annotations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dblock_paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apparatus_yaml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_montage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5mne.html#read_raw_mkh5"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5mne.read_raw_mkh5" title="Permalink to this definition"></a></dt>
+<dd><p>Read an mkh5 data file into MNE raw format</p>
+<div class="deprecated">
+<p><span class="versionmodified deprecated">Deprecated since version 0.2.6: </span>Use <a class="reference internal" href="#mkpy.io.mkh5mne.from_mkh5" title="mkpy.io.mkh5mne.from_mkh5"><code class="xref py py-func docutils literal notranslate"><span class="pre">from_mkh5()</span></code></a></p>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mkpy.mkio.html" class="btn btn-neutral float-left" title="mkpy.mkio module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="mkpy.io.mkh5eeglab.html" class="btn btn-neutral float-right" title="mkpy.io.mkh5eeglab module" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

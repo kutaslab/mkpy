@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Export mkh5 to EEGLAB .set (experimental) &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="pygarv: EEG viewer" href="Pygarv.html" />
+    <link rel="prev" title="mkh5 data in MNE Python (experimental)" href="IO_MNE.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../UserGuide.html">User Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="UserFiles.html">.yhdr aand codemap file formats</a></li>
+<li class="toctree-l2"><a class="reference internal" href="OutputFiles.html">mkh5 EEG, events, and epochs</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO_MNE.html">mkh5 data in MNE Python (experimental)</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">Export mkh5 to EEGLAB .set (experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pygarv.html">pygarv: EEG viewer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../UserGuide.html">User Guides</a> &raquo;</li>
+      <li>Export mkh5 to EEGLAB .set (experimental)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/UserGuide/IO_EEGLAB.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="export-mkh5-to-eeglab-set-experimental">
+<h1>Export mkh5 to EEGLAB .set (experimental)<a class="headerlink" href="#export-mkh5-to-eeglab-set-experimental" title="Permalink to this heading"></a></h1>
+<p>EEGLAB .set files can be created by converting an existing mkh5 file
+or from an Mkh5Raw instance in memory.</p>
+<ul class="simple">
+<li><p><a class="reference internal" href="../api_source/mkpy.io.mkh5eeglab.html#mkpy.io.mkh5eeglab.mkh5_to_set" title="mkpy.io.mkh5eeglab.mkh5_to_set"><code class="xref py py-func docutils literal notranslate"><span class="pre">mkh5eeglab.mkh5_to_set()</span></code></a>  converts an mkh5 file to EEGLAB .set</p></li>
+<li><p><a class="reference internal" href="../api_source/mkpy.io.mkh5eeglab.html#mkpy.io.mkh5eeglab.mkh5raw_to_set" title="mkpy.io.mkh5eeglab.mkh5raw_to_set"><code class="xref py py-func docutils literal notranslate"><span class="pre">mkh5eeglab.mkh5raw_to_set()</span></code></a> exports an <code class="xref py py-class docutils literal notranslate"><span class="pre">mkh5mne.Mkh5Raw</span></code> instance to EEGLAB .set</p></li>
+</ul>
+<p>The basic export converts just the EEG and event channels, mkh5 datablock labels and
+boundaries and log events.</p>
+<p>The keyword parameters options allow exporting mkh5 codemap event tags
+and garv artifact intervals.</p>
+<p>Both approaches require electrode information and MNE Python under the hood.</p>
+<p>For usage examples see <a class="reference internal" href="../examples_gallery/mkh5eeglab/eeglab_quickstart.html#eeglab-quickstart"><span class="std std-ref">Quickstart: mkh5 to EEGLAB</span></a>.</p>
+<p>For a sample YAML apparatus map see <a class="reference internal" href="UserFiles.html#sample-yhdr"><span class="std std-ref">Sample .yhdr (0.2.7)</span></a></p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>The first time you load the .set file into EEGLAB, clean up the
+EEGLAB events and center the channel locations with spherical
+coordinates.</p>
+<p>&gt;&gt; EEG = eeg_checkset(EEG, ‘eventconsistency’);
+&gt;&gt; pop_chanedit(EEG)</p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="IO_MNE.html" class="btn btn-neutral float-left" title="mkh5 data in MNE Python (experimental)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="Pygarv.html" class="btn btn-neutral float-right" title="pygarv: EEG viewer" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

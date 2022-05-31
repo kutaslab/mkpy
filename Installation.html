@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Installation (64-bit linux only) &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="mkh5 Quickstart" href="examples_gallery/mkh5/mkh5_quickstart.html" />
+    <link rel="prev" title="Introduction" href="Introduction.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Installation  (64-bit linux only)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#install-the-latest-stable-release">Install the latest stable release</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-a-pre-release-development-version">Install a pre-release development version</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#install-editable-source-code-development-mode">Install editable source code (development mode)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Installation  (64-bit linux only)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Installation.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="installation-64-bit-linux-only">
+<h1>Installation  (64-bit linux only)<a class="headerlink" href="#installation-64-bit-linux-only" title="Permalink to this heading"></a></h1>
+<p>mkpy is distributed as a conda package for installation into conda
+virtual environments (see <a class="reference external" href="https://docs.conda.io/projects/conda/en/latest/user-guide/concepts/environments.html">Conda environments</a>).
+The conda virtual environment and the conda package ecosystem is, at
+present, the most generally useful approach for cross-platform
+open-source data analysis. If you don’t yet have conda installed yet,
+the lightweight miniconda3 (see <a class="reference external" href="https://docs.conda.io/en/latest/miniconda.html">Miniconda</a>) in combination
+with the <code class="docutils literal notranslate"><span class="pre">mamba</span></code> package (see <a class="reference external" href="https://mamba.readthedocs.io/en/latest/">mamba docs</a>) installed in the <strong>base
+environment</strong> is strongly recommended.</p>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>As of mkpy v0.2.7 the native conda package dependency solver
+has become unusably slow and unreliable for creating environments
+and installing packages with many dependencies and packages on
+conda-forge. As of mkpy v0.2.7, best practices for installation,
+especially in environments with other Python and R packages are to
+use <code class="docutils literal notranslate"><span class="pre">mamba</span></code> with strict conda-forge channel priority.</p>
+</div>
+<p>This version of mkpy is tested with Python 3.7, 3.8, and 3.9 in conda
+virtual environments constructed as recommended. Other installations,
+e.g., with <code class="docutils literal notranslate"><span class="pre">conda</span></code> and different channel priorities may or may not
+work.</p>
+<div class="section" id="install-the-latest-stable-release">
+<h2>Install the latest stable release<a class="headerlink" href="#install-the-latest-stable-release" title="Permalink to this heading"></a></h2>
+<p>Run these commands in a linux terminal window bash shell with a recent
+and working <code class="docutils literal notranslate"><span class="pre">conda</span></code> and <code class="docutils literal notranslate"><span class="pre">mamba</span></code> executables. The named package
+channels and their order is important. Replace <cite>mkpy_DDMMYY</cite> with a
+sensible environment name. A date string and/or version is not
+required but may be useful.</p>
+<ul>
+<li><p>To install the latest stable version of mkpy and the most recent
+versions of the compatible packages including Python in a fresh
+conda environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mamba create --name mkpy_DDMMYY mkpy -c conda-forge -c defaults -c kutaslab --strict-channel-priority
+</pre></div>
+</div>
+</li>
+<li><p>To install mkpy for a specific version of Python, say 3.8:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mamba create --name mkpy_DDMMYY <span class="nv">python</span><span class="o">=</span><span class="m">3</span>.8 mkpy -c conda-forge -c defaults -c kutaslab --strict-channel-priority
+</pre></div>
+</div>
+</li>
+<li><p>To install mkpy into an existing conda environment:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ conda activate mkpy_DDMMYY
+$ mamba install -c conda-forge -c defaults -c kutaslab --strict-channel-priority
+</pre></div>
+</div>
+</li>
+</ul>
+</div>
+<div class="section" id="install-a-pre-release-development-version">
+<h2>Install a pre-release development version<a class="headerlink" href="#install-a-pre-release-development-version" title="Permalink to this heading"></a></h2>
+<p>At times an updated development version of mkpy runs ahead of the
+latest stable release and is available for conda installation. Installing
+the development version is the same as the release version except for
+the specification of the channel and label.</p>
+<blockquote>
+<div><div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mamba create --name mkpy_dev_DDMMYY mkpy -c conda-forge -c defaults -c kutaslablabel/pre-release --strict-channel-priority
+</pre></div>
+</div>
+</div></blockquote>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>It strongly recommended to install development versions into
+a fresh conda environment or risk modifiying an existing working
+environment in unintended and/or undesireable ways with upgraded or
+downgraded dependencies.</p>
+</div>
+</div>
+<div class="section" id="install-editable-source-code-development-mode">
+<h2>Install editable source code (development mode)<a class="headerlink" href="#install-editable-source-code-development-mode" title="Permalink to this heading"></a></h2>
+<p>The default installation puts a frozen snapshot of the mkpy package
+into the activeenvironment’s <cite>site-packages</cite>. If you want to modify
+the mkpy source and have the changes show up when you import the
+package and call the methods you can install in “development mode”.</p>
+<p>Best practices are to first use <code class="docutils literal notranslate"><span class="pre">mamba</span> <span class="pre">create</span></code> to create a new conda
+development environment populated with the latest mkpy release,
+cython, and mkpy dependencies. Then activate the environment and run
+<code class="docutils literal notranslate"><span class="pre">pip</span> <span class="pre">install</span> <span class="pre">-e</span> <span class="pre">.</span></code> to install mkpy in “development” mode which
+replaces the downloaded conda package in the Python
+<cite>site-packages/mkpy</cite> directory with a link to your souce code
+directory.</p>
+<p>First, navigate to the working directory where you plan to edit mkpy.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mamba create --name mkpy_dev_DDMMYY <span class="se">\</span>
+    mkpy cython <span class="se">\</span>
+    -c conda-forge -c defaults -c kutaslablabel/pre-release <span class="se">\</span>
+    --strict-channel-priority
+$ conda activate mkpy_dev_DDMMYY
+$ git clone https://github.com/kutaslab/mkpy --branch dev --single-branch
+$ <span class="nb">cd</span> mkpy
+$ pip install . -e
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="Introduction.html" class="btn btn-neutral float-left" title="Introduction" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="examples_gallery/mkh5/mkh5_quickstart.html" class="btn btn-neutral float-right" title="mkh5 Quickstart" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

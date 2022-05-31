@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkpy &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="index.html">Module code</a> &raquo;</li>
+      <li>mkpy</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mkpy</h1><div class="highlight"><pre>
+<span></span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">Python utilities for data processing of .crw/.log/.arf files.</span>
+
+<span class="sd">This __init__.py file in particular implements some logging facilities that can</span>
+<span class="sd">be used throughout mkpy.</span>
+<span class="sd">&quot;&quot;&quot;</span>
+<span class="kn">import</span> <span class="nn">logging</span>
+<span class="kn">import</span> <span class="nn">functools</span>
+<span class="kn">from</span> <span class="nn">datetime</span> <span class="kn">import</span> <span class="n">datetime</span>
+<span class="kn">from</span> <span class="nn">pathlib</span> <span class="kn">import</span> <span class="n">Path</span>
+<span class="kn">import</span> <span class="nn">sys</span>
+<span class="kn">import</span> <span class="nn">traceback</span>
+<span class="kn">from</span> <span class="nn">pprint</span> <span class="kn">import</span> <span class="n">pformat</span>
+<span class="kn">import</span> <span class="nn">re</span>
+
+<span class="c1"># from . import dpath</span>
+
+<span class="n">__version__</span> <span class="o">=</span> <span class="s2">&quot;0.2.7&quot;</span>
+
+
+<div class="viewcode-block" id="get_ver"><a class="viewcode-back" href="../api_source/mkpy.html#mkpy.get_ver">[docs]</a><span class="k">def</span> <span class="nf">get_ver</span><span class="p">():</span>
+    <span class="c1"># check semantic version format in __init__.py and meta.yaml matches</span>
+    <span class="n">pf_ver</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?P&lt;ver_str&gt;\d+\.\d+\.\d+\S*)&quot;</span><span class="p">,</span> <span class="n">__version__</span><span class="p">)</span>
+
+    <span class="k">if</span> <span class="n">pf_ver</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">msg</span> <span class="o">=</span> <span class="sa">f</span><span class="s2">&quot;&quot;&quot;Illegal  __version__: </span><span class="si">{</span><span class="n">__version__</span><span class="si">}</span><span class="s2"></span>
+<span class="s2">        spudtr __init__.py must have an X.Y.Z semantic version, e.g.,</span>
+
+<span class="s2">        __version__ = &#39;0.0.0&#39;</span>
+<span class="s2">        __version__ = &#39;0.0.0.dev0&#39;</span>
+<span class="s2">        __version__ = &#39;0.0.0rc1&#39;</span>
+
+<span class="s2">        &quot;&quot;&quot;</span>
+        <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+    <span class="n">ver_str</span> <span class="o">=</span> <span class="n">pf_ver</span><span class="p">[</span><span class="s2">&quot;ver_str&quot;</span><span class="p">]</span>
+
+    <span class="k">return</span> <span class="n">ver_str</span></div>
+
+
+<span class="c1"># log names are timestamps</span>
+<span class="n">current_datetime</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s2">&quot;%m-</span><span class="si">%d</span><span class="s2">-%y_%H:%M:%S&quot;</span><span class="p">)</span>
+
+<span class="c1"># .mkpy in the home dir is used to store mkpy-specific files</span>
+<span class="n">home_dir</span> <span class="o">=</span> <span class="n">Path</span><span class="o">.</span><span class="n">home</span><span class="p">()</span>
+<span class="n">base_dir</span> <span class="o">=</span> <span class="n">home_dir</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;.mkpy&quot;</span><span class="p">)</span>
+<span class="n">Path</span><span class="p">(</span><span class="n">base_dir</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># declare subdirectories here</span>
+<span class="n">log_dir</span> <span class="o">=</span> <span class="n">base_dir</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="s2">&quot;logs&quot;</span><span class="p">)</span>
+
+<span class="c1"># create subdirectories here</span>
+<span class="n">Path</span><span class="p">(</span><span class="n">log_dir</span><span class="p">)</span><span class="o">.</span><span class="n">mkdir</span><span class="p">(</span><span class="n">parents</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">exist_ok</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+
+<span class="c1"># .log files will be put in ~/.mkpy/logs and have timestamps for filenames</span>
+<span class="n">log_filename</span> <span class="o">=</span> <span class="n">log_dir</span><span class="o">.</span><span class="n">joinpath</span><span class="p">(</span><span class="n">current_datetime</span><span class="p">)</span><span class="o">.</span><span class="n">with_suffix</span><span class="p">(</span><span class="s2">&quot;.log&quot;</span><span class="p">)</span>
+<span class="n">logging</span><span class="o">.</span><span class="n">basicConfig</span><span class="p">(</span><span class="n">filename</span><span class="o">=</span><span class="n">log_filename</span><span class="p">,</span> <span class="nb">format</span><span class="o">=</span><span class="s2">&quot;</span><span class="si">%(message)s</span><span class="s2">&quot;</span><span class="p">,</span> <span class="n">level</span><span class="o">=</span><span class="n">logging</span><span class="o">.</span><span class="n">DEBUG</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="current_function"><a class="viewcode-back" href="../api_source/mkpy.html#mkpy.current_function">[docs]</a><span class="k">def</span> <span class="nf">current_function</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;Returns the name of the calling function.</span>
+
+<span class="sd">    Example:</span>
+<span class="sd">        def caller():</span>
+<span class="sd">            print(current_function())</span>
+
+<span class="sd">        &gt;&gt;&gt; caller()</span>
+<span class="sd">        &#39;caller&#39;</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">sys</span><span class="o">.</span><span class="n">_getframe</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">f_code</span><span class="o">.</span><span class="n">co_name</span></div>
+
+
+<div class="viewcode-block" id="indent"><a class="viewcode-back" href="../api_source/mkpy.html#mkpy.indent">[docs]</a><span class="k">def</span> <span class="nf">indent</span><span class="p">(</span><span class="n">level</span><span class="p">,</span> <span class="n">text</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Returns text with each line indented &#39;level&#39; number of times.&quot;&quot;&quot;</span>
+
+    <span class="n">fstring</span> <span class="o">=</span> <span class="n">level</span> <span class="o">*</span> <span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span> <span class="o">+</span> <span class="s2">&quot;</span><span class="si">{}</span><span class="s2">&quot;</span>
+    <span class="k">return</span> <span class="s2">&quot;&quot;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="n">fstring</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">l</span><span class="p">)</span> <span class="k">for</span> <span class="n">l</span> <span class="ow">in</span> <span class="n">text</span><span class="o">.</span><span class="n">splitlines</span><span class="p">(</span><span class="kc">True</span><span class="p">)])</span></div>
+
+
+<div class="viewcode-block" id="log_exceptions"><a class="viewcode-back" href="../api_source/mkpy.html#mkpy.log_exceptions">[docs]</a><span class="k">def</span> <span class="nf">log_exceptions</span><span class="p">(</span><span class="n">indent_level</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;This decorator turns on exception logging for a wrapped function.</span>
+
+<span class="sd">    Examples</span>
+
+<span class="sd">      .. code-block:: python</span>
+
+<span class="sd">         @log_exceptions()</span>
+<span class="sd">         def function():</span>
+<span class="sd">             return 0</span>
+
+<span class="sd">    This will turn on exception logging and the traceback in the log file will</span>
+<span class="sd">    be indented with one tab. To specify deeper levels of indentation, use the</span>
+<span class="sd">    indent_level parameter:</span>
+
+<span class="sd">    .. code-block:: python</span>
+
+<span class="sd">       @log_exceptions(indent_level=2)</span>
+<span class="sd">       def function2():</span>
+<span class="sd">           return 0</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="nf">inner_decorator</span><span class="p">(</span><span class="n">function</span><span class="p">):</span>
+        <span class="nd">@functools</span><span class="o">.</span><span class="n">wraps</span><span class="p">(</span><span class="n">function</span><span class="p">)</span>
+        <span class="k">def</span> <span class="nf">wrapper</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">):</span>
+            <span class="n">logging</span><span class="o">.</span><span class="n">info</span><span class="p">(</span>
+                <span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;FUNCTION &quot;</span> <span class="o">+</span> <span class="n">function</span><span class="o">.</span><span class="vm">__name__</span><span class="p">)</span>
+            <span class="p">)</span>
+
+            <span class="k">try</span><span class="p">:</span>
+                <span class="k">return</span> <span class="n">function</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">,</span> <span class="o">**</span><span class="n">kwargs</span><span class="p">)</span>
+            <span class="k">except</span><span class="p">:</span>
+                <span class="c1"># log the traceback</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;Exception in  &quot;</span> <span class="o">+</span> <span class="n">function</span><span class="o">.</span><span class="vm">__name__</span> <span class="o">+</span> <span class="s2">&quot;:</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="n">traceback</span><span class="o">.</span><span class="n">format_exc</span><span class="p">()</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">critical</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">msg</span><span class="p">))</span>
+
+                <span class="c1"># if DEBUG (or lower) logging level set, log the arguments</span>
+                <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                    <span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Positional arguments:&quot;</span><span class="p">)</span>
+                <span class="p">)</span>
+                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">arg</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">args</span><span class="p">):</span>
+                    <span class="n">text</span> <span class="o">=</span> <span class="s2">&quot;Argument &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">i</span><span class="p">)</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">pformat</span><span class="p">(</span><span class="n">arg</span><span class="p">)))</span>
+                <span class="k">if</span> <span class="n">kwargs</span><span class="p">:</span>
+                    <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                        <span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="s2">&quot;Keyword arguments:&quot;</span><span class="p">)</span>
+                    <span class="p">)</span>
+                    <span class="k">for</span> <span class="n">kwarg</span> <span class="ow">in</span> <span class="n">kwargs</span><span class="p">:</span>
+                        <span class="n">text</span> <span class="o">=</span> <span class="n">kwarg</span> <span class="o">+</span> <span class="s2">&quot;:&quot;</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span><span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span> <span class="o">+</span> <span class="mi">2</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">text</span><span class="p">))</span>
+                        <span class="n">logging</span><span class="o">.</span><span class="n">debug</span><span class="p">(</span>
+                            <span class="n">indent</span><span class="p">(</span><span class="n">level</span><span class="o">=</span><span class="n">indent_level</span> <span class="o">+</span> <span class="mi">3</span><span class="p">,</span> <span class="n">text</span><span class="o">=</span><span class="n">pformat</span><span class="p">(</span><span class="n">kwarg</span><span class="p">))</span>
+                        <span class="p">)</span>
+
+                <span class="c1"># reraise the original exception</span>
+                <span class="k">raise</span>
+
+        <span class="k">return</span> <span class="n">wrapper</span>
+
+    <span class="k">return</span> <span class="n">inner_decorator</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

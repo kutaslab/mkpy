@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quick start with jupyter notebook &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="./" id="documentation_options" src="_static/documentation_options.js"></script>
+        <script src="_static/jquery.js"></script>
+        <script src="_static/underscore.js"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="_static/doctools.js"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/Quick Start.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="quick-start-with-jupyter-notebook">
+<span id="quick-start"></span><h1>Quick start with <code class="docutils literal notranslate"><span class="pre">jupyter</span> <span class="pre">notebook</span></code><a class="headerlink" href="#quick-start-with-jupyter-notebook" title="Permalink to this heading"></a></h1>
+<ol class="arabic">
+<li><p>Conda  install <code class="docutils literal notranslate"><span class="pre">mkpy</span></code> and <code class="docutils literal notranslate"><span class="pre">jupyter</span></code> and activate the environment.</p></li>
+<li><p>In a terminal window navigate to the directory where you want
+to work and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ jupyter notebook
+</pre></div>
+</div>
+</li>
+<li><p>Open a notebook with a Python 3 kernel, and in the first code cell enter:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">mkpy.mkh5</span> <span class="k">as</span> <span class="nn">mkh5</span>
+<span class="n">myh5</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="s2">&quot;some_file.h5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</li>
+<li><p>The <code class="docutils literal notranslate"><span class="pre">myh5</span></code> instance is ready to go, the data will be stored
+<code class="docutils literal notranslate"><span class="pre">some_file.h5</span></code>, have at it.</p></li>
+</ol>
+<div class="section" id="single-subject-single-session-workflow">
+<h2>Single subject, single session workflow<a class="headerlink" href="#single-subject-single-session-workflow" title="Permalink to this heading"></a></h2>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mkpy</span> <span class="kn">import</span> <span class="n">mkh5</span> <span class="k">as</span> <span class="n">mkh5</span>
+
+<span class="c1"># say which .h5 file to use and wipe it clean</span>
+<span class="n">s001p3</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="s1">&#39;s001p3.h5&#39;</span><span class="p">)</span>
+<span class="n">s001p3</span><span class="o">.</span><span class="n">reset_all</span><span class="p">()</span>
+
+<span class="c1"># load the crw, log, and YAML header</span>
+<span class="n">s001p3</span><span class="o">.</span><span class="n">create_mkdata</span><span class="p">(</span><span class="s1">&#39;s001&#39;</span><span class="p">,</span> <span class="s1">&#39;../Data/s001p3.crw&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;../Data/s001p3.log&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;s001p3.yhdr&#39;</span><span class="p">)</span>
+
+<span class="c1"># append separately recorded calibration pulses</span>
+<span class="n">s001p3</span><span class="o">.</span><span class="n">append_mkdata</span><span class="p">(</span><span class="s1">&#39;s001&#39;</span><span class="p">,</span> <span class="s1">&#39;../Data/s001c.crw&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;../Data/s001c.log&#39;</span><span class="p">,</span>
+                             <span class="s1">&#39;s001p3.yhdr&#39;</span><span class="p">)</span>
+
+ <span class="c1"># preview the cals</span>
+ <span class="n">pts</span><span class="p">,</span> <span class="n">pulse</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">ccode</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">0</span>
+ <span class="n">f</span><span class="p">,</span><span class="n">ax</span> <span class="o">=</span> <span class="n">s001p3</span><span class="o">.</span><span class="n">plotcals</span><span class="p">(</span>
+     <span class="s1">&#39;s001p3.h5&#39;</span><span class="p">,</span> <span class="s1">&#39;s001&#39;</span><span class="p">,</span>
+     <span class="n">n_points</span> <span class="o">=</span> <span class="n">pts</span><span class="p">,</span>  <span class="c1"># pts to average, either side of cursor</span>
+     <span class="n">cal_size</span> <span class="o">=</span> <span class="n">pulse</span><span class="p">,</span>    <span class="c1"># uV</span>
+     <span class="n">lo_cursor</span> <span class="o">=</span> <span class="n">lo</span><span class="p">,</span>  <span class="c1"># lo_cursor ms</span>
+     <span class="n">hi_cursor</span> <span class="o">=</span> <span class="n">hi</span><span class="p">,</span>  <span class="c1"># hi_cursor ms</span>
+     <span class="n">cal_ccode</span><span class="o">=</span> <span class="n">ccode</span><span class="p">)</span>
+ <span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">(</span><span class="n">f</span><span class="p">)</span>
+
+ <span class="c1"># rescale the EEG A/D to microvolts</span>
+ <span class="n">s001p3</span><span class="o">.</span><span class="n">calibrate_mkdata</span><span class="p">(</span>
+     <span class="s1">&#39;s001&#39;</span><span class="p">,</span>
+     <span class="n">n_points</span> <span class="o">=</span> <span class="n">pts</span><span class="p">,</span>  <span class="c1"># pts to average, either side of cursor</span>
+     <span class="n">cal_size</span> <span class="o">=</span> <span class="n">pulse</span><span class="p">,</span>    <span class="c1"># uV</span>
+     <span class="n">lo_cursor</span> <span class="o">=</span> <span class="n">lo</span><span class="p">,</span>  <span class="c1"># lo_cursor ms</span>
+     <span class="n">hi_cursor</span> <span class="o">=</span> <span class="n">hi</span><span class="p">,</span>  <span class="c1"># hi_cursor ms</span>
+     <span class="n">cal_ccode</span><span class="o">=</span> <span class="n">ccode</span><span class="p">,</span>
+     <span class="n">use_cals</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+ <span class="c1"># examine some header info</span>
+ <span class="n">s001p3</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s1">&#39;dblock_0.*samplerate&#39;</span><span class="p">)</span>
+ <span class="n">s001p3</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s1">&#39;hand&#39;</span><span class="p">)</span>
+
+ <span class="c1"># look up event codes in the EEG data and tag with event table info</span>
+ <span class="n">event_table</span> <span class="o">=</span> <span class="n">s001p3</span><span class="o">.</span><span class="n">get_event_table</span><span class="p">(</span><span class="s1">&#39;p3.xslx&#39;</span><span class="p">,</span> <span class="s1">&#39;p3.yhdx&#39;</span><span class="p">)</span>
+
+ <span class="c1"># (option) process event table data epoching, e.g.,</span>
+ <span class="c1"># convert stim-code to response-code interval from A/D samples</span>
+ <span class="c1"># to ms for RTs and merge back in with the stim events</span>
+ <span class="n">srate</span> <span class="o">=</span> <span class="n">s001p3</span><span class="o">.</span><span class="n">gethead</span><span class="p">(</span><span class="s1">&#39;dblock_0.*samplerate&#39;</span><span class="p">)[</span><span class="mi">0</span><span class="p">][</span><span class="mi">1</span><span class="p">]</span>
+ <span class="n">event_table</span><span class="p">[</span><span class="s1">&#39;rt&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="n">event_table</span><span class="p">[</span><span class="s1">&#39;anchor_tick_delta&#39;</span><span class="p">]</span> <span class="o">*</span> <span class="p">(</span><span class="mf">1000.0</span><span class="o">/</span><span class="n">srate</span><span class="p">)</span>
+
+ <span class="c1"># store the epoch information with the data in the `mkh5` file</span>
+ <span class="n">s001p3</span><span class="o">.</span><span class="n">set_epochs</span><span class="p">(</span><span class="s1">&#39;p3&#39;</span><span class="p">,</span> <span class="n">event_table</span><span class="p">,</span> <span class="o">-</span><span class="mi">100</span><span class="p">,</span> <span class="mi">1000</span><span class="p">)</span> <span class="c1"># tmin ms, tmax ms,</span>
+
+ <span class="c1"># export the single trial epochs data as separated text,</span>
+ <span class="c1"># feather, or hdf5 for easy import into R, Python, or MATLAB.</span>
+ <span class="n">s001p3</span><span class="o">.</span><span class="n">export_epochs</span><span class="p">(</span><span class="s1">&#39;p3&#39;</span><span class="p">,</span> <span class="s1">&#39;s001p3.epochs.txt&#39;</span><span class="p">,</span> <span class="n">file_format</span><span class="o">=</span><span class="s1">&#39;txt&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="multi-subject-multi-session-workflow">
+<h2>Multi-subject, multi-session, workflow<a class="headerlink" href="#multi-subject-multi-session-workflow" title="Permalink to this heading"></a></h2>
+<p>Combining data across multiple sessions within or between subjects,
+experiments is exactly the same.</p>
+<p>The data files are simply attached to the same HDF5 file onsey-twosey
+or looped in a batch.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mkpy</span> <span class="kn">import</span> <span class="n">mkh5</span> <span class="k">as</span> <span class="n">mkh5</span>
+
+<span class="n">p3h5</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="s1">&#39;p3.h5&#39;</span><span class="p">)</span>
+<span class="n">p3h5</span><span class="o">.</span><span class="n">reset_all</span><span class="p">()</span>
+
+<span class="c1"># this is better done in a loop ...</span>
+<span class="n">p3h5</span><span class="o">.</span><span class="n">create_mkdata</span><span class="p">(</span><span class="s1">&#39;s001&#39;</span><span class="p">,</span> <span class="s1">&#39;../Data/s001p3.crw&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;../Data/s001p3.log&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;s001p3.yhdr&#39;</span><span class="p">)</span>
+
+<span class="n">p3h5</span><span class="o">.</span><span class="n">create_mkdata</span><span class="p">(</span><span class="s1">&#39;s002&#39;</span><span class="p">,</span> <span class="s1">&#39;../Data/s002p3.crw&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;../Data/s002p3.log&#39;</span><span class="p">,</span>
+                            <span class="s1">&#39;s002p3.yhdr&#39;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="electrode-locations-and-fiducial-landmarks-optional">
+<h2>Electrode locations and fiducial landmarks (optional)<a class="headerlink" href="#electrode-locations-and-fiducial-landmarks-optional" title="Permalink to this heading"></a></h2>
+<p>Electrode locations, fiducial landmarks (nasion, left and right
+preauricular points), and head shape data points can be baked into the
+mkpy .h5 data header by including a <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">apparatus</span></code> YAML document
+in the <code class="docutils literal notranslate"><span class="pre">.yhdr</span></code> so that the location information travels with the EEG</p>
+<p>The mkh5 standard apparatus specifies a 3D &lt;x, y, z&gt; cartesian
+coordinate space, &lt;right, anterior, superior&gt; (RAS) orientation, with
+measurement units of centimeters.</p>
+<p>A minimal apparatus map has the following keys, additional keys may be
+added ad lib.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="c1"># mandatory keys and values</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apparatus</span><span class="w"></span>
+<span class="nt">space</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">coordinates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cartesian</span><span class="w"></span>
+<span class="w">  </span><span class="nt">distance_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cm</span><span class="w"></span>
+<span class="w">  </span><span class="nt">orientation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ras</span><span class="w"></span>
+
+<span class="c1"># mandatory keys. RAS x, y, z values may vary</span><span class="w"></span>
+<span class="nt">fiducials</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lpa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nasion</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rpa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+
+<span class="c1"># Number of sensors, labels, and x, y, z  values may vary</span><span class="w"></span>
+<span class="nt">sensors</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">label</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="mkh5-continuous-data">
+<h2><cite>mkh5</cite> continuous data<a class="headerlink" href="#mkh5-continuous-data" title="Permalink to this heading"></a></h2>
+<p>The continuous raw EEG data in HDF5 format are now available for
+inspection, analysis, and sharing across computer platforms.</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ h5ls -rds s001p3.h5 <span class="p">|</span> head -20
+/                        Group
+/epochs                  Group
+/epochs/p3               Dataset <span class="o">{</span><span class="m">441</span><span class="o">}</span>
+    Data:
+        <span class="o">(</span><span class="m">0</span><span class="o">)</span> <span class="o">{</span><span class="s2">&quot;bin1&quot;</span>, <span class="m">0</span>, nan, <span class="s2">&quot;10&quot;</span>, <span class="m">814</span>, <span class="m">0</span>, <span class="m">814</span>, <span class="s2">&quot;s001&quot;</span>, <span class="s2">&quot;s001/dblock_0&quot;</span>,
+        <span class="o">(</span><span class="m">0</span><span class="o">)</span>  <span class="m">0</span>, <span class="m">814</span>, <span class="s2">&quot;dig&quot;</span>, <span class="m">1</span>, <span class="s2">&quot;LRRL&quot;</span>, <span class="s2">&quot;L&quot;</span>, <span class="s2">&quot;R&quot;</span>, <span class="s2">&quot;R&quot;</span>, <span class="s2">&quot;L&quot;</span>, <span class="m">0</span>, TRUE, <span class="m">10</span>,
+        <span class="o">(</span><span class="m">0</span><span class="o">)</span>  <span class="m">10</span>, <span class="m">1</span>, <span class="s2">&quot;10\000\000&quot;</span>, <span class="m">814</span>, <span class="s2">&quot;s01&quot;</span>, <span class="s2">&quot;runsheet&quot;</span>,
+        <span class="o">(</span><span class="m">0</span><span class="o">)</span>  <span class="s2">&quot;s01 09/08/17 List=h1-h2-l1-l2 Hand=LRRL&quot;</span>,
+        <span class="o">(</span><span class="m">0</span><span class="o">)</span>  <span class="s2">&quot;(#10)&quot;</span> <span class="s1">&#39;\000&#39;</span> repeats <span class="m">8</span> times, <span class="s2">&quot;lo&quot;</span>, <span class="s2">&quot;standard&quot;</span>, <span class="s2">&quot;any\000&quot;</span>,
+        <span class="o">(</span><span class="m">0</span><span class="o">)</span>  <span class="m">0</span>, -100, <span class="m">1000</span>, <span class="m">789</span>, <span class="m">1064</span><span class="o">}</span>,
+        <span class="o">(</span><span class="m">1</span><span class="o">)</span> <span class="o">{</span><span class="s2">&quot;bin1&quot;</span>, <span class="m">1</span>, nan, <span class="s2">&quot;10&quot;</span>, <span class="m">1082</span>, <span class="m">0</span>, <span class="m">1082</span>, <span class="s2">&quot;s001&quot;</span>, <span class="s2">&quot;s001/dblock_0&quot;</span>,
+        <span class="o">(</span><span class="m">1</span><span class="o">)</span>  <span class="m">1</span>, <span class="m">1082</span>, <span class="s2">&quot;dig&quot;</span>, <span class="m">4</span>, <span class="s2">&quot;LRRL&quot;</span>, <span class="s2">&quot;L&quot;</span>, <span class="s2">&quot;R&quot;</span>, <span class="s2">&quot;R&quot;</span>, <span class="s2">&quot;L&quot;</span>, <span class="m">1</span>, TRUE, <span class="m">10</span>,
+        <span class="o">(</span><span class="m">1</span><span class="o">)</span>  <span class="m">10</span>, <span class="m">1</span>, <span class="s2">&quot;10\000\000&quot;</span>, <span class="m">1082</span>, <span class="s2">&quot;s01&quot;</span>, <span class="s2">&quot;runsheet&quot;</span>,
+        <span class="o">(</span><span class="m">1</span><span class="o">)</span>  <span class="s2">&quot;s01 09/08/17 List=h1-h2-l1-l2 Hand=LRRL&quot;</span>,
+        <span class="o">(</span><span class="m">1</span><span class="o">)</span>  <span class="s2">&quot;(#10)&quot;</span> <span class="s1">&#39;\000&#39;</span> repeats <span class="m">8</span> times, <span class="s2">&quot;lo&quot;</span>, <span class="s2">&quot;standard&quot;</span>, <span class="s2">&quot;any\000&quot;</span>,
+        <span class="o">(</span><span class="m">1</span><span class="o">)</span>  <span class="m">0</span>, -100, <span class="m">1000</span>, <span class="m">1057</span>, <span class="m">1332</span><span class="o">}</span>,
+        <span class="o">(</span><span class="m">2</span><span class="o">)</span> <span class="o">{</span><span class="s2">&quot;bin1&quot;</span>, <span class="m">2</span>, nan, <span class="s2">&quot;10&quot;</span>, <span class="m">1683</span>, <span class="m">0</span>, <span class="m">1683</span>, <span class="s2">&quot;s001&quot;</span>, <span class="s2">&quot;s001/dblock_0&quot;</span>,
+        <span class="o">(</span><span class="m">2</span><span class="o">)</span>  <span class="m">4</span>, <span class="m">1683</span>, <span class="s2">&quot;dig&quot;</span>, <span class="m">15</span>, <span class="s2">&quot;LRRL&quot;</span>, <span class="s2">&quot;L&quot;</span>, <span class="s2">&quot;R&quot;</span>, <span class="s2">&quot;R&quot;</span>, <span class="s2">&quot;L&quot;</span>, <span class="m">4</span>, TRUE, <span class="m">10</span>,
+        <span class="o">(</span><span class="m">2</span><span class="o">)</span>  <span class="m">10</span>, <span class="m">1</span>, <span class="s2">&quot;10\000\000&quot;</span>, <span class="m">1683</span>, <span class="s2">&quot;s01&quot;</span>, <span class="s2">&quot;runsheet&quot;</span>,
+        <span class="o">(</span><span class="m">2</span><span class="o">)</span>  <span class="s2">&quot;s01 09/08/17 List=h1-h2-l1-l2 Hand=LRRL&quot;</span>,
+        ...
+</pre></div>
+</div>
+</div>
+<div class="section" id="mkh5-single-trial-epochs">
+<h2><cite>mkh5</cite> single trial epochs<a class="headerlink" href="#mkh5-single-trial-epochs" title="Permalink to this heading"></a></h2>
+<p>Single trial epochs can be exported in a data table format for import
+into signal processing and statistical analysis pipelines.</p>
+<table class="docutils align-default">
+<colgroup>
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+<col style="width: 8%" />
+</colgroup>
+<thead>
+<tr class="row-odd"><th class="head"><p>index</p></th>
+<th class="head"><p>sub_id</p></th>
+<th class="head"><p>time</p></th>
+<th class="head"><p>events</p></th>
+<th class="head"><p>tone</p></th>
+<th class="head"><p>stim</p></th>
+<th class="head"><p>hb0</p></th>
+<th class="head"><p>rt</p></th>
+<th class="head"><p>fz</p></th>
+<th class="head"><p>cz</p></th>
+<th class="head"><p>pz</p></th>
+<th class="head"></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-100</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-14.570</p></td>
+<td><p>-8.609</p></td>
+<td><p>-7.578</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-96</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-6.418</p></td>
+<td><p>-3.039</p></td>
+<td><p>-4.305</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-92</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-6.070</p></td>
+<td><p>-4.391</p></td>
+<td><p>-8.266</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-88</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-1.734</p></td>
+<td><p>-3.039</p></td>
+<td><p>-9.305</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-84</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>4.684</p></td>
+<td><p>1.520</p></td>
+<td><p>-4.652</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-80</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>2.602</p></td>
+<td><p>-0.675</p></td>
+<td><p>-7.922</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-76</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>7.805</p></td>
+<td><p>5.402</p></td>
+<td><p>-3.100</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-72</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>7.457</p></td>
+<td><p>5.910</p></td>
+<td><p>-0.689</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-68</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>2.256</p></td>
+<td><p>2.533</p></td>
+<td><p>-2.066</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-64</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>1.214</p></td>
+<td><p>3.545</p></td>
+<td><p>0.517</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-60</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>0.173</p></td>
+<td><p>3.715</p></td>
+<td><p>0.861</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-56</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>0.347</p></td>
+<td><p>3.545</p></td>
+<td><p>0.172</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-52</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-1.214</p></td>
+<td><p>0.506</p></td>
+<td><p>-4.477</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-48</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-0.347</p></td>
+<td><p>1.013</p></td>
+<td><p>-3.961</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-44</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>6.590</p></td>
+<td><p>7.090</p></td>
+<td><p>2.756</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-40</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-2.949</p></td>
+<td><p>-0.169</p></td>
+<td><p>-0.517</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-36</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>5.203</p></td>
+<td><p>4.219</p></td>
+<td><p>2.584</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-32</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>4.164</p></td>
+<td><p>1.688</p></td>
+<td><p>-0.172</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-28</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>8.844</p></td>
+<td><p>5.910</p></td>
+<td><p>4.305</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-24</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>14.914</p></td>
+<td><p>12.664</p></td>
+<td><p>7.750</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-20</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>9.195</p></td>
+<td><p>10.297</p></td>
+<td><p>6.027</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-16</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>13.875</p></td>
+<td><p>16.375</p></td>
+<td><p>11.883</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-12</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>11.102</p></td>
+<td><p>15.195</p></td>
+<td><p>11.367</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-8</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>2.082</p></td>
+<td><p>7.258</p></td>
+<td><p>4.477</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>-4</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>2.602</p></td>
+<td><p>6.246</p></td>
+<td><p>3.789</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>0</p></td>
+<td><p>10</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-3.295</p></td>
+<td><p>-1.013</p></td>
+<td><p>-4.824</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>4</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-1.388</p></td>
+<td><p>-1.013</p></td>
+<td><p>-4.824</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>8</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-4.512</p></td>
+<td><p>-3.545</p></td>
+<td><p>-6.719</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>12</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-5.898</p></td>
+<td><p>-4.895</p></td>
+<td><p>-8.953</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>16</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-8.156</p></td>
+<td><p>-5.234</p></td>
+<td><p>-7.578</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>20</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-9.539</p></td>
+<td><p>-6.922</p></td>
+<td><p>-9.992</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>24</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-6.246</p></td>
+<td><p>-4.219</p></td>
+<td><p>-6.719</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>28</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-11.797</p></td>
+<td><p>-6.414</p></td>
+<td><p>-5.684</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>32</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-11.797</p></td>
+<td><p>-6.414</p></td>
+<td><p>-6.547</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>36</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-14.570</p></td>
+<td><p>-9.961</p></td>
+<td><p>-12.227</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>40</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-13.008</p></td>
+<td><p>-8.273</p></td>
+<td><p>-10.508</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>44</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-7.285</p></td>
+<td><p>-0.675</p></td>
+<td><p>-2.066</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>48</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-3.643</p></td>
+<td><p>1.013</p></td>
+<td><p>-1.895</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>52</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-3.295</p></td>
+<td><p>1.857</p></td>
+<td><p>0.172</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>56</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-2.602</p></td>
+<td><p>3.207</p></td>
+<td><p>2.928</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>60</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>3.295</p></td>
+<td><p>7.258</p></td>
+<td><p>7.062</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>64</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-0.694</p></td>
+<td><p>2.869</p></td>
+<td><p>0.517</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>68</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>1.562</p></td>
+<td><p>6.586</p></td>
+<td><p>1.723</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>72</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-2.602</p></td>
+<td><p>2.869</p></td>
+<td><p>0.689</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>76</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-9.195</p></td>
+<td><p>-2.195</p></td>
+<td><p>-3.961</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>80</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-13.703</p></td>
+<td><p>-6.246</p></td>
+<td><p>-6.371</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>84</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-11.445</p></td>
+<td><p>-4.051</p></td>
+<td><p>-4.652</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>88</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-11.797</p></td>
+<td><p>-2.025</p></td>
+<td><p>-2.412</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>92</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-14.966</p></td>
+<td><p>1.351</p></td>
+<td><p>0.689</p></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>96</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-4.336</p></td>
+<td><p>3.545</p></td>
+<td><p>1.550</p></td>
+<td></td>
+</tr>
+<tr class="row-even"><td><p>bin1</p></td>
+<td><p>s001</p></td>
+<td><p>100</p></td>
+<td><p>0</p></td>
+<td><p>lo</p></td>
+<td><p>standard</p></td>
+<td><p>L</p></td>
+<td><p>496</p></td>
+<td><p>-6.418</p></td>
+<td><p>0.338</p></td>
+<td><p>-0.689</p></td>
+<td></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div class="section" id="mne-python-reader-experimental">
+<h2>MNE Python Reader (experimental)<a class="headerlink" href="#mne-python-reader-experimental" title="Permalink to this heading"></a></h2>
+<p>The mkpy .h5 data EEG, codemap tags, and 3D location information can be
+converted to <code class="docutils literal notranslate"><span class="pre">mne.Raw</span></code> and <code class="docutils literal notranslate"><span class="pre">mne.Epochs</span></code> for use with the MNE
+Python analysis and visualization toolbox (<a class="reference external" href="https://mne.tools/stable/index.html">https://mne.tools/stable/index.html</a>).</p>
+<p>First, convert the .crw/.log/.yhdr to mkpy .h5 format, tag events with
+a codemap, and set the corresponding fixed-interval epochs as
+usual. Though not strictly required, it is generally advisable to
+ensure the 3D electrode and fiducial location data travels with the
+EEG by including an apparatus map in the .yhdr file.</p>
+<div class="section" id="continous-eeg">
+<h3>Continous EEG<a class="headerlink" href="#continous-eeg" title="Permalink to this heading"></a></h3>
+<p>Read the s01.h5 mkpy format data as an mne.Raw like so:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+<span class="n">s01_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">read_raw_mkh5</span><span class="p">(</span><span class="s2">&quot;s01.h5&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="section" id="epochs">
+<h3>Epochs<a class="headerlink" href="#epochs" title="Permalink to this heading"></a></h3>
+<p>The epochs and codemap event tags in s01.h5 are converted to
+mne.Epochs with the <code class="docutils literal notranslate"><span class="pre">mkh5mn3.get_epochs</span></code> helper method:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+<span class="n">s01_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">read_raw_mkh5</span><span class="p">(</span><span class="s2">&quot;s01.h5&quot;</span><span class="p">)</span>
+<span class="n">s01_epochs</span> <span class="o">=</span> <span class="n">mkpy</span><span class="o">.</span><span class="n">io</span><span class="o">.</span><span class="n">mkh5mne</span><span class="o">.</span><span class="n">get_epochs</span><span class="p">(</span><span class="n">s01_raw</span><span class="p">,</span> <span class="s2">&quot;tagged_epochs&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>The MNE native method <code class="docutils literal notranslate"><span class="pre">mne.Epochs(s01_raw,</span> <span class="pre">...)</span></code> also extracts
+mne.Epochs from s01_raw but does not convert the original codemap tags
+to mne.Epochs.metadata.</p>
+</div>
+<div class="section" id="garv-eeg-screening">
+<h3>Garv EEG screening<a class="headerlink" href="#garv-eeg-screening" title="Permalink to this heading"></a></h3>
+<p>To use event-based quality control tests like <code class="docutils literal notranslate"><span class="pre">garv</span></code> to screen
+epochs in MNE, convert them to “BAD_garv” mne.Annotations with
+<a class="reference internal" href="api_source/mkpy.io.mkh5mne.html#mkpy.io.mkh5mne.get_garv_bads" title="mkpy.io.mkh5mne.get_garv_bads"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mkh5mne.get_garv_bads()</span></code></a>, then
+use native MNE methods to drop “BAD” epochs.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+<span class="n">s01_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">read_raw_mkh5</span><span class="p">(</span><span class="s2">&quot;s01.h5&quot;</span><span class="p">)</span>
+<span class="n">garv_bads</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">get_garv_bads</span><span class="p">(</span>
+    <span class="n">s01_raw</span><span class="p">,</span>
+    <span class="n">event_channel</span><span class="o">=</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">,</span>
+    <span class="n">garv_interval</span><span class="o">=</span><span class="p">[</span><span class="o">-</span><span class="mi">500</span><span class="p">,</span> <span class="mi">1500</span><span class="p">,</span> <span class="s2">&quot;ms&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

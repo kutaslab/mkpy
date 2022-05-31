@@ -1,0 +1,440 @@
+(2539000, 94)
+
+                Index  adjective  anchor_code  anchor_tick article data_group  \
+Epoch_idx Time                                                                  
+0         -1500     0        NaN            8        56265       a   arquan10   
+          -1496     0        NaN            8        56265       a   arquan10   
+          -1492     0        NaN            8        56265       a   arquan10   
+          -1488     0        NaN            8        56265       a   arquan10   
+          -1484     0        NaN            8        56265       a   arquan10   
+
+                       dblock_path  dblock_srate  dblock_ticks  \
+Epoch_idx Time                                                   
+0         -1500  arquan10/dblock_0         250.0         55890   
+          -1496  arquan10/dblock_0         250.0         55891   
+          -1492  arquan10/dblock_0         250.0         55892   
+          -1488  arquan10/dblock_0         250.0         55893   
+          -1484  arquan10/dblock_0         250.0         55894   
+
+                 epoch_match_tick_delta  epoch_ticks   expt  is_anchor  \
+Epoch_idx Time                                                           
+0         -1500                    -375         1000  eeg_1          1   
+          -1496                    -375         1000  eeg_1          1   
+          -1492                    -375         1000  eeg_1          1   
+          -1488                    -375         1000  eeg_1          1   
+          -1484                    -375         1000  eeg_1          1   
+
+                           item_id item_id_pfx  lemma_ART_noun_anywhere_cloze  \
+Epoch_idx Time                                                                  
+0         -1500  i008_1_a__NA_kite   i008_1_a_                            1.0   
+          -1496  i008_1_a__NA_kite   i008_1_a_                            1.0   
+          -1492  i008_1_a__NA_kite   i008_1_a_                            1.0   
+          -1488  i008_1_a__NA_kite   i008_1_a_                            1.0   
+          -1484  i008_1_a__NA_kite   i008_1_a_                            1.0   
+
+                 lemma_ART_noun_initial_cloze  lemma_NA_noun_anywhere_cloze  \
+Epoch_idx Time                                                                
+0         -1500                           1.0                           1.0   
+          -1496                           1.0                           1.0   
+          -1492                           1.0                           1.0   
+          -1488                           1.0                           1.0   
+          -1484                           1.0                           1.0   
+
+                 lemma_NA_noun_initial_cloze  lemma_context_anywhere_info  \
+Epoch_idx Time                                                              
+0         -1500                        0.143                          1.0   
+          -1496                        0.143                          1.0   
+          -1492                        0.143                          1.0   
+          -1488                        0.143                          1.0   
+          -1484                        0.143                          1.0   
+
+                 lemma_context_initial_info lemma_modal_anywhere  \
+Epoch_idx Time                                                     
+0         -1500                         1.0               [kite]   
+          -1496                         1.0               [kite]   
+          -1492                         1.0               [kite]   
+          -1488                         1.0               [kite]   
+          -1484                         1.0               [kite]   
+
+                 lemma_modal_anywhere_cloze lemma_modal_initial  \
+Epoch_idx Time                                                    
+0         -1500                         1.0              [kite]   
+          -1496                         1.0              [kite]   
+          -1492                         1.0              [kite]   
+          -1488                         1.0              [kite]   
+          -1484                         1.0              [kite]   
+
+                lemma_modal_initial_character_classes  \
+Epoch_idx Time                                          
+0         -1500                           [consonant]   
+          -1496                           [consonant]   
+          -1492                           [consonant]   
+          -1488                           [consonant]   
+          -1484                           [consonant]   
+
+                 lemma_modal_initial_cloze  lemma_n_NAs  lemma_n_responses  \
+Epoch_idx Time                                                               
+0         -1500                        1.0          0.0               30.0   
+          -1496                        1.0          0.0               30.0   
+          -1492                        1.0          0.0               30.0   
+          -1488                        1.0          0.0               30.0   
+          -1484                        1.0          0.0               30.0   
+
+                 lemma_n_strings  list_id  log_ccodes  log_evcodes  log_flags  \
+Epoch_idx Time                                                                  
+0         -1500             30.0  eeg_1_b           0            0          0   
+          -1496             30.0  eeg_1_b           0            0          0   
+          -1492             30.0  eeg_1_b           0            0          0   
+          -1488             30.0  eeg_1_b           0            0          0   
+          -1484             30.0  eeg_1_b           0            0          0   
+
+                 match_code  match_tick  noun  noun_code  noun_pos  \
+Epoch_idx Time                                                       
+0         -1500           8       56265  kite      10082        12   
+          -1496           8       56265  kite      10082        12   
+          -1492           8       56265  kite      10082        12   
+          -1488           8       56265  kite      10082        12   
+          -1484           8       56265  kite      10082        12   
+
+                 orth_ART_noun_anywhere_cloze  orth_ART_noun_initial_cloze  \
+Epoch_idx Time                                                               
+0         -1500                           1.0                          1.0   
+          -1496                           1.0                          1.0   
+          -1492                           1.0                          1.0   
+          -1488                           1.0                          1.0   
+          -1484                           1.0                          1.0   
+
+                 orth_NA_noun_anywhere_cloze  orth_NA_noun_initial_cloze  \
+Epoch_idx Time                                                             
+0         -1500                        0.964                       0.107   
+          -1496                        0.964                       0.107   
+          -1492                        0.964                       0.107   
+          -1488                        0.964                       0.107   
+          -1484                        0.964                       0.107   
+
+                 orth_article_initial_cloze  orth_context_anywhere_info  \
+Epoch_idx Time                                                            
+0         -1500                       0.857                         1.0   
+          -1496                       0.857                         1.0   
+          -1492                       0.857                         1.0   
+          -1488                       0.857                         1.0   
+          -1484                       0.857                         1.0   
+
+                 orth_context_initial_info orth_modal_anywhere  \
+Epoch_idx Time                                                   
+0         -1500                        1.0              [kite]   
+          -1496                        1.0              [kite]   
+          -1492                        1.0              [kite]   
+          -1488                        1.0              [kite]   
+          -1484                        1.0              [kite]   
+
+                 orth_modal_anywhere_cloze orth_modal_initial  \
+Epoch_idx Time                                                  
+0         -1500                        1.0             [kite]   
+          -1496                        1.0             [kite]   
+          -1492                        1.0             [kite]   
+          -1488                        1.0             [kite]   
+          -1484                        1.0             [kite]   
+
+                orth_modal_initial_character_classes  \
+Epoch_idx Time                                         
+0         -1500                          [consonant]   
+          -1496                          [consonant]   
+          -1492                          [consonant]   
+          -1488                          [consonant]   
+          -1484                          [consonant]   
+
+                 orth_modal_initial_cloze  orth_n_NAs  orth_n_responses  \
+Epoch_idx Time                                                            
+0         -1500                       1.0         0.0              30.0   
+          -1496                       1.0         0.0              30.0   
+          -1492                       1.0         0.0              30.0   
+          -1488                       1.0         0.0              30.0   
+          -1484                       1.0         0.0              30.0   
+
+                 orth_n_strings  raw_evcodes              regexp  s1_code  \
+Epoch_idx Time                                                              
+0         -1500            30.0            0  (#\d{1,3}) 2 10082      NaN   
+          -1496            30.0            0  (#\d{1,3}) 2 10082      NaN   
+          -1492            30.0            0  (#\d{1,3}) 2 10082      NaN   
+          -1488            30.0            0  (#\d{1,3}) 2 10082      NaN   
+          -1484            30.0            0  (#\d{1,3}) 2 10082      NaN   
+
+                 stim_idx  topic_n_NA  topic_n_consonants  topic_n_vowels  \
+Epoch_idx Time                                                              
+0         -1500         8         2.0                28.0             0.0   
+          -1496         8         2.0                28.0             0.0   
+          -1492         8         2.0                28.0             0.0   
+          -1488         8         2.0                28.0             0.0   
+          -1484         8         2.0                28.0             0.0   
+
+                 crw_ticks  pygarv        lle        lhz      MiPf       LLPf  \
+Epoch_idx Time                                                                  
+0         -1500      55890       0  18.359375 -14.054688 -38.62500 -27.906250   
+          -1496      55891       0  15.570312 -10.664062 -36.18750 -26.484375   
+          -1492      55892       0  17.796875  -7.269531 -36.68750 -25.531250   
+          -1488      55893       0  14.460938 -12.117188 -35.68750 -25.531250   
+          -1484      55894       0  13.343750 -13.570312 -42.53125 -30.265625   
+
+                     RLPf       LMPf       RMPf      LDFr      RDFr      LLFr  \
+Epoch_idx Time                                                                  
+0         -1500 -36.25000 -11.312500 -12.109375 -6.769531  0.243530 -4.875000   
+          -1496 -32.90625  -8.601562  -9.890625 -3.384766  1.948242 -4.144531   
+          -1492 -33.40625  -8.851562 -11.125000 -3.384766  0.730469 -2.437500   
+          -1488 -28.62500  -6.882812  -9.390625  2.902344  2.435547 -0.243774   
+          -1484 -35.31250 -14.257812 -16.812500 -5.078125 -3.896484 -6.582031   
+
+                     RLFr      LMFr       RMFr      LMCe       RMCe      MiCe  \
+Epoch_idx Time                                                                  
+0         -1500 -4.054688 -6.632812  -8.039062 -4.851562 -11.992188 -4.929688   
+          -1496 -1.013672 -3.039062  -5.898438  0.000000  -8.875000 -1.726562   
+          -1492  0.253418 -2.763672  -6.164062  0.728027  -6.714844 -0.246582   
+          -1488  0.253418  0.552734  -4.019531  4.851562  -3.119141  2.958984   
+          -1484 -4.562500 -6.632812 -10.718750 -0.970703  -8.875000 -3.699219   
+
+                     MiPa      LDCe      RDCe      LDPa       RDPa      LMOc  \
+Epoch_idx Time                                                                 
+0         -1500 -3.261719 -9.890625 -9.726562 -3.144531 -11.273438 -2.166016   
+          -1496  2.562500 -2.966797 -6.167969  2.902344  -9.062500  1.444336   
+          -1492  3.261719 -6.179688 -4.980469  0.241943  -9.062500  0.000000   
+          -1488  8.148438  0.000000 -1.660156  3.628906  -5.636719  3.128906   
+          -1484  1.863281 -9.148438 -7.828125 -3.871094 -10.781250 -3.611328   
+
+                      RMOc      LLTe       RLTe       LLOc       RLOc  \
+Epoch_idx Time                                                          
+0         -1500  -9.375000 -3.943359 -15.453125  -6.996094 -12.015625   
+          -1496  -7.214844  2.710938 -13.039062   0.241211 -14.421875   
+          -1492  -7.937500 -2.218750 -13.523438  -5.546875 -18.265625   
+          -1488  -4.808594  2.218750 -11.828125  -2.412109 -17.312500   
+          -1484 -10.578125 -5.175781 -17.875000 -12.781250 -24.031250   
+
+                      MiOc        A2      HEOG        rle        rhz  
+Epoch_idx Time                                                        
+0         -1500 -10.023438 -58.65625  0.471924   8.570312 -11.359375  
+          -1496  -8.828125 -55.96875  0.708008  10.953125  -7.101562  
+          -1492 -11.453125 -58.15625  0.471924  10.000000  -9.468750  
+          -1488  -8.593750 -60.37500  0.708008  12.382812  -5.207031  
+          -1484 -16.703125 -66.00000  0.471924   6.667969 -14.203125  
+
+
+.
+.
+.
+
+
+
+               Index  adjective  anchor_code  anchor_tick article data_group  \
+Epoch_idx Time                                                                 
+2538      2480  2538        NaN           90         4771       a   arquant9   
+          2484  2538        NaN           90         4771       a   arquant9   
+          2488  2538        NaN           90         4771       a   arquant9   
+          2492  2538        NaN           90         4771       a   arquant9   
+          2496  2538        NaN           90         4771       a   arquant9   
+
+                      dblock_path  dblock_srate  dblock_ticks  \
+Epoch_idx Time                                                  
+2538      2480  arquant9/dblock_9         250.0          5391   
+          2484  arquant9/dblock_9         250.0          5392   
+          2488  arquant9/dblock_9         250.0          5393   
+          2492  arquant9/dblock_9         250.0          5394   
+          2496  arquant9/dblock_9         250.0          5395   
+
+                epoch_match_tick_delta  epoch_ticks   expt  is_anchor  \
+Epoch_idx Time                                                          
+2538      2480                    -375         1000  eeg_1          1   
+          2484                    -375         1000  eeg_1          1   
+          2488                    -375         1000  eeg_1          1   
+          2492                    -375         1000  eeg_1          1   
+          2496                    -375         1000  eeg_1          1   
+
+                             item_id item_id_pfx  \
+Epoch_idx Time                                     
+2538      2480  i090_1_a__NA_tourist   i090_1_a_   
+          2484  i090_1_a__NA_tourist   i090_1_a_   
+          2488  i090_1_a__NA_tourist   i090_1_a_   
+          2492  i090_1_a__NA_tourist   i090_1_a_   
+          2496  i090_1_a__NA_tourist   i090_1_a_   
+
+                lemma_ART_noun_anywhere_cloze  lemma_ART_noun_initial_cloze  \
+Epoch_idx Time                                                                
+2538      2480                          0.967                         0.933   
+          2484                          0.967                         0.933   
+          2488                          0.967                         0.933   
+          2492                          0.967                         0.933   
+          2496                          0.967                         0.933   
+
+                lemma_NA_noun_anywhere_cloze  lemma_NA_noun_initial_cloze  \
+Epoch_idx Time                                                              
+2538      2480                         0.931                        0.034   
+          2484                         0.931                        0.034   
+          2488                         0.931                        0.034   
+          2492                         0.931                        0.034   
+          2496                         0.931                        0.034   
+
+                lemma_context_anywhere_info  lemma_context_initial_info  \
+Epoch_idx Time                                                            
+2538      2480                        0.694                       0.735   
+          2484                        0.694                       0.735   
+          2488                        0.694                       0.735   
+          2492                        0.694                       0.735   
+          2496                        0.694                       0.735   
+
+               lemma_modal_anywhere  lemma_modal_anywhere_cloze  \
+Epoch_idx Time                                                    
+2538      2480            [tourist]                       0.935   
+          2484            [tourist]                       0.935   
+          2488            [tourist]                       0.935   
+          2492            [tourist]                       0.935   
+          2496            [tourist]                       0.935   
+
+               lemma_modal_initial lemma_modal_initial_character_classes  \
+Epoch_idx Time                                                             
+2538      2480           [tourist]                           [consonant]   
+          2484           [tourist]                           [consonant]   
+          2488           [tourist]                           [consonant]   
+          2492           [tourist]                           [consonant]   
+          2496           [tourist]                           [consonant]   
+
+                lemma_modal_initial_cloze  lemma_n_NAs  lemma_n_responses  \
+Epoch_idx Time                                                              
+2538      2480                      0.933          0.0               30.0   
+          2484                      0.933          0.0               30.0   
+          2488                      0.933          0.0               30.0   
+          2492                      0.933          0.0               30.0   
+          2496                      0.933          0.0               30.0   
+
+                lemma_n_strings  list_id  log_ccodes  log_evcodes  log_flags  \
+Epoch_idx Time                                                                 
+2538      2480             31.0  eeg_1_a           0            0          0   
+          2484             31.0  eeg_1_a           0            0          0   
+          2488             31.0  eeg_1_a           0            0          0   
+          2492             31.0  eeg_1_a           0            0          0   
+          2496             31.0  eeg_1_a           0            0          0   
+
+                match_code  match_tick     noun  noun_code  noun_pos  \
+Epoch_idx Time                                                         
+2538      2480          90        4771  tourist      10902        23   
+          2484          90        4771  tourist      10902        23   
+          2488          90        4771  tourist      10902        23   
+          2492          90        4771  tourist      10902        23   
+          2496          90        4771  tourist      10902        23   
+
+                orth_ART_noun_anywhere_cloze  orth_ART_noun_initial_cloze  \
+Epoch_idx Time                                                              
+2538      2480                         0.967                        0.933   
+          2484                         0.967                        0.933   
+          2488                         0.967                        0.933   
+          2492                         0.967                        0.933   
+          2496                         0.967                        0.933   
+
+                orth_NA_noun_anywhere_cloze  orth_NA_noun_initial_cloze  \
+Epoch_idx Time                                                            
+2538      2480                        0.931                       0.034   
+          2484                        0.931                       0.034   
+          2488                        0.931                       0.034   
+          2492                        0.931                       0.034   
+          2496                        0.931                       0.034   
+
+                orth_article_initial_cloze  orth_context_anywhere_info  \
+Epoch_idx Time                                                           
+2538      2480                       0.966                       0.694   
+          2484                       0.966                       0.694   
+          2488                       0.966                       0.694   
+          2492                       0.966                       0.694   
+          2496                       0.966                       0.694   
+
+                orth_context_initial_info orth_modal_anywhere  \
+Epoch_idx Time                                                  
+2538      2480                      0.735           [tourist]   
+          2484                      0.735           [tourist]   
+          2488                      0.735           [tourist]   
+          2492                      0.735           [tourist]   
+          2496                      0.735           [tourist]   
+
+                orth_modal_anywhere_cloze orth_modal_initial  \
+Epoch_idx Time                                                 
+2538      2480                      0.935          [tourist]   
+          2484                      0.935          [tourist]   
+          2488                      0.935          [tourist]   
+          2492                      0.935          [tourist]   
+          2496                      0.935          [tourist]   
+
+               orth_modal_initial_character_classes  orth_modal_initial_cloze  \
+Epoch_idx Time                                                                  
+2538      2480                          [consonant]                     0.933   
+          2484                          [consonant]                     0.933   
+          2488                          [consonant]                     0.933   
+          2492                          [consonant]                     0.933   
+          2496                          [consonant]                     0.933   
+
+                orth_n_NAs  orth_n_responses  orth_n_strings  raw_evcodes  \
+Epoch_idx Time                                                              
+2538      2480         0.0              30.0            31.0            0   
+          2484         0.0              30.0            31.0            0   
+          2488         0.0              30.0            31.0            0   
+          2492         0.0              30.0            31.0            0   
+          2496         0.0              30.0            31.0            0   
+
+                            regexp  s1_code  stim_idx  topic_n_NA  \
+Epoch_idx Time                                                      
+2538      2480  (#\d{1,3}) 2 10902      NaN        90         1.0   
+          2484  (#\d{1,3}) 2 10902      NaN        90         1.0   
+          2488  (#\d{1,3}) 2 10902      NaN        90         1.0   
+          2492  (#\d{1,3}) 2 10902      NaN        90         1.0   
+          2496  (#\d{1,3}) 2 10902      NaN        90         1.0   
+
+                topic_n_consonants  topic_n_vowels  crw_ticks  pygarv  \
+Epoch_idx Time                                                          
+2538      2480                29.0             0.0     696847       0   
+          2484                29.0             0.0     696848       0   
+          2488                29.0             0.0     696849       0   
+          2492                29.0             0.0     696850       0   
+          2496                29.0             0.0     696851       0   
+
+                      lle        lhz      MiPf       LLPf      RLPf  \
+Epoch_idx Time                                                        
+2538      2480  21.671875  26.171875 -38.09375 -23.640625 -50.59375   
+          2484  25.000000  25.687500 -38.09375 -17.968750 -60.12500   
+          2488  23.890625  24.718750 -34.18750 -19.859375 -49.62500   
+          2492  15.562500  21.328125 -39.09375 -27.906250 -51.06250   
+          2496  13.335938  19.875000 -39.09375 -36.406250 -47.25000   
+
+                     LMPf       RMPf       LDFr       RDFr      LLFr  \
+Epoch_idx Time                                                         
+2538      2480  -9.562500 -11.890625 -15.234375 -14.164062  37.93750   
+          2484 -10.054688 -12.382812 -14.265625  -9.281250  37.46875   
+          2488  -8.335938  -5.203125  -7.980469  -3.419922  39.90625   
+          2492 -11.281250  -5.449219 -13.539062  -7.082031  45.96875   
+          2496 -17.406250 -10.156250 -16.921875  -9.523438  43.31250   
+
+                     RLFr      LMFr      RMFr       LMCe      RMCe      MiCe  \
+Epoch_idx Time                                                                 
+2538      2480 -24.281250 -4.687500 -5.644531 -18.968750  2.638672 -8.390625   
+          2484 -20.484375 -3.308594 -2.687500 -18.484375  4.558594 -6.417969   
+          2488 -18.468750  1.377930  2.419922 -16.296875  8.156250 -3.455078   
+          2492 -26.312500 -1.929688 -0.537598 -19.703125  4.796875 -6.417969   
+          2496 -31.875000 -5.789062 -3.226562 -23.343750  2.878906 -9.625000   
+
+                     MiPa       LDCe      RDCe       LDPa      RDPa  \
+Epoch_idx Time                                                        
+2538      2480  -9.070312 -13.351562  2.128906  -3.876953 -5.632812   
+          2484  -9.304688 -13.351562  5.203125  -6.300781 -4.406250   
+          2488  -5.816406 -11.125000  9.937500  -4.363281 -1.224609   
+          2492 -11.632812 -14.093750  5.914062  -7.753906 -6.367188   
+          2496 -13.726562 -19.281250  3.785156 -11.632812 -6.855469   
+
+                     LMOc       RMOc       LLTe       RLTe      LLOc  \
+Epoch_idx Time                                                         
+2538      2480  -6.484375  -9.414062  15.500000 -17.812500  3.855469   
+          2484  -8.164062  -8.929688  11.070312 -16.375000 -2.410156   
+          2488  -5.523438  -5.550781   9.101562 -15.406250 -2.650391   
+          2492 -10.562500 -12.789062   6.640625 -19.734375 -3.615234   
+          2496 -13.687500 -13.757812   1.475586 -16.843750 -9.882812   
+
+                     RLOc       MiOc         A2      HEOG        rle       rhz  
+Epoch_idx Time                                                                  
+2538      2480 -12.507812  -9.742188 -23.250000  0.236938  -9.546875  3.791016  
+          2484  -8.414062  -8.554688 -20.062500  0.236938  -9.546875  3.791016  
+          2488  -4.328125  -6.652344 -16.156250  0.000000  -9.546875  5.210938  
+          2492 -15.148438 -14.015625 -16.640625  0.236938 -10.500000  0.473877  
+          2496 -16.828125 -16.390625 -18.359375  0.000000 -13.367188 -1.421875  

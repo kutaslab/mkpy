@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Electrode location YAML format &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="append separate cals" href="append_cals.html" />
+    <link rel="prev" title="mkh5" href="index.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">mkh5</a><ul class="current">
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Electrode location YAML format</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#electrode-locations-and-fiducial-landmarks-optional">Electrode locations and fiducial landmarks (optional)</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="append_cals.html">append separate cals</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mkh5_quickstart.html">mkh5 Quickstart</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../mkh5mne/index.html">mkh5 and MNE Python (experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../mkh5eeglab/index.html">mkh5 and EEGLAB (experimental)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../ExamplesGallery.html">Examples Gallery</a> &raquo;</li>
+          <li><a href="index.html">mkh5</a> &raquo;</li>
+      <li>Electrode location YAML format</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples_gallery/mkh5/apparatus_map.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-gallery-mkh5-apparatus-map-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="electrode-location-yaml-format">
+<span id="sphx-glr-examples-gallery-mkh5-apparatus-map-py"></span><h1>Electrode location YAML format<a class="headerlink" href="#electrode-location-yaml-format" title="Permalink to this heading"></a></h1>
+<div class="section" id="electrode-locations-and-fiducial-landmarks-optional">
+<h2>Electrode locations and fiducial landmarks (optional)<a class="headerlink" href="#electrode-locations-and-fiducial-landmarks-optional" title="Permalink to this heading"></a></h2>
+<p>Electrode locations, fiducial landmarks (nasion, left and right
+preauricular points), and head shape data points can be baked into the
+mkpy .h5 data header by including a <code class="docutils literal notranslate"><span class="pre">name:</span> <span class="pre">apparatus</span></code> YAML document
+in the <code class="docutils literal notranslate"><span class="pre">.yhdr</span></code> so that the location information travels with the EEG</p>
+<p>The mkh5 standard apparatus specifies a 3D &lt;x, y, z&gt; cartesian
+coordinate space, &lt;right, anterior, superior&gt; (RAS) orientation, with
+measurement units of centimeters.</p>
+<p>A minimal apparatus map has the following keys, additional keys may be
+added ad lib.</p>
+<p>Addition fields may be added to the maps.</p>
+<div class="highlight-yaml notranslate"><div class="highlight"><pre><span></span><span class="nn">---</span><span class="w"></span>
+<span class="c1"># mandatory keys and values</span><span class="w"></span>
+<span class="nt">name</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">apparatus</span><span class="w"></span>
+<span class="nt">space</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">coordinates</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cartesian</span><span class="w"></span>
+<span class="w">  </span><span class="nt">distance_unit</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">cm</span><span class="w"></span>
+<span class="w">  </span><span class="nt">orientation</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">ras</span><span class="w"></span>
+
+<span class="c1"># mandatory keys. RAS x, y, z values may vary</span><span class="w"></span>
+<span class="nt">fiducials</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">lpa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">nasion</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">  </span><span class="nt">rpa</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+
+<span class="c1"># EEG data straems (&quot;channels&quot;)</span><span class="w"></span>
+<span class="nt">streams</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">label</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">pos</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;sensor_label&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">neg</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;sensor(s) label&gt;</span><span class="w"></span>
+
+<span class="c1"># ... as needed ...</span><span class="w"></span>
+
+<span class="c1"># The nmber of electrodes, labels, and x, y, z  values are as needed</span><span class="w"></span>
+<span class="nt">sensors</span><span class="p">:</span><span class="w"></span>
+<span class="w">  </span><span class="nt">label</span><span class="p">:</span><span class="w"></span>
+<span class="w">    </span><span class="nt">x</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">y</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+<span class="w">    </span><span class="nt">z</span><span class="p">:</span><span class="w"> </span><span class="l l-Scalar l-Scalar-Plain">&lt;float&gt;</span><span class="w"></span>
+
+<span class="c1"># ... as needed ...</span><span class="w"></span>
+</pre></div>
+</div>
+<p>For the current format see <a class="reference internal" href="../../UserGuide/UserFiles.html#sample-yhdr"><span class="std std-ref">Sample .yhdr (0.2.7)</span></a></p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  0.000 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-gallery-mkh5-apparatus-map-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/0058df527ece85097cd7fe62b5dcd60b/apparatus_map.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">apparatus_map.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/711258ae3c1553b73a9f604fc228415f/apparatus_map.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">apparatus_map.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="index.html" class="btn btn-neutral float-left" title="mkh5" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="append_cals.html" class="btn btn-neutral float-right" title="append separate cals" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

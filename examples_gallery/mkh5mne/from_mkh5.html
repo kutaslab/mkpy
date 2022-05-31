@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Options for converting to mne.Raw &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="mkh5 and EEGLAB (experimental)" href="../mkh5eeglab/index.html" />
+    <link rel="prev" title="How it works" href="how_it_works.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../mkh5/index.html">mkh5</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">mkh5 and MNE Python (experimental)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="no_events.html">EEG without events or epochs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mne_quickstart.html">Quickstart: mkh5 to MNE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="how_it_works.html">How it works</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Options for converting to mne.Raw</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#set-up">Set up</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#marking-garv-artifacts-in-mne-raw">Marking garv artifacts in mne.Raw</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../mkh5eeglab/index.html">mkh5 and EEGLAB (experimental)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../ExamplesGallery.html">Examples Gallery</a> &raquo;</li>
+          <li><a href="index.html">mkh5 and MNE Python (experimental)</a> &raquo;</li>
+      <li>Options for converting to mne.Raw</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples_gallery/mkh5mne/from_mkh5.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-gallery-mkh5mne-from-mkh5-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="options-for-converting-to-mne-raw">
+<span id="sphx-glr-examples-gallery-mkh5mne-from-mkh5-py"></span><h1>Options for converting to mne.Raw<a class="headerlink" href="#options-for-converting-to-mne-raw" title="Permalink to this heading"></a></h1>
+<div class="section" id="set-up">
+<h2>Set up<a class="headerlink" href="#set-up" title="Permalink to this heading"></a></h2>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">from</span> <span class="nn">mkpy</span> <span class="kn">import</span> <span class="n">mkh5</span>
+<span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+
+<span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">set_browser_backend</span><span class="p">(</span><span class="s2">&quot;matplotlib&quot;</span><span class="p">)</span>  <span class="c1"># for docs generation</span>
+
+<span class="c1"># FYI</span>
+<span class="n">conda_env</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CONDA_DEFAULT_ENV&quot;</span><span class="p">]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;conda env&quot;</span><span class="p">,</span> <span class="n">conda_env</span><span class="p">)</span>
+<span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mkh5</span><span class="p">,</span> <span class="n">mne</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>conda env env_3.8
+mkpy.mkh5 0.2.7
+mne 1.0.3
+</pre></div>
+</div>
+<div class="section" id="mkh5-data-file-format-in-a-nutshell">
+<h3>mkh5 data file format in a nutshell<a class="headerlink" href="#mkh5-data-file-format-in-a-nutshell" title="Permalink to this heading"></a></h3>
+<p>This sample mkh5 data is for a single subject in an auditory oddball paradigm with
+previously set epoch tables.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">H5_F</span> <span class="o">=</span> <span class="s2">&quot;../mkh5_data/sub000p3.h5&quot;</span>
+<span class="n">h5_data</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="n">H5_F</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Stimulus and response events of interest have been tagged with an mkh5 codemap and stored
+as named epochs tables <code class="docutils literal notranslate"><span class="pre">mkh5.set_epochs(...)</span></code>. The epochs tables are whatever was deemed
+useful.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">h5_data</span><span class="o">.</span><span class="n">get_epochs_table_names</span><span class="p">()</span>
+
+<span class="c1"># The epochs tables have index information about where to find the</span>
+<span class="c1"># events in the mkh5 file, the experimental variables from</span>
+<span class="c1"># the codemap, and the epoch discrete time interval specs, relative</span>
+<span class="c1"># to the current mkh5 datablock.</span>
+<span class="n">epochs_table</span> <span class="o">=</span> <span class="n">h5_data</span><span class="o">.</span><span class="n">get_epochs_table</span><span class="p">(</span><span class="s2">&quot;ms1500&quot;</span><span class="p">)</span>
+<span class="n">epochs_table</span><span class="p">[</span>
+    <span class="p">[</span>
+        <span class="s2">&quot;epoch_id&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;data_group&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;dblock_path&quot;</span><span class="p">,</span>  <span class="c1"># HDF5 data lookup info</span>
+        <span class="s2">&quot;log_evcodes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;log_ccodes&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;log_flags&quot;</span><span class="p">,</span>  <span class="c1"># event code info</span>
+        <span class="s2">&quot;tone&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;stim&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;accuracy&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;acc_type&quot;</span><span class="p">,</span>  <span class="c1"># codemap tags</span>
+        <span class="s2">&quot;diti_t_0&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;diti_hop&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;diti_len&quot;</span><span class="p">,</span>  <span class="c1"># epoch t_0, offset, duration</span>
+    <span class="p">]</span>
+<span class="p">]</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>epoch_id</th>
+      <th>data_group</th>
+      <th>dblock_path</th>
+      <th>log_evcodes</th>
+      <th>log_ccodes</th>
+      <th>log_flags</th>
+      <th>tone</th>
+      <th>stim</th>
+      <th>accuracy</th>
+      <th>acc_type</th>
+      <th>diti_t_0</th>
+      <th>diti_hop</th>
+      <th>diti_len</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>11</td>
+      <td>1</td>
+      <td>0</td>
+      <td>hi</td>
+      <td>target</td>
+      <td>correct</td>
+      <td>hit</td>
+      <td>1468</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>11</td>
+      <td>1</td>
+      <td>0</td>
+      <td>hi</td>
+      <td>target</td>
+      <td>correct</td>
+      <td>hit</td>
+      <td>2396</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>11</td>
+      <td>1</td>
+      <td>0</td>
+      <td>hi</td>
+      <td>target</td>
+      <td>correct</td>
+      <td>hit</td>
+      <td>2943</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>3</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>11</td>
+      <td>1</td>
+      <td>0</td>
+      <td>hi</td>
+      <td>target</td>
+      <td>correct</td>
+      <td>hit</td>
+      <td>3308</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>4</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>11</td>
+      <td>1</td>
+      <td>0</td>
+      <td>hi</td>
+      <td>target</td>
+      <td>correct</td>
+      <td>hit</td>
+      <td>4574</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>595</th>
+      <td>596</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>27315</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>596</th>
+      <td>597</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>27444</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>597</th>
+      <td>598</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>27573</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>598</th>
+      <td>599</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>27703</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+    <tr>
+      <th>599</th>
+      <td>600</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>27832</td>
+      <td>-187</td>
+      <td>375</td>
+    </tr>
+  </tbody>
+</table>
+<p>600 rows × 13 columns</p>
+</div>
+</div>
+<br />
+<br /><p>The mkh5 EEG and event channel data are stored in datablocks (HDF5
+Dataset) at the end of an HDF5 “slash” path:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">h5_data</span><span class="o">.</span><span class="n">dblock_paths</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>[&#39;sub000/dblock_0&#39;, &#39;sub000/dblock_1&#39;, &#39;sub000/dblock_2&#39;, &#39;sub000/dblock_3&#39;, &#39;sub000/dblock_4&#39;]
+</pre></div>
+</div>
+</div>
+<div class="section" id="electrode-locations">
+<h3>Electrode locations<a class="headerlink" href="#electrode-locations" title="Permalink to this heading"></a></h3>
+<p>Converting mkh5 to mne.Raw <strong>requires</strong> an mkh5 format apparatus map
+with the coordinate space, fiducal landmarks and electrode
+locations. If the appartus map was included with the YAML .yhdr when
+the mkh5 file was created it will be used automatically.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span><span class="n">H5_F</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000p3.h5
+looking up data block paths, larger files take longer ...
+ok
+checking info, montage sub000/dblock_1
+checking info, montage sub000/dblock_2
+checking info, montage sub000/dblock_3
+checking info, montage sub000/dblock_4
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=31744
+    Range : 0 ... 31743 =      0.000 ...   126.972 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_2 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=32512
+    Range : 0 ... 32511 =      0.000 ...   130.044 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_3 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_4 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms3000 events and metadata
+EEG data marked as already having the desired reference.
+</pre></div>
+</div>
+<p>This sample mkh5 data file was created with coordinates for an
+idealized “average” head, based on 3D digitized
+locations. Head-shaped locations are called for when working with
+realistic head geometry in MNE but they don’t line up exactly with
+circular topographic maps.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">_</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">mne_raw</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">sphere</span><span class="o">=</span><span class="s2">&quot;auto&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_from_mkh5_001.png" srcset="../../_images/sphx_glr_from_mkh5_001.png" alt="from mkh5" class = "sphx-glr-single-img"/><p>If original .yhdr did not include an apparatus map or a different
+set of locations is preferred, they can be specified when converting
+to MNE and used instead.</p>
+<p>This map overrides the original head-shaped electrode locations with
+spherical 3D coordinates which are unrealistic as human head
+geometry but line up neatly with circles for painting pretty 2D
+pictures.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_raw_a</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span><span class="n">H5_F</span><span class="p">,</span> <span class="n">apparatus_yaml</span><span class="o">=</span><span class="s2">&quot;mne_32chan_xyz_spherical.yml&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">mne_raw_a</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_from_mkh5_002.png" srcset="../../_images/sphx_glr_from_mkh5_002.png" alt="from mkh5" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000p3.h5
+looking up data block paths, larger files take longer ...
+ok
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_0 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_1
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_1 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_2
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_2 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_3
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_3 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_4
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_4 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_0 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_1 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_2 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=31744
+    Range : 0 ... 31743 =      0.000 ...   126.972 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_2 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_3 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=32512
+    Range : 0 ... 32511 =      0.000 ...   130.044 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_3 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_4 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_4 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms3000 events and metadata
+EEG data marked as already having the desired reference.
+</pre></div>
+</div>
+</div>
+<div class="section" id="selecting-which-datablocks-to-convert-to-mne-raw">
+<h3>Selecting which datablocks to convert to mne.Raw<a class="headerlink" href="#selecting-which-datablocks-to-convert-to-mne-raw" title="Permalink to this heading"></a></h3>
+<p>By default <code class="xref py py-meth docutils literal notranslate"><span class="pre">read_raw_mkh5()</span></code> converts the entire mkh5 file.
+The mkh5 data groups and EEG datablocks are appended in the order
+order returned by <a class="reference internal" href="../../api_source/mkpy.mkh5.html#mkpy.mkh5.mkh5.dblock_paths" title="mkpy.mkh5.mkh5.dblock_paths"><code class="xref py py-meth docutils literal notranslate"><span class="pre">dblock_paths()</span></code></a> which sorts HDF5 the HDF5
+paths to data group alphabetically and preserves data block order
+within each group.</p>
+<p>An mkh5 file might have multiple subjects or experiments, if
+you don’t want to make it all one mne.Raw object, you can</p>
+<blockquote>
+<div><p>select which data blocks to convert with <code class="docutils literal notranslate"><span class="pre">datablock_paths=</span></code>.</p>
+</div></blockquote>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_raw_b</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">read_raw_mkh5</span><span class="p">(</span>
+    <span class="n">H5_F</span><span class="p">,</span> <span class="n">dblock_paths</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;sub000/dblock_0&quot;</span><span class="p">,</span> <span class="s2">&quot;sub000/dblock_1&quot;</span><span class="p">]</span>
+<span class="p">)</span>
+
+<span class="c1"># only dblock_0 and dblock_1 appear in the Raw data</span>
+<span class="n">mne_raw_b</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">description</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1688: UserWarning: mkh5mne.read_raw_mkh5() is deprecated and will be removed in a future release, use mkh5mn3.from_mkh5() instead
+  warnings.warn(
+ok
+checking info, montage sub000/dblock_1
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+EEG data marked as already having the desired reference.
+
+array([&#39;sub000/dblock_0&#39;, &#39;sub000/dblock_1&#39;, &#39;BAD boundary&#39;,
+       &#39;EDGE boundary&#39;], dtype=&#39;&lt;U15&#39;)
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="marking-garv-artifacts-in-mne-raw">
+<h2>Marking garv artifacts in mne.Raw<a class="headerlink" href="#marking-garv-artifacts-in-mne-raw" title="Permalink to this heading"></a></h2>
+<p>If you prepared the mkh5 file with the .log file log_flags set to
+track garv artifacts (<code class="docutils literal notranslate"><span class="pre">avg</span> <span class="pre">-x</span></code>) you can automatically mark the
+garv artifacts in the mne.Raw with BAD_garv mne.Annotations by
+passing in the <code class="docutils literal notranslate"><span class="pre">garv_annotations</span></code> options.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Mark *all* the log stim and response events events with lots of overlap</span>
+<span class="n">mne_raw_c</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span>
+    <span class="n">H5_F</span><span class="p">,</span>
+    <span class="n">garv_annotations</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;event_channel&quot;</span><span class="p">:</span> <span class="s2">&quot;log_flags&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">500</span><span class="p">,</span>
+        <span class="s2">&quot;tmax&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;ms&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000p3.h5
+looking up data block paths, larger files take longer ...
+ok
+checking info, montage sub000/dblock_1
+checking info, montage sub000/dblock_2
+checking info, montage sub000/dblock_3
+checking info, montage sub000/dblock_4
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;log_flags&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;log_flags&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=31744
+    Range : 0 ... 31743 =      0.000 ...   126.972 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_2 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;log_flags&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=32512
+    Range : 0 ... 32511 =      0.000 ...   130.044 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_3 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;log_flags&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_4 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;log_flags&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+EEG data marked as already having the desired reference.
+</pre></div>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p><code class="docutils literal notranslate"><span class="pre">avg</span> <span class="pre">-x</span></code> flags <strong>all</strong> event codes in the log that fail a test whether or
+not these are the timelocking events of interest.</p>
+</div>
+<p>annotation intervals for log events upstream or downstream of the
+timelock of interest may overlap the epoch interval and
+<code class="docutils literal notranslate"><span class="pre">mne.Epochs(...,</span> <span class="pre">reject_by_annotation=True)</span></code> will exclude them for
+being (partially) polluted. To avoid this, define your mkh5 codemap
+and named epochs table so that epochs of interest do not overlap and
+use that same-named MNE event channel to set the garv annoations
+like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_raw_c</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span>
+    <span class="n">H5_F</span><span class="p">,</span>
+    <span class="n">garv_annotations</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;event_channel&quot;</span><span class="p">:</span> <span class="s2">&quot;ms1500&quot;</span><span class="p">,</span>
+        <span class="s2">&quot;tmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">500</span><span class="p">,</span>
+        <span class="s2">&quot;tmax&quot;</span><span class="p">:</span> <span class="mi">1000</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;ms&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+
+
+<span class="n">mne_raw_c</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">scalings</span><span class="o">=</span><span class="p">{</span><span class="s2">&quot;eeg&quot;</span><span class="p">:</span> <span class="mf">5e-5</span><span class="p">,</span> <span class="s2">&quot;eog&quot;</span><span class="p">:</span> <span class="mf">1e-4</span><span class="p">},</span> <span class="n">start</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">n_channels</span><span class="o">=</span><span class="mi">39</span><span class="p">)</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_from_mkh5_003.png" srcset="../../_images/sphx_glr_from_mkh5_003.png" alt="from mkh5" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000p3.h5
+looking up data block paths, larger files take longer ...
+ok
+checking info, montage sub000/dblock_1
+checking info, montage sub000/dblock_2
+checking info, montage sub000/dblock_3
+checking info, montage sub000/dblock_4
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=31744
+    Range : 0 ... 31743 =      0.000 ...   126.972 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_2 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=32512
+    Range : 0 ... 32511 =      0.000 ...   130.044 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_3 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting positions of 5 eog channels found in montage:
+[&#39;lle&#39;, &#39;lhz&#39;, &#39;HEOG&#39;, &#39;rle&#39;, &#39;rhz&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_4 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -500, &#39;tmax&#39;: 1000, &#39;units&#39;: &#39;ms&#39;}
+EEG data marked as already having the desired reference.
+Opening raw-browser...
+
+&lt;MNEBrowseFigure size 800x800 with 4 Axes&gt;
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 1 minutes  32.366 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-gallery-mkh5mne-from-mkh5-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/72492c09f53b34ea6799eaf2eb063c78/from_mkh5.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">from_mkh5.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/459b28348664ef89bfe6d422803cb2d1/from_mkh5.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">from_mkh5.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="how_it_works.html" class="btn btn-neutral float-left" title="How it works" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../mkh5eeglab/index.html" class="btn btn-neutral float-right" title="mkh5 and EEGLAB (experimental)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

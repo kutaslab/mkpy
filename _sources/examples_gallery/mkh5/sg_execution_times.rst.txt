@@ -1,0 +1,16 @@
+
+:orphan:
+
+.. _sphx_glr_examples_gallery_mkh5_sg_execution_times:
+
+Computation times
+=================
+**00:15.450** total execution time for **examples_gallery_mkh5** files:
+
++-----------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5_append_cals.py` (``append_cals.py``)         | 00:07.960 | 0.0 MB |
++-----------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5_mkh5_quickstart.py` (``mkh5_quickstart.py``) | 00:07.490 | 0.0 MB |
++-----------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5_apparatus_map.py` (``apparatus_map.py``)     | 00:00.000 | 0.0 MB |
++-----------------------------------------------------------------------------------+-----------+--------+

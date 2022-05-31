@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkpy.io.mkh5eeglab module &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Release Notes" href="../ReleaseNotes.html" />
+    <link rel="prev" title="mkpy.io.mkh5mne module" href="mkpy.io.mkh5mne.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../Reference.html">API Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="../Reference.html#module-index">Module Index</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="../mkpy_api.html">mkh5, event tags, epochs</a></li>
+<li class="toctree-l3 current"><a class="reference internal" href="../mkpy_api.html#eeg-analysis-toolboxes">EEG analysis toolboxes</a><ul class="current">
+<li class="toctree-l4"><a class="reference internal" href="mkpy.io.mkh5mne.html">mkpy.io.mkh5mne module</a></li>
+<li class="toctree-l4 current"><a class="current reference internal" href="#">mkpy.io.mkh5eeglab module</a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../Reference.html#alphabetical-index"><span class="xref std std-ref">Alphabetical Index</span></a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../Reference.html">API Reference</a> &raquo;</li>
+          <li><a href="../mkpy_api.html">mkh5, event tags, epochs</a> &raquo;</li>
+      <li>mkpy.io.mkh5eeglab module</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/api_source/mkpy.io.mkh5eeglab.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="module-mkpy.io.mkh5eeglab">
+<span id="mkpy-io-mkh5eeglab-module"></span><h1>mkpy.io.mkh5eeglab module<a class="headerlink" href="#module-mkpy.io.mkh5eeglab" title="Permalink to this heading"></a></h1>
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5eeglab.mkh5_to_set">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5eeglab.</span></span><span class="sig-name descname"><span class="pre">mkh5_to_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mkh5_f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">set_f</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">garv_annotations</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">dblock_paths</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">apparatus_yaml</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_info</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fail_on_montage</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">True</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">verbose</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">'info'</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5eeglab.html#mkh5_to_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5eeglab.mkh5_to_set" title="Permalink to this definition"></a></dt>
+<dd><p>Convert an mkh5 data file into MNE raw format</p>
+<p>The mkh5 EEG data event channels in EEG.data.</p>
+<p>The channel info is in EEG.chanlocs and the mkh5 Right Anterior
+Superior (RAS) coordinates are converted to EEGLAB defaults
+automatically.</p>
+<p>The EEG.events and EEG.urevents fields contain:</p>
+<ul class="simple">
+<li><p>type field values:
+* log event codes (string representation)
+* “boundary” for datablock boundaries and garv annotations
+* mkh5 dblock path labels</p></li>
+<li><p>latency values:
+* 1-base data sample index of the event in the EEG.data array</p></li>
+<li><p>duration values:
+* log events ar duration 0
+* dblock boundary events are duration 0
+* garv annotation boundary events are garv_annotation tmax - tmin in samples</p></li>
+</ul>
+<p>Additional event fields are <cite>description</cite> and codemap tags from
+the epochs table, if any.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mkh5_f</strong> (<em>str</em>) – File path to a mkpy.mkh5 HDF5 file</p></li>
+<li><p><strong>set_f</strong> (<em>str</em>) – File path to the EEGLAB .set file.</p></li>
+<li><p><strong>epochs_name</strong> (<em>str</em>) – Name of a previously set epochs table in the mkh5 file.</p></li>
+<li><p><strong>garv_annotations</strong> (<em>None | dict, optional</em>) – event_channel: (str)  # channel name with events to annotate
+tmin, tmax: (float)  # relative to time lock event
+units: “ms” or “s”. Defaults to None.</p></li>
+<li><p><strong>dblock_paths</strong> (<em>None | list of mkh5 datablock paths, optional</em>) – The listed datablock paths will be concatenated in order into
+the mne.Raw. Defaults to None, in which case all the data
+blocks in mkh5 file are concatenated in the order returned by
+<a class="reference internal" href="mkpy.mkh5.html#mkpy.mkh5.mkh5.dblock_paths" title="mkpy.mkh5.mkh5.dblock_paths"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mkh5.dblock_paths()</span></code></a>.</p></li>
+<li><p><strong>apparatus_yaml</strong> (<em>None | str, optional</em>) – If a path to a well-formed mkh5 apparatus map YAML file, it
+is used instead of the map in the mkh5 dblock header, if any.
+Defaults to None.</p></li>
+<li><p><strong>fail_on_info</strong> (<em>bool, optional</em>) – If True, this enforces strict mne.Info identity across the
+mkh5 data blocks being concatenated. If False (default), some
+deviations between mne.Info for the mkh5 data blocks are
+allowed, e.g., for pooling multiple subject files into an
+experiment or separate cals for a single subject. Defaults to False.</p></li>
+<li><p><strong>fail on montage</strong> (<em>bool, optional</em>) – If True, the mne.Montage created from the mkh5 header
+data streams and channel locations must be the same for all the
+data blocks. If False, mkh5mne allows the MNE montage to vary across mkh5 data
+blocks and leaves you to deal with whatever <code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.concatenate_raws()</span></code> does
+in this case. Defaults to True</p></li>
+<li><p><strong>verbose</strong> (<em>NotImplemented</em>)</p></li>
+</ul>
+</dd>
+</dl>
+<p class="rubric">Notes</p>
+<p>This is a thin wrapper around the mkh5mne file format converter.</p>
+<p class="rubric">Examples</p>
+<p>Minimal</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span> <span class="n">mkh5eeglab</span><span class="o">.</span><span class="n">mkh5_to_set</span><span class="p">((</span><span class="s2">&quot;sub01.h5&quot;</span><span class="p">,</span> <span class="s2">&quot;sub01.set&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mkh5eeglab</span><span class="o">.</span><span class="n">to_set</span><span class="p">(</span>
+<span class="go">        &quot;sub01.h5&quot;,</span>
+<span class="go">        &quot;sub01.set&quot;,</span>
+<span class="go">        &quot;apparatus_yaml&quot;=&quot;ras_32_chan_xyz_spherical.yaml&quot;,</span>
+<span class="go">        epochs_name=&quot;p3&quot;,</span>
+<span class="go">        garv_annotations=dict(</span>
+<span class="go">            event_channel=&quot;p3&quot;, tmin=-500, tmax=1500, units=&quot;ms&quot;</span>
+<span class="go">        )</span>
+<span class="go">    )</span>
+</pre></div>
+</div>
+</dd></dl>
+
+<dl class="py function">
+<dt class="sig sig-object py" id="mkpy.io.mkh5eeglab.mkh5raw_to_set">
+<span class="sig-prename descclassname"><span class="pre">mkpy.io.mkh5eeglab.</span></span><span class="sig-name descname"><span class="pre">mkh5raw_to_set</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">mkh5raw</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">fname</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">epochs_name</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">None</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">return_eeglab_events</span></span><span class="o"><span class="pre">=</span></span><span class="default_value"><span class="pre">False</span></span></em><span class="sig-paren">)</span><a class="reference internal" href="../_modules/mkpy/io/mkh5eeglab.html#mkh5raw_to_set"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mkpy.io.mkh5eeglab.mkh5raw_to_set" title="Permalink to this definition"></a></dt>
+<dd><p>Export mkh5raw EEG, channel, and event data to an EEGLAB .set file.</p>
+<p>Export an mkh5mne.Mkh5Raw instance in memory to an EEGLAB .set
+file. The log events are stored in EEG.events and EEG.urevents and
+any mne.Annotations including garv artifacts are stored there as
+boundary events.  . If <cite>epochs_name</cite> is provided, the mkh5 codemap
+tags for those events are exported as well. Channel locations are
+converted to EEGLAB defaults.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters</dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>mkh5raw</strong> (<em>mkh5mne.Mkh5Raw instance</em>) – As returned by mkh5mne.from_mkh5(), see
+<code class="xref py py-func docutils literal notranslate"><span class="pre">mkh5mne.from_mkhg()</span></code> docs for usage.</p></li>
+<li><p><strong>fname</strong> (<em>str</em>) – Path to the EEGLAB set file to create.</p></li>
+<li><p><strong>epochs_name</strong> (<em>str, optional</em>) – Include event tags from the named mkh5 epochs table in EEGLAB
+.set events. Defaults to None.</p></li>
+<li><p><strong>return_eeglab_events</strong> (<em>bool</em>) – If true, also returns the event information injected into the EEGLAB .set file.
+Useful for diagnosis, validataion. Default is False.</p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns</dt>
+<dd class="field-even"><p><strong>eeglab_events_df</strong> – Dataframe with the event information exported in the .set</p>
+</dd>
+<dt class="field-odd">Return type</dt>
+<dd class="field-odd"><p>pandas.DataFrame</p>
+</dd>
+</dl>
+<p class="rubric">Examples</p>
+<p>Minimal: Export EEG data, datablock boundaries, and log events</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span><span class="p">,</span> <span class="n">mkh5eeglab</span>
+<span class="go">&gt;&gt;&gt;</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span><span class="s2">&quot;sub000.h5)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mkh5eeglab</span><span class="o">.</span><span class="n">mkh5raw_to_set</span><span class="p">(</span><span class="n">mne_raw</span><span class="p">,</span> <span class="s2">&quot;sub000.set&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p>Also export the codemap event tags from mkpy epochs table ‘p3’</p>
+<div class="doctest highlight-default notranslate"><div class="highlight"><pre><span></span><span class="gp">&gt;&gt;&gt; </span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span><span class="s2">&quot;sub000.h5&quot;</span><span class="p">)</span>
+<span class="gp">&gt;&gt;&gt; </span><span class="n">mkh5eeglab</span><span class="o">.</span><span class="n">mkh5raw_to_set</span><span class="p">(</span><span class="n">mne_raw</span><span class="p">,</span> <span class="s2">&quot;sub000.set&quot;</span><span class="p">,</span> <span class="n">event_channel</span><span class="o">=</span><span class="s2">&quot;p3&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</dd></dl>
+
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mkpy.io.mkh5mne.html" class="btn btn-neutral float-left" title="mkpy.io.mkh5mne module" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../ReleaseNotes.html" class="btn btn-neutral float-right" title="Release Notes" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

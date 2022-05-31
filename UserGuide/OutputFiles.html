@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkh5 EEG, events, and epochs &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+        <script src="../_static/jquery.js"></script>
+        <script src="../_static/underscore.js"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../_static/doctools.js"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="mkh5 data in MNE Python (experimental)" href="IO_MNE.html" />
+    <link rel="prev" title=".yhdr aand codemap file formats" href="UserFiles.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../UserGuide.html">User Guides</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="UserFiles.html">.yhdr aand codemap file formats</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">mkh5 EEG, events, and epochs</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#mkh5-hdf5-for-kutas-lab-erpss"><code class="docutils literal notranslate"><span class="pre">mkh5</span></code> HDF5 for Kutas Lab ERPSS</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#data-groups">Data groups</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#datasets-dblocks">Datasets: dblocks</a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="#single-trial-eeg-epochs">Single-trial EEG epochs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="IO_MNE.html">mkh5 data in MNE Python (experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="IO_EEGLAB.html">Export mkh5 to EEGLAB .set (experimental)</a></li>
+<li class="toctree-l2"><a class="reference internal" href="Pygarv.html">pygarv: EEG viewer</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../UserGuide.html">User Guides</a> &raquo;</li>
+      <li>mkh5 EEG, events, and epochs</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/UserGuide/OutputFiles.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="mkh5-eeg-events-and-epochs">
+<h1>mkh5 EEG, events, and epochs<a class="headerlink" href="#mkh5-eeg-events-and-epochs" title="Permalink to this heading"></a></h1>
+<div class="section" id="mkh5-hdf5-for-kutas-lab-erpss">
+<h2><code class="docutils literal notranslate"><span class="pre">mkh5</span></code> HDF5 for Kutas Lab ERPSS<a class="headerlink" href="#mkh5-hdf5-for-kutas-lab-erpss" title="Permalink to this heading"></a></h2>
+<p>Time-stamped ERPSS EEG and event code data streams and auxiliary
+header information are converted to <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> format hdf5 binary data
+files.</p>
+<p>Since <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> data files are just hdf5 files, they can be read or
+dumped by hdf5 linux command line utilities (<code class="docutils literal notranslate"><span class="pre">h5ls</span></code>, <code class="docutils literal notranslate"><span class="pre">h5dump</span></code>) or
+read processed in other languages such as MATLAB (<code class="docutils literal notranslate"><span class="pre">load_hdf</span></code>) , R
+(<code class="docutils literal notranslate"><span class="pre">library(rhdf5)</span></code>, <code class="docutils literal notranslate"><span class="pre">h5ls</span></code>), or python (<code class="docutils literal notranslate"><span class="pre">import</span> <span class="pre">h5py</span></code>).</p>
+<p>The contents of an <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> file are organized much like a file system
+directory except that instead of “folders” and “files”, the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code>
+file has <a class="reference internal" href="../Glossary.html#term-HDF5-group"><span class="xref std std-term">“group”</span></a> and <a class="reference internal" href="../Glossary.html#term-HDF5-dataset"><span class="xref std std-term">“dataset”</span></a> (the term “group” is native HDF5’s regrettable choice of
+terminology). The groups can hold further groups or datasets and form
+a tree that branches from the “root” into groups and ultimately
+terminates in data sets.</p>
+<div class="section" id="data-groups">
+<h3>Data groups<a class="headerlink" href="#data-groups" title="Permalink to this heading"></a></h3>
+<p>There are two types of data groups, non-terminal and
+terminal. Non-terminal groups hold other groups, terminal groups hold
+the datasets containing the EEG data blocks.</p>
+<dl>
+<dt>Non-terminal data groups</dt><dd><p>These define the upper level(s) of the HDF5 tree structure and the
+organization is up to the user.</p>
+<p>When <code class="docutils literal notranslate"><span class="pre">.crw/.log</span></code> files are loaded into the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> file, the
+user specifies the full slashpath from the root of the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code>
+file to the hdf5 data group in the file tree structure where the
+ERPSS data will actually be stored.</p>
+<p>We’ll call this “loading the <code class="docutils literal notranslate"><span class="pre">.crw/.log</span></code> into a data group”, and
+the Python looks like these examples:</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="n">myh5</span><span class="o">.</span><span class="n">create_mkdata</span><span class="p">(</span><span class="s2">&quot;sub01&quot;</span><span class="p">,</span> <span class="s2">&quot;sub01.crw&quot;</span><span class="p">,</span> <span class="s2">&quot;sub01.log&quot;</span><span class="p">,</span> <span class="s2">&quot;sub01.yhdr&quot;</span><span class="p">)</span>
+<span class="n">myh5</span><span class="o">.</span><span class="n">create_mkdata</span><span class="p">(</span><span class="s2">&quot;expt3/sub01&quot;</span><span class="p">,</span> <span class="s2">&quot;sub01.crw&quot;</span><span class="p">,</span> <span class="s2">&quot;sub01.log&quot;</span><span class="p">,</span> <span class="s2">&quot;sub01.yhdr&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">.crw/.log</span></code> data are always loaded into the last data
+group on the slashpath.</p>
+</div>
+<p>Some example slashpaths:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">sub01</span>
+<span class="n">sub02</span>
+<span class="n">sub03</span>
+
+<span class="n">expt1</span><span class="o">/</span><span class="n">sub01</span>
+<span class="n">expt1</span><span class="o">/</span><span class="n">sub02</span>
+<span class="n">expt1</span><span class="o">/</span><span class="n">sub03</span>
+
+<span class="n">expt1</span><span class="o">/</span><span class="n">session1</span><span class="o">/</span><span class="n">sub01</span>
+<span class="n">expt1</span><span class="o">/</span><span class="n">session1</span><span class="o">/</span><span class="n">sub02</span>
+
+<span class="n">sub01</span><span class="o">/</span><span class="n">session1</span>
+<span class="n">sub01</span><span class="o">/</span><span class="n">session2</span>
+<span class="n">sub01</span><span class="o">/</span><span class="n">session3</span>
+
+<span class="n">sub01</span><span class="o">/</span><span class="n">sessions</span><span class="o">/</span><span class="mi">1</span>
+<span class="n">sub01</span><span class="o">/</span><span class="n">sessions</span><span class="o">/</span><span class="mi">2</span>
+<span class="n">sub01</span><span class="o">/</span><span class="n">sessions</span><span class="o">/</span><span class="mi">3</span>
+</pre></div>
+</div>
+<p>If the data groups along the slash path already exist in the
+<code class="docutils literal notranslate"><span class="pre">mkh5</span></code>, the data are attached where they belong in the tree.</p>
+<p>If the intermediate data groups don’t exist they are created on the
+fly.</p>
+<p>This flexibility allows users create <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> files with different
+configurations for analyzing single subjects or multisubject
+experiments or …?</p>
+</dd>
+<dt>Terminal data groups</dt><dd><p>The last data group on a slashpath branch is the terminal data
+group. The structure of this data group is fixed by the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code>
+format specification. Immediately below the the terminal group are
+the EEG data block datasets as described next.</p>
+</dd>
+</dl>
+</div>
+<div class="section" id="datasets-dblocks">
+<h3>Datasets: dblocks<a class="headerlink" href="#datasets-dblocks" title="Permalink to this heading"></a></h3>
+<p>In contrast to the flexibility of the data group tree, the
+organization of datasets loaded into the terminal data group is fixed
+by design in the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code>.</p>
+<p>The basic data structure is the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> datablock or <code class="docutils literal notranslate"><span class="pre">dblock</span></code> for
+short.</p>
+<p>During data acquisition with <code class="docutils literal notranslate"><span class="pre">dig</span></code> the recording is typically
+started and stopped multiple times during the experiment, sometimes by
+design, sometimes to fix problems. So a single <code class="docutils literal notranslate"><span class="pre">.crw</span></code> and <code class="docutils literal notranslate"><span class="pre">.log</span></code>
+file typically contains multiple segments of uninterrupted recording
+separated by pauses of unknown duration.</p>
+<p>When the <code class="docutils literal notranslate"><span class="pre">.crw/log</span></code> data files are loaded into the <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> file,
+the EEG and log data are snipped apart at the discontinuities and each
+of the continuous segments are formed into an <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> format
+datablock and stored as an hdf5 dataset daughter of the terminal data
+group in the user-specified slashpath <code class="docutils literal notranslate"><span class="pre">h5_path</span></code> as follows:</p>
+<p>Within each terminal <code class="docutils literal notranslate"><span class="pre">data_group</span></code> the <cite>N</cite>- 1 data blocks are</p>
+<blockquote>
+<div><ul>
+<li><p>named <code class="docutils literal notranslate"><span class="pre">dblock_0</span></code>, <code class="docutils literal notranslate"><span class="pre">dblock_1</span></code>, … <code class="docutils literal notranslate"><span class="pre">dblock_N</span></code></p></li>
+<li><p>the integer sequence preserves the order of the continuous
+segments in the the <code class="docutils literal notranslate"><span class="pre">.crw/.log</span></code></p></li>
+<li><p>each <code class="docutils literal notranslate"><span class="pre">dblock_i</span></code> is stored as a <strong>separate</strong> hdf5 dataset, the daughter</p>
+<p><code class="docutils literal notranslate"><span class="pre">h5_path/dblock_i</span></code></p>
+</li>
+</ul>
+</div></blockquote>
+<dl class="simple">
+<dt>Datablock</dt><dd><ul class="simple">
+<li><p>a tabular array of typed columnar data streams (time=rows)</p>
+<ul>
+<li><p>unsigned integer time-stamps</p></li>
+<li><p>integer event codes</p></li>
+<li><p>EEG data (integer A/D samples, floating point uV).</p></li>
+</ul>
+</li>
+<li><p>headed by flexible document-structure extensible up to 64KB. In
+the Python workspace this is available as a dict; for storage in
+the <cite>.h5</cite> dataset attribute it is a utf-8 JSON string.</p></li>
+</ul>
+</dd>
+<dt>Header</dt><dd><ul class="simple">
+<li><p>the <cite>mkh5`</cite> file format uses the hdf5.Dataset Attribute to hold the
+header information</p></li>
+<li><p>Header structures are python dictionaries, serialized for hdf5
+storage as JSON strings, and tucked into the hdf5 attribute so
+they travel with the datablock.</p></li>
+<li><p>data block header information is collected/generated from several
+sources. Some is read from dig .crw/.log file headers, some is
+generated at runtime as the dig data is converted to mkh5
+format. Some is generated/merged in at runtime when the YAML
+header info file is processed</p></li>
+<li><p>native .crw header from the info dict returned by
+mkio._read_header()</p></li>
+<li><p><code class="docutils literal notranslate"><span class="pre">mkh5</span></code> adds a <cite>streams</cite> key to the header which gives, in column
+order, a sequence of maps, where the <em>j</em>-th map gives the name,
+data type, and column index of <em>j</em>-th data block data stream.</p></li>
+</ul>
+</dd>
+</dl>
+</div>
+</div>
+<div class="section" id="single-trial-eeg-epochs">
+<h2>Single-trial EEG epochs<a class="headerlink" href="#single-trial-eeg-epochs" title="Permalink to this heading"></a></h2>
+<p>Once an <code class="docutils literal notranslate"><span class="pre">mkh5</span></code> file with data blocks of EEG data has been
+constructed and the events of interest tagged with experimental
+variables in the event table the data are in a handy format for
+continuous EEG data analysis.</p>
+<p>Since the analysis of data epochs containing events of interest is a
+common use case and the platform may not be Python, the
+<a class="reference internal" href="../api_source/mkpy.mkh5.html#mkpy.mkh5.mkh5.export_epochs" title="mkpy.mkh5.mkh5.export_epochs"><code class="xref py py-meth docutils literal notranslate"><span class="pre">export_epochs()</span></code></a> method is available to write out
+single trial EEG data epochs in tabular format in (<code class="docutils literal notranslate"><span class="pre">.h5</span></code>) or feather
+(<code class="docutils literal notranslate"><span class="pre">.fthr</span></code>) binary data interchange formats or as tab-separated text
+(<code class="docutils literal notranslate"><span class="pre">.txt</span></code>).</p>
+<p>Epochs are defined in the usual way as relative to some event of
+interest that occurred while EEG data were being
+recorded. Specifically, an epoch is a sample interval with a start and
+stop defined relative to a <cite>match`</cite> code sample from the code tagger
+regular expression pattern used to tag the event with the experimental
+information from the code tag table and/or extracted from the header.</p>
+<p>Each epoch contains all the columns given by the event table,
+typically event code and EEG data streams, plus the experimental
+variables that were merged (or a user-selected subset of these columns).</p>
+<p>In the exported single trial data, the column <code class="docutils literal notranslate"><span class="pre">Time</span></code> contains
+timestamps for each sample in each epoch, with the <code class="docutils literal notranslate"><span class="pre">match</span></code> code at
+<code class="docutils literal notranslate"><span class="pre">Time</span></code> == 0. The column <code class="docutils literal notranslate"><span class="pre">Epoch_idx</span></code> contains an integer index that
+uniquely identifies each epoch within the exported epochs table but
+<strong>not</strong> across tables.</p>
+<p>The tabular single trial epochs file can be read directly into various
+scientific computing environements and from there it is a few short
+steps to visualization and analysis.</p>
+<p>This 2-D single trial EEG data table allows the non-EEG experimental
+variables to travel with the EEG data during analysis sample by sample
+or in the aggregate.</p>
+<ul class="simple">
+<li><p>row slicing the epochs table on Time index == 0 gives a (sub-)table
+containing all and only the time-locking data samples where the event
+codes of interest are found.</p></li>
+<li><p>epochs grouped by timestamp and averaged within group are the grand mean
+ERP waveforms.</p></li>
+<li><p>epochs grouped by levels of a categorical factor column and then
+timestamp are the conventional by-condition time-domain average ERP
+waveforms.</p></li>
+<li><p>epochs grouped by time stamp and modeled with a linear regression
+model give regression ERPs (see, <a class="reference external" href="https://kutaslab.github.io/fitgrid/">https://kutaslab.github.io/fitgrid/</a>)</p></li>
+</ul>
+<p>Although it is obviously inefficient to broadcast experimental
+variables to every sample in the dataset, the cost is the same as
+adding any other data stream time-series, e.g., another EEG or
+response channel. The simplicity and familiarity of the format
+together with the rich inventory of data manipulation and analytic
+functions that operate on data tables/frames shortens the distance
+from single trial EEG data to analysis and interpretation for a great
+many types of analysis across scientific computing platforms.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="n">epochs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_hdf</span><span class="p">(</span><span class="s1">&#39;exported_epochs.h5&#39;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">head</span><span class="p">())</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">epochs</span><span class="o">.</span><span class="n">tail</span><span class="p">())</span>
+</pre></div>
+</div>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">(</span><span class="mi">2539000</span><span class="p">,</span> <span class="mi">94</span><span class="p">)</span>
+
+                <span class="n">Index</span>  <span class="n">adjective</span>  <span class="n">anchor_code</span>  <span class="n">anchor_tick</span> <span class="n">article</span> <span class="n">data_group</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>     <span class="mi">0</span>        <span class="n">NaN</span>            <span class="mi">8</span>        <span class="mi">56265</span>       <span class="n">a</span>   <span class="n">arquan10</span>   
+          <span class="o">-</span><span class="mi">1496</span>     <span class="mi">0</span>        <span class="n">NaN</span>            <span class="mi">8</span>        <span class="mi">56265</span>       <span class="n">a</span>   <span class="n">arquan10</span>   
+          <span class="o">-</span><span class="mi">1492</span>     <span class="mi">0</span>        <span class="n">NaN</span>            <span class="mi">8</span>        <span class="mi">56265</span>       <span class="n">a</span>   <span class="n">arquan10</span>   
+          <span class="o">-</span><span class="mi">1488</span>     <span class="mi">0</span>        <span class="n">NaN</span>            <span class="mi">8</span>        <span class="mi">56265</span>       <span class="n">a</span>   <span class="n">arquan10</span>   
+          <span class="o">-</span><span class="mi">1484</span>     <span class="mi">0</span>        <span class="n">NaN</span>            <span class="mi">8</span>        <span class="mi">56265</span>       <span class="n">a</span>   <span class="n">arquan10</span>   
+
+                       <span class="n">dblock_path</span>  <span class="n">dblock_srate</span>  <span class="n">dblock_ticks</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                   
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>  <span class="n">arquan10</span><span class="o">/</span><span class="n">dblock_0</span>         <span class="mf">250.0</span>         <span class="mi">55890</span>   
+          <span class="o">-</span><span class="mi">1496</span>  <span class="n">arquan10</span><span class="o">/</span><span class="n">dblock_0</span>         <span class="mf">250.0</span>         <span class="mi">55891</span>   
+          <span class="o">-</span><span class="mi">1492</span>  <span class="n">arquan10</span><span class="o">/</span><span class="n">dblock_0</span>         <span class="mf">250.0</span>         <span class="mi">55892</span>   
+          <span class="o">-</span><span class="mi">1488</span>  <span class="n">arquan10</span><span class="o">/</span><span class="n">dblock_0</span>         <span class="mf">250.0</span>         <span class="mi">55893</span>   
+          <span class="o">-</span><span class="mi">1484</span>  <span class="n">arquan10</span><span class="o">/</span><span class="n">dblock_0</span>         <span class="mf">250.0</span>         <span class="mi">55894</span>   
+
+                 <span class="n">epoch_match_tick_delta</span>  <span class="n">epoch_ticks</span>   <span class="n">expt</span>  <span class="n">is_anchor</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                           
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="o">-</span><span class="mi">1496</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="o">-</span><span class="mi">1492</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="o">-</span><span class="mi">1488</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="o">-</span><span class="mi">1484</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+
+                           <span class="n">item_id</span> <span class="n">item_id_pfx</span>  <span class="n">lemma_ART_noun_anywhere_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>  <span class="n">i008_1_a__NA_kite</span>   <span class="n">i008_1_a_</span>                            <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>  <span class="n">i008_1_a__NA_kite</span>   <span class="n">i008_1_a_</span>                            <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>  <span class="n">i008_1_a__NA_kite</span>   <span class="n">i008_1_a_</span>                            <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>  <span class="n">i008_1_a__NA_kite</span>   <span class="n">i008_1_a_</span>                            <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>  <span class="n">i008_1_a__NA_kite</span>   <span class="n">i008_1_a_</span>                            <span class="mf">1.0</span>   
+
+                 <span class="n">lemma_ART_noun_initial_cloze</span>  <span class="n">lemma_NA_noun_anywhere_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                           <span class="mf">1.0</span>                           <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>                           <span class="mf">1.0</span>                           <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>                           <span class="mf">1.0</span>                           <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>                           <span class="mf">1.0</span>                           <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>                           <span class="mf">1.0</span>                           <span class="mf">1.0</span>   
+
+                 <span class="n">lemma_NA_noun_initial_cloze</span>  <span class="n">lemma_context_anywhere_info</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                              
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                        <span class="mf">0.143</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>                        <span class="mf">0.143</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>                        <span class="mf">0.143</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>                        <span class="mf">0.143</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>                        <span class="mf">0.143</span>                          <span class="mf">1.0</span>   
+
+                 <span class="n">lemma_context_initial_info</span> <span class="n">lemma_modal_anywhere</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                     
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                         <span class="mf">1.0</span>               <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1496</span>                         <span class="mf">1.0</span>               <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1492</span>                         <span class="mf">1.0</span>               <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1488</span>                         <span class="mf">1.0</span>               <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1484</span>                         <span class="mf">1.0</span>               <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+
+                 <span class="n">lemma_modal_anywhere_cloze</span> <span class="n">lemma_modal_initial</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                    
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                         <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1496</span>                         <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1492</span>                         <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1488</span>                         <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1484</span>                         <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+
+                <span class="n">lemma_modal_initial_character_classes</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                          
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1496</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1492</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1488</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1484</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+
+                 <span class="n">lemma_modal_initial_cloze</span>  <span class="n">lemma_n_NAs</span>  <span class="n">lemma_n_responses</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                               
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                        <span class="mf">1.0</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>                        <span class="mf">1.0</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>                        <span class="mf">1.0</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>                        <span class="mf">1.0</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>                        <span class="mf">1.0</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+
+                 <span class="n">lemma_n_strings</span>  <span class="n">list_id</span>  <span class="n">log_ccodes</span>  <span class="n">log_evcodes</span>  <span class="n">log_flags</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>             <span class="mf">30.0</span>  <span class="n">eeg_1_b</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="o">-</span><span class="mi">1496</span>             <span class="mf">30.0</span>  <span class="n">eeg_1_b</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="o">-</span><span class="mi">1492</span>             <span class="mf">30.0</span>  <span class="n">eeg_1_b</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="o">-</span><span class="mi">1488</span>             <span class="mf">30.0</span>  <span class="n">eeg_1_b</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="o">-</span><span class="mi">1484</span>             <span class="mf">30.0</span>  <span class="n">eeg_1_b</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+
+                 <span class="n">match_code</span>  <span class="n">match_tick</span>  <span class="n">noun</span>  <span class="n">noun_code</span>  <span class="n">noun_pos</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                       
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>           <span class="mi">8</span>       <span class="mi">56265</span>  <span class="n">kite</span>      <span class="mi">10082</span>        <span class="mi">12</span>   
+          <span class="o">-</span><span class="mi">1496</span>           <span class="mi">8</span>       <span class="mi">56265</span>  <span class="n">kite</span>      <span class="mi">10082</span>        <span class="mi">12</span>   
+          <span class="o">-</span><span class="mi">1492</span>           <span class="mi">8</span>       <span class="mi">56265</span>  <span class="n">kite</span>      <span class="mi">10082</span>        <span class="mi">12</span>   
+          <span class="o">-</span><span class="mi">1488</span>           <span class="mi">8</span>       <span class="mi">56265</span>  <span class="n">kite</span>      <span class="mi">10082</span>        <span class="mi">12</span>   
+          <span class="o">-</span><span class="mi">1484</span>           <span class="mi">8</span>       <span class="mi">56265</span>  <span class="n">kite</span>      <span class="mi">10082</span>        <span class="mi">12</span>   
+
+                 <span class="n">orth_ART_noun_anywhere_cloze</span>  <span class="n">orth_ART_noun_initial_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                               
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                           <span class="mf">1.0</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>                           <span class="mf">1.0</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>                           <span class="mf">1.0</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>                           <span class="mf">1.0</span>                          <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>                           <span class="mf">1.0</span>                          <span class="mf">1.0</span>   
+
+                 <span class="n">orth_NA_noun_anywhere_cloze</span>  <span class="n">orth_NA_noun_initial_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                             
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                        <span class="mf">0.964</span>                       <span class="mf">0.107</span>   
+          <span class="o">-</span><span class="mi">1496</span>                        <span class="mf">0.964</span>                       <span class="mf">0.107</span>   
+          <span class="o">-</span><span class="mi">1492</span>                        <span class="mf">0.964</span>                       <span class="mf">0.107</span>   
+          <span class="o">-</span><span class="mi">1488</span>                        <span class="mf">0.964</span>                       <span class="mf">0.107</span>   
+          <span class="o">-</span><span class="mi">1484</span>                        <span class="mf">0.964</span>                       <span class="mf">0.107</span>   
+
+                 <span class="n">orth_article_initial_cloze</span>  <span class="n">orth_context_anywhere_info</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                            
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                       <span class="mf">0.857</span>                         <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>                       <span class="mf">0.857</span>                         <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>                       <span class="mf">0.857</span>                         <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>                       <span class="mf">0.857</span>                         <span class="mf">1.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>                       <span class="mf">0.857</span>                         <span class="mf">1.0</span>   
+
+                 <span class="n">orth_context_initial_info</span> <span class="n">orth_modal_anywhere</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                   
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                        <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1496</span>                        <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1492</span>                        <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1488</span>                        <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1484</span>                        <span class="mf">1.0</span>              <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+
+                 <span class="n">orth_modal_anywhere_cloze</span> <span class="n">orth_modal_initial</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                  
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                        <span class="mf">1.0</span>             <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1496</span>                        <span class="mf">1.0</span>             <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1492</span>                        <span class="mf">1.0</span>             <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1488</span>                        <span class="mf">1.0</span>             <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1484</span>                        <span class="mf">1.0</span>             <span class="p">[</span><span class="n">kite</span><span class="p">]</span>   
+
+                <span class="n">orth_modal_initial_character_classes</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                         
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1496</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1492</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1488</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="o">-</span><span class="mi">1484</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+
+                 <span class="n">orth_modal_initial_cloze</span>  <span class="n">orth_n_NAs</span>  <span class="n">orth_n_responses</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                            
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>                       <span class="mf">1.0</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>                       <span class="mf">1.0</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>                       <span class="mf">1.0</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>                       <span class="mf">1.0</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>                       <span class="mf">1.0</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>   
+
+                 <span class="n">orth_n_strings</span>  <span class="n">raw_evcodes</span>              <span class="n">regexp</span>  <span class="n">s1_code</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                              
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>            <span class="mf">30.0</span>            <span class="mi">0</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10082      NaN   </span>
+          <span class="o">-</span><span class="mi">1496</span>            <span class="mf">30.0</span>            <span class="mi">0</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10082      NaN   </span>
+          <span class="o">-</span><span class="mi">1492</span>            <span class="mf">30.0</span>            <span class="mi">0</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10082      NaN   </span>
+          <span class="o">-</span><span class="mi">1488</span>            <span class="mf">30.0</span>            <span class="mi">0</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10082      NaN   </span>
+          <span class="o">-</span><span class="mi">1484</span>            <span class="mf">30.0</span>            <span class="mi">0</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10082      NaN   </span>
+
+                 <span class="n">stim_idx</span>  <span class="n">topic_n_NA</span>  <span class="n">topic_n_consonants</span>  <span class="n">topic_n_vowels</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                              
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>         <span class="mi">8</span>         <span class="mf">2.0</span>                <span class="mf">28.0</span>             <span class="mf">0.0</span>   
+          <span class="o">-</span><span class="mi">1496</span>         <span class="mi">8</span>         <span class="mf">2.0</span>                <span class="mf">28.0</span>             <span class="mf">0.0</span>   
+          <span class="o">-</span><span class="mi">1492</span>         <span class="mi">8</span>         <span class="mf">2.0</span>                <span class="mf">28.0</span>             <span class="mf">0.0</span>   
+          <span class="o">-</span><span class="mi">1488</span>         <span class="mi">8</span>         <span class="mf">2.0</span>                <span class="mf">28.0</span>             <span class="mf">0.0</span>   
+          <span class="o">-</span><span class="mi">1484</span>         <span class="mi">8</span>         <span class="mf">2.0</span>                <span class="mf">28.0</span>             <span class="mf">0.0</span>   
+
+                 <span class="n">crw_ticks</span>  <span class="n">pygarv</span>        <span class="n">lle</span>        <span class="n">lhz</span>      <span class="n">MiPf</span>       <span class="n">LLPf</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>      <span class="mi">55890</span>       <span class="mi">0</span>  <span class="mf">18.359375</span> <span class="o">-</span><span class="mf">14.054688</span> <span class="o">-</span><span class="mf">38.62500</span> <span class="o">-</span><span class="mf">27.906250</span>   
+          <span class="o">-</span><span class="mi">1496</span>      <span class="mi">55891</span>       <span class="mi">0</span>  <span class="mf">15.570312</span> <span class="o">-</span><span class="mf">10.664062</span> <span class="o">-</span><span class="mf">36.18750</span> <span class="o">-</span><span class="mf">26.484375</span>   
+          <span class="o">-</span><span class="mi">1492</span>      <span class="mi">55892</span>       <span class="mi">0</span>  <span class="mf">17.796875</span>  <span class="o">-</span><span class="mf">7.269531</span> <span class="o">-</span><span class="mf">36.68750</span> <span class="o">-</span><span class="mf">25.531250</span>   
+          <span class="o">-</span><span class="mi">1488</span>      <span class="mi">55893</span>       <span class="mi">0</span>  <span class="mf">14.460938</span> <span class="o">-</span><span class="mf">12.117188</span> <span class="o">-</span><span class="mf">35.68750</span> <span class="o">-</span><span class="mf">25.531250</span>   
+          <span class="o">-</span><span class="mi">1484</span>      <span class="mi">55894</span>       <span class="mi">0</span>  <span class="mf">13.343750</span> <span class="o">-</span><span class="mf">13.570312</span> <span class="o">-</span><span class="mf">42.53125</span> <span class="o">-</span><span class="mf">30.265625</span>   
+
+                     <span class="n">RLPf</span>       <span class="n">LMPf</span>       <span class="n">RMPf</span>      <span class="n">LDFr</span>      <span class="n">RDFr</span>      <span class="n">LLFr</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span> <span class="o">-</span><span class="mf">36.25000</span> <span class="o">-</span><span class="mf">11.312500</span> <span class="o">-</span><span class="mf">12.109375</span> <span class="o">-</span><span class="mf">6.769531</span>  <span class="mf">0.243530</span> <span class="o">-</span><span class="mf">4.875000</span>   
+          <span class="o">-</span><span class="mi">1496</span> <span class="o">-</span><span class="mf">32.90625</span>  <span class="o">-</span><span class="mf">8.601562</span>  <span class="o">-</span><span class="mf">9.890625</span> <span class="o">-</span><span class="mf">3.384766</span>  <span class="mf">1.948242</span> <span class="o">-</span><span class="mf">4.144531</span>   
+          <span class="o">-</span><span class="mi">1492</span> <span class="o">-</span><span class="mf">33.40625</span>  <span class="o">-</span><span class="mf">8.851562</span> <span class="o">-</span><span class="mf">11.125000</span> <span class="o">-</span><span class="mf">3.384766</span>  <span class="mf">0.730469</span> <span class="o">-</span><span class="mf">2.437500</span>   
+          <span class="o">-</span><span class="mi">1488</span> <span class="o">-</span><span class="mf">28.62500</span>  <span class="o">-</span><span class="mf">6.882812</span>  <span class="o">-</span><span class="mf">9.390625</span>  <span class="mf">2.902344</span>  <span class="mf">2.435547</span> <span class="o">-</span><span class="mf">0.243774</span>   
+          <span class="o">-</span><span class="mi">1484</span> <span class="o">-</span><span class="mf">35.31250</span> <span class="o">-</span><span class="mf">14.257812</span> <span class="o">-</span><span class="mf">16.812500</span> <span class="o">-</span><span class="mf">5.078125</span> <span class="o">-</span><span class="mf">3.896484</span> <span class="o">-</span><span class="mf">6.582031</span>   
+
+                     <span class="n">RLFr</span>      <span class="n">LMFr</span>       <span class="n">RMFr</span>      <span class="n">LMCe</span>       <span class="n">RMCe</span>      <span class="n">MiCe</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span> <span class="o">-</span><span class="mf">4.054688</span> <span class="o">-</span><span class="mf">6.632812</span>  <span class="o">-</span><span class="mf">8.039062</span> <span class="o">-</span><span class="mf">4.851562</span> <span class="o">-</span><span class="mf">11.992188</span> <span class="o">-</span><span class="mf">4.929688</span>   
+          <span class="o">-</span><span class="mi">1496</span> <span class="o">-</span><span class="mf">1.013672</span> <span class="o">-</span><span class="mf">3.039062</span>  <span class="o">-</span><span class="mf">5.898438</span>  <span class="mf">0.000000</span>  <span class="o">-</span><span class="mf">8.875000</span> <span class="o">-</span><span class="mf">1.726562</span>   
+          <span class="o">-</span><span class="mi">1492</span>  <span class="mf">0.253418</span> <span class="o">-</span><span class="mf">2.763672</span>  <span class="o">-</span><span class="mf">6.164062</span>  <span class="mf">0.728027</span>  <span class="o">-</span><span class="mf">6.714844</span> <span class="o">-</span><span class="mf">0.246582</span>   
+          <span class="o">-</span><span class="mi">1488</span>  <span class="mf">0.253418</span>  <span class="mf">0.552734</span>  <span class="o">-</span><span class="mf">4.019531</span>  <span class="mf">4.851562</span>  <span class="o">-</span><span class="mf">3.119141</span>  <span class="mf">2.958984</span>   
+          <span class="o">-</span><span class="mi">1484</span> <span class="o">-</span><span class="mf">4.562500</span> <span class="o">-</span><span class="mf">6.632812</span> <span class="o">-</span><span class="mf">10.718750</span> <span class="o">-</span><span class="mf">0.970703</span>  <span class="o">-</span><span class="mf">8.875000</span> <span class="o">-</span><span class="mf">3.699219</span>   
+
+                     <span class="n">MiPa</span>      <span class="n">LDCe</span>      <span class="n">RDCe</span>      <span class="n">LDPa</span>       <span class="n">RDPa</span>      <span class="n">LMOc</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                 
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span> <span class="o">-</span><span class="mf">3.261719</span> <span class="o">-</span><span class="mf">9.890625</span> <span class="o">-</span><span class="mf">9.726562</span> <span class="o">-</span><span class="mf">3.144531</span> <span class="o">-</span><span class="mf">11.273438</span> <span class="o">-</span><span class="mf">2.166016</span>   
+          <span class="o">-</span><span class="mi">1496</span>  <span class="mf">2.562500</span> <span class="o">-</span><span class="mf">2.966797</span> <span class="o">-</span><span class="mf">6.167969</span>  <span class="mf">2.902344</span>  <span class="o">-</span><span class="mf">9.062500</span>  <span class="mf">1.444336</span>   
+          <span class="o">-</span><span class="mi">1492</span>  <span class="mf">3.261719</span> <span class="o">-</span><span class="mf">6.179688</span> <span class="o">-</span><span class="mf">4.980469</span>  <span class="mf">0.241943</span>  <span class="o">-</span><span class="mf">9.062500</span>  <span class="mf">0.000000</span>   
+          <span class="o">-</span><span class="mi">1488</span>  <span class="mf">8.148438</span>  <span class="mf">0.000000</span> <span class="o">-</span><span class="mf">1.660156</span>  <span class="mf">3.628906</span>  <span class="o">-</span><span class="mf">5.636719</span>  <span class="mf">3.128906</span>   
+          <span class="o">-</span><span class="mi">1484</span>  <span class="mf">1.863281</span> <span class="o">-</span><span class="mf">9.148438</span> <span class="o">-</span><span class="mf">7.828125</span> <span class="o">-</span><span class="mf">3.871094</span> <span class="o">-</span><span class="mf">10.781250</span> <span class="o">-</span><span class="mf">3.611328</span>   
+
+                      <span class="n">RMOc</span>      <span class="n">LLTe</span>       <span class="n">RLTe</span>       <span class="n">LLOc</span>       <span class="n">RLOc</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                          
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span>  <span class="o">-</span><span class="mf">9.375000</span> <span class="o">-</span><span class="mf">3.943359</span> <span class="o">-</span><span class="mf">15.453125</span>  <span class="o">-</span><span class="mf">6.996094</span> <span class="o">-</span><span class="mf">12.015625</span>   
+          <span class="o">-</span><span class="mi">1496</span>  <span class="o">-</span><span class="mf">7.214844</span>  <span class="mf">2.710938</span> <span class="o">-</span><span class="mf">13.039062</span>   <span class="mf">0.241211</span> <span class="o">-</span><span class="mf">14.421875</span>   
+          <span class="o">-</span><span class="mi">1492</span>  <span class="o">-</span><span class="mf">7.937500</span> <span class="o">-</span><span class="mf">2.218750</span> <span class="o">-</span><span class="mf">13.523438</span>  <span class="o">-</span><span class="mf">5.546875</span> <span class="o">-</span><span class="mf">18.265625</span>   
+          <span class="o">-</span><span class="mi">1488</span>  <span class="o">-</span><span class="mf">4.808594</span>  <span class="mf">2.218750</span> <span class="o">-</span><span class="mf">11.828125</span>  <span class="o">-</span><span class="mf">2.412109</span> <span class="o">-</span><span class="mf">17.312500</span>   
+          <span class="o">-</span><span class="mi">1484</span> <span class="o">-</span><span class="mf">10.578125</span> <span class="o">-</span><span class="mf">5.175781</span> <span class="o">-</span><span class="mf">17.875000</span> <span class="o">-</span><span class="mf">12.781250</span> <span class="o">-</span><span class="mf">24.031250</span>   
+
+                      <span class="n">MiOc</span>        <span class="n">A2</span>      <span class="n">HEOG</span>        <span class="n">rle</span>        <span class="n">rhz</span>  
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                        
+<span class="mi">0</span>         <span class="o">-</span><span class="mi">1500</span> <span class="o">-</span><span class="mf">10.023438</span> <span class="o">-</span><span class="mf">58.65625</span>  <span class="mf">0.471924</span>   <span class="mf">8.570312</span> <span class="o">-</span><span class="mf">11.359375</span>  
+          <span class="o">-</span><span class="mi">1496</span>  <span class="o">-</span><span class="mf">8.828125</span> <span class="o">-</span><span class="mf">55.96875</span>  <span class="mf">0.708008</span>  <span class="mf">10.953125</span>  <span class="o">-</span><span class="mf">7.101562</span>  
+          <span class="o">-</span><span class="mi">1492</span> <span class="o">-</span><span class="mf">11.453125</span> <span class="o">-</span><span class="mf">58.15625</span>  <span class="mf">0.471924</span>  <span class="mf">10.000000</span>  <span class="o">-</span><span class="mf">9.468750</span>  
+          <span class="o">-</span><span class="mi">1488</span>  <span class="o">-</span><span class="mf">8.593750</span> <span class="o">-</span><span class="mf">60.37500</span>  <span class="mf">0.708008</span>  <span class="mf">12.382812</span>  <span class="o">-</span><span class="mf">5.207031</span>  
+          <span class="o">-</span><span class="mi">1484</span> <span class="o">-</span><span class="mf">16.703125</span> <span class="o">-</span><span class="mf">66.00000</span>  <span class="mf">0.471924</span>   <span class="mf">6.667969</span> <span class="o">-</span><span class="mf">14.203125</span>  
+
+
+<span class="o">.</span>
+<span class="o">.</span>
+<span class="o">.</span>
+
+
+
+               <span class="n">Index</span>  <span class="n">adjective</span>  <span class="n">anchor_code</span>  <span class="n">anchor_tick</span> <span class="n">article</span> <span class="n">data_group</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                 
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="mi">2538</span>        <span class="n">NaN</span>           <span class="mi">90</span>         <span class="mi">4771</span>       <span class="n">a</span>   <span class="n">arquant9</span>   
+          <span class="mi">2484</span>  <span class="mi">2538</span>        <span class="n">NaN</span>           <span class="mi">90</span>         <span class="mi">4771</span>       <span class="n">a</span>   <span class="n">arquant9</span>   
+          <span class="mi">2488</span>  <span class="mi">2538</span>        <span class="n">NaN</span>           <span class="mi">90</span>         <span class="mi">4771</span>       <span class="n">a</span>   <span class="n">arquant9</span>   
+          <span class="mi">2492</span>  <span class="mi">2538</span>        <span class="n">NaN</span>           <span class="mi">90</span>         <span class="mi">4771</span>       <span class="n">a</span>   <span class="n">arquant9</span>   
+          <span class="mi">2496</span>  <span class="mi">2538</span>        <span class="n">NaN</span>           <span class="mi">90</span>         <span class="mi">4771</span>       <span class="n">a</span>   <span class="n">arquant9</span>   
+
+                      <span class="n">dblock_path</span>  <span class="n">dblock_srate</span>  <span class="n">dblock_ticks</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                  
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="n">arquant9</span><span class="o">/</span><span class="n">dblock_9</span>         <span class="mf">250.0</span>          <span class="mi">5391</span>   
+          <span class="mi">2484</span>  <span class="n">arquant9</span><span class="o">/</span><span class="n">dblock_9</span>         <span class="mf">250.0</span>          <span class="mi">5392</span>   
+          <span class="mi">2488</span>  <span class="n">arquant9</span><span class="o">/</span><span class="n">dblock_9</span>         <span class="mf">250.0</span>          <span class="mi">5393</span>   
+          <span class="mi">2492</span>  <span class="n">arquant9</span><span class="o">/</span><span class="n">dblock_9</span>         <span class="mf">250.0</span>          <span class="mi">5394</span>   
+          <span class="mi">2496</span>  <span class="n">arquant9</span><span class="o">/</span><span class="n">dblock_9</span>         <span class="mf">250.0</span>          <span class="mi">5395</span>   
+
+                <span class="n">epoch_match_tick_delta</span>  <span class="n">epoch_ticks</span>   <span class="n">expt</span>  <span class="n">is_anchor</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                          
+<span class="mi">2538</span>      <span class="mi">2480</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="mi">2484</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="mi">2488</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="mi">2492</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+          <span class="mi">2496</span>                    <span class="o">-</span><span class="mi">375</span>         <span class="mi">1000</span>  <span class="n">eeg_1</span>          <span class="mi">1</span>   
+
+                             <span class="n">item_id</span> <span class="n">item_id_pfx</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                     
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="n">i090_1_a__NA_tourist</span>   <span class="n">i090_1_a_</span>   
+          <span class="mi">2484</span>  <span class="n">i090_1_a__NA_tourist</span>   <span class="n">i090_1_a_</span>   
+          <span class="mi">2488</span>  <span class="n">i090_1_a__NA_tourist</span>   <span class="n">i090_1_a_</span>   
+          <span class="mi">2492</span>  <span class="n">i090_1_a__NA_tourist</span>   <span class="n">i090_1_a_</span>   
+          <span class="mi">2496</span>  <span class="n">i090_1_a__NA_tourist</span>   <span class="n">i090_1_a_</span>   
+
+                <span class="n">lemma_ART_noun_anywhere_cloze</span>  <span class="n">lemma_ART_noun_initial_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                
+<span class="mi">2538</span>      <span class="mi">2480</span>                          <span class="mf">0.967</span>                         <span class="mf">0.933</span>   
+          <span class="mi">2484</span>                          <span class="mf">0.967</span>                         <span class="mf">0.933</span>   
+          <span class="mi">2488</span>                          <span class="mf">0.967</span>                         <span class="mf">0.933</span>   
+          <span class="mi">2492</span>                          <span class="mf">0.967</span>                         <span class="mf">0.933</span>   
+          <span class="mi">2496</span>                          <span class="mf">0.967</span>                         <span class="mf">0.933</span>   
+
+                <span class="n">lemma_NA_noun_anywhere_cloze</span>  <span class="n">lemma_NA_noun_initial_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                              
+<span class="mi">2538</span>      <span class="mi">2480</span>                         <span class="mf">0.931</span>                        <span class="mf">0.034</span>   
+          <span class="mi">2484</span>                         <span class="mf">0.931</span>                        <span class="mf">0.034</span>   
+          <span class="mi">2488</span>                         <span class="mf">0.931</span>                        <span class="mf">0.034</span>   
+          <span class="mi">2492</span>                         <span class="mf">0.931</span>                        <span class="mf">0.034</span>   
+          <span class="mi">2496</span>                         <span class="mf">0.931</span>                        <span class="mf">0.034</span>   
+
+                <span class="n">lemma_context_anywhere_info</span>  <span class="n">lemma_context_initial_info</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                            
+<span class="mi">2538</span>      <span class="mi">2480</span>                        <span class="mf">0.694</span>                       <span class="mf">0.735</span>   
+          <span class="mi">2484</span>                        <span class="mf">0.694</span>                       <span class="mf">0.735</span>   
+          <span class="mi">2488</span>                        <span class="mf">0.694</span>                       <span class="mf">0.735</span>   
+          <span class="mi">2492</span>                        <span class="mf">0.694</span>                       <span class="mf">0.735</span>   
+          <span class="mi">2496</span>                        <span class="mf">0.694</span>                       <span class="mf">0.735</span>   
+
+               <span class="n">lemma_modal_anywhere</span>  <span class="n">lemma_modal_anywhere_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                    
+<span class="mi">2538</span>      <span class="mi">2480</span>            <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                       <span class="mf">0.935</span>   
+          <span class="mi">2484</span>            <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                       <span class="mf">0.935</span>   
+          <span class="mi">2488</span>            <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                       <span class="mf">0.935</span>   
+          <span class="mi">2492</span>            <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                       <span class="mf">0.935</span>   
+          <span class="mi">2496</span>            <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                       <span class="mf">0.935</span>   
+
+               <span class="n">lemma_modal_initial</span> <span class="n">lemma_modal_initial_character_classes</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                             
+<span class="mi">2538</span>      <span class="mi">2480</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="mi">2484</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="mi">2488</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="mi">2492</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+          <span class="mi">2496</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>                           <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>   
+
+                <span class="n">lemma_modal_initial_cloze</span>  <span class="n">lemma_n_NAs</span>  <span class="n">lemma_n_responses</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                              
+<span class="mi">2538</span>      <span class="mi">2480</span>                      <span class="mf">0.933</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="mi">2484</span>                      <span class="mf">0.933</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="mi">2488</span>                      <span class="mf">0.933</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="mi">2492</span>                      <span class="mf">0.933</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+          <span class="mi">2496</span>                      <span class="mf">0.933</span>          <span class="mf">0.0</span>               <span class="mf">30.0</span>   
+
+                <span class="n">lemma_n_strings</span>  <span class="n">list_id</span>  <span class="n">log_ccodes</span>  <span class="n">log_evcodes</span>  <span class="n">log_flags</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                 
+<span class="mi">2538</span>      <span class="mi">2480</span>             <span class="mf">31.0</span>  <span class="n">eeg_1_a</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="mi">2484</span>             <span class="mf">31.0</span>  <span class="n">eeg_1_a</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="mi">2488</span>             <span class="mf">31.0</span>  <span class="n">eeg_1_a</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="mi">2492</span>             <span class="mf">31.0</span>  <span class="n">eeg_1_a</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+          <span class="mi">2496</span>             <span class="mf">31.0</span>  <span class="n">eeg_1_a</span>           <span class="mi">0</span>            <span class="mi">0</span>          <span class="mi">0</span>   
+
+                <span class="n">match_code</span>  <span class="n">match_tick</span>     <span class="n">noun</span>  <span class="n">noun_code</span>  <span class="n">noun_pos</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                         
+<span class="mi">2538</span>      <span class="mi">2480</span>          <span class="mi">90</span>        <span class="mi">4771</span>  <span class="n">tourist</span>      <span class="mi">10902</span>        <span class="mi">23</span>   
+          <span class="mi">2484</span>          <span class="mi">90</span>        <span class="mi">4771</span>  <span class="n">tourist</span>      <span class="mi">10902</span>        <span class="mi">23</span>   
+          <span class="mi">2488</span>          <span class="mi">90</span>        <span class="mi">4771</span>  <span class="n">tourist</span>      <span class="mi">10902</span>        <span class="mi">23</span>   
+          <span class="mi">2492</span>          <span class="mi">90</span>        <span class="mi">4771</span>  <span class="n">tourist</span>      <span class="mi">10902</span>        <span class="mi">23</span>   
+          <span class="mi">2496</span>          <span class="mi">90</span>        <span class="mi">4771</span>  <span class="n">tourist</span>      <span class="mi">10902</span>        <span class="mi">23</span>   
+
+                <span class="n">orth_ART_noun_anywhere_cloze</span>  <span class="n">orth_ART_noun_initial_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                              
+<span class="mi">2538</span>      <span class="mi">2480</span>                         <span class="mf">0.967</span>                        <span class="mf">0.933</span>   
+          <span class="mi">2484</span>                         <span class="mf">0.967</span>                        <span class="mf">0.933</span>   
+          <span class="mi">2488</span>                         <span class="mf">0.967</span>                        <span class="mf">0.933</span>   
+          <span class="mi">2492</span>                         <span class="mf">0.967</span>                        <span class="mf">0.933</span>   
+          <span class="mi">2496</span>                         <span class="mf">0.967</span>                        <span class="mf">0.933</span>   
+
+                <span class="n">orth_NA_noun_anywhere_cloze</span>  <span class="n">orth_NA_noun_initial_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                            
+<span class="mi">2538</span>      <span class="mi">2480</span>                        <span class="mf">0.931</span>                       <span class="mf">0.034</span>   
+          <span class="mi">2484</span>                        <span class="mf">0.931</span>                       <span class="mf">0.034</span>   
+          <span class="mi">2488</span>                        <span class="mf">0.931</span>                       <span class="mf">0.034</span>   
+          <span class="mi">2492</span>                        <span class="mf">0.931</span>                       <span class="mf">0.034</span>   
+          <span class="mi">2496</span>                        <span class="mf">0.931</span>                       <span class="mf">0.034</span>   
+
+                <span class="n">orth_article_initial_cloze</span>  <span class="n">orth_context_anywhere_info</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                           
+<span class="mi">2538</span>      <span class="mi">2480</span>                       <span class="mf">0.966</span>                       <span class="mf">0.694</span>   
+          <span class="mi">2484</span>                       <span class="mf">0.966</span>                       <span class="mf">0.694</span>   
+          <span class="mi">2488</span>                       <span class="mf">0.966</span>                       <span class="mf">0.694</span>   
+          <span class="mi">2492</span>                       <span class="mf">0.966</span>                       <span class="mf">0.694</span>   
+          <span class="mi">2496</span>                       <span class="mf">0.966</span>                       <span class="mf">0.694</span>   
+
+                <span class="n">orth_context_initial_info</span> <span class="n">orth_modal_anywhere</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                  
+<span class="mi">2538</span>      <span class="mi">2480</span>                      <span class="mf">0.735</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2484</span>                      <span class="mf">0.735</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2488</span>                      <span class="mf">0.735</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2492</span>                      <span class="mf">0.735</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2496</span>                      <span class="mf">0.735</span>           <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+
+                <span class="n">orth_modal_anywhere_cloze</span> <span class="n">orth_modal_initial</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                 
+<span class="mi">2538</span>      <span class="mi">2480</span>                      <span class="mf">0.935</span>          <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2484</span>                      <span class="mf">0.935</span>          <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2488</span>                      <span class="mf">0.935</span>          <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2492</span>                      <span class="mf">0.935</span>          <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+          <span class="mi">2496</span>                      <span class="mf">0.935</span>          <span class="p">[</span><span class="n">tourist</span><span class="p">]</span>   
+
+               <span class="n">orth_modal_initial_character_classes</span>  <span class="n">orth_modal_initial_cloze</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">2538</span>      <span class="mi">2480</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>                     <span class="mf">0.933</span>   
+          <span class="mi">2484</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>                     <span class="mf">0.933</span>   
+          <span class="mi">2488</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>                     <span class="mf">0.933</span>   
+          <span class="mi">2492</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>                     <span class="mf">0.933</span>   
+          <span class="mi">2496</span>                          <span class="p">[</span><span class="n">consonant</span><span class="p">]</span>                     <span class="mf">0.933</span>   
+
+                <span class="n">orth_n_NAs</span>  <span class="n">orth_n_responses</span>  <span class="n">orth_n_strings</span>  <span class="n">raw_evcodes</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                              
+<span class="mi">2538</span>      <span class="mi">2480</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>            <span class="mf">31.0</span>            <span class="mi">0</span>   
+          <span class="mi">2484</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>            <span class="mf">31.0</span>            <span class="mi">0</span>   
+          <span class="mi">2488</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>            <span class="mf">31.0</span>            <span class="mi">0</span>   
+          <span class="mi">2492</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>            <span class="mf">31.0</span>            <span class="mi">0</span>   
+          <span class="mi">2496</span>         <span class="mf">0.0</span>              <span class="mf">30.0</span>            <span class="mf">31.0</span>            <span class="mi">0</span>   
+
+                            <span class="n">regexp</span>  <span class="n">s1_code</span>  <span class="n">stim_idx</span>  <span class="n">topic_n_NA</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                      
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10902      NaN        90         1.0   </span>
+          <span class="mi">2484</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10902      NaN        90         1.0   </span>
+          <span class="mi">2488</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10902      NaN        90         1.0   </span>
+          <span class="mi">2492</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10902      NaN        90         1.0   </span>
+          <span class="mi">2496</span>  <span class="p">(</span><span class="c1">#\d{1,3}) 2 10902      NaN        90         1.0   </span>
+
+                <span class="n">topic_n_consonants</span>  <span class="n">topic_n_vowels</span>  <span class="n">crw_ticks</span>  <span class="n">pygarv</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                          
+<span class="mi">2538</span>      <span class="mi">2480</span>                <span class="mf">29.0</span>             <span class="mf">0.0</span>     <span class="mi">696847</span>       <span class="mi">0</span>   
+          <span class="mi">2484</span>                <span class="mf">29.0</span>             <span class="mf">0.0</span>     <span class="mi">696848</span>       <span class="mi">0</span>   
+          <span class="mi">2488</span>                <span class="mf">29.0</span>             <span class="mf">0.0</span>     <span class="mi">696849</span>       <span class="mi">0</span>   
+          <span class="mi">2492</span>                <span class="mf">29.0</span>             <span class="mf">0.0</span>     <span class="mi">696850</span>       <span class="mi">0</span>   
+          <span class="mi">2496</span>                <span class="mf">29.0</span>             <span class="mf">0.0</span>     <span class="mi">696851</span>       <span class="mi">0</span>   
+
+                      <span class="n">lle</span>        <span class="n">lhz</span>      <span class="n">MiPf</span>       <span class="n">LLPf</span>      <span class="n">RLPf</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                        
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="mf">21.671875</span>  <span class="mf">26.171875</span> <span class="o">-</span><span class="mf">38.09375</span> <span class="o">-</span><span class="mf">23.640625</span> <span class="o">-</span><span class="mf">50.59375</span>   
+          <span class="mi">2484</span>  <span class="mf">25.000000</span>  <span class="mf">25.687500</span> <span class="o">-</span><span class="mf">38.09375</span> <span class="o">-</span><span class="mf">17.968750</span> <span class="o">-</span><span class="mf">60.12500</span>   
+          <span class="mi">2488</span>  <span class="mf">23.890625</span>  <span class="mf">24.718750</span> <span class="o">-</span><span class="mf">34.18750</span> <span class="o">-</span><span class="mf">19.859375</span> <span class="o">-</span><span class="mf">49.62500</span>   
+          <span class="mi">2492</span>  <span class="mf">15.562500</span>  <span class="mf">21.328125</span> <span class="o">-</span><span class="mf">39.09375</span> <span class="o">-</span><span class="mf">27.906250</span> <span class="o">-</span><span class="mf">51.06250</span>   
+          <span class="mi">2496</span>  <span class="mf">13.335938</span>  <span class="mf">19.875000</span> <span class="o">-</span><span class="mf">39.09375</span> <span class="o">-</span><span class="mf">36.406250</span> <span class="o">-</span><span class="mf">47.25000</span>   
+
+                     <span class="n">LMPf</span>       <span class="n">RMPf</span>       <span class="n">LDFr</span>       <span class="n">RDFr</span>      <span class="n">LLFr</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                         
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="o">-</span><span class="mf">9.562500</span> <span class="o">-</span><span class="mf">11.890625</span> <span class="o">-</span><span class="mf">15.234375</span> <span class="o">-</span><span class="mf">14.164062</span>  <span class="mf">37.93750</span>   
+          <span class="mi">2484</span> <span class="o">-</span><span class="mf">10.054688</span> <span class="o">-</span><span class="mf">12.382812</span> <span class="o">-</span><span class="mf">14.265625</span>  <span class="o">-</span><span class="mf">9.281250</span>  <span class="mf">37.46875</span>   
+          <span class="mi">2488</span>  <span class="o">-</span><span class="mf">8.335938</span>  <span class="o">-</span><span class="mf">5.203125</span>  <span class="o">-</span><span class="mf">7.980469</span>  <span class="o">-</span><span class="mf">3.419922</span>  <span class="mf">39.90625</span>   
+          <span class="mi">2492</span> <span class="o">-</span><span class="mf">11.281250</span>  <span class="o">-</span><span class="mf">5.449219</span> <span class="o">-</span><span class="mf">13.539062</span>  <span class="o">-</span><span class="mf">7.082031</span>  <span class="mf">45.96875</span>   
+          <span class="mi">2496</span> <span class="o">-</span><span class="mf">17.406250</span> <span class="o">-</span><span class="mf">10.156250</span> <span class="o">-</span><span class="mf">16.921875</span>  <span class="o">-</span><span class="mf">9.523438</span>  <span class="mf">43.31250</span>   
+
+                     <span class="n">RLFr</span>      <span class="n">LMFr</span>      <span class="n">RMFr</span>       <span class="n">LMCe</span>      <span class="n">RMCe</span>      <span class="n">MiCe</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                 
+<span class="mi">2538</span>      <span class="mi">2480</span> <span class="o">-</span><span class="mf">24.281250</span> <span class="o">-</span><span class="mf">4.687500</span> <span class="o">-</span><span class="mf">5.644531</span> <span class="o">-</span><span class="mf">18.968750</span>  <span class="mf">2.638672</span> <span class="o">-</span><span class="mf">8.390625</span>   
+          <span class="mi">2484</span> <span class="o">-</span><span class="mf">20.484375</span> <span class="o">-</span><span class="mf">3.308594</span> <span class="o">-</span><span class="mf">2.687500</span> <span class="o">-</span><span class="mf">18.484375</span>  <span class="mf">4.558594</span> <span class="o">-</span><span class="mf">6.417969</span>   
+          <span class="mi">2488</span> <span class="o">-</span><span class="mf">18.468750</span>  <span class="mf">1.377930</span>  <span class="mf">2.419922</span> <span class="o">-</span><span class="mf">16.296875</span>  <span class="mf">8.156250</span> <span class="o">-</span><span class="mf">3.455078</span>   
+          <span class="mi">2492</span> <span class="o">-</span><span class="mf">26.312500</span> <span class="o">-</span><span class="mf">1.929688</span> <span class="o">-</span><span class="mf">0.537598</span> <span class="o">-</span><span class="mf">19.703125</span>  <span class="mf">4.796875</span> <span class="o">-</span><span class="mf">6.417969</span>   
+          <span class="mi">2496</span> <span class="o">-</span><span class="mf">31.875000</span> <span class="o">-</span><span class="mf">5.789062</span> <span class="o">-</span><span class="mf">3.226562</span> <span class="o">-</span><span class="mf">23.343750</span>  <span class="mf">2.878906</span> <span class="o">-</span><span class="mf">9.625000</span>   
+
+                     <span class="n">MiPa</span>       <span class="n">LDCe</span>      <span class="n">RDCe</span>       <span class="n">LDPa</span>      <span class="n">RDPa</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                        
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="o">-</span><span class="mf">9.070312</span> <span class="o">-</span><span class="mf">13.351562</span>  <span class="mf">2.128906</span>  <span class="o">-</span><span class="mf">3.876953</span> <span class="o">-</span><span class="mf">5.632812</span>   
+          <span class="mi">2484</span>  <span class="o">-</span><span class="mf">9.304688</span> <span class="o">-</span><span class="mf">13.351562</span>  <span class="mf">5.203125</span>  <span class="o">-</span><span class="mf">6.300781</span> <span class="o">-</span><span class="mf">4.406250</span>   
+          <span class="mi">2488</span>  <span class="o">-</span><span class="mf">5.816406</span> <span class="o">-</span><span class="mf">11.125000</span>  <span class="mf">9.937500</span>  <span class="o">-</span><span class="mf">4.363281</span> <span class="o">-</span><span class="mf">1.224609</span>   
+          <span class="mi">2492</span> <span class="o">-</span><span class="mf">11.632812</span> <span class="o">-</span><span class="mf">14.093750</span>  <span class="mf">5.914062</span>  <span class="o">-</span><span class="mf">7.753906</span> <span class="o">-</span><span class="mf">6.367188</span>   
+          <span class="mi">2496</span> <span class="o">-</span><span class="mf">13.726562</span> <span class="o">-</span><span class="mf">19.281250</span>  <span class="mf">3.785156</span> <span class="o">-</span><span class="mf">11.632812</span> <span class="o">-</span><span class="mf">6.855469</span>   
+
+                     <span class="n">LMOc</span>       <span class="n">RMOc</span>       <span class="n">LLTe</span>       <span class="n">RLTe</span>      <span class="n">LLOc</span>  \
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                         
+<span class="mi">2538</span>      <span class="mi">2480</span>  <span class="o">-</span><span class="mf">6.484375</span>  <span class="o">-</span><span class="mf">9.414062</span>  <span class="mf">15.500000</span> <span class="o">-</span><span class="mf">17.812500</span>  <span class="mf">3.855469</span>   
+          <span class="mi">2484</span>  <span class="o">-</span><span class="mf">8.164062</span>  <span class="o">-</span><span class="mf">8.929688</span>  <span class="mf">11.070312</span> <span class="o">-</span><span class="mf">16.375000</span> <span class="o">-</span><span class="mf">2.410156</span>   
+          <span class="mi">2488</span>  <span class="o">-</span><span class="mf">5.523438</span>  <span class="o">-</span><span class="mf">5.550781</span>   <span class="mf">9.101562</span> <span class="o">-</span><span class="mf">15.406250</span> <span class="o">-</span><span class="mf">2.650391</span>   
+          <span class="mi">2492</span> <span class="o">-</span><span class="mf">10.562500</span> <span class="o">-</span><span class="mf">12.789062</span>   <span class="mf">6.640625</span> <span class="o">-</span><span class="mf">19.734375</span> <span class="o">-</span><span class="mf">3.615234</span>   
+          <span class="mi">2496</span> <span class="o">-</span><span class="mf">13.687500</span> <span class="o">-</span><span class="mf">13.757812</span>   <span class="mf">1.475586</span> <span class="o">-</span><span class="mf">16.843750</span> <span class="o">-</span><span class="mf">9.882812</span>   
+
+                     <span class="n">RLOc</span>       <span class="n">MiOc</span>         <span class="n">A2</span>      <span class="n">HEOG</span>        <span class="n">rle</span>       <span class="n">rhz</span>  
+<span class="n">Epoch_idx</span> <span class="n">Time</span>                                                                  
+<span class="mi">2538</span>      <span class="mi">2480</span> <span class="o">-</span><span class="mf">12.507812</span>  <span class="o">-</span><span class="mf">9.742188</span> <span class="o">-</span><span class="mf">23.250000</span>  <span class="mf">0.236938</span>  <span class="o">-</span><span class="mf">9.546875</span>  <span class="mf">3.791016</span>  
+          <span class="mi">2484</span>  <span class="o">-</span><span class="mf">8.414062</span>  <span class="o">-</span><span class="mf">8.554688</span> <span class="o">-</span><span class="mf">20.062500</span>  <span class="mf">0.236938</span>  <span class="o">-</span><span class="mf">9.546875</span>  <span class="mf">3.791016</span>  
+          <span class="mi">2488</span>  <span class="o">-</span><span class="mf">4.328125</span>  <span class="o">-</span><span class="mf">6.652344</span> <span class="o">-</span><span class="mf">16.156250</span>  <span class="mf">0.000000</span>  <span class="o">-</span><span class="mf">9.546875</span>  <span class="mf">5.210938</span>  
+          <span class="mi">2492</span> <span class="o">-</span><span class="mf">15.148438</span> <span class="o">-</span><span class="mf">14.015625</span> <span class="o">-</span><span class="mf">16.640625</span>  <span class="mf">0.236938</span> <span class="o">-</span><span class="mf">10.500000</span>  <span class="mf">0.473877</span>  
+          <span class="mi">2496</span> <span class="o">-</span><span class="mf">16.828125</span> <span class="o">-</span><span class="mf">16.390625</span> <span class="o">-</span><span class="mf">18.359375</span>  <span class="mf">0.000000</span> <span class="o">-</span><span class="mf">13.367188</span> <span class="o">-</span><span class="mf">1.421875</span>  
+</pre></div>
+</div>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="UserFiles.html" class="btn btn-neutral float-left" title=".yhdr aand codemap file formats" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="IO_MNE.html" class="btn btn-neutral float-right" title="mkh5 data in MNE Python (experimental)" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

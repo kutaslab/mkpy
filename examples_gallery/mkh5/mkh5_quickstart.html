@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkh5 Quickstart &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="A. Stoermann’s Gists online" href="../../AS_howto.html" />
+    <link rel="prev" title="Installation (64-bit linux only)" href="../../Installation.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+      <li>mkh5 Quickstart</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples_gallery/mkh5/mkh5_quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-gallery-mkh5-mkh5-quickstart-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="mkh5-quickstart">
+<span id="sphx-glr-examples-gallery-mkh5-mkh5-quickstart-py"></span><span id="id1"></span><h1>mkh5 Quickstart<a class="headerlink" href="#mkh5-quickstart" title="Permalink to this heading"></a></h1>
+<ol class="arabic">
+<li><p>In a terminal window use <code class="docutils literal notranslate"><span class="pre">mamba</span></code> (recommended) or <code class="docutils literal notranslate"><span class="pre">conda</span></code> (if
+necessary) to install mkpy along with jupyter or jupyterlab
+into a fresh environment and activate it:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>$ mamba create --name mkpy_041221 mkpy jupyterlab <span class="se">\</span>
+     -c kutaslab -c conda-forge -c defaults <span class="se">\</span>
+     --strict-channel-priority
+$ conda activate mkpy_041221
+</pre></div>
+</div>
+</li>
+<li><p>In a terminal window navigate to the directory where you want
+to work and run:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>$ jupyter notebook
+</pre></div>
+</div>
+</li>
+<li><p>Open a notebook with a Python 3 kernel and proceed.</p></li>
+</ol>
+<p>Single subject single session workflow</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">mkpy</span> <span class="kn">import</span> <span class="n">mkh5</span> <span class="k">as</span> <span class="n">mkh5</span>
+
+<span class="n">DATA_H5_F</span> <span class="o">=</span> <span class="s2">&quot;../mkh5_data/_sub000p3.h5&quot;</span>
+<span class="n">data_h5</span> <span class="o">=</span> <span class="n">mkh5</span><span class="o">.</span><span class="n">mkh5</span><span class="p">(</span><span class="n">DATA_H5_F</span><span class="p">)</span>
+<span class="n">data_h5</span><span class="o">.</span><span class="n">reset_all</span><span class="p">()</span>
+
+<span class="c1"># load the crw, log, and YAML header</span>
+<span class="n">data_h5</span><span class="o">.</span><span class="n">create_mkdata</span><span class="p">(</span>
+    <span class="s2">&quot;sub000&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;../mkdig_data/sub000p3.crw&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;../mkdig_data/sub000p3.x.log&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;../mkdig_data/sub000p3.yhdr&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p>If calibration pulses are not in the .crw file, append them like so:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_h5</span><span class="o">.</span><span class="n">append_mkdata</span><span class="p">(</span>
+    <span class="s2">&quot;sub000&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;../mkdig_data/sub000c.crw&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;../mkdig_data/sub000c.log&quot;</span><span class="p">,</span>
+    <span class="s2">&quot;../mkdig_data/sub000c.yhdr&quot;</span><span class="p">,</span>
+<span class="p">)</span>
+
+<span class="c1"># Visually check the calibration parameters.</span>
+<span class="n">pts</span><span class="p">,</span> <span class="n">pulse</span><span class="p">,</span> <span class="n">lo</span><span class="p">,</span> <span class="n">hi</span><span class="p">,</span> <span class="n">ccode</span> <span class="o">=</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">,</span> <span class="o">-</span><span class="mi">50</span><span class="p">,</span> <span class="mi">50</span><span class="p">,</span> <span class="mi">0</span>
+<span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">data_h5</span><span class="o">.</span><span class="n">plotcals</span><span class="p">(</span>
+    <span class="n">DATA_H5_F</span><span class="p">,</span>
+    <span class="s2">&quot;sub000&quot;</span><span class="p">,</span>
+    <span class="n">n_points</span><span class="o">=</span><span class="n">pts</span><span class="p">,</span>  <span class="c1"># pts to average, either side of cursor</span>
+    <span class="n">cal_size</span><span class="o">=</span><span class="n">pulse</span><span class="p">,</span>  <span class="c1"># uV</span>
+    <span class="n">lo_cursor</span><span class="o">=</span><span class="n">lo</span><span class="p">,</span>  <span class="c1"># lo_cursor ms</span>
+    <span class="n">hi_cursor</span><span class="o">=</span><span class="n">hi</span><span class="p">,</span>  <span class="c1"># hi_cursor ms</span>
+    <span class="n">cal_ccode</span><span class="o">=</span><span class="n">ccode</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">fig</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+<img src="../../_images/sphx_glr_mkh5_quickstart_001.png" srcset="../../_images/sphx_glr_mkh5_quickstart_001.png" alt="calibration pulses (recorded N=209) from: ../mkh5_data/_sub000p3.h5 sub000 n_points=3 cal_size=10 lo_cursor=-50 hi_cursor=50 cal_ccode=0, scale=17.67, trimmed 5, scale=20.30, trimmed 6, scale=20.05, trimmed 8, scale=20.79, trimmed 5, scale=20.59, trimmed 2, scale=40.13, trimmed 6, scale=39.63, trimmed 9, scale=40.82, trimmed 6, scale=40.47, trimmed 3, scale=40.01, trimmed 11, scale=38.82, trimmed 6, scale=35.58, trimmed 16, scale=36.46, trimmed 3, scale=40.63, trimmed 14, scale=37.88, trimmed 15, scale=39.60, trimmed 13, scale=42.02, trimmed 15, scale=39.58, trimmed 16, scale=41.42, trimmed 5, scale=40.49, trimmed 12, scale=40.11, trimmed 7, scale=40.81, trimmed 7, scale=40.65, trimmed 6, scale=39.84, trimmed 12, scale=40.59, trimmed 24, scale=40.37, trimmed 11, scale=40.81, trimmed 9, scale=41.27, trimmed 7, scale=40.73, trimmed 9, scale=40.92, trimmed 4, scale=20.57, trimmed 5, scale=20.59, trimmed 14" class = "sphx-glr-single-img"/><p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Plotting cals
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/mkh5.py:3666: UserWarning: negative event code(s) found for cal condition code 0 -16384
+  warnings.warn(msg)
+Found cals in /sub000/dblock_4
+</pre></div>
+</div>
+<p>Scale the EEG A/D to microvolts.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_h5</span><span class="o">.</span><span class="n">calibrate_mkdata</span><span class="p">(</span>
+    <span class="s2">&quot;sub000&quot;</span><span class="p">,</span>
+    <span class="n">n_points</span><span class="o">=</span><span class="n">pts</span><span class="p">,</span>
+    <span class="n">cal_size</span><span class="o">=</span><span class="n">pulse</span><span class="p">,</span>
+    <span class="n">lo_cursor</span><span class="o">=</span><span class="n">lo</span><span class="p">,</span>
+    <span class="n">hi_cursor</span><span class="o">=</span><span class="n">hi</span><span class="p">,</span>
+    <span class="n">cal_ccode</span><span class="o">=</span><span class="n">ccode</span><span class="p">,</span>
+    <span class="n">use_cals</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/mkh5.py:3666: UserWarning: negative event code(s) found for cal condition code 0 -16384
+  warnings.warn(msg)
+Found cals in /sub000/dblock_4
+Calibrating block /sub000/dblock_0 of 5: (31232,)
+Calibrating block /sub000/dblock_1 of 5: (32768,)
+Calibrating block /sub000/dblock_2 of 5: (31744,)
+Calibrating block /sub000/dblock_3 of 5: (32512,)
+Calibrating block /sub000/dblock_4 of 5: (28416,)
+</pre></div>
+</div>
+<p>Examine some header info with <a class="reference internal" href="../../api_source/mkpy.mkh5.html#mkpy.mkh5.mkh5.headinfo" title="mkpy.mkh5.mkh5.headinfo"><code class="xref py py-meth docutils literal notranslate"><span class="pre">mkh5.headinfo()</span></code></a></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">data_h5</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s2">&quot;dblock_0.*samplerate&quot;</span><span class="p">)</span>
+<span class="n">data_h5</span><span class="o">.</span><span class="n">headinfo</span><span class="p">(</span><span class="s2">&quot;dblock_0.*MiPa&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>sub000/dblock_0/samplerate: 250.0
+sub000/dblock_0/apparatus/streams/MiPa/pos: MiPa
+sub000/dblock_0/apparatus/streams/MiPa/neg: A1
+sub000/dblock_0/apparatus/streams/MiPa/gain: 20000
+sub000/dblock_0/apparatus/streams/MiPa/hphz: 0.01
+sub000/dblock_0/apparatus/streams/MiPa/lphz: 100.0
+sub000/dblock_0/apparatus/streams/MiPa/mne_type: eeg
+sub000/dblock_0/apparatus/sensors/MiPa/x: 0.0
+sub000/dblock_0/apparatus/sensors/MiPa/y: -2.7
+sub000/dblock_0/apparatus/sensors/MiPa/z: 13.2
+sub000/dblock_0/streams/MiPa/jdx: 23
+sub000/dblock_0/streams/MiPa/source: dig_chan_0016
+sub000/dblock_0/streams/MiPa/name: MiPa
+sub000/dblock_0/streams/MiPa/dt: &lt;f2
+sub000/dblock_0/streams/MiPa/calibrated: True
+sub000/dblock_0/streams/MiPa/cals/cal_srate: 250.0
+sub000/dblock_0/streams/MiPa/cals/cal_dblock/0: ../mkh5_data/_sub000p3.h5/sub000/dblock_4
+sub000/dblock_0/streams/MiPa/cals/cal_args/n_points: 3
+sub000/dblock_0/streams/MiPa/cals/cal_args/cal_size: 10.0
+sub000/dblock_0/streams/MiPa/cals/cal_args/lo_cursor: -50.0
+sub000/dblock_0/streams/MiPa/cals/cal_args/hi_cursor: 50.0
+sub000/dblock_0/streams/MiPa/cals/cal_args/cal_ccode: 0
+sub000/dblock_0/streams/MiPa/cals/scale_by: 42.019882179675996
+sub000/dblock_0/streams/MiPa/cals/var: 0.24502864170431732
+sub000/dblock_0/streams/MiPa/cals/median: 42.0
+sub000/dblock_0/streams/MiPa/cals/iqr: 0.7142857142857153
+sub000/dblock_0/streams/MiPa/cals/n_cals: 194
+sub000/dblock_0/streams/MiPa/cals/n_trimmed: 15
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/0: 27
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/1: 30
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/2: 35
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/3: 58
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/4: 68
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/5: 73
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/6: 76
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/7: 94
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/8: 101
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/9: 121
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/10: 159
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/11: 178
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/12: 181
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/13: 189
+sub000/dblock_0/streams/MiPa/cals/trimmed_idxs/14: 206
+</pre></div>
+</div>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  7.490 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-gallery-mkh5-mkh5-quickstart-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/fbbc8d50a23efebca7edb5f6839a9454/mkh5_quickstart.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">mkh5_quickstart.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/25855838ba4f9ade82d3c5d1cbf5da2f/mkh5_quickstart.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">mkh5_quickstart.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../../Installation.html" class="btn btn-neutral float-left" title="Installation (64-bit linux only)" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="../../AS_howto.html" class="btn btn-neutral float-right" title="A. Stoermann’s Gists online" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

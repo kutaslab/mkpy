@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Quickstart: mkh5 to MNE &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="How it works" href="how_it_works.html" />
+    <link rel="prev" title="EEG without events or epochs" href="no_events.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../mkh5/index.html">mkh5</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">mkh5 and MNE Python (experimental)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="no_events.html">EEG without events or epochs</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">Quickstart: mkh5 to MNE</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#mkh5mne-from-mkh5"><code class="xref py py-func docutils literal notranslate"><span class="pre">mkh5mne.from_mkh5()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mkh5mne-get-epochs"><code class="xref py py-func docutils literal notranslate"><span class="pre">mkh5mne.get_epochs()</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="#gotcha-mne-find-events-is-unsafe">Gotcha: <code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.find_events()</span></code> <strong>IS UNSAFE</strong></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="how_it_works.html">How it works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="from_mkh5.html">Options for converting to mne.Raw</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../mkh5eeglab/index.html">mkh5 and EEGLAB (experimental)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../ExamplesGallery.html">Examples Gallery</a> &raquo;</li>
+          <li><a href="index.html">mkh5 and MNE Python (experimental)</a> &raquo;</li>
+      <li>Quickstart: mkh5 to MNE</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples_gallery/mkh5mne/mne_quickstart.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-gallery-mkh5mne-mne-quickstart-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="quickstart-mkh5-to-mne">
+<span id="sphx-glr-examples-gallery-mkh5mne-mne-quickstart-py"></span><h1>Quickstart: mkh5 to MNE<a class="headerlink" href="#quickstart-mkh5-to-mne" title="Permalink to this heading"></a></h1>
+<p>The sample data is a single subject mkh5 data file for an auditory oddball paradigm.</p>
+<p>FYI … environment and versions. The MNE browser backend is set for generating these docs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">import</span> <span class="nn">mkpy</span>
+<span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+
+<span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">set_browser_backend</span><span class="p">(</span><span class="s2">&quot;matplotlib&quot;</span><span class="p">)</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;conda env&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CONDA_DEFAULT_ENV&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mkpy</span><span class="p">,</span> <span class="n">mne</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>conda env env_3.8
+mkpy 0.2.7
+mne 1.0.3
+</pre></div>
+</div>
+<div class="section" id="mkh5mne-from-mkh5">
+<h2><a class="reference internal" href="../../api_source/mkpy.io.mkh5mne.html#mkpy.io.mkh5mne.from_mkh5" title="mkpy.io.mkh5mne.from_mkh5"><code class="xref py py-func docutils literal notranslate"><span class="pre">mkh5mne.from_mkh5()</span></code></a><a class="headerlink" href="#mkh5mne-from-mkh5" title="Permalink to this heading"></a></h2>
+<p>Import an mkh5 file into the MNE ecosystem</p>
+<ul class="simple">
+<li><p>MNE requires electrode locations. Include them in .yhdr YAML file
+when creating the mkh5 data or add them when converting to MNE as
+shown here. The apparatus map format is the same.</p></li>
+<li><p>Adding garv annotations is optional but enables the MNE automatic
+rejection option for creating epochs.</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span>
+    <span class="s2">&quot;../mkh5_data/sub000p3.h5&quot;</span><span class="p">,</span>  <span class="c1"># file to convert</span>
+    <span class="n">apparatus_yaml</span><span class="o">=</span><span class="s2">&quot;mne_32chan_xyz_spherical.yml&quot;</span><span class="p">,</span>  <span class="c1"># electrode locations</span>
+    <span class="n">garv_annotations</span><span class="o">=</span><span class="p">{</span>
+        <span class="s2">&quot;event_channel&quot;</span><span class="p">:</span> <span class="s2">&quot;ms1500&quot;</span><span class="p">,</span>  <span class="c1"># annotate events on this channel</span>
+        <span class="s2">&quot;tmin&quot;</span><span class="p">:</span> <span class="o">-</span><span class="mi">750</span><span class="p">,</span>
+        <span class="s2">&quot;tmax&quot;</span><span class="p">:</span> <span class="mi">750</span><span class="p">,</span>
+        <span class="s2">&quot;units&quot;</span><span class="p">:</span> <span class="s2">&quot;ms&quot;</span><span class="p">,</span>
+    <span class="p">},</span>
+<span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000p3.h5
+looking up data block paths, larger files take longer ...
+ok
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_0 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_1
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_1 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_2
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_2 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_3
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_3 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_4
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_4 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_0 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -750, &#39;tmax&#39;: 750, &#39;units&#39;: &#39;ms&#39;}
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_1 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -750, &#39;tmax&#39;: 750, &#39;units&#39;: &#39;ms&#39;}
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_2 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=31744
+    Range : 0 ... 31743 =      0.000 ...   126.972 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_2 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -750, &#39;tmax&#39;: 750, &#39;units&#39;: &#39;ms&#39;}
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_3 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=32512
+    Range : 0 ... 32511 =      0.000 ...   130.044 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_3 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -750, &#39;tmax&#39;: 750, &#39;units&#39;: &#39;ms&#39;}
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_4 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_4 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms3000 events and metadata
+annotating garv artifacts {&#39;event_channel&#39;: &#39;ms1500&#39;, &#39;tmin&#39;: -750, &#39;tmax&#39;: 750, &#39;units&#39;: &#39;ms&#39;}
+EEG data marked as already having the desired reference.
+</pre></div>
+</div>
+<p>Now run other mkh5mne functions and native MNE methods on <cite>mne_raw</cite></p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1">#  mkpy.io.mkh5mne custom event finder</span>
+<span class="n">p3_events</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">find_mkh5_events</span><span class="p">(</span><span class="n">mne_raw</span><span class="p">,</span> <span class="s2">&quot;ms1500&quot;</span><span class="p">)</span>
+
+<span class="c1"># MNE native ploting</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">mne_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">p3_events</span><span class="p">,</span>
+    <span class="n">start</span><span class="o">=</span><span class="mf">53.0</span><span class="p">,</span>
+    <span class="n">duration</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">mne_raw</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_mne_quickstart_001.png" srcset="../../_images/sphx_glr_mne_quickstart_001.png" alt="mne quickstart" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_mne_quickstart_002.png" srcset="../../_images/sphx_glr_mne_quickstart_002.png" alt="mne quickstart" class = "sphx-glr-multi-img"/></li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Opening raw-browser...
+</pre></div>
+</div>
+</div>
+<div class="section" id="mkh5mne-get-epochs">
+<h2><a class="reference internal" href="../../api_source/mkpy.io.mkh5mne.html#mkpy.io.mkh5mne.get_epochs" title="mkpy.io.mkh5mne.get_epochs"><code class="xref py py-func docutils literal notranslate"><span class="pre">mkh5mne.get_epochs()</span></code></a><a class="headerlink" href="#mkh5mne-get-epochs" title="Permalink to this heading"></a></h2>
+<p>Create a native <code class="xref py py-class docutils literal notranslate"><span class="pre">mne.Epochs</span></code> and attach the event
+tags from a named mkh5 epochs table as the <code class="xref py py-obj docutils literal notranslate"><span class="pre">mne.Epochs.metadata</span></code>.</p>
+<p>Pass in the same arguments and key word arguments as you would for
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.Epochs()</span></code>.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_epochs</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">get_epochs</span><span class="p">(</span>
+    <span class="n">mne_raw</span><span class="p">,</span>
+    <span class="s2">&quot;ms1500&quot;</span><span class="p">,</span>
+    <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># populate the Epochs with data and apply projections</span>
+    <span class="n">reject_by_annotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># drop the BAD_* annotations or set False to keep them</span>
+    <span class="n">baseline</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>  <span class="c1"># center on this interval</span>
+<span class="p">)</span>
+<span class="n">mne_epochs</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Adding metadata with 40 columns
+600 matching events found
+Applying baseline correction (mode: mean)
+0 projection items activated
+Using data from preloaded Raw for 600 events and 376 original time points ...
+131 bad epochs dropped
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<table class="table table-hover table-striped table-sm table-responsive small">
+    <tr>
+        <th>Number of events</th>
+        <td>469</td>
+    </tr>
+    <tr>
+        <th>Events</th>
+
+        <td>1: 49<br/>10: 100<br/>11: 22<br/>2: 47<br/>20: 116<br/>21: 23<br/>3: 56<br/>4: 56</td>
+
+    </tr>
+    <tr>
+        <th>Time range</th>
+        <td>-0.748 – 0.752 sec</td>
+    </tr>
+    <tr>
+        <th>Baseline</th>
+        <td>-0.200 – 0.000 sec</td>
+    </tr>
+</table>
+</div>
+<br />
+<br /></div>
+<div class="section" id="gotcha-mne-find-events-is-unsafe">
+<h2>Gotcha: <code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.find_events()</span></code> <strong>IS UNSAFE</strong><a class="headerlink" href="#gotcha-mne-find-events-is-unsafe" title="Permalink to this heading"></a></h2>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>Use mkh5 data use <code class="xref py py-meth docutils literal notranslate"><span class="pre">mkh5mne.find_mkh5_events()</span></code> to create
+MNE event arrays. <strong>DO NOT use the native MNE</strong>
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.find_events()</span></code> the results may be incorrect.</p>
+</div>
+<p>Various MNE raw data methods including plotting and epoching
+ingest a 3-column <cite>event_array</cite> of [sample, 0, event] that says
+where (column 0) and what (column 2) the events are.</p>
+<p>The event array data format is sound and processing event
+arrays is reliable.</p>
+<p>Unfortunately the native MNE event lookup utility
+<code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.find_events()</span></code> for <strong>creating</strong> event arrays from
+event channels forcibly converts negative events to positive.</p>
+<p>Te .crw/.log/mkh5 data format routinely uses negative event codes
+for pause marks, data errors, and manually logpoked negative event
+codes. Changing the sign to positive folds them back back into the
+experimental event code range and creates creates spurious events.</p>
+<p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  22.058 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-gallery-mkh5mne-mne-quickstart-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/5db10795a3e04ad8d0b8dd011f5dc2e7/mne_quickstart.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">mne_quickstart.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/eb77d3b3e1f09fc00db41fb7a83e08e7/mne_quickstart.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">mne_quickstart.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="no_events.html" class="btn btn-neutral float-left" title="EEG without events or epochs" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="how_it_works.html" class="btn btn-neutral float-right" title="How it works" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

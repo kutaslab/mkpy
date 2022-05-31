@@ -1,0 +1,12 @@
+
+:orphan:
+
+.. _sphx_glr_examples_gallery_mkh5eeglab_sg_execution_times:
+
+Computation times
+=================
+**01:05.406** total execution time for **examples_gallery_mkh5eeglab** files:
+
++---------------------------------------------------------------------------------------------+-----------+--------+
+| :ref:`sphx_glr_examples_gallery_mkh5eeglab_eeglab_quickstart.py` (``eeglab_quickstart.py``) | 01:05.406 | 0.0 MB |
++---------------------------------------------------------------------------------------------+-----------+--------+

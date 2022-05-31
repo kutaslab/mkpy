@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkpy.codetagger &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../index.html">Module code</a> &raquo;</li>
+          <li><a href="../mkpy.html">mkpy</a> &raquo;</li>
+      <li>mkpy.codetagger</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mkpy.codetagger</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">yaml</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">warnings</span>
+
+
+<div class="viewcode-block" id="CodeTagger"><a class="viewcode-back" href="../../api_source/mkpy.codetagger.html#mkpy.codetagger.CodeTagger">[docs]</a><span class="k">class</span> <span class="nc">CodeTagger</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;Tag pattern-matched sequences of time-indexed integer with key:value metadata.</span>
+
+
+<span class="sd">    In the intended use case</span>
+
+<span class="sd">    * the integer values are event-markers recorded on an event or</span>
+<span class="sd">      timing track of a digital data acquisition system.</span>
+
+<span class="sd">    * Each integer maps to a specific event or event-type, e.g., a</span>
+<span class="sd">      stimulus onset/offset, a response, a timing mark.</span>
+
+<span class="sd">    * A sequence of integers corresponds to a sequence of events or</span>
+<span class="sd">      event types.</span>
+
+<span class="sd">    * The metadata (tabular rows x columns) add further information</span>
+<span class="sd">      above and beyond the numeric value of the integer and may</span>
+<span class="sd">      include are mapped to tuples of mixed data types: strings,</span>
+<span class="sd">      integers, floats, suitable for decorating events and epochs of</span>
+<span class="sd">      data with useful information such experimental design factor</span>
+<span class="sd">      levels (Easy, Hard), continuous covariates (age of acquisition).</span>
+
+<span class="sd">    The original use case was to find and decorate ERPSS log event</span>
+<span class="sd">    codes with experimental information.</span>
+
+<span class="sd">    The mechanism here is general, abstracting away from the source of</span>
+<span class="sd">    the integer 1-D arrays and the intended purpose of the metadata.</span>
+
+
+<span class="sd">    .. note::</span>
+
+<span class="sd">       Starting with mkpy v0.2.1 codemaps allow but do not require</span>
+<span class="sd">       an `Index`.</span>
+
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    The UI for specifying a code tag map can be any of these file types</span>
+
+<span class="sd">     Excel</span>
+<span class="sd">       an .xlsx file and (optional) named worksheet readable by</span>
+<span class="sd">       pandas.DataFrame.read_excel()</span>
+
+<span class="sd">       CodeTagger(&#39;myexpt/code_tag_table.xlsx&#39;)</span>
+<span class="sd">       CodeTagger(&#39;myexpt/code_tag_table.xlsx!for_evoked&#39;)</span>
+<span class="sd">       CodeTagger(&#39;myexpt/code_tag_table.xlsx!for_mixed_effects&#39;)</span>
+
+<span class="sd">     Tabbed text</span>
+<span class="sd">        a rows x columns tab-delimited text file readable by</span>
+<span class="sd">        pandas.Data.read_csv(..., sep=&quot;\t&quot;).</span>
+
+<span class="sd">     YAML</span>
+<span class="sd">        a yaml map readable by yaml.load(), mock-tabular format</span>
+<span class="sd">        described below.</span>
+
+
+<span class="sd">    * File formats</span>
+
+<span class="sd">        Excel and Tabbed-text</span>
+<span class="sd">            1. the data must be tabular in n rows and m columns (i,j &gt;= 2)</span>
+<span class="sd">            2. column labels must be in the first row</span>
+<span class="sd">            3. the column labels must include &#39;regexp&#39;</span>
+<span class="sd">            4. there must be at least one tag column, there may be more</span>
+
+<span class="sd">            +------------+--------------+------------------+</span>
+<span class="sd">            | regexp     | col_label_1  |  &lt;col_label_m&gt;*  |</span>
+<span class="sd">            +============+==============+==================+</span>
+<span class="sd">            | pattern_1  | code_tag_11  | &lt;code_tag_1m&gt;*   |</span>
+<span class="sd">            +------------+--------------+------------------+</span>
+<span class="sd">            |  ...       |  ...         | ...              |</span>
+<span class="sd">            +------------+--------------+------------------+</span>
+<span class="sd">            | pattern_n  | code_tag_n1  |  &lt;datum_nm&gt;*     |</span>
+<span class="sd">            +------------+--------------+------------------+</span>
+
+<span class="sd">        YAML files</span>
+<span class="sd">            The YAML can be any combination of inline (JSON-ic) and</span>
+<span class="sd">            YAML indentation that PyYAML yaml.load can handle.</span>
+
+<span class="sd">            1. must have one YAML document with two keys: ``columns`` and ``rows``.</span>
+<span class="sd">            2. the columns must start with `regexp`</span>
+<span class="sd">            3. the columns may continue ad lib.</span>
+<span class="sd">            4. each row must be a YAML sequence with the same number of items as there are columns</span>
+
+
+
+<span class="sd">        Example</span>
+
+<span class="sd">        .. code-block:: yaml</span>
+
+<span class="sd">           ---</span>
+<span class="sd">           &#39;columns&#39;:</span>
+<span class="sd">             [regexp, bin, probability, frequency, source]</span>
+<span class="sd">           &#39;rows&#39;:</span>
+<span class="sd">             - [&#39;(#1)&#39;, 1, hi,   880, oboe]</span>
+<span class="sd">             - [&#39;(#2)&#39;, 2, hi,   440, oboe]</span>
+<span class="sd">             - [&#39;(#3)&#39;, 3, lo,   880, oboe]</span>
+<span class="sd">             - [&#39;(#4)&#39;, 4, lo,   440, oboe]</span>
+<span class="sd">             - [&#39;(#5)&#39;, 5, hi,   880, tuba]</span>
+<span class="sd">             - [&#39;(#6)&#39;, 6, hi,   440, tuba]</span>
+<span class="sd">             - [&#39;(#7)&#39;, 7, lo,   880, tuba]</span>
+<span class="sd">             - [&#39;(#8)&#39;, 8, lo,   440, tuba]</span>
+
+<span class="sd">    Row value data types</span>
+
+<span class="sd">    regexp : regular expresion `pattern* (#pattern) pattern*`</span>
+<span class="sd">        This is the code sequence search pattern.  Log codes are separated</span>
+<span class="sd">        by a single whitespace for matching. The ``regexp`` has one or</span>
+<span class="sd">        more time-locking pattern capture groups of which one begins</span>
+<span class="sd">        with the time-marking anchor symbol, ``#``.</span>
+
+<span class="sd">        Flanking code patterns may be capture groups (...) and</span>
+<span class="sd">        non-capture groups (?:...)</span>
+
+<span class="sd">        All matched time-locking codes, the anchor code, and distance</span>
+<span class="sd">        between them are extracted from the mkpy.mkh5 datablocks and</span>
+<span class="sd">        merged with the code tags in the returned event_table for all</span>
+<span class="sd">        capture groups.</span>
+
+<span class="sd">    Additional columns: scalar (string, float, int, bool)</span>
+
+<span class="sd">    That&#39;s it. All the real work is done by 1) specifying regular</span>
+<span class="sd">    expressions that match useful (sequences of) integer event codes</span>
+<span class="sd">    and 2) specifying the optional column values that label the</span>
+<span class="sd">    matched codes in useful ways, e.g., by specifying factors and</span>
+<span class="sd">    levels of experimental design, or numeric values for regression</span>
+<span class="sd">    modeling or ...</span>
+
+<span class="sd">    Notes</span>
+
+<span class="sd">    * The values in any given column should all be the same data type:</span>
+<span class="sd">      string, integer, boolean, float. This is not enforced, violate</span>
+<span class="sd">      at your own risk.</span>
+
+<span class="sd">    * Missing data are allowed as values but discouraged b.c. 1) they</span>
+<span class="sd">      are handled differently by the pandas csv reader vs. yaml and</span>
+<span class="sd">      Excel readers. 2) the resulting NaNs and None coerce np.int and</span>
+<span class="sd">      np.str dtype columns into np.object dtype and incur a</span>
+<span class="sd">      performance penalty and 3) np.object dtypes are not readily</span>
+<span class="sd">      serialized to hdf5 ... h5py gags and pytables pickles them. 4)</span>
+<span class="sd">      It may lead to other unknown pathologies.</span>
+
+<span class="sd">    * For yaml files, if missing values are unavoidable, coding them</span>
+<span class="sd">      with the yaml value .NAN is recommended for all cases ... yes,</span>
+<span class="sd">      even string data. The yaml value null maps to None and behaves</span>
+<span class="sd">      differently in python/numpy/pandas. This is not enforced,</span>
+<span class="sd">      violate at your own risk</span>
+
+<span class="sd">    * Floating point precision. Reading code tag maps from yaml text files</span>
+<span class="sd">      and directly from Excel .xlsx files introduces the same rounding</span>
+<span class="sd">      errors for floating point numbers, e.g. 0.357 -&gt;</span>
+<span class="sd">      0.35699999999999998. Reading text files introduces a *different*</span>
+<span class="sd">      rounding error, e.g.,0.35700000000000004.</span>
+
+<span class="sd">    * There is no provision for &lt;t:n-m&gt; time interval constraints on</span>
+<span class="sd">      code patterns. Maybe someday.</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+<div class="viewcode-block" id="CodeTagger.MissingAnchor"><a class="viewcode-back" href="../../api_source/mkpy.codetagger.html#mkpy.codetagger.CodeTagger.MissingAnchor">[docs]</a>    <span class="k">class</span> <span class="nc">MissingAnchor</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cause</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error: missing anchor mark</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;Cause: </span><span class="si">{0}</span><span class="se">\n</span><span class="s2">&quot;</span>
+                <span class="s2">&quot;Fix: Mark exactly one target code pattern&quot;</span>
+                <span class="s2">&quot;with a #  like this: (#mycode)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cause</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span></div>
+
+<div class="viewcode-block" id="CodeTagger.MultipleAnchors"><a class="viewcode-back" href="../../api_source/mkpy.codetagger.html#mkpy.codetagger.CodeTagger.MultipleAnchors">[docs]</a>    <span class="k">class</span> <span class="nc">MultipleAnchors</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cause</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error: multiple anchor marks&quot;</span><span class="p">)</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cause: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cause</span><span class="p">))</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;Fix: Mark exactly one target code pattern with a #  like this: (#mycode)</span><span class="se">\n</span><span class="s2">&quot;</span>
+            <span class="p">)</span></div>
+
+<div class="viewcode-block" id="CodeTagger.BadCodePattern"><a class="viewcode-back" href="../../api_source/mkpy.codetagger.html#mkpy.codetagger.CodeTagger.BadCodePattern">[docs]</a>    <span class="k">class</span> <span class="nc">BadCodePattern</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+        <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">in_patt</span><span class="p">,</span> <span class="n">cause</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+            <span class="nb">print</span><span class="p">(</span>
+                <span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Error: Regular expression syntax error in code pattern: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">in_patt</span>
+                <span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">if</span> <span class="n">cause</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Cause: </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">cause</span><span class="p">))</span></div>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;initialize instance with a code tag map file.&quot;&quot;&quot;</span>
+
+        <span class="c1"># TODO: handle different filetypes, don&#39;t let things fail silently</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">cmf</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">cmf</span><span class="p">)</span>  <span class="c1"># for Path</span>
+
+        <span class="n">loaders</span> <span class="o">=</span> <span class="p">{</span>
+            <span class="s2">&quot;xlsx&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_xlsx_map</span><span class="p">,</span>
+            <span class="s2">&quot;yaml&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_yaml_map</span><span class="p">,</span>
+            <span class="s2">&quot;text&quot;</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">_load_txt_map</span><span class="p">,</span>
+        <span class="p">}</span>
+
+        <span class="n">fails</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">code_map</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="k">for</span> <span class="n">kind</span><span class="p">,</span> <span class="n">loader</span> <span class="ow">in</span> <span class="n">loaders</span><span class="o">.</span><span class="n">items</span><span class="p">():</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">code_map</span> <span class="o">=</span> <span class="n">loader</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmf</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">fail</span><span class="p">:</span>
+                <span class="n">fails</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">kind</span><span class="p">,</span> <span class="n">fail</span><span class="p">))</span>
+                <span class="k">continue</span>
+
+            <span class="c1"># break out on success</span>
+            <span class="k">if</span> <span class="n">code_map</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">code_map</span> <span class="o">=</span> <span class="n">code_map</span>
+                <span class="k">return</span>
+
+        <span class="c1"># uh oh ...</span>
+        <span class="k">for</span> <span class="n">fail</span> <span class="ow">in</span> <span class="n">fails</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed </span><span class="si">{</span><span class="n">fail</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">fail</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+        <span class="k">raise</span> <span class="ne">IOError</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;failed to load </span><span class="si">{</span><span class="n">cmf</span><span class="si">}</span><span class="s2"> as an xlsx, YAML, or text code map&quot;</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">_check_mapper</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">code_map</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_check_mapper</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">mapper</span><span class="p">):</span>
+
+        <span class="k">if</span> <span class="ow">not</span> <span class="s2">&quot;regexp&quot;</span> <span class="ow">in</span> <span class="n">mapper</span><span class="o">.</span><span class="n">columns</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;codemap </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cmf</span><span class="si">}</span><span class="s2"> must include a regexp column&quot;</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">mapper</span><span class="o">.</span><span class="n">columns</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="ne">Exception</span><span class="p">(</span>
+                <span class="sa">f</span><span class="s2">&quot;codemap </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cmf</span><span class="si">}</span><span class="s2"> must have regexp and &quot;</span>
+                <span class="s2">&quot;at least one additional code tag column.&quot;</span>
+            <span class="p">)</span>
+
+        <span class="k">for</span> <span class="n">row</span><span class="p">,</span> <span class="n">pattern</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">mapper</span><span class="p">[</span><span class="s2">&quot;regexp&quot;</span><span class="p">]):</span>
+            <span class="k">try</span><span class="p">:</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+            <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">fail</span><span class="p">:</span>
+                <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;regexp row </span><span class="si">{</span><span class="n">row</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+                <span class="k">raise</span> <span class="n">fail</span>
+
+        <span class="k">if</span> <span class="n">code_map</span><span class="o">.</span><span class="n">columns</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">==</span> <span class="s2">&quot;Index&quot;</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">DeprecationWarning</span><span class="p">(</span>
+                <span class="s2">&quot;As of mkpy 0.2.1 codemaps no longer require an Index as the first column.&quot;</span>
+            <span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_load_xlsx_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;wraps pandas.Dataframe.read_excel() to load a code tag table from .xlsx</span>
+
+<span class="sd">        Parameter</span>
+<span class="sd">        ---------</span>
+<span class="sd">            cmf : str or Path</span>
+<span class="sd">                is path_to_file.xlsx[!named_sheet )path to an .xlsx file with optional.</span>
+<span class="sd">                Default selects first worksheet use .xlsx!sheet_name syntax to select a</span>
+<span class="sd">                named sheet.</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            mapper : pandas.Dataframe</span>
+
+<span class="sd">        Examples</span>
+<span class="sd">        --------</span>
+<span class="sd">            _load_xlsx_map(&#39;myexpt/code_tag_table.xlsx&#39;)</span>
+<span class="sd">            _load_xlsx_map(&#39;myexpt/code_tag_table.xlsx!for_evoked&#39;)</span>
+<span class="sd">            _load_xlsx_map(&#39;myexpt/code_tag_table.xlsx!for_mixed_effects&#39;)</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># use !named_sheet if there is one, else default to 0 == first</span>
+        <span class="n">cmf_reob</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;(?P&lt;xl_f&gt;.+\.xls[xm])[\!]*(?P&lt;sheet_name&gt;.*)$&quot;</span><span class="p">,</span> <span class="n">cmf</span><span class="p">)</span>
+        <span class="n">xl_f</span> <span class="o">=</span> <span class="n">cmf_reob</span><span class="p">[</span><span class="s2">&quot;xl_f&quot;</span><span class="p">]</span>
+        <span class="n">sheet_name</span> <span class="o">=</span> <span class="n">cmf_reob</span><span class="p">[</span><span class="s2">&quot;sheet_name&quot;</span><span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">sheet_name</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">sheet_name</span> <span class="o">=</span> <span class="mi">0</span>
+
+        <span class="n">mapper</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_excel</span><span class="p">(</span>
+            <span class="n">xl_f</span><span class="p">,</span>
+            <span class="n">sheet_name</span><span class="o">=</span><span class="n">sheet_name</span><span class="p">,</span>
+            <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+            <span class="n">engine</span><span class="o">=</span><span class="s2">&quot;openpyxl&quot;</span><span class="p">,</span>  <span class="c1"># , index_col=&quot;Index&quot;</span>
+        <span class="p">)</span>
+        <span class="k">return</span> <span class="n">mapper</span>
+
+    <span class="k">def</span> <span class="nf">_load_txt_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;load tab-separated UTF-8 text file and return pandas DataFrame&quot;&quot;&quot;</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cmf</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+            <span class="n">mapper</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_table</span><span class="p">(</span>
+                <span class="n">cmf</span><span class="p">,</span>
+                <span class="n">delimiter</span><span class="o">=</span><span class="s2">&quot;</span><span class="se">\t</span><span class="s2">&quot;</span><span class="p">,</span>
+                <span class="n">header</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>
+                <span class="n">encoding</span><span class="o">=</span><span class="s2">&quot;utf-8&quot;</span><span class="p">,</span>
+                <span class="c1"># index_col=&quot;Index&quot;,</span>
+            <span class="p">)</span>
+        <span class="k">return</span> <span class="n">mapper</span>
+
+    <span class="k">def</span> <span class="nf">_load_yaml_map</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmf</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;load yaml mapper file and return pandas DataFrame&quot;&quot;&quot;</span>
+
+        <span class="c1"># slurp the code tags</span>
+        <span class="k">with</span> <span class="nb">open</span><span class="p">(</span><span class="n">cmf</span><span class="p">,</span> <span class="s2">&quot;r&quot;</span><span class="p">)</span> <span class="k">as</span> <span class="n">d</span><span class="p">:</span>
+            <span class="n">mapper</span> <span class="o">=</span> <span class="n">yaml</span><span class="o">.</span><span class="n">load</span><span class="p">(</span><span class="n">d</span><span class="o">.</span><span class="n">read</span><span class="p">(),</span> <span class="n">Loader</span><span class="o">=</span><span class="n">yaml</span><span class="o">.</span><span class="n">SafeLoader</span><span class="p">)</span>
+
+        <span class="c1"># modicum of format checking ...</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">mapper</span><span class="p">,</span> <span class="nb">dict</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;code tag map file is not a yaml map: &quot;</span>
+                <span class="o">+</span> <span class="s2">&quot;yaml.load(</span><span class="si">{0}</span><span class="s2">).__class__ == </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">cmf</span><span class="p">,</span> <span class="n">mapper</span><span class="o">.</span><span class="vm">__class__</span><span class="p">)</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># nab column labels ... equivalent to header row in tabular code tag map</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">col_labels</span> <span class="o">=</span> <span class="n">mapper</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span>
+            <span class="n">ncols</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">col_labels</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;code tag map must have &quot;columns&quot; entry&#39;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># nab rows</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">rows</span> <span class="o">=</span> <span class="n">mapper</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">]</span>
+            <span class="n">nrows</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">rows</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span><span class="p">:</span>
+            <span class="nb">print</span><span class="p">(</span><span class="s1">&#39;code tag map must have &quot;rows&quot; entry&#39;</span><span class="p">)</span>
+            <span class="k">raise</span>
+
+        <span class="c1"># modicum of value checking</span>
+        <span class="k">for</span> <span class="n">mapvals</span> <span class="ow">in</span> <span class="n">rows</span><span class="p">:</span>
+            <span class="c1"># insist on non-empty column values</span>
+            <span class="k">if</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">isinstance</span><span class="p">(</span><span class="n">mapvals</span><span class="p">,</span> <span class="nb">list</span><span class="p">)</span> <span class="ow">and</span> <span class="nb">len</span><span class="p">(</span><span class="n">mapvals</span><span class="p">)</span> <span class="o">==</span> <span class="n">ncols</span><span class="p">):</span>
+                <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;</span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">mapvals</span><span class="p">)</span>
+                <span class="n">msg</span> <span class="o">+=</span> <span class="s2">&quot; map values must be a list of </span><span class="si">{0}</span><span class="s2"> items: </span><span class="si">{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span>
+                    <span class="n">ncols</span><span class="p">,</span> <span class="n">col_labels</span>
+                <span class="p">)</span>
+                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+            <span class="c1"># check that the patterns will compile as a regexp</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">mapvals</span><span class="p">[</span><span class="n">mapper</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">index</span><span class="p">(</span><span class="s2">&quot;regexp&quot;</span><span class="p">)])</span>
+
+        <span class="c1"># return as a pandas data frame, indexed on Index</span>
+        <span class="n">mapper</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">mapper</span><span class="p">[</span><span class="s2">&quot;rows&quot;</span><span class="p">],</span> <span class="n">columns</span><span class="o">=</span><span class="n">mapper</span><span class="p">[</span><span class="s2">&quot;columns&quot;</span><span class="p">])</span>
+        <span class="c1"># mapper.set_index(&quot;Index&quot;, inplace=True)</span>
+        <span class="k">return</span> <span class="n">mapper</span>
+
+    <span class="k">def</span> <span class="nf">_pattern_to_str</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        normalize different input data types to a string rep for re matching</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="c1"># np.bytes_ has __abs__ so check it first ... yuck</span>
+        <span class="k">if</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">bytes_</span><span class="p">):</span>
+            <span class="c1"># bytes</span>
+            <span class="n">patt_str</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="n">decode</span><span class="p">(</span><span class="s2">&quot;utf8&quot;</span><span class="p">)</span>
+        <span class="k">elif</span> <span class="nb">hasattr</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="s2">&quot;__abs__&quot;</span><span class="p">):</span>
+            <span class="c1"># numeric ... +/-</span>
+            <span class="n">patt_str</span> <span class="o">=</span> <span class="n">pattern</span><span class="o">.</span><span class="fm">__str__</span><span class="p">()</span>
+        <span class="k">elif</span> <span class="nb">isinstance</span><span class="p">(</span><span class="n">pattern</span><span class="p">,</span> <span class="nb">str</span><span class="p">):</span>
+            <span class="c1"># strings</span>
+            <span class="n">patt_str</span> <span class="o">=</span> <span class="n">pattern</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;cannot convert </span><span class="si">{0}</span><span class="s2"> to string for pattern matching &quot;</span>
+                <span class="s2">&quot;must be integer, bytes, or string&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># try to be helpful about invisible characters</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">t&quot;</span><span class="p">,</span> <span class="n">patt_str</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;tab character in </span><span class="si">{0}</span><span class="s2"> never match, use a single &quot;</span>
+                <span class="s2">&quot;white space to delimit event codes&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">patt_str</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\s{2,}&quot;</span><span class="p">,</span> <span class="n">patt_str</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;consecutive whitespaces in </span><span class="si">{0}</span><span class="s2"> never match, use a single &quot;</span>
+                <span class="s2">&quot;white space to delimit event codes&quot;</span>
+            <span class="p">)</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">patt_str</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;^ &quot;</span><span class="p">,</span> <span class="n">patt_str</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;leading whitespace in </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">patt_str</span><span class="p">))</span>
+        <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot; $&quot;</span><span class="p">,</span> <span class="n">patt_str</span><span class="p">):</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;trailing whitespace in </span><span class="si">{0}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">patt_str</span><span class="p">))</span>
+
+        <span class="c1"># check regular expression syntax</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">Exception</span> <span class="k">as</span> <span class="n">msg</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="bp">self</span><span class="o">.</span><span class="n">BadCodePattern</span><span class="p">(</span><span class="n">in_patt</span><span class="o">=</span><span class="n">pattern</span><span class="p">,</span> <span class="n">cause</span><span class="o">=</span><span class="n">msg</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">patt_str</span>
+
+    <span class="k">def</span> <span class="nf">_parse_patt</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">):</span>
+        <span class="sd">&quot;&quot;&quot;locate position of the anchor code in search pattern plus basic r.e. validation</span>
+
+<span class="sd">        Parameters</span>
+<span class="sd">        ----------</span>
+<span class="sd">            pattern : regular expression string</span>
+<span class="sd">                regular expression pattern with exactly one anchor capture group</span>
+<span class="sd">                of the form (#...), optionally flanked by other code patterns</span>
+
+<span class="sd">        Returns</span>
+<span class="sd">        -------</span>
+<span class="sd">            (anchor, capture_groups, code_patt) : tuple</span>
+<span class="sd">                anchor : tuple</span>
+<span class="sd">                    (anchor_group_index, anchor_match_object)</span>
+<span class="sd">                capture_groups : list</span>
+<span class="sd">                    a list of the capture groups in pattern</span>
+<span class="sd">                code_patt : regular expression string</span>
+<span class="sd">                    regular expression pattern with the (one and only)</span>
+<span class="sd">                    anchor marker # stripped</span>
+
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">in_patt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_pattern_to_str</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>  <span class="c1"># coerce input to a sensible r.e.</span>
+
+        <span class="c1"># define capture groups, supressing greedy matching w/ ? is essential</span>
+        <span class="n">capt_group_patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\((?!\?\:).+?\)&quot;</span>  <span class="c1"># any ( ) except non-capturing (?: )</span>
+
+        <span class="c1"># anchor_patt = r&#39;\(#[-]{0,1}\d+\)&#39; # matches integer code literals only</span>
+        <span class="n">anchor_patt</span> <span class="o">=</span> <span class="sa">r</span><span class="s2">&quot;\(#.+\)&quot;</span>  <span class="c1"># allow anchor pattern (# ...)  allows patterns</span>
+
+        <span class="c1"># look up the capture groups including anchors</span>
+        <span class="n">capture_groups</span> <span class="o">=</span> <span class="p">[</span><span class="n">g</span> <span class="k">for</span> <span class="n">g</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">capt_group_patt</span><span class="p">,</span> <span class="n">in_patt</span><span class="p">)]</span>
+
+        <span class="c1"># check exactly one anchor group</span>
+        <span class="n">anchors</span> <span class="o">=</span> <span class="p">[</span>
+            <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">g</span><span class="p">)</span>
+            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">g</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">capture_groups</span><span class="p">)</span>
+            <span class="k">if</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">anchor_patt</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">0</span><span class="p">))</span>
+        <span class="p">]</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">anchors</span><span class="p">)</span> <span class="o">&lt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MissingAnchor</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span>
+        <span class="k">elif</span> <span class="nb">len</span><span class="p">(</span><span class="n">anchors</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">1</span><span class="p">:</span>
+            <span class="k">raise</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">MultipleAnchors</span><span class="p">(</span><span class="n">pattern</span><span class="p">))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">anchor</span> <span class="o">=</span> <span class="n">anchors</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+
+        <span class="c1"># strip the # anchor mark</span>
+        <span class="c1"># code_patt = re.sub(r&#39;#&#39;, r&#39;&#39;, in_patt)</span>
+        <span class="c1"># like so to prevent stripping comments (?# ...)</span>
+        <span class="n">code_patt</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;\(#&quot;</span><span class="p">,</span> <span class="sa">r</span><span class="s2">&quot;(&quot;</span><span class="p">,</span> <span class="n">in_patt</span><span class="p">)</span>
+
+        <span class="c1"># right-bound the captured group, e.g., (#10) -&gt; (#10\b) else (#10) matches</span>
+        <span class="c1"># and extracts 1024. No expressive loss b.c. (#1024) and (#10\d\d) also match 1024</span>
+        <span class="c1"># The \b matches boundary at next white space or end of string</span>
+        <span class="n">code_patt</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">sub</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\\</span><span class="s2">)&quot;</span><span class="p">,</span> <span class="s2">&quot;</span><span class="se">\\\\</span><span class="s2">b)&quot;</span><span class="p">,</span> <span class="n">code_patt</span><span class="p">)</span>
+
+        <span class="c1"># these are used for pattern matching and lookup in find_codes</span>
+        <span class="k">return</span> <span class="p">(</span><span class="n">anchor</span><span class="p">,</span> <span class="n">capture_groups</span><span class="p">,</span> <span class="n">code_patt</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">_find_evcodes</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">pattern</span><span class="p">,</span> <span class="n">ticks</span><span class="p">,</span> <span class="n">evcodes</span><span class="p">):</span>
+        <span class="sa">r</span><span class="sd">&quot;&quot;&quot;Pattern match sequences of integer codes and extract timing information</span>
+
+<span class="sd">        This finds arbitrary subsequences of integers in a 1-D array</span>
+<span class="sd">        of integers (``evcodes``) and returns bundles of match and</span>
+<span class="sd">        index information.</span>
+
+<span class="sd">        Whereas individual integers are readily matched by numerical</span>
+<span class="sd">        identity comparison, matching arbitrary subsequences requires</span>
+<span class="sd">        a more general search algorithm.</span>
+
+<span class="sd">        Regular expression pattern matching over character strings</span>
+<span class="sd">        affords just such generality, but based on character rather</span>
+<span class="sd">        than numeric identity comparisons, i.e., 2/4 == 2 is true but</span>
+<span class="sd">        &#39;2/4&#39; == &#39;2&#39; is false. So the 1-D integer array is mapped to</span>
+<span class="sd">        1-D character array (=string) representation drawn from the</span>
+<span class="sd">        alphabet &#39; -0123456789&#39; with &#39; &#39; as a delimiter. Since the nth</span>
+<span class="sd">        delimiter corresponds to 0-base index of the nth integer in</span>
+<span class="sd">        the original array, the string positions of pattern matches on</span>
+<span class="sd">        the string representation can be converted back to the indices</span>
+<span class="sd">        of the corresponding values in the integer array.</span>
+
+<span class="sd">        For the intended use case where integer correspond to event</span>
+<span class="sd">        codes in a data stream it is convenient to single out one code</span>
+<span class="sd">        as the &quot;anchor&quot; in the sequence, ``#...`` and to use the</span>
+<span class="sd">        regular expression capture group mechanism ``( ... )`` to</span>
+<span class="sd">        identify those portions of the sequence to extract and return:</span>
+<span class="sd">        the anchor (#...) always and optionally other codes in the</span>
+<span class="sd">        matching sequence.</span>
+
+<span class="sd">        In conjunction with a specification of indexes into a data</span>
+<span class="sd">        stream (``ticks``), each match bundle provides all the</span>
+<span class="sd">        information necessary to look-up the location of the</span>
+<span class="sd">        subsequence of integers in the original data stream.</span>
+
+<span class="sd">        Approach: two steps</span>
+
+<span class="sd">          1. preprocess the search pattern to find the # anchor mark and</span>
+<span class="sd">             count the capture groups</span>
+
+<span class="sd">          2. sweep the pattern across a string-ified representation of</span>
+<span class="sd">             the integer event codes, extracting information bundles</span>
+<span class="sd">             for each captured group: the obligatory anchor code always,</span>
+<span class="sd">             and any other captured evcodes.</span>
+
+<span class="sd">        The extracted information bundles are dictionaries that</span>
+<span class="sd">        contain (primarily) the matched code in the `evcodes` vector,</span>
+<span class="sd">        the matched tick in the `ticks`, the index i at which these</span>
+<span class="sd">        values are found, i.e., idx such that evcodes[idx] = is the</span>
+<span class="sd">        matching and ticks[idx] = the value of the tick at that</span>
+<span class="sd">        match. Additional information specifies the relation between</span>
+<span class="sd">        the match and the anchor pattern.</span>
+
+<span class="sd">        Code Pattern Matching Definitions</span>
+<span class="sd">        --------------------</span>
+<span class="sd">        ``digits``: char</span>
+<span class="sd">            The characters 0, 1, 2, 3, 4, 5, 6, 7, 8, 9. Each is</span>
+<span class="sd">            matched by r&#39;[0-9]&#39; or equivalent, e.g., r&#39;\d&#39;</span>
+
+<span class="sd">        ``code`` : str</span>
+<span class="sd">            a sequence of one or more digits optionally preceded</span>
+<span class="sd">            by the - character.  Matched by r&#39;[-]{0,1}\d+&#39;</span>
+
+<span class="sd">        ``code pattern`` : regexp str</span>
+<span class="sd">            any regular expression that matches a code. Such as r&#39;1&#39;</span>
+<span class="sd">            to match code 1 or r&#39;\d{2}&#39; to match any two digit code or</span>
+<span class="sd">            r&#39;\d{3}1&#39; to match any four digit code ending in 1 or</span>
+<span class="sd">            r&#39;\d{3}[02468]&#39; to match any even four digit code.</span>
+
+<span class="sd">        ``capturing code pattern`` : regexp str</span>
+<span class="sd">           any code pattern of the form r&#39;(...)&#39; that matches a code</span>
+<span class="sd">           or code sequence</span>
+
+<span class="sd">        ``anchor pattern`` : regexp str</span>
+<span class="sd">            any capturing code pattern that captures a subset of the codes</span>
+<span class="sd">            captured by r&#39;(#[-]{0,1}\d+)&#39;.</span>
+
+<span class="sd">        ``code sequence`` : str</span>
+<span class="sd">            a sequence of codes, each preceded by a single a single whitespace.</span>
+<span class="sd">            r&#39;( [-]{0,1}\d+)+&#39;</span>
+
+<span class="sd">        ``search pattern`` : regexp str</span>
+<span class="sd">            any regular expression that contains exactly one anchor</span>
+<span class="sd">            pattern and matches a code or code sequence</span>
+
+<span class="sd">            .. Note::</span>
+<span class="sd">               A ``search pattern`` may contain capturing code</span>
+<span class="sd">               patterns in addition to the anchor pattern</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">rvals</span> <span class="o">=</span> <span class="p">[]</span>  <span class="c1"># return this</span>
+
+        <span class="c1"># bail out if there&#39;s nothing to do</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">evcodes</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">warnings</span><span class="o">.</span><span class="n">warn</span><span class="p">(</span><span class="s2">&quot;list of event codes is empty&quot;</span><span class="p">)</span>
+            <span class="k">return</span> <span class="n">rvals</span>
+
+        <span class="c1"># parse the pattern parameter into useful chunks.</span>
+        <span class="c1"># details in _parse_patt().__doc__</span>
+        <span class="n">anchor</span><span class="p">,</span> <span class="n">capture_groups</span><span class="p">,</span> <span class="n">code_patt</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_parse_patt</span><span class="p">(</span><span class="n">pattern</span><span class="p">)</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">patt_regx</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">compile</span><span class="p">(</span><span class="n">code_patt</span><span class="p">)</span>
+        <span class="k">except</span><span class="p">:</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="s2">&quot;cannot compile </span><span class="si">{0}</span><span class="s2"> as regular expression&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">code_patt</span><span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">TypeError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># stringify the code list for matching against the code pattern</span>
+        <span class="n">sep</span> <span class="o">=</span> <span class="s2">&quot; &quot;</span>  <span class="c1"># the single whitespace delimiter, critical for pattern matching</span>
+        <span class="n">code_str</span> <span class="o">=</span> <span class="s2">&quot;&quot;</span>
+        <span class="k">for</span> <span class="n">e</span> <span class="ow">in</span> <span class="n">evcodes</span><span class="p">:</span>
+            <span class="n">code_str</span> <span class="o">+=</span> <span class="s2">&quot;</span><span class="si">{0}{1}</span><span class="s2">&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> <span class="n">e</span><span class="p">)</span>
+
+        <span class="c1"># sweep the pattern regular expression across the code string</span>
+        <span class="n">matches</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">patt_regx</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">code_str</span><span class="p">)]</span>
+
+        <span class="c1"># rank of the sep delimiter == event code index</span>
+        <span class="c1"># end boundary of nth sep delimiter is right-boundary of the nth event code</span>
+        <span class="n">delims</span> <span class="o">=</span> <span class="p">[</span><span class="n">m</span><span class="o">.</span><span class="n">end</span><span class="p">()</span> <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">re</span><span class="o">.</span><span class="n">finditer</span><span class="p">(</span><span class="n">sep</span><span class="p">,</span> <span class="n">code_str</span><span class="p">)]</span>
+
+        <span class="c1"># assert len(delims)==len(evcodes) # very very bad if not</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">delims</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span><span class="p">(</span><span class="n">evcodes</span><span class="p">):</span>
+            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                <span class="s2">&quot;something has gone horribly wrong in _find_event_codes(), &quot;</span>
+                <span class="s2">&quot;stop what you&quot;</span>
+                <span class="s2">&quot;re doing immediately, find urbach &quot;</span>
+                <span class="s2">&quot;and smack him up side the head.&quot;</span>
+            <span class="p">)</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+        <span class="c1"># 3. scan the string delimter values for pattern match span starts</span>
+        <span class="k">for</span> <span class="p">(</span><span class="n">didx</span><span class="p">,</span> <span class="n">delim_at</span><span class="p">)</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">delims</span><span class="p">):</span>
+
+            <span class="c1"># A search may find 0, 1, or 1+ pattern</span>
+            <span class="c1"># match(es). If a match is found there is at least one</span>
+            <span class="c1"># match group for the obligatory anchor and maybe more</span>
+            <span class="c1"># if the pattern contains additional capture groups.</span>
+            <span class="c1"># So for generality always iterate over m.groups()</span>
+            <span class="k">for</span> <span class="n">m</span> <span class="ow">in</span> <span class="n">matches</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">delim_at</span> <span class="o">==</span> <span class="n">m</span><span class="o">.</span><span class="n">span</span><span class="p">()[</span><span class="mi">0</span><span class="p">]:</span>
+                    <span class="n">m_group_info</span> <span class="o">=</span> <span class="p">[]</span>
+
+                    <span class="c1"># iterate thru the match groups in this m</span>
+                    <span class="n">mgi</span> <span class="o">=</span> <span class="mi">1</span>  <span class="c1"># individual match groups start at index 1</span>
+
+                    <span class="c1"># copy indexes to process m&#39;s match groups</span>
+                    <span class="c1"># w/out disturbing didx, delim_at</span>
+                    <span class="n">idx</span> <span class="o">=</span> <span class="n">didx</span>
+                    <span class="n">dlim</span> <span class="o">=</span> <span class="n">delim_at</span>
+
+                    <span class="n">anchor_idx</span><span class="p">,</span> <span class="n">anchor_group_idx</span><span class="p">,</span> <span class="n">anchor_tick</span> <span class="o">=</span> <span class="p">(</span><span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">,</span> <span class="kc">None</span><span class="p">)</span>
+
+                    <span class="c1">#  this index points to the anchor capture group in m.groups()</span>
+                    <span class="n">anchor_group_idx</span> <span class="o">=</span> <span class="n">anchor</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span>
+
+                    <span class="c1"># for readability</span>
+                    <span class="n">anchor_delim</span> <span class="o">=</span> <span class="n">m</span><span class="o">.</span><span class="n">span</span><span class="p">(</span><span class="n">anchor_group_idx</span><span class="p">)[</span>
+                        <span class="mi">0</span>
+                    <span class="p">]</span>  <span class="c1"># string offset for anchor</span>
+                    <span class="n">anchor_idx</span> <span class="o">=</span> <span class="n">delims</span><span class="o">.</span><span class="n">index</span><span class="p">(</span>
+                        <span class="n">anchor_delim</span>
+                    <span class="p">)</span>  <span class="c1"># index in code list of anchor</span>
+                    <span class="n">anchor_tick</span> <span class="o">=</span> <span class="n">ticks</span><span class="p">[</span><span class="n">anchor_idx</span><span class="p">]</span>  <span class="c1"># index into the lists</span>
+
+                    <span class="c1"># assert(int(m.group(anchor_group_idx)) == evcodes[anchor_idx])</span>
+                    <span class="c1"># confirm stringified event code sequence w/ original array</span>
+                    <span class="k">if</span> <span class="nb">int</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">anchor_group_idx</span><span class="p">))</span> <span class="o">!=</span> <span class="n">evcodes</span><span class="p">[</span><span class="n">anchor_idx</span><span class="p">]:</span>
+                        <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                            <span class="s2">&quot;uh oh, horrible bug #1 in the event code finder &quot;</span>
+                            <span class="s2">&quot;... yell at urbach&quot;</span>
+                        <span class="p">)</span>
+                        <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                    <span class="k">while</span> <span class="n">mgi</span> <span class="o">&lt;=</span> <span class="n">m</span><span class="o">.</span><span class="n">lastindex</span> <span class="ow">and</span> <span class="n">idx</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">evcodes</span><span class="p">):</span>
+                        <span class="k">if</span> <span class="n">m</span><span class="o">.</span><span class="n">start</span><span class="p">(</span><span class="n">mgi</span><span class="p">)</span> <span class="o">==</span> <span class="n">dlim</span><span class="p">:</span>
+                            <span class="c1"># scrape this match group info</span>
+                            <span class="n">info</span> <span class="o">=</span> <span class="kc">None</span>
+
+                            <span class="c1"># capture groups match one or more evcodes</span>
+                            <span class="c1"># ... make a list, possibly singleton</span>
+                            <span class="n">enumevcodes</span> <span class="o">=</span> <span class="p">[</span>
+                                <span class="p">(</span><span class="n">i</span><span class="p">,</span> <span class="n">c</span><span class="p">)</span>
+                                <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">mgi</span><span class="p">)</span><span class="o">.</span><span class="n">strip</span><span class="p">()</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="s2">&quot; &quot;</span><span class="p">))</span>
+                            <span class="p">]</span>
+
+                            <span class="c1"># check the slicing and dicing ...</span>
+                            <span class="c1"># the code (sequence) at this index must match the string pattern</span>
+                            <span class="c1"># assert all([c == str(evcodes[idx+i]) for i,c in enumevcodes])</span>
+                            <span class="k">if</span> <span class="nb">any</span><span class="p">(</span>
+                                <span class="p">[</span><span class="n">c</span> <span class="o">!=</span> <span class="nb">str</span><span class="p">(</span><span class="n">evcodes</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span> <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">enumevcodes</span><span class="p">]</span>
+                            <span class="p">):</span>
+                                <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                                    <span class="s2">&quot;uh oh, horrible bug #2 in the event code finder&quot;</span>
+                                    <span class="s2">&quot;... yell at urbach&quot;</span>
+                                <span class="p">)</span>
+                                <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                            <span class="c1"># whew ...</span>
+                            <span class="k">for</span> <span class="n">i</span><span class="p">,</span> <span class="n">c</span> <span class="ow">in</span> <span class="n">enumevcodes</span><span class="p">:</span>
+                                <span class="c1"># each info is a list of (key, value) tuples, readily</span>
+                                <span class="c1"># convertible something useful ... OrderedDict, pandas.Dataframe</span>
+                                <span class="n">info</span> <span class="o">=</span> <span class="p">[</span>
+                                    <span class="p">(</span><span class="s2">&quot;match_group&quot;</span><span class="p">,</span> <span class="n">mgi</span><span class="p">),</span>
+                                    <span class="p">(</span><span class="s2">&quot;idx&quot;</span><span class="p">,</span> <span class="n">idx</span><span class="p">),</span>
+                                    <span class="p">(</span><span class="s2">&quot;dlim&quot;</span><span class="p">,</span> <span class="n">dlim</span><span class="p">),</span>
+                                    <span class="p">(</span><span class="s2">&quot;anchor_str&quot;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">anchor_group_idx</span><span class="p">)),</span>
+                                    <span class="p">(</span><span class="s2">&quot;match_str&quot;</span><span class="p">,</span> <span class="n">m</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="n">mgi</span><span class="p">)),</span>
+                                    <span class="p">(</span><span class="s2">&quot;anchor_code&quot;</span><span class="p">,</span> <span class="n">evcodes</span><span class="p">[</span><span class="n">anchor_idx</span><span class="p">]),</span>
+                                    <span class="p">(</span><span class="s2">&quot;match_code&quot;</span><span class="p">,</span> <span class="n">evcodes</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">i</span><span class="p">]),</span>  <span class="c1"># evcodes[idx],</span>
+                                    <span class="p">(</span><span class="s2">&quot;anchor_tick&quot;</span><span class="p">,</span> <span class="n">anchor_tick</span><span class="p">),</span>
+                                    <span class="p">(</span><span class="s2">&quot;match_tick&quot;</span><span class="p">,</span> <span class="n">ticks</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">i</span><span class="p">]),</span>  <span class="c1"># ticks[idx]</span>
+                                    <span class="p">(</span>
+                                        <span class="s2">&quot;anchor_tick_delta&quot;</span><span class="p">,</span>
+                                        <span class="nb">int</span><span class="p">(</span><span class="n">ticks</span><span class="p">[</span><span class="n">idx</span> <span class="o">+</span> <span class="n">i</span><span class="p">])</span> <span class="o">-</span> <span class="nb">int</span><span class="p">(</span><span class="n">anchor_tick</span><span class="p">),</span>
+                                    <span class="p">),</span>
+                                    <span class="p">(</span><span class="s2">&quot;is_anchor&quot;</span><span class="p">,</span> <span class="n">mgi</span> <span class="o">==</span> <span class="n">anchor_group_idx</span><span class="p">),</span>
+                                <span class="p">]</span>
+                                <span class="n">m_group_info</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">info</span><span class="p">)</span>
+                            <span class="n">mgi</span> <span class="o">+=</span> <span class="mi">1</span>
+                        <span class="n">idx</span> <span class="o">+=</span> <span class="mi">1</span>  <span class="c1"># keep looking to the right</span>
+                        <span class="k">if</span> <span class="n">idx</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">evcodes</span><span class="p">):</span>
+                            <span class="k">continue</span>  <span class="c1"># nothing else to look for, move on</span>
+                        <span class="n">dlim</span> <span class="o">=</span> <span class="n">delims</span><span class="p">[</span><span class="n">idx</span><span class="p">]</span>  <span class="c1"># update delimiter</span>
+
+                        <span class="c1"># vestigal bounds check ...</span>
+                        <span class="k">if</span> <span class="n">idx</span> <span class="o">&gt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">evcodes</span><span class="p">):</span>
+                            <span class="n">msg</span> <span class="o">=</span> <span class="p">(</span>
+                                <span class="s2">&quot;uh oh, event code list overrun horrible bug #3 in the &quot;</span>
+                                <span class="s2">&quot;event code finder ... yell at urbach&quot;</span>
+                            <span class="p">)</span>
+                            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="n">msg</span><span class="p">)</span>
+
+                    <span class="c1"># accumulate the data</span>
+                    <span class="n">rvals</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">m_group_info</span><span class="p">)</span>
+
+        <span class="c1"># done scanning, go home</span>
+        <span class="k">if</span> <span class="nb">len</span><span class="p">(</span><span class="n">rvals</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="c1"># pp.pprint(rvals)</span>
+            <span class="c1"># pdb.set_trace()</span>
+            <span class="k">return</span> <span class="n">rvals</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="kc">None</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

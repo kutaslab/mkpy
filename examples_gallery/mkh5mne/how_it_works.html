@@ -1,0 +1,1570 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>How it works &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Options for converting to mne.Raw" href="from_mkh5.html" />
+    <link rel="prev" title="Quickstart: mkh5 to MNE" href="mne_quickstart.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../mkh5/index.html">mkh5</a></li>
+<li class="toctree-l2 current"><a class="reference internal" href="index.html">mkh5 and MNE Python (experimental)</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="no_events.html">EEG without events or epochs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mne_quickstart.html">Quickstart: mkh5 to MNE</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">How it works</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="#annotate-garv-artifacts-optional">Annotate garv artifacts (optional)</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#mne-epochs-codemap-metadata">mne.Epochs codemap metadata</a></li>
+<li class="toctree-l4"><a class="reference internal" href="#find-mkh5-events"><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_mkh5_events()</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l3"><a class="reference internal" href="from_mkh5.html">Options for converting to mne.Raw</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../mkh5eeglab/index.html">mkh5 and EEGLAB (experimental)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../ExamplesGallery.html">Examples Gallery</a> &raquo;</li>
+          <li><a href="index.html">mkh5 and MNE Python (experimental)</a> &raquo;</li>
+      <li>How it works</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples_gallery/mkh5mne/how_it_works.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="sphx-glr-download-link-note admonition note">
+<p class="admonition-title">Note</p>
+<p>Click <a class="reference internal" href="#sphx-glr-download-examples-gallery-mkh5mne-how-it-works-py"><span class="std std-ref">here</span></a>
+to download the full example code</p>
+</div>
+<div class="sphx-glr-example-title section" id="how-it-works">
+<span id="sphx-glr-examples-gallery-mkh5mne-how-it-works-py"></span><h1>How it works<a class="headerlink" href="#how-it-works" title="Permalink to this heading"></a></h1>
+<p>The sample mkh5 file is for a single subject in an auditory oddball paradigm with
+some epochs tables previously marked.</p>
+<p>Converting mkh5 HDF5 to MNE RawMkh5 does several things:</p>
+<ul class="simple">
+<li><p>concatenates the separate mkh5 datablock EEG and event data channels into one long mne.Raw strip chart</p></li>
+<li><p>populates the mne.Info structure with header info including
+electrode names and locations</p></li>
+<li><p>extracts all the mkpy epochs tables from the HDF5 and packs them into the mne.Info</p></li>
+<li><p>for each epoch table, a new “stim” event code channel is created in the mne.Raw with
+the name of the epochs table and all and only the events from that table.</p></li>
+</ul>
+<p>FYI … environment and versions.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">import</span> <span class="nn">mne</span>
+<span class="kn">import</span> <span class="nn">mkpy</span>
+<span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+
+<span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">set_browser_backend</span><span class="p">(</span><span class="s2">&quot;matplotlib&quot;</span><span class="p">)</span>  <span class="c1"># for docs generation</span>
+
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;conda env&quot;</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s2">&quot;CONDA_DEFAULT_ENV&quot;</span><span class="p">])</span>
+<span class="k">for</span> <span class="n">pkg</span> <span class="ow">in</span> <span class="p">[</span><span class="n">mkpy</span><span class="p">,</span> <span class="n">mne</span><span class="p">]:</span>
+    <span class="nb">print</span><span class="p">(</span><span class="n">pkg</span><span class="o">.</span><span class="vm">__name__</span><span class="p">,</span> <span class="n">pkg</span><span class="o">.</span><span class="n">__version__</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>conda env env_3.8
+mkpy 0.2.7
+mne 1.0.3
+</pre></div>
+</div>
+<p>Convert the EEG and event-tagged epochs. Electrode locations are
+required, they can be included in the YAML .yhdr when the mkh5 file
+is created or added during conversion as shown.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p3_h5_f</span> <span class="o">=</span> <span class="s2">&quot;../mkh5_data/sub000p3.h5&quot;</span>
+<span class="n">mne_raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span><span class="n">p3_h5_f</span><span class="p">,</span> <span class="n">apparatus_yaml</span><span class="o">=</span><span class="s2">&quot;mne_32chan_xyz_spherical.yml&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>../mkh5_data/sub000p3.h5
+looking up data block paths, larger files take longer ...
+ok
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_0 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_1
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_1 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_2
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_2 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_3
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_3 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+checking info, montage sub000/dblock_4
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_4 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_0 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=31232
+    Range : 0 ... 31231 =      0.000 ...   124.924 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_0 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_0 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_1 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=32768
+    Range : 0 ... 32767 =      0.000 ...   131.068 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_1 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_1 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_2 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=31744
+    Range : 0 ... 31743 =      0.000 ...   126.972 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_2 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_2 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_3 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=32512
+    Range : 0 ... 32511 =      0.000 ...   130.044 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_3 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_3 setting mkh5 epochs table ms3000 events and metadata
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1190: UserWarning: Overriding /sub000/dblock_4 with sensor locations from mne_32chan_xyz_spherical.yml
+  warnings.warn(msg)
+Creating RawArray with float64 data, n_channels=39, n_times=28416
+    Range : 0 ... 28415 =      0.000 ...   113.660 secs
+Ready.
+/usr/share/miniconda/envs/env_3.8/lib/python3.8/site-packages/mkpy/io/mkh5mne.py:1478: RuntimeWarning: Not setting position of 1 eog channel found in montage:
+[&#39;HEOG&#39;]
+Consider setting the channel types to be of EEG/sEEG/ECoG/DBS/fNIRS using inst.set_channel_types before calling inst.set_montage, or omit these channels when creating your montage.
+  raw_dblock.set_montage(montage)
+sub000/dblock_4 setting mkh5 epochs table ms100 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms10000 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms1500 events and metadata
+sub000/dblock_4 setting mkh5 epochs table ms3000 events and metadata
+EEG data marked as already having the desired reference.
+</pre></div>
+</div>
+<p>When the mkh5 datablocks are knit together for MNE, the discontinuities at edges
+are tracked automatically as mne.Annotations</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_raw</span><span class="o">.</span><span class="n">annotations</span><span class="o">.</span><span class="n">description</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>array([&#39;sub000/dblock_0&#39;, &#39;sub000/dblock_1&#39;, &#39;BAD boundary&#39;,
+       &#39;EDGE boundary&#39;, &#39;sub000/dblock_2&#39;, &#39;BAD boundary&#39;,
+       &#39;EDGE boundary&#39;, &#39;sub000/dblock_3&#39;, &#39;BAD boundary&#39;,
+       &#39;EDGE boundary&#39;, &#39;sub000/dblock_4&#39;, &#39;BAD boundary&#39;,
+       &#39;EDGE boundary&#39;], dtype=&#39;&lt;U15&#39;)
+</pre></div>
+</div>
+<p>The mne_raw object has the mne.Info attached. You can see the mkh5 epoch_table info
+peeking out of the mne.Info[“description”] field.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_raw</span><span class="o">.</span><span class="n">info</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<table class="table table-hover table-striped table-sm table-responsive small">
+    <tr>
+        <th>Measurement date</th>
+
+        <td>July 25, 2020  14:23:44 GMT</td>
+
+    </tr>
+    <tr>
+        <th>Experimenter</th>
+
+        <td>Unknown</td>
+
+    </tr>
+        <th>Participant</th>
+
+
+            <td>33f90cab-395e-4871-8641-3be5c9e9d579</td>
+
+
+    </tr>
+    <tr>
+        <th>Digitized points</th>
+
+        <td>0 points</td>
+
+    </tr>
+    <tr>
+        <th>Good channels</th>
+        <td>2 misc, 9 Stimulus, 31 EEG, 1 EOG</td>
+    </tr>
+    <tr>
+        <th>Bad channels</th>
+        <td>None</td>
+    </tr>
+    <tr>
+        <th>EOG channels</th>
+        <td>HEOG</td>
+    </tr>
+    <tr>
+        <th>ECG channels</th>
+        <td>Not available</td>
+
+    <tr>
+        <th>Sampling frequency</th>
+        <td>250.00 Hz</td>
+    </tr>
+
+
+    <tr>
+        <th>Highpass</th>
+        <td>0.00 Hz</td>
+    </tr>
+
+
+    <tr>
+        <th>Lowpass</th>
+        <td>125.00 Hz</td>
+    </tr>
+
+
+</table>
+</div>
+<br />
+<br /><p>This RawMkh5 object can do all the usual mne.Raw tricks like plotting and writing
+itself to an MNE raw <cite>.fif</cite> file.
+%%</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">p3_events</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">find_mkh5_events</span><span class="p">(</span><span class="n">mne_raw</span><span class="p">,</span> <span class="s2">&quot;ms1500&quot;</span><span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">mne_raw</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span>
+    <span class="n">p3_events</span><span class="p">,</span>
+    <span class="n">start</span><span class="o">=</span><span class="mf">53.0</span><span class="p">,</span>
+    <span class="n">duration</span><span class="o">=</span><span class="mf">3.0</span><span class="p">,</span>
+<span class="p">)</span>
+<span class="n">_</span> <span class="o">=</span> <span class="n">mne</span><span class="o">.</span><span class="n">viz</span><span class="o">.</span><span class="n">plot_sensors</span><span class="p">(</span><span class="n">mne_raw</span><span class="o">.</span><span class="n">info</span><span class="p">)</span>
+</pre></div>
+</div>
+<ul class="sphx-glr-horizontal">
+<li><img src="../../_images/sphx_glr_how_it_works_001.png" srcset="../../_images/sphx_glr_how_it_works_001.png" alt="how it works" class = "sphx-glr-multi-img"/></li>
+<li><img src="../../_images/sphx_glr_how_it_works_002.png" srcset="../../_images/sphx_glr_how_it_works_002.png" alt="how it works" class = "sphx-glr-multi-img"/></li>
+</ul>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Opening raw-browser...
+</pre></div>
+</div>
+<div class="section" id="annotate-garv-artifacts-optional">
+<h2>Annotate garv artifacts (optional)<a class="headerlink" href="#annotate-garv-artifacts-optional" title="Permalink to this heading"></a></h2>
+<p>The mkh5 log_flags that indicate garv artifact events after <code class="docutils literal notranslate"><span class="pre">avg</span>
+<span class="pre">-x</span></code> can be converted to <cite>BAD_garv</cite> mne.Annotations for events on
+any of the event channels.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="c1"># Select the event channel to annotate (&quot;log_evcodes&quot; for all), then</span>
+<span class="c1"># then add the annotations to the mne.Raw</span>
+<span class="n">garv_bads</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">get_garv_bads</span><span class="p">(</span>
+    <span class="n">mne_raw</span><span class="p">,</span> <span class="n">event_channel</span><span class="o">=</span><span class="s2">&quot;ms1500&quot;</span><span class="p">,</span> <span class="n">tmin</span><span class="o">=-</span><span class="mi">750</span><span class="p">,</span> <span class="n">tmax</span><span class="o">=</span><span class="mi">750</span><span class="p">,</span> <span class="n">units</span><span class="o">=</span><span class="s2">&quot;ms&quot;</span>
+<span class="p">)</span>
+<span class="n">mne_raw</span><span class="o">.</span><span class="n">set_annotations</span><span class="p">(</span><span class="n">mne_raw</span><span class="o">.</span><span class="n">annotations</span> <span class="o">+</span> <span class="n">garv_bads</span><span class="p">)</span>
+<span class="n">mne_raw</span><span class="o">.</span><span class="n">annotations</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Annotations | 71 segments: BAD boundary (4), BAD_garv_32 (33), ...&gt;
+</pre></div>
+</div>
+</div>
+<div class="section" id="mne-epochs-codemap-metadata">
+<h2>mne.Epochs codemap metadata<a class="headerlink" href="#mne-epochs-codemap-metadata" title="Permalink to this heading"></a></h2>
+<p>Use :py:meth:.`get_epochs_metadata` to extract mne.Epochs with
+the codemap metatdata
+as MNE format metata when constructing mne.Epochs.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_epochs</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">get_epochs</span><span class="p">(</span>
+    <span class="n">mne_raw</span><span class="p">,</span>
+    <span class="s2">&quot;ms1500&quot;</span><span class="p">,</span>
+    <span class="n">preload</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># populate the Epochs with data and apply projections</span>
+    <span class="n">reject_by_annotation</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>  <span class="c1"># drop the BAD_* annotations or set False to keep them</span>
+    <span class="n">baseline</span><span class="o">=</span><span class="p">(</span><span class="o">-</span><span class="mf">0.2</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">),</span>  <span class="c1"># center on this interval</span>
+<span class="p">)</span>
+<span class="n">mne_epochs</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>Adding metadata with 40 columns
+600 matching events found
+Applying baseline correction (mode: mean)
+0 projection items activated
+Using data from preloaded Raw for 600 events and 376 original time points ...
+131 bad epochs dropped
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<table class="table table-hover table-striped table-sm table-responsive small">
+    <tr>
+        <th>Number of events</th>
+        <td>469</td>
+    </tr>
+    <tr>
+        <th>Events</th>
+
+        <td>1: 49<br/>10: 100<br/>11: 22<br/>2: 47<br/>20: 116<br/>21: 23<br/>3: 56<br/>4: 56</td>
+
+    </tr>
+    <tr>
+        <th>Time range</th>
+        <td>-0.748 – 0.752 sec</td>
+    </tr>
+    <tr>
+        <th>Baseline</th>
+        <td>-0.200 – 0.000 sec</td>
+    </tr>
+</table>
+</div>
+<br />
+<br /><p>The mkh5 codemap tags are attached as native mne.Epochs.metadata</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">mne_epochs</span><span class="o">.</span><span class="n">metadata</span>
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>epoch_id</th>
+      <th>data_group</th>
+      <th>dblock_path</th>
+      <th>dblock_tick_idx</th>
+      <th>dblock_ticks</th>
+      <th>crw_ticks</th>
+      <th>raw_evcodes</th>
+      <th>log_evcodes</th>
+      <th>log_ccodes</th>
+      <th>log_flags</th>
+      <th>epoch_match_tick_delta</th>
+      <th>epoch_ticks</th>
+      <th>dblock_srate</th>
+      <th>match_group</th>
+      <th>idx</th>
+      <th>dlim</th>
+      <th>anchor_str</th>
+      <th>match_str</th>
+      <th>anchor_code</th>
+      <th>match_code</th>
+      <th>anchor_tick</th>
+      <th>match_tick</th>
+      <th>anchor_tick_delta</th>
+      <th>is_anchor</th>
+      <th>regexp</th>
+      <th>ccode</th>
+      <th>instrument</th>
+      <th>bin</th>
+      <th>tone</th>
+      <th>stim</th>
+      <th>accuracy</th>
+      <th>acc_type</th>
+      <th>match_time</th>
+      <th>anchor_time</th>
+      <th>anchor_time_delta</th>
+      <th>diti_t_0</th>
+      <th>diti_hop</th>
+      <th>diti_len</th>
+      <th>mne_dblock_path_idx</th>
+      <th>mne_raw_tick</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>27</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>0</td>
+      <td>943</td>
+      <td>943</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>943</td>
+      <td>943</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>943</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>943</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>28</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>1</td>
+      <td>1212</td>
+      <td>1212</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1212</td>
+      <td>1212</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1212</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>1212</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>2</td>
+      <td>1468</td>
+      <td>1468</td>
+      <td>11</td>
+      <td>11</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7</td>
+      <td>11</td>
+      <td>11</td>
+      <td>11</td>
+      <td>11</td>
+      <td>1468</td>
+      <td>1468</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#11) 1040</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>3</td>
+      <td>hi</td>
+      <td>target</td>
+      <td>correct</td>
+      <td>hit</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1468</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>1468</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>29</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>4</td>
+      <td>1814</td>
+      <td>1814</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>15</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1814</td>
+      <td>1814</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1814</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>1814</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>30</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>5</td>
+      <td>2066</td>
+      <td>2066</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>5</td>
+      <td>18</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>2066</td>
+      <td>2066</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2066</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>2066</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>595</th>
+      <td>596</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>204</td>
+      <td>27315</td>
+      <td>27315</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>204</td>
+      <td>409</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>27315</td>
+      <td>27315</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27315</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155571</td>
+    </tr>
+    <tr>
+      <th>596</th>
+      <td>597</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>205</td>
+      <td>27444</td>
+      <td>27444</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>205</td>
+      <td>411</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>27444</td>
+      <td>27444</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27444</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155700</td>
+    </tr>
+    <tr>
+      <th>597</th>
+      <td>598</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>206</td>
+      <td>27573</td>
+      <td>27573</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>206</td>
+      <td>413</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>27573</td>
+      <td>27573</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27573</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155829</td>
+    </tr>
+    <tr>
+      <th>598</th>
+      <td>599</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>207</td>
+      <td>27703</td>
+      <td>27703</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>207</td>
+      <td>415</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>27703</td>
+      <td>27703</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27703</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155959</td>
+    </tr>
+    <tr>
+      <th>599</th>
+      <td>600</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>208</td>
+      <td>27832</td>
+      <td>27832</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>208</td>
+      <td>417</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>27832</td>
+      <td>27832</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27832</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>156088</td>
+    </tr>
+  </tbody>
+</table>
+<p>469 rows × 40 columns</p>
+</div>
+</div>
+<br />
+<br /><div class="section" id="mkh5mne-raw-data-utilities">
+<h3><a class="reference internal" href="../../api_source/mkpy.io.mkh5mne.html#module-mkpy.io.mkh5mne" title="mkpy.io.mkh5mne"><code class="xref py py-mod docutils literal notranslate"><span class="pre">mkh5mne</span></code></a> raw data utilities<a class="headerlink" href="#mkh5mne-raw-data-utilities" title="Permalink to this heading"></a></h3>
+<p>These utility functions access mkh5 information embedded in the RawMkH5 object.</p>
+</div>
+</div>
+<div class="section" id="find-mkh5-events">
+<h2><code class="xref py py-meth docutils literal notranslate"><span class="pre">find_mkh5_events()</span></code><a class="headerlink" href="#find-mkh5-events" title="Permalink to this heading"></a></h2>
+<p>This is a replacement for <code class="xref py py-meth docutils literal notranslate"><span class="pre">mne.find_events()</span></code> that creates
+the 3 column array of [sample, 0, event] used for native mne.Raw epoching and
+plotting without doing wrong things like converting negative event
+codes to positive.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">garv_bads</span><span class="p">,</span> <span class="n">garv_bads</span><span class="o">.</span><span class="n">description</span><span class="p">)</span>
+<span class="n">p3_events</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">find_mkh5_events</span><span class="p">(</span><span class="n">mne_raw</span><span class="p">,</span> <span class="s2">&quot;ms1500&quot;</span><span class="p">)</span>
+<span class="n">p3_events</span>
+
+<span class="c1"># :py:meth:`.get_find_mkh5_events`</span>
+<span class="c1"># ----------------------------</span>
+<span class="c1">#</span>
+<span class="c1"># This extracts the embedded epochs table from the RawMkh5.</span>
+<span class="n">metadata</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">get_epochs_metadata</span><span class="p">(</span><span class="n">mne_raw</span><span class="p">,</span> <span class="s2">&quot;ms1500&quot;</span><span class="p">)</span>
+<span class="n">metadata</span>
+</pre></div>
+</div>
+<p class="sphx-glr-script-out">Out:</p>
+<div class="sphx-glr-script-out highlight-none notranslate"><div class="highlight"><pre><span></span>&lt;Annotations | 58 segments: BAD_garv_32 (33), BAD_garv_48 (25)&gt; [&#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39;
+ &#39;BAD_garv_32&#39; &#39;BAD_garv_48&#39; &#39;BAD_garv_48&#39;]
+</pre></div>
+</div>
+<div class="output_subarea output_html rendered_html output_result">
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>epoch_id</th>
+      <th>data_group</th>
+      <th>dblock_path</th>
+      <th>dblock_tick_idx</th>
+      <th>dblock_ticks</th>
+      <th>crw_ticks</th>
+      <th>raw_evcodes</th>
+      <th>log_evcodes</th>
+      <th>log_ccodes</th>
+      <th>log_flags</th>
+      <th>epoch_match_tick_delta</th>
+      <th>epoch_ticks</th>
+      <th>dblock_srate</th>
+      <th>match_group</th>
+      <th>idx</th>
+      <th>dlim</th>
+      <th>anchor_str</th>
+      <th>match_str</th>
+      <th>anchor_code</th>
+      <th>match_code</th>
+      <th>anchor_tick</th>
+      <th>match_tick</th>
+      <th>anchor_tick_delta</th>
+      <th>is_anchor</th>
+      <th>regexp</th>
+      <th>ccode</th>
+      <th>instrument</th>
+      <th>bin</th>
+      <th>tone</th>
+      <th>stim</th>
+      <th>accuracy</th>
+      <th>acc_type</th>
+      <th>match_time</th>
+      <th>anchor_time</th>
+      <th>anchor_time_delta</th>
+      <th>diti_t_0</th>
+      <th>diti_hop</th>
+      <th>diti_len</th>
+      <th>mne_dblock_path_idx</th>
+      <th>mne_raw_tick</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>27</th>
+      <td>27</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>0</td>
+      <td>943</td>
+      <td>943</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>943</td>
+      <td>943</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>943</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>943</td>
+    </tr>
+    <tr>
+      <th>28</th>
+      <td>28</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>1</td>
+      <td>1212</td>
+      <td>1212</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>4</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1212</td>
+      <td>1212</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1212</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>1212</td>
+    </tr>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>2</td>
+      <td>1468</td>
+      <td>1468</td>
+      <td>11</td>
+      <td>11</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>2</td>
+      <td>7</td>
+      <td>11</td>
+      <td>11</td>
+      <td>11</td>
+      <td>11</td>
+      <td>1468</td>
+      <td>1468</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#11) 1040</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>3</td>
+      <td>hi</td>
+      <td>target</td>
+      <td>correct</td>
+      <td>hit</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1468</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>1468</td>
+    </tr>
+    <tr>
+      <th>29</th>
+      <td>29</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>4</td>
+      <td>1814</td>
+      <td>1814</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>4</td>
+      <td>15</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1814</td>
+      <td>1814</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1814</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>1814</td>
+    </tr>
+    <tr>
+      <th>30</th>
+      <td>30</td>
+      <td>sub000</td>
+      <td>sub000/dblock_0</td>
+      <td>5</td>
+      <td>2066</td>
+      <td>2066</td>
+      <td>10</td>
+      <td>10</td>
+      <td>1</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>5</td>
+      <td>18</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>10</td>
+      <td>2066</td>
+      <td>2066</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#10) (?!1040)</td>
+      <td>1</td>
+      <td>eeg</td>
+      <td>4</td>
+      <td>lo</td>
+      <td>standard</td>
+      <td>correct</td>
+      <td>cr</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>2066</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>0</td>
+      <td>2066</td>
+    </tr>
+    <tr>
+      <th>...</th>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+      <td>...</td>
+    </tr>
+    <tr>
+      <th>595</th>
+      <td>596</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>204</td>
+      <td>27315</td>
+      <td>27315</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>204</td>
+      <td>409</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>27315</td>
+      <td>27315</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27315</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155571</td>
+    </tr>
+    <tr>
+      <th>596</th>
+      <td>597</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>205</td>
+      <td>27444</td>
+      <td>27444</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>205</td>
+      <td>411</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>27444</td>
+      <td>27444</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27444</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155700</td>
+    </tr>
+    <tr>
+      <th>597</th>
+      <td>598</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>206</td>
+      <td>27573</td>
+      <td>27573</td>
+      <td>3</td>
+      <td>3</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>206</td>
+      <td>413</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>3</td>
+      <td>27573</td>
+      <td>27573</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27573</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155829</td>
+    </tr>
+    <tr>
+      <th>598</th>
+      <td>599</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>207</td>
+      <td>27703</td>
+      <td>27703</td>
+      <td>4</td>
+      <td>4</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>207</td>
+      <td>415</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>4</td>
+      <td>27703</td>
+      <td>27703</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27703</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>155959</td>
+    </tr>
+    <tr>
+      <th>599</th>
+      <td>600</td>
+      <td>sub000</td>
+      <td>sub000/dblock_4</td>
+      <td>208</td>
+      <td>27832</td>
+      <td>27832</td>
+      <td>2</td>
+      <td>2</td>
+      <td>0</td>
+      <td>0</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>250.0</td>
+      <td>1</td>
+      <td>208</td>
+      <td>417</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>2</td>
+      <td>27832</td>
+      <td>27832</td>
+      <td>0</td>
+      <td>True</td>
+      <td>(#\d+)</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>cal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>27832</td>
+      <td>-187</td>
+      <td>375</td>
+      <td>4</td>
+      <td>156088</td>
+    </tr>
+  </tbody>
+</table>
+<p>600 rows × 40 columns</p>
+</div>
+</div>
+<br />
+<br /><p class="sphx-glr-timing"><strong>Total running time of the script:</strong> ( 0 minutes  21.051 seconds)</p>
+<div class="sphx-glr-footer class sphx-glr-footer-example docutils container" id="sphx-glr-download-examples-gallery-mkh5mne-how-it-works-py">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/1849d5fc3ee930022d0e39fe06318114/how_it_works.py"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">how_it_works.py</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/9c695db992c7cfc66a0b55f6a8cfa314/how_it_works.ipynb"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">Jupyter</span> <span class="pre">notebook:</span> <span class="pre">how_it_works.ipynb</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="mne_quickstart.html" class="btn btn-neutral float-left" title="Quickstart: mkh5 to MNE" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="from_mkh5.html" class="btn btn-neutral float-right" title="Options for converting to mne.Raw" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

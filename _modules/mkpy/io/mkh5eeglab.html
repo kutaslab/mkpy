@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkpy.io.mkh5eeglab &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../../" id="documentation_options" src="../../../_static/documentation_options.js"></script>
+        <script src="../../../_static/jquery.js"></script>
+        <script src="../../../_static/underscore.js"></script>
+        <script src="../../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../../_static/doctools.js"></script>
+    <script src="../../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../../genindex.html" />
+    <link rel="search" title="Search" href="../../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul>
+<li class="toctree-l1"><a class="reference internal" href="../../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../examples_gallery/mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ExamplesGallery.html">Examples Gallery</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../index.html">Module code</a> &raquo;</li>
+          <li><a href="../../mkpy.html">mkpy</a> &raquo;</li>
+      <li>mkpy.io.mkh5eeglab</li>
+      <li class="wy-breadcrumbs-aside">
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <h1>Source code for mkpy.io.mkh5eeglab</h1><div class="highlight"><pre>
+<span></span><span class="c1"># Authors: Thomas P. Urbach</span>
+<span class="c1">#</span>
+<span class="c1"># License: BSD (3-clause)</span>
+<span class="c1">#</span>
+<span class="c1"># to_set based on https://github.com/cbrnr/mnelab/blob/main/mnelab/io/writers.py</span>
+<span class="c1"># Authors: Clemens Brunner &lt;clemens.brunner@gmail.com&gt;</span>
+<span class="c1"># License: BSD (3-clause)</span>
+
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">import</span> <span class="nn">json</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+
+<span class="c1"># from numpy.core.records import fromarrays</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">from</span> <span class="nn">scipy.io</span> <span class="kn">import</span> <span class="n">savemat</span>
+<span class="kn">from</span> <span class="nn">mne</span> <span class="kn">import</span> <span class="n">pick_types</span>
+<span class="kn">from</span> <span class="nn">mne.io.constants</span> <span class="kn">import</span> <span class="n">FIFF</span>
+<span class="kn">from</span> <span class="nn">mkpy.io</span> <span class="kn">import</span> <span class="n">mkh5mne</span>
+
+
+<div class="viewcode-block" id="mkh5raw_to_set"><a class="viewcode-back" href="../../../api_source/mkpy.io.mkh5eeglab.html#mkpy.io.mkh5eeglab.mkh5raw_to_set">[docs]</a><span class="k">def</span> <span class="nf">mkh5raw_to_set</span><span class="p">(</span><span class="n">mkh5raw</span><span class="p">,</span> <span class="n">fname</span><span class="p">,</span> <span class="n">epochs_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">return_eeglab_events</span><span class="o">=</span><span class="kc">False</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot;Export mkh5raw EEG, channel, and event data to an EEGLAB .set file.</span>
+
+<span class="sd">    Export an mkh5mne.Mkh5Raw instance in memory to an EEGLAB .set</span>
+<span class="sd">    file. The log events are stored in EEG.events and EEG.urevents and</span>
+<span class="sd">    any mne.Annotations including garv artifacts are stored there as</span>
+<span class="sd">    boundary events.  . If `epochs_name` is provided, the mkh5 codemap</span>
+<span class="sd">    tags for those events are exported as well. Channel locations are</span>
+<span class="sd">    converted to EEGLAB defaults.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mkh5raw : mkh5mne.Mkh5Raw instance</span>
+<span class="sd">       As returned by mkh5mne.from_mkh5(), see</span>
+<span class="sd">       :py:func:`.mkh5mne.from_mkhg` docs for usage.</span>
+
+<span class="sd">    fname : str</span>
+<span class="sd">       Path to the EEGLAB set file to create.</span>
+
+<span class="sd">    epochs_name : str, optional</span>
+<span class="sd">       Include event tags from the named mkh5 epochs table in EEGLAB</span>
+<span class="sd">       .set events. Defaults to None.</span>
+
+<span class="sd">    return_eeglab_events : bool</span>
+<span class="sd">       If true, also returns the event information injected into the EEGLAB .set file.</span>
+<span class="sd">       Useful for diagnosis, validataion. Default is False.</span>
+
+
+<span class="sd">    Returns</span>
+<span class="sd">    -------</span>
+<span class="sd">    eeglab_events_df : pandas.DataFrame</span>
+<span class="sd">       Dataframe with the event information exported in the .set</span>
+
+
+<span class="sd">    Examples</span>
+<span class="sd">    --------</span>
+
+<span class="sd">    Minimal: Export EEG data, datablock boundaries, and log events</span>
+
+<span class="sd">    &gt;&gt;&gt; from mkpy.io import mkh5mne, mkh5eeglab</span>
+<span class="sd">    &gt;&gt;&gt;</span>
+<span class="sd">    &gt;&gt;&gt; mne_raw = mkh5mne.from_mkh5(&quot;sub000.h5)</span>
+<span class="sd">    &gt;&gt;&gt; mkh5eeglab.mkh5raw_to_set(mne_raw, &quot;sub000.set&quot;)</span>
+
+
+<span class="sd">    Also export the codemap event tags from mkpy epochs table &#39;p3&#39;</span>
+
+<span class="sd">    &gt;&gt;&gt; mne_raw = mkh5mne.from_mkh5(&quot;sub000.h5&quot;)</span>
+<span class="sd">    &gt;&gt;&gt; mkh5eeglab.mkh5raw_to_set(mne_raw, &quot;sub000.set&quot;, event_channel=&quot;p3&quot;)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">mkh5raw</span><span class="o">.</span><span class="n">get_data</span><span class="p">()</span>
+
+    <span class="c1"># convert eeg, eog to microvolts</span>
+    <span class="n">chan_idxs</span> <span class="o">=</span> <span class="n">pick_types</span><span class="p">(</span><span class="n">mkh5raw</span><span class="o">.</span><span class="n">info</span><span class="p">,</span> <span class="n">eeg</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span> <span class="n">eog</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">chan_idx</span> <span class="ow">in</span> <span class="n">chan_idxs</span><span class="p">:</span>
+        <span class="n">chan</span> <span class="o">=</span> <span class="n">mkh5raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;chs&quot;</span><span class="p">][</span><span class="n">chan_idx</span><span class="p">]</span>
+
+        <span class="c1"># true by mkh5mne construction or die</span>
+        <span class="k">assert</span> <span class="n">chan</span><span class="p">[</span><span class="s2">&quot;unit&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">FIFF</span><span class="o">.</span><span class="n">FIFF_UNIT_V</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">chan</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="k">assert</span> <span class="n">chan</span><span class="p">[</span><span class="s2">&quot;unit_mul&quot;</span><span class="p">]</span> <span class="o">==</span> <span class="n">FIFF</span><span class="o">.</span><span class="n">FIFF_UNITM_NONE</span><span class="p">,</span> <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">chan</span><span class="si">}</span><span class="s2">&quot;</span>
+        <span class="n">data</span><span class="p">[</span><span class="n">chan_idx</span><span class="p">,</span> <span class="p">:]</span> <span class="o">*=</span> <span class="mf">1e6</span>
+
+    <span class="n">fs</span> <span class="o">=</span> <span class="n">mkh5raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;sfreq&quot;</span><span class="p">]</span>
+    <span class="n">times</span> <span class="o">=</span> <span class="n">mkh5raw</span><span class="o">.</span><span class="n">times</span>
+
+    <span class="n">chanlocs</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">[</span>
+            <span class="p">(</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>  <span class="c1"># theta</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>  <span class="c1"># radius</span>
+                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;ch_name&quot;</span><span class="p">],</span>  <span class="c1"># labels</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>  <span class="c1"># sph_theta</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>  <span class="c1"># sph_phi</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>  <span class="c1"># sph_radius</span>
+                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">][</span><span class="mi">1</span><span class="p">],</span>  <span class="c1"># X for eeglab default</span>
+                <span class="o">-</span><span class="mf">1.0</span> <span class="o">*</span> <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">],</span>  <span class="c1"># Y for eeglab default</span>
+                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;loc&quot;</span><span class="p">][</span><span class="mi">2</span><span class="p">],</span>  <span class="c1"># Z</span>
+                <span class="n">np</span><span class="o">.</span><span class="n">nan</span><span class="p">,</span>  <span class="c1"># ref</span>
+                <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span>
+                    <span class="sa">r</span><span class="s2">&quot;.+FIFFV_(?P&lt;kind&gt;.+)_CH.+&quot;</span><span class="p">,</span>  <span class="c1"># EEG, EOG, MISC, STIM</span>
+                    <span class="nb">str</span><span class="p">(</span><span class="n">ch</span><span class="p">[</span><span class="s2">&quot;kind&quot;</span><span class="p">]),</span>
+                <span class="p">)[</span><span class="s2">&quot;kind&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">upper</span><span class="p">(),</span>
+                <span class="n">ch</span><span class="p">[</span><span class="s2">&quot;ch_name&quot;</span><span class="p">],</span>  <span class="c1"># urchan</span>
+            <span class="p">)</span>
+            <span class="k">for</span> <span class="n">ch</span> <span class="ow">in</span> <span class="n">mkh5raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;chs&quot;</span><span class="p">]</span>
+        <span class="p">],</span>
+        <span class="c1"># EEGLAB chlocs fields</span>
+        <span class="n">columns</span><span class="o">=</span><span class="p">[</span>
+            <span class="s2">&quot;theta&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;radius&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;labels&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sph_theta&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sph_phi&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;sph_radius&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;X&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Y&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;Z&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;ref&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;urchan&quot;</span><span class="p">,</span>
+        <span class="p">],</span>
+    <span class="p">)</span><span class="o">.</span><span class="n">to_records</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+
+    <span class="c1"># always convert MNE annotations to EEGLAB events for dblocks and boundaries</span>
+    <span class="k">assert</span> <span class="nb">len</span><span class="p">(</span><span class="n">mkh5raw</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span>  <span class="c1"># by construction at least one mkh5 dblock tag</span>
+    <span class="n">eeglab_events_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">mkh5raw</span><span class="o">.</span><span class="n">annotations</span><span class="p">)</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;orig_time&quot;</span><span class="p">)</span>
+
+    <span class="n">eeglab_events_df</span><span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">eeglab_events_df</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">apply</span><span class="p">(</span>
+        <span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="s2">&quot;boundary&quot;</span> <span class="k">if</span> <span class="s2">&quot;boundary&quot;</span> <span class="ow">in</span> <span class="n">x</span> <span class="ow">or</span> <span class="s2">&quot;BAD&quot;</span> <span class="ow">in</span> <span class="n">x</span><span class="o">.</span><span class="n">upper</span><span class="p">()</span> <span class="k">else</span> <span class="n">x</span>
+    <span class="p">)</span>
+    <span class="n">eeglab_events_df</span><span class="p">[</span><span class="s2">&quot;latency&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">eeglab_events_df</span><span class="p">[</span><span class="s2">&quot;onset&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">fs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span>
+        <span class="nb">int</span>
+    <span class="p">)</span>  <span class="c1"># matlab 1-base sample</span>
+    <span class="n">eeglab_events_df</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="n">eeglab_events_df</span><span class="p">[</span><span class="s2">&quot;duration&quot;</span><span class="p">]</span> <span class="o">*</span> <span class="n">fs</span><span class="p">)</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">eeglab_events_df</span> <span class="o">=</span> <span class="n">eeglab_events_df</span><span class="p">[</span>
+        <span class="p">[</span><span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="s2">&quot;latency&quot;</span><span class="p">,</span> <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="s2">&quot;description&quot;</span><span class="p">,</span> <span class="s2">&quot;onset&quot;</span><span class="p">]</span>
+    <span class="p">]</span>
+
+    <span class="c1"># always convert log_evcodes</span>
+    <span class="n">log_evcode_idxs</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">mkh5raw</span><span class="p">[</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span> <span class="o">!=</span> <span class="mi">0</span><span class="p">)[</span><span class="mi">0</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">log_evcodes</span> <span class="o">=</span> <span class="n">mkh5raw</span><span class="p">[</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">][</span><span class="mi">0</span><span class="p">][:,</span> <span class="n">log_evcode_idxs</span><span class="p">]</span><span class="o">.</span><span class="n">squeeze</span><span class="p">()</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">int</span><span class="p">)</span>
+    <span class="n">log_evcodes_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+        <span class="p">{</span>
+            <span class="s2">&quot;type&quot;</span><span class="p">:</span> <span class="n">log_evcodes</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">),</span>  <span class="c1"># else dtype mismatch on merge</span>
+            <span class="s2">&quot;latency&quot;</span><span class="p">:</span> <span class="n">log_evcode_idxs</span> <span class="o">+</span> <span class="mi">1</span><span class="p">,</span>  <span class="c1"># matlab 1-base</span>
+            <span class="s2">&quot;duration&quot;</span><span class="p">:</span> <span class="nb">int</span><span class="p">(</span><span class="mi">0</span><span class="p">),</span>
+            <span class="s2">&quot;description&quot;</span><span class="p">:</span> <span class="s2">&quot;log_evcode&quot;</span><span class="p">,</span>
+            <span class="s2">&quot;log_evcodes&quot;</span><span class="p">:</span> <span class="n">log_evcodes</span><span class="p">,</span>
+            <span class="s2">&quot;mne_raw_tick&quot;</span><span class="p">:</span> <span class="n">log_evcode_idxs</span><span class="p">,</span>
+        <span class="p">}</span>
+    <span class="p">)</span>
+
+    <span class="c1"># if present, convert mkh5 tagged events to EEGLAB events</span>
+    <span class="k">if</span> <span class="n">epochs_name</span><span class="p">:</span>
+        <span class="n">tags_df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span>
+            <span class="n">json</span><span class="o">.</span><span class="n">loads</span><span class="p">(</span><span class="n">mkh5raw</span><span class="o">.</span><span class="n">info</span><span class="p">[</span><span class="s2">&quot;description&quot;</span><span class="p">])[</span><span class="s2">&quot;mkh5_epoch_tables&quot;</span><span class="p">][</span><span class="n">epochs_name</span><span class="p">]</span>
+        <span class="p">)</span>
+        <span class="n">tags_df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;type&quot;</span><span class="p">,</span> <span class="n">tags_df</span><span class="p">[</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">astype</span><span class="p">(</span><span class="nb">str</span><span class="p">))</span>
+        <span class="n">tags_df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="s2">&quot;latency&quot;</span><span class="p">,</span> <span class="n">tags_df</span><span class="p">[</span><span class="s2">&quot;mne_raw_tick&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="mi">1</span><span class="p">)</span>  <span class="c1"># matlab 1-base</span>
+        <span class="n">tags_df</span><span class="o">.</span><span class="n">insert</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="s2">&quot;duration&quot;</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+        <span class="n">tags_df</span><span class="p">[</span><span class="s2">&quot;urevent&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">tags_df</span><span class="p">))</span>
+
+        <span class="c1"># merge event tag columns onto log events on the mne_raw_tick</span>
+        <span class="c1"># type, latency, duration must be exact match by type to merge columns</span>
+        <span class="c1"># without duplicating rows. Untagged events get NaN filled for the</span>
+        <span class="c1"># tag columns</span>
+
+        <span class="c1"># tagged event codes must agree with log_evcodes</span>
+        <span class="k">assert</span> <span class="nb">all</span><span class="p">(</span>
+            <span class="n">log_evcodes_df</span><span class="p">[</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">][</span>
+                <span class="n">log_evcodes_df</span><span class="p">[</span><span class="s2">&quot;mne_raw_tick&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">isin</span><span class="p">(</span><span class="n">tags_df</span><span class="p">[</span><span class="s2">&quot;mne_raw_tick&quot;</span><span class="p">])</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+            <span class="p">]</span>
+            <span class="o">==</span> <span class="n">tags_df</span><span class="p">[</span><span class="s2">&quot;log_evcodes&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">to_numpy</span><span class="p">()</span>
+        <span class="p">),</span> <span class="s2">&quot;tagged events don&#39;t match log_evcodes&quot;</span>
+
+        <span class="c1"># check before and after merge</span>
+        <span class="n">n_log_evcodes</span> <span class="o">=</span> <span class="nb">len</span><span class="p">(</span><span class="n">log_evcodes_df</span><span class="p">)</span>
+
+        <span class="c1"># clobber and let the merge NaN fill untagged events</span>
+        <span class="n">log_evcodes_df</span><span class="o">.</span><span class="n">drop</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="s2">&quot;mne_raw_tick&quot;</span><span class="p">,</span> <span class="n">inplace</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+        <span class="n">log_evcodes_df</span> <span class="o">=</span> <span class="n">log_evcodes_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">tags_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">)</span>
+        <span class="k">assert</span> <span class="n">n_log_evcodes</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">log_evcodes_df</span><span class="p">),</span> <span class="s2">&quot;bad merge for codemap tags&quot;</span>
+
+        <span class="c1"># update eeglab event field description w/ epoch table name</span>
+        <span class="n">log_evcodes_df</span><span class="o">.</span><span class="n">loc</span><span class="p">[</span>
+            <span class="o">~</span><span class="n">pd</span><span class="o">.</span><span class="n">isna</span><span class="p">(</span><span class="n">log_evcodes_df</span><span class="p">[</span><span class="s2">&quot;mne_raw_tick&quot;</span><span class="p">]),</span> <span class="s2">&quot;description&quot;</span>
+        <span class="p">]</span> <span class="o">=</span> <span class="n">epochs_name</span>
+
+    <span class="c1"># combine annotations, event codes, and tags</span>
+    <span class="n">eeglab_events_df</span> <span class="o">=</span> <span class="n">eeglab_events_df</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">log_evcodes_df</span><span class="p">,</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;outer&quot;</span><span class="p">)</span><span class="o">.</span><span class="n">sort_values</span><span class="p">(</span>
+        <span class="s2">&quot;latency&quot;</span>
+    <span class="p">)</span>
+    <span class="n">eeglab_events</span> <span class="o">=</span> <span class="n">eeglab_events_df</span><span class="o">.</span><span class="n">to_records</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="n">savemat</span><span class="p">(</span>
+        <span class="n">fname</span><span class="p">,</span>
+        <span class="nb">dict</span><span class="p">(</span>
+            <span class="n">EEG</span><span class="o">=</span><span class="nb">dict</span><span class="p">(</span>
+                <span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span>
+                <span class="n">setname</span><span class="o">=</span><span class="nb">str</span><span class="p">(</span><span class="n">fname</span><span class="p">),</span>
+                <span class="n">nbchan</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">pnts</span><span class="o">=</span><span class="n">data</span><span class="o">.</span><span class="n">shape</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">trials</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>
+                <span class="n">srate</span><span class="o">=</span><span class="n">fs</span><span class="p">,</span>
+                <span class="n">xmin</span><span class="o">=</span><span class="n">times</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span>
+                <span class="n">xmax</span><span class="o">=</span><span class="n">times</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">],</span>
+                <span class="n">chanlocs</span><span class="o">=</span><span class="n">chanlocs</span><span class="p">,</span>
+                <span class="n">event</span><span class="o">=</span><span class="n">eeglab_events</span><span class="p">,</span>
+                <span class="n">urevent</span><span class="o">=</span><span class="n">eeglab_events</span><span class="p">,</span>
+                <span class="n">icawinv</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">icasphere</span><span class="o">=</span><span class="p">[],</span>
+                <span class="n">icaweights</span><span class="o">=</span><span class="p">[],</span>
+            <span class="p">)</span>
+        <span class="p">),</span>
+        <span class="n">appendmat</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="p">)</span>
+    <span class="k">if</span> <span class="n">return_eeglab_events</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">eeglab_events_df</span></div>
+
+
+<div class="viewcode-block" id="mkh5_to_set"><a class="viewcode-back" href="../../../api_source/mkpy.io.mkh5eeglab.html#mkpy.io.mkh5eeglab.mkh5_to_set">[docs]</a><span class="k">def</span> <span class="nf">mkh5_to_set</span><span class="p">(</span>
+    <span class="n">mkh5_f</span><span class="p">,</span>
+    <span class="n">set_f</span><span class="p">,</span>
+    <span class="n">epochs_name</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">garv_annotations</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">dblock_paths</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">apparatus_yaml</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span>
+    <span class="n">fail_on_info</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span>
+    <span class="n">fail_on_montage</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="s2">&quot;info&quot;</span><span class="p">,</span>
+<span class="p">):</span>
+
+    <span class="sd">&quot;&quot;&quot;Convert an mkh5 data file into MNE raw format</span>
+
+<span class="sd">    The mkh5 EEG data event channels in EEG.data.</span>
+
+<span class="sd">    The channel info is in EEG.chanlocs and the mkh5 Right Anterior</span>
+<span class="sd">    Superior (RAS) coordinates are converted to EEGLAB defaults</span>
+<span class="sd">    automatically.</span>
+
+<span class="sd">    The EEG.events and EEG.urevents fields contain:</span>
+
+<span class="sd">    * type field values:</span>
+<span class="sd">      * log event codes (string representation)</span>
+<span class="sd">      * &quot;boundary&quot; for datablock boundaries and garv annotations</span>
+<span class="sd">      * mkh5 dblock path labels</span>
+<span class="sd">    * latency values:</span>
+<span class="sd">      * 1-base data sample index of the event in the EEG.data array</span>
+<span class="sd">    * duration values:</span>
+<span class="sd">      * log events ar duration 0</span>
+<span class="sd">      * dblock boundary events are duration 0</span>
+<span class="sd">      * garv annotation boundary events are garv_annotation tmax - tmin in samples</span>
+
+<span class="sd">    Additional event fields are `description` and codemap tags from</span>
+<span class="sd">    the epochs table, if any.</span>
+
+<span class="sd">    Parameters</span>
+<span class="sd">    ----------</span>
+<span class="sd">    mkh5_f: str</span>
+<span class="sd">        File path to a mkpy.mkh5 HDF5 file</span>
+
+<span class="sd">    set_f: str</span>
+<span class="sd">        File path to the EEGLAB .set file.</span>
+
+<span class="sd">    epochs_name : str</span>
+<span class="sd">        Name of a previously set epochs table in the mkh5 file.</span>
+
+<span class="sd">    garv_annotations: None | dict, optional</span>
+<span class="sd">        event_channel: (str)  # channel name with events to annotate</span>
+<span class="sd">        tmin, tmax: (float)  # relative to time lock event</span>
+<span class="sd">        units: &quot;ms&quot; or &quot;s&quot;. Defaults to None.</span>
+
+<span class="sd">    dblock_paths : None | list of mkh5 datablock paths, optional</span>
+<span class="sd">        The listed datablock paths will be concatenated in order into</span>
+<span class="sd">        the mne.Raw. Defaults to None, in which case all the data</span>
+<span class="sd">        blocks in mkh5 file are concatenated in the order returned by</span>
+<span class="sd">        :py:meth:`.mkh5.dblock_paths`.</span>
+
+<span class="sd">    apparatus_yaml : None | str, optional</span>
+<span class="sd">        If a path to a well-formed mkh5 apparatus map YAML file, it</span>
+<span class="sd">        is used instead of the map in the mkh5 dblock header, if any.</span>
+<span class="sd">        Defaults to None.</span>
+
+<span class="sd">    fail_on_info : bool, optional</span>
+<span class="sd">        If True, this enforces strict mne.Info identity across the</span>
+<span class="sd">        mkh5 data blocks being concatenated. If False (default), some</span>
+<span class="sd">        deviations between mne.Info for the mkh5 data blocks are</span>
+<span class="sd">        allowed, e.g., for pooling multiple subject files into an</span>
+<span class="sd">        experiment or separate cals for a single subject. Defaults to False.</span>
+
+<span class="sd">    fail on montage : bool, optional</span>
+<span class="sd">       If True, the mne.Montage created from the mkh5 header</span>
+<span class="sd">       data streams and channel locations must be the same for all the</span>
+<span class="sd">       data blocks. If False, mkh5mne allows the MNE montage to vary across mkh5 data</span>
+<span class="sd">       blocks and leaves you to deal with whatever :py:meth:`mne.concatenate_raws` does</span>
+<span class="sd">       in this case. Defaults to True</span>
+
+<span class="sd">    verbose : NotImplemented</span>
+
+
+<span class="sd">    Notes</span>
+<span class="sd">    -----</span>
+
+<span class="sd">    This is a thin wrapper around the mkh5mne file format converter.</span>
+
+<span class="sd">    Examples</span>
+<span class="sd">    -------</span>
+
+<span class="sd">    Minimal</span>
+
+<span class="sd">    &gt;&gt;&gt;  mkh5eeglab.mkh5_to_set((&quot;sub01.h5&quot;, &quot;sub01.set&quot;)</span>
+
+<span class="sd">    &gt;&gt;&gt; mkh5eeglab.to_set(</span>
+<span class="sd">            &quot;sub01.h5&quot;,</span>
+<span class="sd">            &quot;sub01.set&quot;,</span>
+<span class="sd">            &quot;apparatus_yaml&quot;=&quot;ras_32_chan_xyz_spherical.yaml&quot;,</span>
+<span class="sd">            epochs_name=&quot;p3&quot;,</span>
+<span class="sd">            garv_annotations=dict(</span>
+<span class="sd">                event_channel=&quot;p3&quot;, tmin=-500, tmax=1500, units=&quot;ms&quot;</span>
+<span class="sd">            )</span>
+<span class="sd">        )</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+
+    <span class="n">mkh5raw</span> <span class="o">=</span> <span class="n">mkh5mne</span><span class="o">.</span><span class="n">from_mkh5</span><span class="p">(</span>
+        <span class="n">mkh5_f</span><span class="p">,</span>
+        <span class="n">garv_annotations</span><span class="o">=</span><span class="n">garv_annotations</span><span class="p">,</span>
+        <span class="n">dblock_paths</span><span class="o">=</span><span class="n">dblock_paths</span><span class="p">,</span>
+        <span class="n">apparatus_yaml</span><span class="o">=</span><span class="n">apparatus_yaml</span><span class="p">,</span>
+        <span class="n">fail_on_info</span><span class="o">=</span><span class="n">fail_on_info</span><span class="p">,</span>
+        <span class="n">fail_on_montage</span><span class="o">=</span><span class="n">fail_on_montage</span><span class="p">,</span>
+        <span class="n">verbose</span><span class="o">=</span><span class="n">verbose</span><span class="p">,</span>
+    <span class="p">)</span>
+
+    <span class="n">mkh5raw_to_set</span><span class="p">(</span><span class="n">mkh5raw</span><span class="p">,</span> <span class="n">set_f</span><span class="p">,</span> <span class="n">epochs_name</span><span class="o">=</span><span class="n">epochs_name</span><span class="p">)</span></div>
+</pre></div>
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

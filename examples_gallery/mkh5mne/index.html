@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" >
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>mkh5 and MNE Python (experimental) &mdash; mkpy  documentation</title>
+      <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/css/theme.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-binder.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-dataframe.css" type="text/css" />
+      <link rel="stylesheet" href="../../_static/sg_gallery-rendered-html.css" type="text/css" />
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+        <script src="../../_static/jquery.js"></script>
+        <script src="../../_static/underscore.js"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js"></script>
+        <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="EEG without events or epochs" href="no_events.html" />
+    <link rel="prev" title="append separate cals" href="../mkh5/append_cals.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+            <a href="../../index.html" class="icon icon-home"> mkpy
+          </a>
+              <div class="version">
+                0.2.7
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../../Introduction.html">Introduction</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Installation.html">Installation  (64-bit linux only)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../mkh5/mkh5_quickstart.html">mkh5 Quickstart</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../AS_howto.html">A. Stoermann’s Gists online</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../../ExamplesGallery.html">Examples Gallery</a><ul class="current">
+<li class="toctree-l2"><a class="reference internal" href="../mkh5/index.html">mkh5</a></li>
+<li class="toctree-l2 current"><a class="current reference internal" href="#">mkh5 and MNE Python (experimental)</a><ul>
+<li class="toctree-l3"><a class="reference internal" href="no_events.html">EEG without events or epochs</a></li>
+<li class="toctree-l3"><a class="reference internal" href="mne_quickstart.html">Quickstart: mkh5 to MNE</a></li>
+<li class="toctree-l3"><a class="reference internal" href="how_it_works.html">How it works</a></li>
+<li class="toctree-l3"><a class="reference internal" href="from_mkh5.html">Options for converting to mne.Raw</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="../mkh5eeglab/index.html">mkh5 and EEGLAB (experimental)</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../../UserGuide.html">User Guides</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../CheatSheet.html">Cheat Sheet</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Learning.html">Background reading</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Glossary.html">Glossary</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../Reference.html">API Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../ReleaseNotes.html">Release Notes</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../../RolesCredits.html">Roles and credits</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">mkpy</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home"></a> &raquo;</li>
+          <li><a href="../../ExamplesGallery.html">Examples Gallery</a> &raquo;</li>
+      <li>mkh5 and MNE Python (experimental)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/examples_gallery/mkh5mne/index.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <div class="section" id="mkh5-and-mne-python-experimental">
+<span id="mkh5-and-mne"></span><span id="sphx-glr-examples-gallery-mkh5mne"></span><h1>mkh5 and MNE Python (experimental)<a class="headerlink" href="#mkh5-and-mne-python-experimental" title="Permalink to this heading"></a></h1>
+<div class="sphx-glr-thumbcontainer" tooltip="EEG without events or epochs"><div class="figure align-default" id="id1">
+<img alt="EEG without events or epochs" src="../../_images/sphx_glr_no_events_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="no_events.html#sphx-glr-examples-gallery-mkh5mne-no-events-py"><span class="std std-ref">EEG without events or epochs</span></a></span><a class="headerlink" href="#id1" title="Permalink to this image"></a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Quickstart: mkh5 to MNE"><div class="figure align-default" id="id2">
+<img alt="Quickstart: mkh5 to MNE" src="../../_images/sphx_glr_mne_quickstart_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="mne_quickstart.html#sphx-glr-examples-gallery-mkh5mne-mne-quickstart-py"><span class="std std-ref">Quickstart: mkh5 to MNE</span></a></span><a class="headerlink" href="#id2" title="Permalink to this image"></a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="How it works"><div class="figure align-default" id="id3">
+<img alt="How it works" src="../../_images/sphx_glr_how_it_works_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="how_it_works.html#sphx-glr-examples-gallery-mkh5mne-how-it-works-py"><span class="std std-ref">How it works</span></a></span><a class="headerlink" href="#id3" title="Permalink to this image"></a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-thumbcontainer" tooltip="Options for converting to mne.Raw"><div class="figure align-default" id="id4">
+<img alt="Options for converting to mne.Raw" src="../../_images/sphx_glr_from_mkh5_thumb.png" />
+<p class="caption"><span class="caption-text"><a class="reference internal" href="from_mkh5.html#sphx-glr-examples-gallery-mkh5mne-from-mkh5-py"><span class="std std-ref">Options for converting to mne.Raw</span></a></span><a class="headerlink" href="#id4" title="Permalink to this image"></a></p>
+</div>
+</div><div class="toctree-wrapper compound">
+</div>
+<div class="sphx-glr-clear"></div><div class="sphx-glr-footer class sphx-glr-footer-gallery docutils container">
+<div class="sphx-glr-download sphx-glr-download-python docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/1d2d52770fbe194e8d45affd2b2ef9ec/mkh5mne_python.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Python</span> <span class="pre">source</span> <span class="pre">code:</span> <span class="pre">mkh5mne_python.zip</span></code></a></p>
+</div>
+<div class="sphx-glr-download sphx-glr-download-jupyter docutils container">
+<p><a class="reference download internal" download="" href="../../_downloads/03f02373c154f4770deeac9525ce0fc7/mkh5mne_jupyter.zip"><code class="xref download docutils literal notranslate"><span class="pre">Download</span> <span class="pre">all</span> <span class="pre">examples</span> <span class="pre">in</span> <span class="pre">Jupyter</span> <span class="pre">notebooks:</span> <span class="pre">mkh5mne_jupyter.zip</span></code></a></p>
+</div>
+</div>
+<p class="sphx-glr-signature"><a class="reference external" href="https://sphinx-gallery.github.io">Gallery generated by Sphinx-Gallery</a></p>
+</div>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="../mkh5/append_cals.html" class="btn btn-neutral float-left" title="append separate cals" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="no_events.html" class="btn btn-neutral float-right" title="EEG without events or epochs" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2017-2021 Thomas P. Urbach, Andrey Portnoy, 2013 Nathaniel Smith.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
