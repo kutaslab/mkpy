@@ -54,7 +54,7 @@ class CodeTagger:
        CodeTagger('myexpt/code_tag_table.xlsx!for_evoked')
        CodeTagger('myexpt/code_tag_table.xlsx!for_mixed_effects')
 
-     Tabbed text 
+     Tabbed text
         a rows x columns tab-delimited text file readable by
         pandas.Data.read_csv(..., sep="\t").
 
@@ -71,16 +71,16 @@ class CodeTagger:
             3. the column labels must include 'regexp'
             4. there must be at least one tag column, there may be more
 
-	    +------------+--------------+------------------+
+            +------------+--------------+------------------+
             | regexp     | col_label_1  |  <col_label_m>*  |
-	    +============+==============+==================+
+            +============+==============+==================+
             | pattern_1  | code_tag_11  | <code_tag_1m>*   |
-	    +------------+--------------+------------------+
+            +------------+--------------+------------------+
             |  ...       |  ...         | ...              |
-	    +------------+--------------+------------------+
+            +------------+--------------+------------------+
             | pattern_n  | code_tag_n1  |  <datum_nm>*     |
-	    +------------+--------------+------------------+
-    
+            +------------+--------------+------------------+
+
         YAML files
             The YAML can be any combination of inline (JSON-ic) and
             YAML indentation that PyYAML yaml.load can handle.
@@ -124,7 +124,7 @@ class CodeTagger:
         between them are extracted from the mkpy.mkh5 datablocks and
         merged with the code tags in the returned event_table for all
         capture groups.
-            
+
     Additional columns: scalar (string, float, int, bool)
 
     That's it. All the real work is done by 1) specifying regular
@@ -194,7 +194,7 @@ class CodeTagger:
                 print("Cause: {0}".format(cause))
 
     def __init__(self, cmf):
-        """initialize instance with a code tag map file. """
+        """initialize instance with a code tag map file."""
 
         # TODO: handle different filetypes, don't let things fail silently
         self.cmf = str(cmf)  # for Path
@@ -403,7 +403,7 @@ class CodeTagger:
 
         Returns
         -------
-            (anchor, capture_groups, code_patt) : tuple 
+            (anchor, capture_groups, code_patt) : tuple
                 anchor : tuple
                     (anchor_group_index, anchor_match_object)
                 capture_groups : list
@@ -460,7 +460,7 @@ class CodeTagger:
 
         Whereas individual integers are readily matched by numerical
         identity comparison, matching arbitrary subsequences requires
-        a more general search algorithm. 
+        a more general search algorithm.
 
         Regular expression pattern matching over character strings
         affords just such generality, but based on character rather

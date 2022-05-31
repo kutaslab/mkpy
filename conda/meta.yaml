@@ -41,7 +41,8 @@ requirements:
     - nose  # for legacy dpath tests
     - requests  # TravisCI pytests download test data files too large for github
     # - mne >=0.20.0=py3*  # mne noarch is a brutally slow dependency solve
-    - mne >=0.20  # allow noarch builds w/ conda-forge priority
+    # - mne >=0.20  # allow noarch builds w/ conda-forge priority
+    - mne >=1.0  # allow noarch builds w/ conda-forge priority
 
 test:
   imports:

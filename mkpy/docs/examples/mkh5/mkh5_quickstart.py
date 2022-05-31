@@ -8,13 +8,17 @@ mkh5 Quickstart
 """
 
 # %%
-# To run examples in a jupyter notebook
 #
-# #. Conda install mkpy and jupyter or jupyterlab for your preferred python
-#    version into a fresh environment and activate it::
+# #. In a terminal window use ``mamba`` (recommended) or ``conda`` (if
+#    necessary) to install mkpy along with jupyter or jupyterlab
+#    into a fresh environment and activate it:
 #
-#    $ conda create --name mkpy_041221 python=3.7 mkpy jupyterlab -c kutaslab -c defaults -c conda-forge
-#    $ conda activate mkpy_041221
+#    .. code-block:: bash
+#
+#       $ mamba create --name mkpy_041221 mkpy jupyterlab \
+#            -c kutaslab -c conda-forge -c defaults \
+#            --strict-channel-priority
+#       $ conda activate mkpy_041221
 #
 #
 # #. In a terminal window navigate to the directory where you want
@@ -22,7 +26,7 @@ mkh5 Quickstart
 #
 #    $ jupyter notebook
 #
-# #. Open a notebook with a Python 3 kernel
+# #. Open a notebook with a Python 3 kernel and proceed.
 
 # %%
 #

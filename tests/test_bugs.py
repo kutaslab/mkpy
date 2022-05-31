@@ -50,8 +50,7 @@ def test_irb_pcag_13o():
 
 @irb_data
 def test_irb_hp301():
-    """ _find_events bombs out w/ an urbach slap
-    """
+    """_find_events bombs out w/ an urbach slap"""
 
     subid = "hp301"
     h5_f = IRB_DIR / "mkh5" / (subid + ".h5")

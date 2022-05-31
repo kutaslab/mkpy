@@ -3,8 +3,8 @@ mkh5 data in MNE Python (experimental)
 
 .. note::
 
-  Requires mkpy >= 0.2.5 and MNE Python >=0.20 (installed by default
-  when mkpy is installed with ``conda``)
+  Requires mkpy >= 0.2.5 and MNE Python >=1.0 (installed by default
+  when mkpy is installed with ``mamba`` or ``conda``)
 
 An mkh5 data file can be imported into MNE Python and used with the
 native MNE :py:class:`mne.Raw` continous EEG methods and

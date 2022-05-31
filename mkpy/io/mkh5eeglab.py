@@ -243,7 +243,7 @@ def mkh5_to_set(
     * type field values:
       * log event codes (string representation)
       * "boundary" for datablock boundaries and garv annotations
-      * mkh5 dblock path labels 
+      * mkh5 dblock path labels
     * latency values:
       * 1-base data sample index of the event in the EEG.data array
     * duration values:

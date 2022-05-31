@@ -239,12 +239,12 @@ def test_pd_series_to_hdf5():
 
     # helpers
     def test_types_to_sequence(test_types, n_each=1):
-        """ utility to build a list of items type
+        """utility to build a list of items type
 
         Parameters
         ----------
-        test_types : k,v dict 
-           each v is a list of native python or numpy data types 
+        test_types : k,v dict
+           each v is a list of native python or numpy data types
         n_each : uint
            number of repetitions of items of each dtype
 

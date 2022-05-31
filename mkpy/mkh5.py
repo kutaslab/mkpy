@@ -190,8 +190,7 @@ class mkh5:
                 return str(self.value)
 
         class YAMLClobberError(Exception):
-            """raised when a YAML header file tries to overwrite an mkh5 header reserved word
-            """
+            """raised when a YAML header file tries to overwrite an mkh5 header reserved word"""
 
             def __init__(self, hio, keyword, yhdr_f=None):
                 msg = "These are mkh5 header reserved words: "
@@ -257,7 +256,7 @@ class mkh5:
         # Create/Update
         def new(self, hdr_dict, yhdr_f):
             """merge a dictionary and dict from the YAML file into a well-formed
-               mkh5 datablock header or die
+            mkh5 datablock header or die
             """
             self._create(hdr_dict, yhdr_f)
             self._check_header()
@@ -268,8 +267,8 @@ class mkh5:
 
             Parameters
             ----------
-            dblock : h5py.Dataset 
-               The HDF5 dataset whose attribute 'json_header' holds the header JSON string. 
+            dblock : h5py.Dataset
+               The HDF5 dataset whose attribute 'json_header' holds the header JSON string.
             """
             if not isinstance(dblock, h5py.Dataset):
                 raise TypeError(
@@ -303,7 +302,7 @@ class mkh5:
 
             # good to go ...jsonify stuff the string into the hdf5 attribute
             json_header = json.dumps(self._header)
-            if len(json_header) > 2 ** 16:
+            if len(json_header) > 2**16:
                 msg = (
                     "jsonified header info exceeds 64KB ... too big for hdf5 attribute"
                 )
@@ -333,13 +332,13 @@ class mkh5:
 
               - terminating branches only
               - string labels as terminals, e.g., col_0, col_1
-             
+
             Ex. , ['key_0', 'key_1', ... 'key_i', col_0]
 
             * Walking through header slicer with dpath.util.get(path)
               fetches the data value at the end of the path and we
               label it with the slicer column name like so
-             
+
                 [ (col_0, val_0), ... (col_n, val_n)]
 
             This converts neatly to wide tabular format
@@ -363,7 +362,7 @@ class mkh5:
                  handedness: L/L
                  mood_VAS: 4.5
 
-            The YAML header slicer follows matching paths into that header 
+            The YAML header slicer follows matching paths into that header
             to pluck out the terminal data values (leafs) and (re-)label them
 
             .. code-block:: yaml
@@ -375,7 +374,7 @@ class mkh5:
                  handedness: fam_hand
                  age: age
 
-            .. note:: 
+            .. note::
                ``key:value`` order does not matter
 
             This next slicer specifies the same **paths** into the
@@ -393,10 +392,10 @@ class mkh5:
 
               runsheet/mood_VAS/mood
 
-              runsheet/handedness/fam_hand  
+              runsheet/handedness/fam_hand
 
-              runsheet/age/age  
-            
+              runsheet/age/age
+
             Algorithm
 
             * HeaderIO.get_slices() extracts the header values at the end of the path, i.e.,
@@ -586,7 +585,7 @@ class mkh5:
             self._check_header()
 
         def _update_from_slashpaths(self, slash_vals):
-            """ header date via dpath (slash_path:value) syntax
+            """header date via dpath (slash_path:value) syntax
 
             Parameters:
 
@@ -662,9 +661,9 @@ class mkh5:
 
         def _load_yhdr(self, yhdr_f):
             """load a YAML format header extension
-            
-            Syntax: 
-  
+
+            Syntax:
+
             * Must conform to YAML spec (?2.0)
 
             * There MUST be at least one YAML document
@@ -673,7 +672,7 @@ class mkh5:
               value
 
             OPTIONAL
-             
+
             * Additional YAML documents may be added to the file ad lib provided
               each document is named with a key-value pair like so
 
@@ -689,12 +688,12 @@ class mkh5:
 
             * Apparatus doc is a fixed-format map with these keys and
               values
-        
+
                  name: "apparatus"
-                 space: 
-                 fiducial: 
-                 sensor: 
-                 stream: 
+                 space:
+                 fiducial:
+                 sensor:
+                 stream:
 
 
              The ``fiducial``, ``sensor``, and ``stream`` data are
@@ -810,11 +809,11 @@ class mkh5:
             'jdx': int,    # column index in dblock_N dataset, 0, 1, ...
             'source': str, # source pfx[NNNN] where pfx = eeg|log|other, NNNN enumerates
             'dt': str,     # string np.dtype, e.g., '<f2', '<i4'
-            # from mkh5._h5_update_eeg() where h5_path + dblock_id is the 
+            # from mkh5._h5_update_eeg() where h5_path + dblock_id is the
 
-            
+
             Raises:
-            
+
             RuntimeError on mismatch
             columns: labels, column order=jdx, and data type
 
@@ -957,7 +956,7 @@ class mkh5:
     # ------------------------------------------------------------
     def garv_data_group(self, h5_data_group_path, skip_ccodes=[0]):
         """Run `pygarv` on all the dblocks under the `h5_data_group_path`.
-        
+
         Parameters
         ----------
         h5_data_group_path : str
@@ -1208,7 +1207,7 @@ class mkh5:
         * data_group: full slashpath to the h5py.Group covering a
           sequence of dblocks, e.g.,
 
-              S001  
+              S001
               Expt1/Session1/S047
 
         * dblock_path: full slashpath from the hdf5 root to one of the
@@ -1219,13 +1218,13 @@ class mkh5:
 
         * dblock_ticks: the A/D sample counter which is also the row
           index of the dblock where the *matched* event appearing in
-          the event table occurred. 
+          the event table occurred.
 
         * match_code: the event code of the regexp pattern-matched
           group for this event table row. There is one match code for
-          each capture group in the regular expression pattern, so 
+          each capture group in the regular expression pattern, so
           the match code need not be the anchor code
-        
+
         * All anchors are matches. Some matches may not be anchors
 
         * log_evcodes: the sequence of integer event codes occuring at
@@ -1277,13 +1276,13 @@ class mkh5:
              epoch_match_tick_delta = number of samples from epoch start to matched event code
 
         Returns
-        ------- 
+        -------
            None
 
         Raises
         ------
            ValueError
-             if epoch event codes and data blocks column values do not match the datablocks or 
+             if epoch event codes and data blocks column values do not match the datablocks or
              epoch length and start offset values are not uniform across the epochs.
 
         """
@@ -1359,7 +1358,7 @@ class mkh5:
         None
             updates h5_f/EPOCH_TABLES_PATH/ with the named epoch table h5py.Dataset
 
-        
+
         Notes
         -----
 
@@ -1566,9 +1565,7 @@ class mkh5:
             raise RuntimeError()
 
     def get_epochs_table_names(self):
-        """returns a list, possibly empty of previously named epochs tables
-
-        """
+        """returns a list, possibly empty of previously named epochs tables"""
         epochs_names = []
         try:
             with h5py.File(self.h5_fname, "r") as h5:
@@ -1596,11 +1593,11 @@ class mkh5:
 
 
         Supported data types
-        
+
         * a single, homogenous scalar data type drawn from these
-    
+
            float-like: float, np.float32, np.float64, etc.
-           int-like: int, np.int32, np.int64, etc. 
+           int-like: int, np.int32, np.int64, etc.
            uint-like: np.uint32, np.uint64, etc.
            boolean-like: bool, np.bool
            string-like: str, bytes, unicode
@@ -1608,7 +1605,7 @@ class mkh5:
         * missing data/NaNs are supported **except for boolean-like**
 
             NaN, None conversions as follows:
-        
+
             Series type  |  from           | to hdf5
             ------------ | --------------  | ------------
             float-like   |  np.NaN, None   | np.nan
@@ -1616,12 +1613,12 @@ class mkh5:
             uint-like    |  pd.NaN, None   | np.nan, int coerced to float_
             string-like  |  pd.NaN, None   | b'NaN'
             boolean-like |  pd.NaN, None   | not allowed
-        
-        
+
+
         Known dtypes according to pandas 0.21.0 return by infer_dtype
-        
+
             empty (returned when all are None, undocumented in pandas)
-         
+
             string, unicode, bytes, floating, integer,
             mixed-integer, mixed-integer-float, decimal,
             complex, categorical, boolean, datetime64,
@@ -1633,7 +1630,7 @@ class mkh5:
             - not hasnans
                - values are str_like -> to bytes -> np.array
                - values are mixed types -> illegal, die
-             
+
             - hasnans: two cases
                - the non-missing values are mixed types: illegal, die
                - the non-missing values are homogenous: handle by NaNs by type as above
@@ -1942,7 +1939,7 @@ class mkh5:
                 yield (epoch)
 
     def get_epochs(self, epochs_name, format="numpy", columns=None):
-        """ fetch single trial epochs in tabluar form
+        """fetch single trial epochs in tabluar form
 
         Parameters
         ----------
@@ -1964,7 +1961,7 @@ class mkh5:
           See `_h5_get_epochs()` for details.
 
         attrs : dict
-           stub 
+           stub
 
         """
 
@@ -2099,15 +2096,15 @@ class mkh5:
         -----------
           h5f : str
              filepath to existing writable h5, else h5py Error
-  
+
           group_name : str
               h5 file Group path name
 
           header : mkh5.HeaderIO.header
               built from .crw header + YAML info
 
-          data : numpy record array 
-              rows = samples 
+          data : numpy record array
+              rows = samples
               columns = ticks, events, log, individual channel data
 
           yhdr : dict
@@ -2135,13 +2132,13 @@ class mkh5:
           code rows (pauses, data errors) into mkh5 datablocks of
           continuously sampled eeg.
 
-        * The mkh5 datablock is the minimal unit, consisting of 
+        * The mkh5 datablock is the minimal unit, consisting of
 
            * dblock_N (h5py.Dataset) a single numpy.ndarray log + eeg
                       stripchart
 
            * dblock_N.attr[json_header] (h5py.Attribute) the log + eeg
-                      header information encoded as a JSON string. 
+                      header information encoded as a JSON string.
 
         * The processing to Create and Append .crw/.log as mkh5 datablocks is
           identical
@@ -2164,7 +2161,7 @@ class mkh5:
 
            group_name/dblock_0/crw_ticks
            group_name/dblock_0/raw_evcodes
-           ... 
+           ...
            group_name/dblock_0/lle
            group_name/dblock_0/lhz
            ...
@@ -2264,7 +2261,7 @@ class mkh5:
     def create_mkdata(
         self, h5_path, eeg_f, log_f, yhdr_f, *args, with_log_events="aligned", **kwargs
     ):
-        """Convert Kutas lab ERPSS `.crw` and `.log` to the 
+        """Convert Kutas lab ERPSS `.crw` and `.log` to the
         `mkh5` hdf5 format.
 
         This merges dig `.crw`, `.log`, and user-specified `.yml` data into a tidy
@@ -2294,15 +2291,15 @@ class mkh5:
         with_log_events : {"aligned", "from_eeg", "none", "as_is"}, optional
              how to handle log file event codes (`log_evcodes`)
              relative to the eeg event codes (`raw_evcodes`) from the
-             eeg recording.  
-  
+             eeg recording.
+
              `aligned` (default)
                    ensures eeg and log event code
                    timestamps are 1-1 but allows discrepant, e.g., logpoked,
                    event codes with a warning. Requires a log file. This
-                   default is the mkpy.mkh5 <= 0.2.2 behavior.  
+                   default is the mkpy.mkh5 <= 0.2.2 behavior.
 
-             `from_eeg` 
+             `from_eeg`
                    propagates the eeg event codes (dig mark track) to the `log_evcodes`
                    column. Requires `log_f` is `None`.
 
@@ -2319,7 +2316,7 @@ class mkh5:
         *args : strings, optional
             passed in to `h5py.create_dataset()`
         *kwargs : key=values, optional
-            passed in to `h5py.create_dataset()`, e.g., 
+            passed in to `h5py.create_dataset()`, e.g.,
             `compression="gzip"`.
 
 
@@ -2557,7 +2554,7 @@ class mkh5:
 
         Parameters
         ----------
-        pattern: regexp 
+        pattern: regexp
            regular expression to look for in the slashpaths to
            datablocks and header information in this mkh5 format
            file. Default '.+' matches all header info.
@@ -2573,13 +2570,13 @@ class mkh5:
 
         Select the relevant information with regular expression
         pattern matching:
-        
+
         .. code-block:: python
 
            > expts = mkh5.mkh5('expts.h5') # initialize the mkh5 object
            > expts.headinfo('Expt1/S001') # fetch all header info for Expt1/S001, all datablocks
            > expts.headinfo('Expt1/.*MiPa') # returns everything in any Expt1 header involving MiPa
-           > expts.headinfo('Expt1/S001/apparatus/space/origin') # origin of sensor space Expt1/S003 
+           > expts.headinfo('Expt1/S001/apparatus/space/origin') # origin of sensor space Expt1/S003
            > expts.headinfo('Expt1/S001/apparatus/sensors/MiPa/x') # x-coordinate of electrode MiPa
 
         """
@@ -2591,15 +2588,15 @@ class mkh5:
             warnings.warn("headinfo pattern {0} not found".format(pattern))
 
     def sethead(self, slash_vals, **kwargs):
-        """update mkh5 dblock header information via ``dpath.utils`` style 
+        """update mkh5 dblock header information via ``dpath.utils`` style
         slash path, value notation.
 
 
         The recommended method for adding information to mkh5 headers
         is via the YAML header file loaded when converting .crw/.log
         to mkh5
-        
-        myh5file.create_mkdata('my.crw', 'my.log', 'my.yhdr') 
+
+        myh5file.create_mkdata('my.crw', 'my.log', 'my.yhdr')
 
         Use sethead() at your own risk. mucking with headers by hand
         is dangerous without a clear understanding of the mkh5 dataset
@@ -2620,7 +2617,7 @@ class mkh5:
 
           # probably a bad idea to set this only for first datablock
           mydat.sethead(('S01/dblock_0/npsych/mood_score', 4)
-         
+
           # use a list to set for all dblocks
           spvs = [('S01/dblock_0/npsych/mood_score', 4),
                   ('S01/dblock_1/npsych/mood_score', 4),
@@ -2649,7 +2646,7 @@ class mkh5:
                 self._h5_update_header(h5[h5_dblock_path], hdr_slash_vals, **kwargs)
 
     def gethead(self, pattern):
-        """ get header values as a list of (slashpath, value) 2-ples suitable for passing to edhead"""
+        """get header values as a list of (slashpath, value) 2-ples suitable for passing to edhead"""
         return self._get_head(pattern)
 
     # ------------------------------------------------------------
@@ -2714,10 +2711,10 @@ class mkh5:
     def info(self):
         """return h5dump-ish overview of h5_path's groups/datasets/attributes and data
         Parameter:
-      
-        h5_path (string) h5 path to a group or dataset 
 
-        Returns info (string) 
+        h5_path (string) h5 path to a group or dataset
+
+        Returns info (string)
         """
         # headinfo = self.headinfo(**kwargs)
         headinfo = self._get_head(".+")
@@ -2763,7 +2760,7 @@ class mkh5:
         use_cals=None,
         use_file=None,
     ):
-        """fetch and apply normerp style calibration to raw/crw dataset. 
+        """fetch and apply normerp style calibration to raw/crw dataset.
 
         This locates two cursors, one on either side of a an
         event-triggered calibration square wave step and measures
@@ -2779,7 +2776,7 @@ class mkh5:
             h5 group name that is parent to mkpy format dblocks, id_name/dblocks
         cal_size : float
             magnitude of calibration square wave step in microvolts, e.g., 10
-        polarity : (1,0) 
+        polarity : (1,0)
             ignored, and should be deprecated. In ERPSS this inverts
             all waveforms ... has nothing to do with calibration really.
         lo_cursor: float (positive value)
@@ -2822,7 +2819,7 @@ class mkh5:
         2. The normerp way is to use the *ABSOLUTE VALUE* of the cal
            step regardless of polarity to adjust the amplitude of the
            +/- A/D recordings ... leaving the sign unchanged.
-        
+
         3. The polarity flag -1 is used *ONLY* to switch the sign of
            the EEG and has nothing to do with the A/D scaling factor
 
@@ -2963,7 +2960,7 @@ class mkh5:
                 #                              ('streams/' + chan + '/cals', info)]
 
     def _attr_to_slashpath(self, k, v, p, l):
-        """ walk dictionary building a list of dpath friendly slashpaths, e.g., dblock.attr dicts"""
+        """walk dictionary building a list of dpath friendly slashpaths, e.g., dblock.attr dicts"""
         p = p + "/" + k  # last key
         if not isinstance(v, dict):
             # l.append('{0}: {1}'.format(p, v))
@@ -3031,7 +3028,7 @@ class mkh5:
 
         * Pausing makes kutaslab "continuous" EEG data gappy. However,
           since the dig clock ticks stop during a pause,  ticks are
-          not sample counts (at a fixed rate) not real-time clock ticks. 
+          not sample counts (at a fixed rate) not real-time clock ticks.
         """
 
         # slurp low level NJS data
@@ -3118,7 +3115,7 @@ class mkh5:
           kwargs ... keywords past to dpath.util.set
 
         Ex.  _h5_set_dblock_attr(h5dblock, (S01/dblock_0/samplerate, 250))
-        Ex.  _h5_set_dblock_attr(h5dblock, [ (S01/dblock_0/streams/lle/calibrated, True), 
+        Ex.  _h5_set_dblock_attr(h5dblock, [ (S01/dblock_0/streams/lle/calibrated, True),
                                              (S01/dblock_0/streams/lhz/calibrated, True) ])
         """
 
@@ -3157,17 +3154,17 @@ class mkh5:
         n_before: uint
             the number of samples before the anchor (positive integer)
         n_duration : uint
-           epoch slice length in samples (positive integer) 
+           epoch slice length in samples (positive integer)
 
         Returns
         -------
-        epochs : numpy.ndarray, dtype=mkh5._dblock_slicer_dtype       
+        epochs : numpy.ndarray, dtype=mkh5._dblock_slicer_dtype
             each dblock_slicer is a tuple of sample indices
             (start_idx, anchor_idx, stop_idx)
-        
+
 
         This just does the sample math the sample math, minimal bounds checking
-        
+
 
         """
         start_ticks = anchors - n_before  # *subtract* positive numbers
@@ -3199,15 +3196,15 @@ class mkh5:
 
     def _get_dblock_slicer_from_eventstream(self, event_stream, presamp, duration):
         """returns np.array of _dblock_slicer_dtype for non-zero events in event_stream
-    
+
         Parameters
         ----------
         event_stream : 1-D array
-            mostly 0's where non-zero values are taken to be event codes 
+            mostly 0's where non-zero values are taken to be event codes
         presamp : uin64
             number of samples before the anchor event (positive number)
         duration : uint64
-            number of samples in the slice 
+            number of samples in the slice
 
         Returns
         -------
@@ -3235,7 +3232,7 @@ class mkh5:
     # Model: data handling
     # ------------------------------------------------------------
     def _read_raw_log(self, eeg_f, log_f, with_log_events="aligned"):
-        """NJS crw/log slurpers plus TPU decorations and log wrangling. 
+        """NJS crw/log slurpers plus TPU decorations and log wrangling.
 
         Parameters
         ----------
@@ -3243,7 +3240,7 @@ class mkh5:
            path to ERPSS .crw or .raw file
 
         log_f : str or None
-           path to ERPSS .log file, if any. 
+           path to ERPSS .log file, if any.
 
         with_log_events : str ("aligned", "from_eeg", "none", "as_is" )
 
@@ -3589,13 +3586,13 @@ class mkh5:
 
         Raises
         ------
-        ValueError if missing kwargs 
+        ValueError if missing kwargs
         IOError if no kutaslab cals found in any of the group_name dblocks
 
         Return values coerced to float b.c. json can't serialze float16 .. cmon
 
         Unopinionated about what h5 group to search and works on any dblock with cals
-        so it can be called on cals recorded with the EEG or in separate files. 
+        so it can be called on cals recorded with the EEG or in separate files.
 
         Differences from normerp:
 
@@ -3781,7 +3778,12 @@ class mkh5:
                 # ------------------------------------------------------------
                 # auto trim the data FIX ME ... parameterize configurable someday
                 # ------------------------------------------------------------
-                q75, median, q25, iqr, = None, None, None, None
+                q75, median, q25, iqr, = (
+                    None,
+                    None,
+                    None,
+                    None,
+                )
                 delta_min, delta_max = None, None
                 deltas, good = None, None
 
@@ -3864,7 +3866,10 @@ class mkh5:
         microvolts
         """
 
-        calinfo, cal_stack, = None, None
+        calinfo, cal_stack, = (
+            None,
+            None,
+        )
         print("Plotting cals")
         calinfo, cal_stack = self._h5_get_calinfo(*args, **kwargs)
         if calinfo is None or len(calinfo.keys()) == 0:
@@ -3957,7 +3962,7 @@ class mkh5:
 # TPU
 class LocDat:
     """map Kutas lab spherical coordinates and Brainsight
-    .elp data files to 3-D cartesian XYZ 
+    .elp data files to 3-D cartesian XYZ
 
 
     Coordinates
@@ -3967,7 +3972,7 @@ class LocDat:
        Origin is center of head
 
        Orientation is RAS: X+ = Right, Y+ = Anterior, Z+ = Superior
-    
+
        Cartesian coordinates come in as triples: x, y, z
 
        Polar coordinates come in as triples: radius, theta, z
